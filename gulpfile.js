@@ -35,7 +35,7 @@
 
 	// Start servers
 		gulp.task('start:proxy', function () {
-			shell.exec('node dist/proxy.bundle.js');
+			require('./dist/proxy.bundle.js');
 		});
 
 	// Serve app
