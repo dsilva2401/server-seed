@@ -1,6 +1,19 @@
 Server Seed
 ===========
 
+A NodeJS based server seed.
+
+## Requirements
+
+#### Development
+- gulp
+- npm
+
+#### Production
+- pm2
+- npm
+
+
 ## Architecture
 
 ![Architecture](docs/architecture.png)
@@ -10,3 +23,44 @@ Server Seed
 - App Server: Contains all business logic.
 
 - DB Server: Database Server.
+
+
+## File Structure
+
+```bash
+./
+	package.json
+	gulpfile.js
+	src/
+		core/
+			architecture/
+				classes/..
+				interfaces/..
+				..
+			app/
+				classes/..
+				interfaces/..
+				..
+		setup/
+			proxy/..
+			app/..
+			database/..
+			..
+		..
+```
+
+## Start Servers
+
+#### Development
+```bash
+gulp serve
+```
+
+#### Production
+```bash
+npm run proxy
+npm run app
+npm run database
+..
+```
+
