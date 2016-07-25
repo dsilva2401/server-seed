@@ -8,7 +8,7 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "proxy": "pm2 start dist/proxy.bundle.js -i 0"
   },
   "repository": {
     "type": "git",
