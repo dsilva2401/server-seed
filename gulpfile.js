@@ -2,6 +2,7 @@
 	var gulp = require('gulp-param')(require('gulp'), process.argv);
 	var shell = require('shelljs');
 	var open = require('open');
+	var runSequence = require('run-sequence');
 
 // Tasks
 
@@ -32,10 +33,15 @@
 			);
 		});
 
+	// Start servers
+		gulp.task('start:proxy', function () {
+			shell.exec('node dist/proxy.bundle.js');
+		});
+
 	// Serve app
 		gulp.task('serve', function () {
-			// open('http://localhost:8080/www');
-			shell.exec('node_modules/.bin/webpack-dev-server --progress --colors --watch --inline --open');
+			shell.exec('node_modules/.bin/webpack');
+			runSequence('start:proxy');
 		});
 
 	// Build webpack

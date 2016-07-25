@@ -21,6 +21,7 @@
     "gulp-param": "^1.0.3",
     "json-loader": "^0.5.4",
     "open": "0.0.5",
+    "run-sequence": "^1.2.2",
     "shelljs": "^0.7.0",
     "ts-loader": "^0.8.2",
     "typescript": "^1.8.10",
