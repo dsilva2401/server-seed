@@ -13,6 +13,15 @@ A NodeJS based server seed.
 - pm2
 - npm
 
+## First setup
+```bash
+# Node dependencies
+npm install
+
+# Typescript definitions
+gulp typings:install
+```
+
 
 ## Architecture
 
