@@ -46,35 +46,13 @@
 
 	"use strict";
 	// Imports
-	var server_ts_1 = __webpack_require__(1);
+	var server_ts_1 = __webpack_require__(86);
 	// Start server
 	server_ts_1.startServer();
 
 
 /***/ },
-/* 1 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	// Imports
-	var express = __webpack_require__(2);
-	var index_ts_1 = __webpack_require__(84);
-	var config_ts_1 = __webpack_require__(85);
-	// Server setup
-	var serverConfig = config_ts_1.config.servers.app;
-	exports.server = express();
-	// Setup routers
-	index_ts_1.setupAPI(exports.server);
-	// Start function
-	function startServer() {
-	    exports.server.listen(serverConfig.port, function () {
-	        console.log('Serving app at ' + serverConfig.domain + ':' + serverConfig.port);
-	    });
-	}
-	exports.startServer = startServer;
-
-
-/***/ },
+/* 1 */,
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -24462,27 +24440,7 @@
 
 
 /***/ },
-/* 84 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	// Imports
-	var express = __webpack_require__(2);
-	// Export router setup function
-	function setupAPI(server) {
-	    // Init router
-	    var router = express.Router();
-	    // Setup routes
-	    router.all('*', function (req, res, next) {
-	        res.end('Calling API from app server :D :|');
-	    });
-	    // Add router to server
-	    server.use('/api', router);
-	}
-	exports.setupAPI = setupAPI;
-
-
-/***/ },
+/* 84 */,
 /* 85 */
 /***/ function(module, exports) {
 
@@ -24507,6 +24465,50 @@
 	exports.config.servers.auth.domain = 'localhost';
 	exports.config.servers.auth.port = 5000;
 	exports.config.servers.auth.url = 'http://' + exports.config.servers.auth.domain + ':' + exports.config.servers.auth.port;
+
+
+/***/ },
+/* 86 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	// Imports
+	var express = __webpack_require__(2);
+	var index_ts_1 = __webpack_require__(87);
+	var config_ts_1 = __webpack_require__(85);
+	// Server setup
+	var serverConfig = config_ts_1.config.servers.auth;
+	exports.server = express();
+	// Setup routers
+	index_ts_1.setupAuth(exports.server);
+	// Start function
+	function startServer() {
+	    exports.server.listen(serverConfig.port, function () {
+	        console.log('Serving auth at ' + serverConfig.domain + ':' + serverConfig.port);
+	    });
+	}
+	exports.startServer = startServer;
+
+
+/***/ },
+/* 87 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	// Imports
+	var express = __webpack_require__(2);
+	// Export router setup function
+	function setupAuth(server) {
+	    // Init router
+	    var router = express.Router();
+	    // Setup routes
+	    router.all('*', function (req, res, next) {
+	        res.end('Calling Auth service..');
+	    });
+	    // Add router to server
+	    server.use('/auth', router);
+	}
+	exports.setupAuth = setupAuth;
 
 
 /***/ }

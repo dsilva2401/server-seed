@@ -40,11 +40,14 @@
 		gulp.task('start:app', function () {
 			require('./dist/app.bundle.js');
 		});
+		gulp.task('start:auth', function () {
+			require('./dist/auth.bundle.js');
+		});
 
 	// Serve app
 		gulp.task('serve', function () {
 			shell.exec('node_modules/.bin/webpack');
-			runSequence(['start:proxy', 'start:app']);
+			runSequence(['start:proxy', 'start:app', 'start:auth']);
 		});
 
 	// Build webpack

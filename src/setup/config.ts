@@ -19,3 +19,9 @@ config = {};
 	config.servers.app.domain = 'localhost';
 	config.servers.app.port = 3000;
 	config.servers.app.url = 'http://'+config.servers.app.domain+':'+config.servers.app.port;
+
+	// Auth Server
+	config.servers.auth = {};
+	config.servers.auth.domain = 'localhost';
+	config.servers.auth.port = 5000;
+	config.servers.auth.url = 'http://'+config.servers.auth.domain+':'+config.servers.auth.port;
