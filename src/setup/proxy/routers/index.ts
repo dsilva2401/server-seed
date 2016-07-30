@@ -1,14 +1,16 @@
 
 // Imports
-	import {setupViews} from './views.ts';
-	import {setupAPI} from './api.ts';
-	import {setupAuth} from './auth.ts';
-	import {setupStatics} from './statics.ts';
+	import {router as authRouter} from './auth.ts';
+	import {router as apiRouter} from './api.ts';
+	import {router as viewsRouter} from './views.ts';
+	import {router as staticsPublicRouter} from './statics-public.ts';
+	import {router as staticsPrivateRouter} from './statics-private.ts';
 
 // Export setup routers function
 	export function setupRouters (server: any) {
-		setupAPI(server);
-		setupAuth(server);
-		setupStatics(server);
-		setupViews(server);
+		server.use('/api', apiRouter);
+		server.use('/auth', authRouter);
+		server.use('/statics/public', staticsPublicRouter);
+		server.use('/statics/private', staticsPrivateRouter);
+		server.use('/', viewsRouter);
 	}

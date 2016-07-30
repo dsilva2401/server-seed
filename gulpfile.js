@@ -6,7 +6,7 @@
 
 // Tasks
 
-	// Install typings definitions
+	// Install typings definitions (ex. gulp typings:install --module dt~request --global)
 		gulp.task('typings:install', function(module, global) {
 			if (!module) {
 				shell.exec('node_modules/.bin/typings install');
@@ -37,11 +37,14 @@
 		gulp.task('start:proxy', function () {
 			require('./dist/proxy.bundle.js');
 		});
+		gulp.task('start:app', function () {
+			require('./dist/app.bundle.js');
+		});
 
 	// Serve app
 		gulp.task('serve', function () {
 			shell.exec('node_modules/.bin/webpack');
-			runSequence('start:proxy');
+			runSequence(['start:proxy', 'start:app']);
 		});
 
 	// Build webpack

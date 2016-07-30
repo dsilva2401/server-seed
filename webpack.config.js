@@ -3,7 +3,7 @@ var path = require('path');
 
 module.exports = {
 	entry: {
-		app: './src/setup/app/index.ts',
+		app: './src/setup/app/start.ts',
 		database: './src/setup/database/index.ts',
 		proxy: './src/setup/proxy/start.ts'
 	},

@@ -12,5 +12,5 @@
 			2. Request api
 			3. Response request
 		*/
-		res.end('Calling Auth');
+		res.end('Calling public statics');
 	});
