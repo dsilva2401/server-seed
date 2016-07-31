@@ -24,6 +24,9 @@ npm install
 gulp typings:install
 ```
 
+## App Classes diagram
+
+![Classes diagram](media/app-classes-diagram.png)
 
 ## Architecture
 
