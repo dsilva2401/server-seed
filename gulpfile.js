@@ -46,6 +46,9 @@
 		gulp.task('start:database', function () {
 			require('./dist/database.bundle.js');
 		});
+		gulp.task('start:statics', function () {
+			require('./dist/statics.bundle.js');
+		});
 
 	// Serve app
 		gulp.task('serve', function () {
@@ -54,7 +57,8 @@
 				'start:database',
 				'start:proxy',
 				'start:app',
-				'start:auth'
+				'start:auth',
+				'start:statics'
 			]);
 		});
 

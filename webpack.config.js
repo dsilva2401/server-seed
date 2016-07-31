@@ -6,13 +6,18 @@ module.exports = {
 		app: './src/setup/app/start.ts',
 		auth: './src/setup/auth/start.ts',
 		database: './src/setup/database/index.ts',
-		proxy: './src/setup/proxy/start.ts'
+		proxy: './src/setup/proxy/start.ts',
+		statics: './src/setup/statics/start.ts',
 	},
 	output: {
 		filename: '[name].bundle.js',
 		path: path.join(__dirname, 'dist')
 	},
 	target: 'node',
+	node: {
+		__dirname: false,
+		__filename: false,
+	},
 	module: {
 		loaders: [
 			{ test: /\.json$/,  loader: 'json' },        

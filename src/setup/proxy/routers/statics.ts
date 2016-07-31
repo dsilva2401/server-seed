@@ -1,6 +1,7 @@
 
 // Imports
 	import * as express from 'express';
+	import {config} from '../../config.ts';
 
 // Define router
 	export let router = express.Router();
@@ -12,5 +13,5 @@
 			2. Request api
 			3. Response request
 		*/
-		res.end('Calling private statics');
+		res.redirect(config.servers.statics.url+req.originalUrl);
 	});

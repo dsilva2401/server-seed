@@ -24472,6 +24472,11 @@
 	exports.config.servers.auth.domain = 'localhost';
 	exports.config.servers.auth.port = 5000;
 	exports.config.servers.auth.url = 'http://' + exports.config.servers.auth.domain + ':' + exports.config.servers.auth.port;
+	// Statics Server
+	exports.config.servers.statics = {};
+	exports.config.servers.statics.domain = 'localhost';
+	exports.config.servers.statics.port = 8080;
+	exports.config.servers.statics.url = 'http://' + exports.config.servers.statics.domain + ':' + exports.config.servers.statics.port;
 
 
 /***/ },
@@ -24559,14 +24564,12 @@
 	var auth_ts_1 = __webpack_require__(136);
 	var api_ts_1 = __webpack_require__(247);
 	var views_ts_1 = __webpack_require__(248);
-	var statics_public_ts_1 = __webpack_require__(249);
-	var statics_private_ts_1 = __webpack_require__(250);
+	var statics_ts_1 = __webpack_require__(249);
 	// Export setup routers function
 	function setupRouters(server) {
 	    server.use('/api', api_ts_1.router);
 	    server.use('/auth', auth_ts_1.router);
-	    server.use('/statics/public', statics_public_ts_1.router);
-	    server.use('/statics/private', statics_private_ts_1.router);
+	    server.use('/statics', statics_ts_1.router);
 	    server.use('/', views_ts_1.router);
 	}
 	exports.setupRouters = setupRouters;
@@ -45332,6 +45335,7 @@
 	"use strict";
 	// Imports
 	var express = __webpack_require__(2);
+	var config_ts_1 = __webpack_require__(85);
 	// Define router
 	exports.router = express.Router();
 	// Setup routes
@@ -45341,27 +45345,7 @@
 	        2. Request api
 	        3. Response request
 	    */
-	    res.end('Calling public statics');
-	});
-
-
-/***/ },
-/* 250 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	// Imports
-	var express = __webpack_require__(2);
-	// Define router
-	exports.router = express.Router();
-	// Setup routes
-	exports.router.all('*', function (req, res, next) {
-	    /**
-	        1. Process api request
-	        2. Request api
-	        3. Response request
-	    */
-	    res.end('Calling private statics');
+	    res.redirect(config_ts_1.config.servers.statics.url + req.originalUrl);
 	});
 
 

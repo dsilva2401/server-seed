@@ -34,3 +34,9 @@
 	config.servers.auth.domain = 'localhost';
 	config.servers.auth.port = 5000;
 	config.servers.auth.url = 'http://'+config.servers.auth.domain+':'+config.servers.auth.port;
+
+	// Statics Server
+	config.servers.statics = {};
+	config.servers.statics.domain = 'localhost';
+	config.servers.statics.port = 8080;
+	config.servers.statics.url = 'http://'+config.servers.statics.domain+':'+config.servers.statics.port;

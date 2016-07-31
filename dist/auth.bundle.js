@@ -24472,6 +24472,11 @@
 	exports.config.servers.auth.domain = 'localhost';
 	exports.config.servers.auth.port = 5000;
 	exports.config.servers.auth.url = 'http://' + exports.config.servers.auth.domain + ':' + exports.config.servers.auth.port;
+	// Statics Server
+	exports.config.servers.statics = {};
+	exports.config.servers.statics.domain = 'localhost';
+	exports.config.servers.statics.port = 8080;
+	exports.config.servers.statics.url = 'http://' + exports.config.servers.statics.domain + ':' + exports.config.servers.statics.port;
 
 
 /***/ },
