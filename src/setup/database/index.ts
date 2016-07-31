@@ -8,7 +8,7 @@
 	export function start () {
 		setTimeout(function () {
 			console.log('Serving database at '+databaseConfig.domain+':'+databaseConfig.port);
-			shell.exec('mongod --dbpath '+databaseConfig.dataPath+' --port '+databaseConfig.port);
+			shell.exec('sudo mongod --dbpath '+databaseConfig.dataPath+' --port '+databaseConfig.port);
 		}, 10);
 	}
 

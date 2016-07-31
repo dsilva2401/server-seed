@@ -68,7 +68,7 @@
 	// Start function
 	function startServer() {
 	    exports.server.listen(serverConfig.port, function () {
-	        console.log('Serving app at ' + serverConfig.domain + ':' + serverConfig.port);
+	        console.log('Serving api at ' + serverConfig.domain + ':' + serverConfig.port);
 	    });
 	}
 	exports.startServer = startServer;

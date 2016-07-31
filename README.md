@@ -27,7 +27,7 @@ gulp typings:install
 
 ## Architecture
 
-![Architecture](docs/architecture.png)
+![Architecture](media/architecture.png)
 
 - Proxy Server: Intercepts all requests between client and App Server, this is to prevent attacks and improve performance.
 

@@ -3,8 +3,25 @@
 	var shell = require('shelljs');
 	var open = require('open');
 	var runSequence = require('run-sequence');
+	var typedoc = require('gulp-typedoc');
+	var package = require('./package.json');
+	var tsconfig = require('./tsconfig.json');
 
 // Tasks
+
+	// Generate typescript documentation
+		gulp.task('doc:build', function () {
+			return gulp
+        	.src(['src/**/*.ts', 'typings/**/*.ts'])
+        	.pipe(typedoc({
+				module: (tsconfig.module || 'commonjs'),
+				target: (tsconfig.target || 'es5'),
+				out: './wiki',
+				// theme: 'minimal',
+				name: package.name,
+				media: './media'
+			}));
+		});
 
 	// Install typings definitions (ex. gulp typings:install --module dt~request --global)
 		gulp.task('typings:install', function(module, global) {
@@ -37,8 +54,8 @@
 		gulp.task('start:proxy', function () {
 			require('./dist/proxy.bundle.js');
 		});
-		gulp.task('start:app', function () {
-			require('./dist/app.bundle.js');
+		gulp.task('start:api', function () {
+			require('./dist/api.bundle.js');
 		});
 		gulp.task('start:auth', function () {
 			require('./dist/auth.bundle.js');
@@ -56,7 +73,7 @@
 			runSequence([
 				'start:database',
 				'start:proxy',
-				'start:app',
+				'start:api',
 				'start:auth',
 				'start:statics'
 			]);
@@ -66,3 +83,11 @@
 		gulp.task('webpack:build', function () {
 			return shell.exec('node_modules/.bin/webpack');
 		});
+
+	// Build all
+		gulp.task('build', function () {
+			runSequence([
+				'doc:build',
+				'webpack:build'
+			]);
+		})

@@ -1,7 +1,7 @@
 
 // Imports
 	import * as express from 'express';
-	import {setupAPI} from './api/index.ts';
+	import {setupAPI} from './setup/index.ts';
 	import {config} from '../config.ts';
 
 // Server setup
@@ -14,6 +14,6 @@
 // Start function
 	export function startServer () {
 		server.listen(serverConfig.port, function () {
-			console.log('Serving app at '+serverConfig.domain+':'+serverConfig.port);
+			console.log('Serving api at '+serverConfig.domain+':'+serverConfig.port);
 		});
 	}
