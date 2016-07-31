@@ -8,7 +8,11 @@
     "doc": "docs"
   },
   "scripts": {
-    "proxy": "pm2 start dist/proxy.bundle.js -i 0"
+    "proxy": "pm2 start dist/proxy.bundle.js -i 0",
+    "api": "pm2 start dist/api.bundle.js -i 0",
+    "auth": "pm2 start dist/auth.bundle.js -i 0",
+    "server": "pm2 start dist/server.bundle.js -i 0",
+    "statics": "pm2 start dist/statics.bundle.js -i 0",
   },
   "repository": {
     "type": "git",
