@@ -35,9 +35,10 @@ A NodeJS based server seed.
 				interfaces/..
 				..
 		setup/
+			config.ts
 			proxy/..
-			app/..
-			database/..
+			api/..
+			auth/..
 			..
 		..
 ```
