@@ -43,11 +43,19 @@
 		gulp.task('start:auth', function () {
 			require('./dist/auth.bundle.js');
 		});
+		gulp.task('start:database', function () {
+			require('./dist/database.bundle.js');
+		});
 
 	// Serve app
 		gulp.task('serve', function () {
 			shell.exec('node_modules/.bin/webpack');
-			runSequence(['start:proxy', 'start:app', 'start:auth']);
+			runSequence([
+				'start:database',
+				'start:proxy',
+				'start:app',
+				'start:auth'
+			]);
 		});
 
 	// Build webpack

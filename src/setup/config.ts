@@ -1,12 +1,21 @@
 
-export let config: any;
+// Imports
+	import * as path from 'path';
 
-config = {};
+// Exports
+	export let config: any;
+	config = {};
 
 /**
 	=== Servers configuration ===
 */
 	config.servers = {};
+
+	// Database server
+	config.servers.database = {};
+	config.servers.database.domain = 'localhost';
+	config.servers.database.port = 27017;
+	config.servers.database.dataPath = path.join(process.cwd(), 'mongodata');
 
 	// Proxy Server
 	config.servers.proxy = {};

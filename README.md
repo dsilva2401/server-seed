@@ -8,10 +8,12 @@ A NodeJS based server seed.
 #### Development
 - gulp
 - npm
+- [mongodb](https://docs.mongodb.com/manual/installation/)
 
 #### Production
 - pm2
 - npm
+- [mongodb](https://docs.mongodb.com/manual/installation/)
 
 ## First setup
 ```bash

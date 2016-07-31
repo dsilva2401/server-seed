@@ -31,7 +31,8 @@
   },
   "dependencies": {
     "express": "^4.14.0",
-    "request": "^2.65.0"
+    "request": "^2.65.0",
+    "shelljs": "^0.7.3"
   },
   "bugs": {
     "url": "https://github.com/dsilva2401/server-seed/issues"
