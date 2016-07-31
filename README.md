@@ -80,7 +80,7 @@ gulp serve
 #### Production
 ```bash
 npm run proxy
-npm run app
+npm run api
 npm run database
 ..
 ```
