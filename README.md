@@ -3,27 +3,6 @@ Server Seed
 
 A NodeJS based server seed.
 
-## Requirements
-
-#### Development
-- gulp
-- npm
-- [mongodb](https://docs.mongodb.com/manual/installation/)
-
-#### Production
-- pm2
-- npm
-- [mongodb](https://docs.mongodb.com/manual/installation/)
-
-## First setup
-```bash
-# Node dependencies
-npm install
-
-# Typescript definitions
-gulp typings:install
-```
-
 ## App Classes diagram
 
 ![Classes diagram](media/app-classes-diagram.png)
@@ -62,6 +41,28 @@ gulp typings:install
 			..
 		..
 ```
+
+## Requirements
+
+#### Development
+- gulp
+- npm
+- [mongodb](https://docs.mongodb.com/manual/installation/)
+
+#### Production
+- pm2
+- npm
+- [mongodb](https://docs.mongodb.com/manual/installation/)
+
+## First setup
+```bash
+# Node dependencies
+npm install
+
+# Typescript definitions
+gulp typings:install
+```
+
 
 ## Build app
 ```bash
