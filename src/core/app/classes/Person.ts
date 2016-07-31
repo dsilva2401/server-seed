@@ -1,6 +1,6 @@
 
 // Imports
-	import {IPerson} from './IPerson.ts';
+	import {IPerson} from '../interfaces/IPerson.ts';
 
 // Exports
 	export abstract class Person implements IPerson {

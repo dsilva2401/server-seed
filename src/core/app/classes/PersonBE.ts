@@ -1,7 +1,7 @@
 
 // Imports
 	import {Person} from './Person.ts';
-	import {IPerson} from './IPerson.ts';
+	import {IPerson} from '../interfaces/IPerson.ts';
 	import {Credential} from './Credential.ts';
 	import {Session} from './Session.ts';
 
