@@ -60,6 +60,11 @@ gulp typings:install
 		..
 ```
 
+## Build app
+```bash
+gulp build
+```
+
 ## Start Servers
 
 #### Development
