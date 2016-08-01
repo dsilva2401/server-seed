@@ -2,7 +2,7 @@
 // Imports
 	import * as express from 'express';
 	import * as path from 'path';
-	import {config} from '../config.ts';
+	import {config} from '../../config.ts';
 
 // Server setup
 	let serverConfig = config.servers.statics;

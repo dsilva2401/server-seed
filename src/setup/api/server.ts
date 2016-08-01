@@ -2,7 +2,7 @@
 // Imports
 	import * as express from 'express';
 	import {setupAPI} from './setup/index.ts';
-	import {config} from '../config.ts';
+	import {config} from '../../config.ts';
 
 // Server setup
 	let serverConfig = config.servers.app;

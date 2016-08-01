@@ -2,13 +2,16 @@
 // Imports
 	import * as express from 'express';
 	import {setupAuth} from './setup/index.ts';
-	import {config} from '../config.ts';
+	import {config} from '../../config.ts';
+	import * as bodyParser from 'body-parser';
 
 // Server setup
 	let serverConfig = config.servers.auth;
 	export let server = express();
 
 // Setup routers
+	server.use(bodyParser.urlencoded({ extended: false }));
+	server.use(bodyParser.json());
 	setupAuth(server);
 
 // Start function

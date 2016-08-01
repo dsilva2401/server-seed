@@ -2,13 +2,16 @@
 // Imports
 	import * as express from 'express';
 	import {setupRouters} from './routers/index.ts';
-	import {config} from '../config.ts';
+	import {config} from '../../config.ts';
+	import * as bodyParser from 'body-parser';
 
 // Server setup
 	let serverConfig = config.servers.proxy;
 	export let server = express();
 
 // Setup routers
+	server.use(bodyParser.urlencoded({ extended: false }));
+	server.use(bodyParser.json());
 	setupRouters(server);
 
 // Start function

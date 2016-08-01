@@ -2,7 +2,7 @@
 // Imports
 	import * as express from 'express';
 	import * as request from 'request';
-	import {config} from '../../config.ts';
+	import {config} from '../../../config.ts';
 
 // Define router
 	export let router = express.Router();

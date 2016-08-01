@@ -40,20 +40,21 @@
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	// Imports
-	var server_ts_1 = __webpack_require__(250);
+	var server_ts_1 = __webpack_require__(376);
 	// Start server
 	server_ts_1.startServer();
 
 
 /***/ },
-/* 1 */,
-/* 2 */
+
+/***/ 2:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -70,7 +71,8 @@
 
 
 /***/ },
-/* 3 */
+
+/***/ 3:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -179,13 +181,15 @@
 
 
 /***/ },
-/* 4 */
+
+/***/ 4:
 /***/ function(module, exports) {
 
 	module.exports = require("events");
 
 /***/ },
-/* 5 */
+
+/***/ 5:
 /***/ function(module, exports) {
 
 	/*!
@@ -251,7 +255,8 @@
 
 
 /***/ },
-/* 6 */
+
+/***/ 6:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -900,7 +905,8 @@
 
 
 /***/ },
-/* 7 */
+
+/***/ 7:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -1095,7 +1101,8 @@
 
 
 /***/ },
-/* 8 */
+
+/***/ 8:
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -1310,19 +1317,22 @@
 
 
 /***/ },
-/* 9 */
+
+/***/ 9:
 /***/ function(module, exports) {
 
 	module.exports = require("tty");
 
 /***/ },
-/* 10 */
+
+/***/ 10:
 /***/ function(module, exports) {
 
 	module.exports = require("util");
 
 /***/ },
-/* 11 */
+
+/***/ 11:
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -1525,7 +1535,8 @@
 
 
 /***/ },
-/* 12 */
+
+/***/ 12:
 /***/ function(module, exports) {
 
 	/**
@@ -1656,19 +1667,22 @@
 
 
 /***/ },
-/* 13 */
+
+/***/ 13:
 /***/ function(module, exports) {
 
 	module.exports = require("fs");
 
 /***/ },
-/* 14 */
+
+/***/ 14:
 /***/ function(module, exports) {
 
 	module.exports = require("net");
 
 /***/ },
-/* 15 */
+
+/***/ 15:
 /***/ function(module, exports) {
 
 	/*!
@@ -1752,7 +1766,8 @@
 
 
 /***/ },
-/* 16 */
+
+/***/ 16:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -1954,7 +1969,8 @@
 
 
 /***/ },
-/* 17 */
+
+/***/ 17:
 /***/ function(module, exports) {
 
 	/*!
@@ -2055,7 +2071,8 @@
 
 
 /***/ },
-/* 18 */
+
+/***/ 18:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -2171,7 +2188,8 @@
 
 
 /***/ },
-/* 19 */
+
+/***/ 19:
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -2241,7 +2259,8 @@
 	};
 
 /***/ },
-/* 20 */
+
+/***/ 20:
 /***/ function(module, exports) {
 
 	/*!
@@ -2316,7 +2335,8 @@
 
 
 /***/ },
-/* 21 */
+
+/***/ 21:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -2967,7 +2987,8 @@
 
 
 /***/ },
-/* 22 */
+
+/***/ 22:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -3183,7 +3204,8 @@
 
 
 /***/ },
-/* 23 */
+
+/***/ 23:
 /***/ function(module, exports) {
 
 	'use strict'
@@ -3253,7 +3275,8 @@
 
 
 /***/ },
-/* 24 */
+
+/***/ 24:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -3435,7 +3458,8 @@
 
 
 /***/ },
-/* 25 */
+
+/***/ 25:
 /***/ function(module, exports) {
 
 	/**
@@ -3570,7 +3594,8 @@
 
 
 /***/ },
-/* 26 */
+
+/***/ 26:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -3645,13 +3670,15 @@
 
 
 /***/ },
-/* 27 */
+
+/***/ 27:
 /***/ function(module, exports) {
 
 	module.exports = require("http");
 
 /***/ },
-/* 28 */
+
+/***/ 28:
 /***/ function(module, exports) {
 
 	/**
@@ -3680,7 +3707,8 @@
 
 
 /***/ },
-/* 29 */
+
+/***/ 29:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -4207,7 +4235,8 @@
 
 
 /***/ },
-/* 30 */
+
+/***/ 30:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -4297,13 +4326,15 @@
 
 
 /***/ },
-/* 31 */
+
+/***/ 31:
 /***/ function(module, exports) {
 
 	module.exports = require("buffer");
 
 /***/ },
-/* 32 */
+
+/***/ 32:
 /***/ function(module, exports) {
 
 	/*!
@@ -4344,7 +4375,8 @@
 
 
 /***/ },
-/* 33 */
+
+/***/ 33:
 /***/ function(module, exports) {
 
 	/*!
@@ -4453,7 +4485,8 @@
 
 
 /***/ },
-/* 34 */
+
+/***/ 34:
 /***/ function(module, exports) {
 
 	/*!
@@ -4481,13 +4514,15 @@
 
 
 /***/ },
-/* 35 */
+
+/***/ 35:
 /***/ function(module, exports) {
 
 	module.exports = require("path");
 
 /***/ },
-/* 36 */
+
+/***/ 36:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -4631,13 +4666,15 @@
 
 
 /***/ },
-/* 37 */
+
+/***/ 37:
 /***/ function(module, exports) {
 
 	module.exports = require("url");
 
 /***/ },
-/* 38 */
+
+/***/ 38:
 /***/ function(module, exports) {
 
 	/*!
@@ -4679,7 +4716,8 @@
 
 
 /***/ },
-/* 39 */
+
+/***/ 39:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -4731,7 +4769,8 @@
 
 
 /***/ },
-/* 40 */
+
+/***/ 40:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4746,7 +4785,8 @@
 
 
 /***/ },
-/* 41 */
+
+/***/ 41:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4889,7 +4929,8 @@
 
 
 /***/ },
-/* 42 */
+
+/***/ 42:
 /***/ function(module, exports) {
 
 	'use strict';
@@ -5059,7 +5100,8 @@
 
 
 /***/ },
-/* 43 */
+
+/***/ 43:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5232,7 +5274,8 @@
 
 
 /***/ },
-/* 44 */
+
+/***/ 44:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -5411,7 +5454,8 @@
 
 
 /***/ },
-/* 45 */
+
+/***/ 45:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -5716,7 +5760,8 @@
 
 
 /***/ },
-/* 46 */
+
+/***/ 46:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -6167,7 +6212,8 @@
 
 
 /***/ },
-/* 47 */
+
+/***/ 47:
 /***/ function(module, exports) {
 
 	/*!
@@ -6389,7 +6435,8 @@
 
 
 /***/ },
-/* 48 */
+
+/***/ 48:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -7343,7 +7390,8 @@
 
 
 /***/ },
-/* 49 */
+
+/***/ 49:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -7572,7 +7620,8 @@
 
 
 /***/ },
-/* 50 */
+
+/***/ 50:
 /***/ function(module, exports) {
 
 	module.exports = Object.setPrototypeOf || ({__proto__:[]} instanceof Array ? setProtoOf : mixinProperties);
@@ -7589,14 +7638,16 @@
 
 
 /***/ },
-/* 51 */
+
+/***/ 51:
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__(10).inherits
 
 
 /***/ },
-/* 52 */
+
+/***/ 52:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -7677,13 +7728,15 @@
 
 
 /***/ },
-/* 53 */
+
+/***/ 53:
 /***/ function(module, exports) {
 
 	module.exports = require("stream");
 
 /***/ },
-/* 54 */
+
+/***/ 54:
 /***/ function(module, exports) {
 
 	/*!
@@ -7749,7 +7802,8 @@
 
 
 /***/ },
-/* 55 */
+
+/***/ 55:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -7887,13 +7941,15 @@
 
 
 /***/ },
-/* 56 */
+
+/***/ 56:
 /***/ function(module, exports) {
 
 	module.exports = require("crypto");
 
 /***/ },
-/* 57 */
+
+/***/ 57:
 /***/ function(module, exports) {
 
 	
@@ -7956,7 +8012,8 @@
 
 
 /***/ },
-/* 58 */
+
+/***/ 58:
 /***/ function(module, exports, __webpack_require__) {
 
 	var path = __webpack_require__(35);
@@ -8070,7 +8127,8 @@
 
 
 /***/ },
-/* 59 */
+
+/***/ 59:
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -10661,7 +10719,8 @@
 	};
 
 /***/ },
-/* 60 */
+
+/***/ 60:
 /***/ function(module, exports) {
 
 	/*!
@@ -10825,7 +10884,8 @@
 
 
 /***/ },
-/* 61 */
+
+/***/ 61:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -11152,7 +11212,8 @@
 
 
 /***/ },
-/* 62 */
+
+/***/ 62:
 /***/ function(module, exports) {
 
 	/*!
@@ -11193,7 +11254,8 @@
 
 
 /***/ },
-/* 63 */
+
+/***/ 63:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {(function() {
@@ -11726,7 +11788,8 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)(module)))
 
 /***/ },
-/* 64 */
+
+/***/ 64:
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -11742,13 +11805,15 @@
 
 
 /***/ },
-/* 65 */
+
+/***/ 65:
 /***/ function(module, exports) {
 
 	module.exports = require("querystring");
 
 /***/ },
-/* 66 */
+
+/***/ 66:
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
@@ -11790,7 +11855,8 @@
 
 
 /***/ },
-/* 67 */
+
+/***/ 67:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -12298,7 +12364,8 @@
 
 
 /***/ },
-/* 68 */
+
+/***/ 68:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -12535,7 +12602,8 @@
 
 
 /***/ },
-/* 69 */
+
+/***/ 69:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -12665,7 +12733,8 @@
 
 
 /***/ },
-/* 70 */
+
+/***/ 70:
 /***/ function(module, exports) {
 
 	/**
@@ -12840,7 +12909,8 @@
 
 
 /***/ },
-/* 71 */
+
+/***/ 71:
 /***/ function(module, exports) {
 
 	/**
@@ -13030,7 +13100,8 @@
 
 
 /***/ },
-/* 72 */
+
+/***/ 72:
 /***/ function(module, exports) {
 
 	/**
@@ -13215,7 +13286,8 @@
 
 
 /***/ },
-/* 73 */
+
+/***/ 73:
 /***/ function(module, exports) {
 
 	/**
@@ -13515,7 +13587,8 @@
 
 
 /***/ },
-/* 74 */
+
+/***/ 74:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -13709,7 +13782,8 @@
 
 
 /***/ },
-/* 75 */
+
+/***/ 75:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -13726,7 +13800,8 @@
 
 
 /***/ },
-/* 76 */
+
+/***/ 76:
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -22243,7 +22318,8 @@
 	};
 
 /***/ },
-/* 77 */
+
+/***/ 77:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -22511,7 +22587,8 @@
 
 
 /***/ },
-/* 78 */
+
+/***/ 78:
 /***/ function(module, exports) {
 
 	/*!
@@ -22787,7 +22864,8 @@
 
 
 /***/ },
-/* 79 */
+
+/***/ 79:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -23858,7 +23936,8 @@
 
 
 /***/ },
-/* 80 */
+
+/***/ 80:
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -23915,7 +23994,8 @@
 
 
 /***/ },
-/* 81 */
+
+/***/ 81:
 /***/ function(module, exports) {
 
 	/*!
@@ -24116,7 +24196,8 @@
 
 
 /***/ },
-/* 82 */
+
+/***/ 82:
 /***/ function(module, exports) {
 
 	/*!
@@ -24246,7 +24327,8 @@
 
 
 /***/ },
-/* 83 */
+
+/***/ 83:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -24440,8 +24522,8 @@
 
 
 /***/ },
-/* 84 */,
-/* 85 */
+
+/***/ 85:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -24457,6 +24539,8 @@
 	exports.config.servers.database.domain = 'localhost';
 	exports.config.servers.database.port = 27017;
 	exports.config.servers.database.dataPath = path.join(process.cwd(), 'mongodata');
+	exports.config.servers.database.dbname = 'serverseed';
+	exports.config.servers.database.url = 'mongodb://' + exports.config.servers.database.domain + ':' + exports.config.servers.database.port + '/' + exports.config.servers.database.dbname;
 	// Proxy Server
 	exports.config.servers.proxy = {};
 	exports.config.servers.proxy.domain = 'localhost';
@@ -24480,171 +24564,8 @@
 
 
 /***/ },
-/* 86 */,
-/* 87 */,
-/* 88 */,
-/* 89 */,
-/* 90 */,
-/* 91 */,
-/* 92 */,
-/* 93 */,
-/* 94 */,
-/* 95 */,
-/* 96 */,
-/* 97 */,
-/* 98 */,
-/* 99 */,
-/* 100 */,
-/* 101 */,
-/* 102 */,
-/* 103 */,
-/* 104 */,
-/* 105 */,
-/* 106 */,
-/* 107 */,
-/* 108 */,
-/* 109 */,
-/* 110 */,
-/* 111 */,
-/* 112 */,
-/* 113 */,
-/* 114 */,
-/* 115 */,
-/* 116 */,
-/* 117 */,
-/* 118 */,
-/* 119 */,
-/* 120 */,
-/* 121 */,
-/* 122 */,
-/* 123 */,
-/* 124 */,
-/* 125 */,
-/* 126 */,
-/* 127 */,
-/* 128 */,
-/* 129 */,
-/* 130 */,
-/* 131 */,
-/* 132 */,
-/* 133 */,
-/* 134 */,
-/* 135 */,
-/* 136 */,
-/* 137 */,
-/* 138 */,
-/* 139 */,
-/* 140 */,
-/* 141 */,
-/* 142 */,
-/* 143 */,
-/* 144 */,
-/* 145 */,
-/* 146 */,
-/* 147 */,
-/* 148 */,
-/* 149 */,
-/* 150 */,
-/* 151 */,
-/* 152 */,
-/* 153 */,
-/* 154 */,
-/* 155 */,
-/* 156 */,
-/* 157 */,
-/* 158 */,
-/* 159 */,
-/* 160 */,
-/* 161 */,
-/* 162 */,
-/* 163 */,
-/* 164 */,
-/* 165 */,
-/* 166 */,
-/* 167 */,
-/* 168 */,
-/* 169 */,
-/* 170 */,
-/* 171 */,
-/* 172 */,
-/* 173 */,
-/* 174 */,
-/* 175 */,
-/* 176 */,
-/* 177 */,
-/* 178 */,
-/* 179 */,
-/* 180 */,
-/* 181 */,
-/* 182 */,
-/* 183 */,
-/* 184 */,
-/* 185 */,
-/* 186 */,
-/* 187 */,
-/* 188 */,
-/* 189 */,
-/* 190 */,
-/* 191 */,
-/* 192 */,
-/* 193 */,
-/* 194 */,
-/* 195 */,
-/* 196 */,
-/* 197 */,
-/* 198 */,
-/* 199 */,
-/* 200 */,
-/* 201 */,
-/* 202 */,
-/* 203 */,
-/* 204 */,
-/* 205 */,
-/* 206 */,
-/* 207 */,
-/* 208 */,
-/* 209 */,
-/* 210 */,
-/* 211 */,
-/* 212 */,
-/* 213 */,
-/* 214 */,
-/* 215 */,
-/* 216 */,
-/* 217 */,
-/* 218 */,
-/* 219 */,
-/* 220 */,
-/* 221 */,
-/* 222 */,
-/* 223 */,
-/* 224 */,
-/* 225 */,
-/* 226 */,
-/* 227 */,
-/* 228 */,
-/* 229 */,
-/* 230 */,
-/* 231 */,
-/* 232 */,
-/* 233 */,
-/* 234 */,
-/* 235 */,
-/* 236 */,
-/* 237 */,
-/* 238 */,
-/* 239 */,
-/* 240 */,
-/* 241 */,
-/* 242 */,
-/* 243 */,
-/* 244 */,
-/* 245 */,
-/* 246 */,
-/* 247 */,
-/* 248 */,
-/* 249 */,
-/* 250 */
+
+/***/ 376:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -24668,4 +24589,5 @@
 
 
 /***/ }
-/******/ ]);
+
+/******/ });

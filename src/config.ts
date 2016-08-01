@@ -16,6 +16,8 @@
 	config.servers.database.domain = 'localhost';
 	config.servers.database.port = 27017;
 	config.servers.database.dataPath = path.join(process.cwd(), 'mongodata');
+	config.servers.database.dbname = 'serverseed';
+	config.servers.database.url = 'mongodb://'+config.servers.database.domain+':'+config.servers.database.port+'/'+config.servers.database.dbname;
 
 	// Proxy Server
 	config.servers.proxy = {};

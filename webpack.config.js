@@ -21,8 +21,12 @@ module.exports = {
 	module: {
 		loaders: [
 			{ test: /\.json$/,  loader: 'json' },        
-			{ test: /\.tsx?$/, loader: 'ts-loader' }
+			{ test: /\.tsx?$/, loader: 'ts-loader' },
+			{ test: /\.node$/, loader: 'node-loader' }
 		]
+	},
+	resolve: {
+		extensions: ["", ".webpack.js", ".web.js", ".js", ".node"]
 	},
 	plugins: []
 };
