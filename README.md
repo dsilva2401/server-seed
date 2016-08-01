@@ -85,3 +85,8 @@ npm run database
 ..
 ```
 
+## Run Tests
+```bash
+gulp test
+```
+
