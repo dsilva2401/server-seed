@@ -26,7 +26,6 @@
 				credential.getOwner()
 				// Success
 				.then(function (owner) {
-					console.log(owner);
 					if (owner) {
 						res.status(409);
 						res.json({

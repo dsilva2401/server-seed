@@ -24535,7 +24535,6 @@
 	        var credential = new Credential_ts_1.Credential(currentPerson.email);
 	        credential.getOwner()
 	            .then(function (owner) {
-	            console.log(owner);
 	            if (owner) {
 	                res.status(409);
 	                res.json({
