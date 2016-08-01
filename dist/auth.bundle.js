@@ -24490,7 +24490,7 @@
 	var express = __webpack_require__(2);
 	var index_ts_1 = __webpack_require__(87);
 	var config_ts_1 = __webpack_require__(85);
-	var bodyParser = __webpack_require__(188);
+	var bodyParser = __webpack_require__(189);
 	// Server setup
 	var serverConfig = config_ts_1.config.servers.auth;
 	exports.server = express();
@@ -24514,54 +24514,13 @@
 	"use strict";
 	// Imports
 	var express = __webpack_require__(2);
-	var PersonBE_ts_1 = __webpack_require__(88);
-	var Credential_ts_1 = __webpack_require__(187);
+	var register_ts_1 = __webpack_require__(88);
 	// Export router setup function
 	function setupAuth(server) {
 	    // Init router
 	    var router = express.Router();
 	    // Setup routes
-	    router.post('/register', function (req, res, next) {
-	        var currentPerson = new PersonBE_ts_1.PersonBE(req.body);
-	        // Data validation
-	        var errors = currentPerson.validate();
-	        if (errors) {
-	            res.status(400);
-	            res.json(errors);
-	            res.end();
-	            return;
-	        }
-	        // Verify if not exists
-	        var credential = new Credential_ts_1.Credential(currentPerson.email);
-	        credential.getOwner()
-	            .then(function (owner) {
-	            if (owner) {
-	                res.status(409);
-	                res.json({
-	                    details: 'Already registered'
-	                });
-	                res.end();
-	                return;
-	            }
-	            // Save register
-	            currentPerson.save()
-	                .then(function (result) {
-	                res.status(200);
-	                res.json(result);
-	                res.end();
-	            })
-	                .catch(function (err) {
-	                res.status(500);
-	                res.json(err);
-	                res.end();
-	            });
-	        })
-	            .catch(function (err) {
-	            res.status(500);
-	            res.json(err);
-	            res.end();
-	        });
-	    });
+	    router.post('/register', register_ts_1.controller);
 	    // Add router to server
 	    server.use('/auth', router);
 	}
@@ -24573,14 +24532,68 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
+	// Imports
+	var PersonBE_ts_1 = __webpack_require__(89);
+	var Credential_ts_1 = __webpack_require__(188);
+	// Exports
+	function controller(req, res, next) {
+	    var currentPerson = new PersonBE_ts_1.PersonBE(req.body);
+	    // Data validation
+	    var errors = currentPerson.validate();
+	    if (errors) {
+	        res.status(400);
+	        res.json(errors);
+	        res.end();
+	        return;
+	    }
+	    // Verify if not exists
+	    var credential = new Credential_ts_1.Credential(currentPerson.email);
+	    credential.getOwner()
+	        .then(function (owner) {
+	        if (owner) {
+	            res.status(409);
+	            res.json({
+	                details: 'Already registered'
+	            });
+	            res.end();
+	            return;
+	        }
+	        // Save register
+	        currentPerson.save()
+	            .then(function (result) {
+	            res.status(200);
+	            res.json(result);
+	            res.end();
+	        })
+	            .catch(function (err) {
+	            res.status(500);
+	            res.json(err);
+	            res.end();
+	        });
+	    })
+	        .catch(function (err) {
+	        res.status(500);
+	        res.json(err);
+	        res.end();
+	    });
+	}
+	exports.controller = controller;
+	;
+
+
+/***/ },
+/* 89 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
 	var __extends = (this && this.__extends) || function (d, b) {
 	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	// Imports
-	var Person_ts_1 = __webpack_require__(89);
-	var database_ts_1 = __webpack_require__(90);
+	var Person_ts_1 = __webpack_require__(90);
+	var database_ts_1 = __webpack_require__(91);
 	// Exports
 	var PersonBE = (function (_super) {
 	    __extends(PersonBE, _super);
@@ -24625,7 +24638,7 @@
 
 
 /***/ },
-/* 89 */
+/* 90 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -24667,14 +24680,14 @@
 
 
 /***/ },
-/* 90 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	// Imports
 	var config_ts_1 = __webpack_require__(85);
-	var mongodb_1 = __webpack_require__(91);
-	var Q = __webpack_require__(186);
+	var mongodb_1 = __webpack_require__(92);
+	var Q = __webpack_require__(187);
 	// Setup
 	var db;
 	setTimeout(function () {
@@ -24723,33 +24736,33 @@
 
 
 /***/ },
-/* 91 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Core module
-	var core = __webpack_require__(92),
-	  Instrumentation = __webpack_require__(150);
+	var core = __webpack_require__(93),
+	  Instrumentation = __webpack_require__(151);
 
 	// Set up the connect function
-	var connect = __webpack_require__(181).connect;
+	var connect = __webpack_require__(182).connect;
 
 	// Expose error class
 	connect.MongoError = core.MongoError;
 
 	// Actual driver classes exported
-	connect.Admin = __webpack_require__(180);
-	connect.MongoClient = __webpack_require__(181);
-	connect.Db = __webpack_require__(179);
-	connect.Collection = __webpack_require__(173);
-	connect.Server = __webpack_require__(175);
-	connect.ReplSet = __webpack_require__(177);
-	connect.Mongos = __webpack_require__(178);
-	connect.ReadPreference = __webpack_require__(153);
-	connect.GridStore = __webpack_require__(171);
-	connect.Chunk = __webpack_require__(172);
+	connect.Admin = __webpack_require__(181);
+	connect.MongoClient = __webpack_require__(182);
+	connect.Db = __webpack_require__(180);
+	connect.Collection = __webpack_require__(174);
+	connect.Server = __webpack_require__(176);
+	connect.ReplSet = __webpack_require__(178);
+	connect.Mongos = __webpack_require__(179);
+	connect.ReadPreference = __webpack_require__(154);
+	connect.GridStore = __webpack_require__(172);
+	connect.Chunk = __webpack_require__(173);
 	connect.Logger = core.Logger;
-	connect.Cursor = __webpack_require__(164);
-	connect.GridFSBucket = __webpack_require__(183);
+	connect.Cursor = __webpack_require__(165);
+	connect.GridFSBucket = __webpack_require__(184);
 
 	// BSON types exported
 	connect.Binary = core.BSON.Binary;
@@ -24779,31 +24792,31 @@
 
 
 /***/ },
-/* 92 */
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = {
-	    MongoError: __webpack_require__(93)
-	  , Server: __webpack_require__(94)
-	  , ReplSet: __webpack_require__(146)
-	  , Mongos: __webpack_require__(149)
-	  , Logger: __webpack_require__(120)
-	  , Cursor: __webpack_require__(122)
-	  , ReadPreference: __webpack_require__(121)
-	  , BSON: __webpack_require__(100)
+	    MongoError: __webpack_require__(94)
+	  , Server: __webpack_require__(95)
+	  , ReplSet: __webpack_require__(147)
+	  , Mongos: __webpack_require__(150)
+	  , Logger: __webpack_require__(121)
+	  , Cursor: __webpack_require__(123)
+	  , ReadPreference: __webpack_require__(122)
+	  , BSON: __webpack_require__(101)
 	  // Raw operations
-	  , Query: __webpack_require__(99).Query
+	  , Query: __webpack_require__(100).Query
 	  // Auth mechanisms
-	  , MongoCR: __webpack_require__(130)
-	  , X509: __webpack_require__(131)
-	  , Plain: __webpack_require__(132)
-	  , GSSAPI: __webpack_require__(133)
-	  , ScramSHA1: __webpack_require__(145)
+	  , MongoCR: __webpack_require__(131)
+	  , X509: __webpack_require__(132)
+	  , Plain: __webpack_require__(133)
+	  , GSSAPI: __webpack_require__(134)
+	  , ScramSHA1: __webpack_require__(146)
 	}
 
 
 /***/ },
-/* 93 */
+/* 94 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -24853,38 +24866,38 @@
 
 
 /***/ },
-/* 94 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var inherits = __webpack_require__(10).inherits
 	  , f = __webpack_require__(10).format
-	  , bindToCurrentDomain = __webpack_require__(95).bindToCurrentDomain
+	  , bindToCurrentDomain = __webpack_require__(96).bindToCurrentDomain
 	  , EventEmitter = __webpack_require__(4).EventEmitter
-	  , Pool = __webpack_require__(96)
-	  , b = __webpack_require__(100)
+	  , Pool = __webpack_require__(97)
+	  , b = __webpack_require__(101)
 	  , crypto = __webpack_require__(56)
-	  , Query = __webpack_require__(99).Query
-	  , MongoError = __webpack_require__(93)
-	  , ReadPreference = __webpack_require__(121)
-	  , BasicCursor = __webpack_require__(122)
-	  , CommandResult = __webpack_require__(123)
-	  , getSingleProperty = __webpack_require__(95).getSingleProperty
-	  , getProperty = __webpack_require__(95).getProperty
-	  , debugOptions = __webpack_require__(95).debugOptions
-	  , BSON = __webpack_require__(100).native().BSON
-	  , PreTwoSixWireProtocolSupport = __webpack_require__(124)
-	  , TwoSixWireProtocolSupport = __webpack_require__(127)
-	  , ThreeTwoWireProtocolSupport = __webpack_require__(128)
-	  , Session = __webpack_require__(129)
-	  , Logger = __webpack_require__(120)
-	  , MongoCR = __webpack_require__(130)
-	  , X509 = __webpack_require__(131)
-	  , Plain = __webpack_require__(132)
-	  , GSSAPI = __webpack_require__(133)
-	  , SSPI = __webpack_require__(144)
-	  , ScramSHA1 = __webpack_require__(145);
+	  , Query = __webpack_require__(100).Query
+	  , MongoError = __webpack_require__(94)
+	  , ReadPreference = __webpack_require__(122)
+	  , BasicCursor = __webpack_require__(123)
+	  , CommandResult = __webpack_require__(124)
+	  , getSingleProperty = __webpack_require__(96).getSingleProperty
+	  , getProperty = __webpack_require__(96).getProperty
+	  , debugOptions = __webpack_require__(96).debugOptions
+	  , BSON = __webpack_require__(101).native().BSON
+	  , PreTwoSixWireProtocolSupport = __webpack_require__(125)
+	  , TwoSixWireProtocolSupport = __webpack_require__(128)
+	  , ThreeTwoWireProtocolSupport = __webpack_require__(129)
+	  , Session = __webpack_require__(130)
+	  , Logger = __webpack_require__(121)
+	  , MongoCR = __webpack_require__(131)
+	  , X509 = __webpack_require__(132)
+	  , Plain = __webpack_require__(133)
+	  , GSSAPI = __webpack_require__(134)
+	  , SSPI = __webpack_require__(145)
+	  , ScramSHA1 = __webpack_require__(146);
 
 	/**
 	 * @fileOverview The **Server** class is a class that represents a single server topology and is
@@ -25717,9 +25730,9 @@
 	  var nBSON = null;
 
 	  if(type == 'c++') {
-	    nBSON = __webpack_require__(100).native().BSON;
+	    nBSON = __webpack_require__(101).native().BSON;
 	  } else if(type == 'js') {
-	    nBSON = __webpack_require__(100).pure().BSON;
+	    nBSON = __webpack_require__(101).pure().BSON;
 	  } else {
 	    throw new MongoError(f("% parser not supported", type));
 	  }
@@ -26492,7 +26505,7 @@
 
 
 /***/ },
-/* 95 */
+/* 96 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -26583,16 +26596,16 @@
 
 
 /***/ },
-/* 96 */
+/* 97 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var inherits = __webpack_require__(10).inherits
 	  , EventEmitter = __webpack_require__(4).EventEmitter
-	  , Connection = __webpack_require__(97)
-	  , Query = __webpack_require__(99).Query
-	  , Logger = __webpack_require__(120)
+	  , Connection = __webpack_require__(98)
+	  , Query = __webpack_require__(100).Query
+	  , Logger = __webpack_require__(121)
 	  , f = __webpack_require__(10).format;
 
 	var DISCONNECTED = 'disconnected';
@@ -27118,7 +27131,7 @@
 
 
 /***/ },
-/* 97 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -27126,14 +27139,14 @@
 	var inherits = __webpack_require__(10).inherits
 	  , EventEmitter = __webpack_require__(4).EventEmitter
 	  , net = __webpack_require__(14)
-	  , tls = __webpack_require__(98)
+	  , tls = __webpack_require__(99)
 	  , f = __webpack_require__(10).format
 	  , crypto = __webpack_require__(56)
-	  , getSingleProperty = __webpack_require__(95).getSingleProperty
-	  , debugOptions = __webpack_require__(95).debugOptions
-	  , Response = __webpack_require__(99).Response
-	  , MongoError = __webpack_require__(93)
-	  , Logger = __webpack_require__(120);
+	  , getSingleProperty = __webpack_require__(96).getSingleProperty
+	  , debugOptions = __webpack_require__(96).debugOptions
+	  , Response = __webpack_require__(100).Response
+	  , MongoError = __webpack_require__(94)
+	  , Logger = __webpack_require__(121);
 
 	var _id = 0;
 	var debugFields = ['host', 'port', 'size', 'keepAlive', 'keepAliveInitialDelay', 'noDelay'
@@ -27667,22 +27680,22 @@
 
 
 /***/ },
-/* 98 */
+/* 99 */
 /***/ function(module, exports) {
 
 	module.exports = require("tls");
 
 /***/ },
-/* 99 */
+/* 100 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var f = __webpack_require__(10).format
-	  , Long = __webpack_require__(100).Long
-	  , setProperty = __webpack_require__(95).setProperty
-	  , getProperty = __webpack_require__(95).getProperty
-	  , getSingleProperty = __webpack_require__(95).getSingleProperty;
+	  , Long = __webpack_require__(101).Long
+	  , setProperty = __webpack_require__(96).setProperty
+	  , getProperty = __webpack_require__(96).getProperty
+	  , getSingleProperty = __webpack_require__(96).getSingleProperty;
 
 	// Incrementing request id
 	var _requestId = 0;
@@ -28232,12 +28245,12 @@
 
 
 /***/ },
-/* 100 */
+/* 101 */
 /***/ function(module, exports, __webpack_require__) {
 
 	try {
-	  exports.BSONPure = __webpack_require__(101);
-	  exports.BSONNative = __webpack_require__(101);
+	  exports.BSONPure = __webpack_require__(102);
+	  exports.BSONNative = __webpack_require__(102);
 	} catch(err) {
 	}
 
@@ -28254,7 +28267,7 @@
 	  , './symbol'
 	  , './timestamp'
 	  , './long'].forEach(function (path) {
-	  	var module = __webpack_require__(119)(path);
+	  	var module = __webpack_require__(120)(path);
 	  	for (var i in module) {
 	  		exports[i] = module[i];
 	    }
@@ -28278,7 +28291,7 @@
 	    , './timestamp'
 	    , './long'
 	    , './bson'].forEach(function (path) {
-	    	var module = __webpack_require__(119)(path);
+	    	var module = __webpack_require__(120)(path);
 	    	for (var i in module) {
 	    		classes[i] = module[i];
 	      }
@@ -28305,7 +28318,7 @@
 	    , './timestamp'
 	    , './long'
 	  ].forEach(function (path) {
-	      var module = __webpack_require__(119)(path);
+	      var module = __webpack_require__(120)(path);
 	      for (var i in module) {
 	        classes[i] = module[i];
 	      }
@@ -28313,7 +28326,7 @@
 
 	  // Catch error and return no classes found
 	  try {
-	    classes['BSON'] = __webpack_require__(101);
+	    classes['BSON'] = __webpack_require__(102);
 	  } catch(err) {
 	    return exports.pure();
 	  }
@@ -28324,30 +28337,30 @@
 
 
 /***/ },
-/* 101 */
+/* 102 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// "use strict"
 
-	var writeIEEE754 = __webpack_require__(102).writeIEEE754,
-		readIEEE754 = __webpack_require__(102).readIEEE754,
-	  Map = __webpack_require__(103),
-		Long = __webpack_require__(104).Long,
-	  Double = __webpack_require__(105).Double,
-	  Timestamp = __webpack_require__(106).Timestamp,
-	  ObjectID = __webpack_require__(107).ObjectID,
-	  BSONRegExp = __webpack_require__(109).BSONRegExp,
-	  Symbol = __webpack_require__(110).Symbol,
-	  Code = __webpack_require__(111).Code,
-	  MinKey = __webpack_require__(112).MinKey,
-	  MaxKey = __webpack_require__(113).MaxKey,
-	  DBRef = __webpack_require__(114).DBRef,
-	  Binary = __webpack_require__(115).Binary;
+	var writeIEEE754 = __webpack_require__(103).writeIEEE754,
+		readIEEE754 = __webpack_require__(103).readIEEE754,
+	  Map = __webpack_require__(104),
+		Long = __webpack_require__(105).Long,
+	  Double = __webpack_require__(106).Double,
+	  Timestamp = __webpack_require__(107).Timestamp,
+	  ObjectID = __webpack_require__(108).ObjectID,
+	  BSONRegExp = __webpack_require__(110).BSONRegExp,
+	  Symbol = __webpack_require__(111).Symbol,
+	  Code = __webpack_require__(112).Code,
+	  MinKey = __webpack_require__(113).MinKey,
+	  MaxKey = __webpack_require__(114).MaxKey,
+	  DBRef = __webpack_require__(115).DBRef,
+	  Binary = __webpack_require__(116).Binary;
 
 	// Parts of the parser
-	var deserialize = __webpack_require__(116),
-		serializer = __webpack_require__(117),
-		calculateObjectSize = __webpack_require__(118);
+	var deserialize = __webpack_require__(117),
+		serializer = __webpack_require__(118),
+		calculateObjectSize = __webpack_require__(119);
 
 	/**
 	 * @ignore
@@ -28653,7 +28666,7 @@
 
 
 /***/ },
-/* 102 */
+/* 103 */
 /***/ function(module, exports) {
 
 	// Copyright (c) 2008, Fair Oaks Labs, Inc.
@@ -28779,7 +28792,7 @@
 	exports.writeIEEE754 = writeIEEE754;
 
 /***/ },
-/* 103 */
+/* 104 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -28910,7 +28923,7 @@
 	}
 
 /***/ },
-/* 104 */
+/* 105 */
 /***/ function(module, exports) {
 
 	// Licensed under the Apache License, Version 2.0 (the "License");
@@ -29771,7 +29784,7 @@
 	module.exports.Long = Long;
 
 /***/ },
-/* 105 */
+/* 106 */
 /***/ function(module, exports) {
 
 	/**
@@ -29809,7 +29822,7 @@
 	module.exports.Double = Double;
 
 /***/ },
-/* 106 */
+/* 107 */
 /***/ function(module, exports) {
 
 	// Licensed under the Apache License, Version 2.0 (the "License");
@@ -30670,14 +30683,14 @@
 	module.exports.Timestamp = Timestamp;
 
 /***/ },
-/* 107 */
+/* 108 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Module dependencies.
 	 * @ignore
 	 */
-	var BinaryParser = __webpack_require__(108).BinaryParser;
+	var BinaryParser = __webpack_require__(109).BinaryParser;
 
 	/**
 	 * Machine id.
@@ -30962,7 +30975,7 @@
 
 
 /***/ },
-/* 108 */
+/* 109 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -31353,7 +31366,7 @@
 
 
 /***/ },
-/* 109 */
+/* 110 */
 /***/ function(module, exports) {
 
 	/**
@@ -31388,7 +31401,7 @@
 	module.exports.BSONRegExp = BSONRegExp;
 
 /***/ },
-/* 110 */
+/* 111 */
 /***/ function(module, exports) {
 
 	/**
@@ -31440,7 +31453,7 @@
 	module.exports.Symbol = Symbol;
 
 /***/ },
-/* 111 */
+/* 112 */
 /***/ function(module, exports) {
 
 	/**
@@ -31469,7 +31482,7 @@
 	module.exports.Code = Code;
 
 /***/ },
-/* 112 */
+/* 113 */
 /***/ function(module, exports) {
 
 	/**
@@ -31488,7 +31501,7 @@
 	module.exports.MinKey = MinKey;
 
 /***/ },
-/* 113 */
+/* 114 */
 /***/ function(module, exports) {
 
 	/**
@@ -31507,7 +31520,7 @@
 	module.exports.MaxKey = MaxKey;
 
 /***/ },
-/* 114 */
+/* 115 */
 /***/ function(module, exports) {
 
 	/**
@@ -31544,7 +31557,7 @@
 	module.exports.DBRef = DBRef;
 
 /***/ },
-/* 115 */
+/* 116 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -31897,24 +31910,24 @@
 
 
 /***/ },
-/* 116 */
+/* 117 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
 
-	var readIEEE754 = __webpack_require__(102).readIEEE754,
+	var readIEEE754 = __webpack_require__(103).readIEEE754,
 		f = __webpack_require__(10).format,
-		Long = __webpack_require__(104).Long,
-	  Double = __webpack_require__(105).Double,
-	  Timestamp = __webpack_require__(106).Timestamp,
-	  ObjectID = __webpack_require__(107).ObjectID,
-	  Symbol = __webpack_require__(110).Symbol,
-	  Code = __webpack_require__(111).Code,
-	  MinKey = __webpack_require__(112).MinKey,
-	  MaxKey = __webpack_require__(113).MaxKey,
-	  DBRef = __webpack_require__(114).DBRef,
-	  BSONRegExp = __webpack_require__(109).BSONRegExp,
-	  Binary = __webpack_require__(115).Binary;
+		Long = __webpack_require__(105).Long,
+	  Double = __webpack_require__(106).Double,
+	  Timestamp = __webpack_require__(107).Timestamp,
+	  ObjectID = __webpack_require__(108).ObjectID,
+	  Symbol = __webpack_require__(111).Symbol,
+	  Code = __webpack_require__(112).Code,
+	  MinKey = __webpack_require__(113).MinKey,
+	  MaxKey = __webpack_require__(114).MaxKey,
+	  DBRef = __webpack_require__(115).DBRef,
+	  BSONRegExp = __webpack_require__(110).BSONRegExp,
+	  Binary = __webpack_require__(116).Binary;
 
 	var deserialize = function(buffer, options, isArray) {
 		options = options == null ? {} : options;
@@ -32434,25 +32447,25 @@
 
 
 /***/ },
-/* 117 */
+/* 118 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
 
-	var writeIEEE754 = __webpack_require__(102).writeIEEE754,
-	  readIEEE754 = __webpack_require__(102).readIEEE754,
-	  Long = __webpack_require__(104).Long,
-	  Map = __webpack_require__(103),
-	  Double = __webpack_require__(105).Double,
-	  Timestamp = __webpack_require__(106).Timestamp,
-	  ObjectID = __webpack_require__(107).ObjectID,
-	  Symbol = __webpack_require__(110).Symbol,
-	  Code = __webpack_require__(111).Code,
-	  BSONRegExp = __webpack_require__(109).BSONRegExp,
-	  MinKey = __webpack_require__(112).MinKey,
-	  MaxKey = __webpack_require__(113).MaxKey,
-	  DBRef = __webpack_require__(114).DBRef,
-	  Binary = __webpack_require__(115).Binary;
+	var writeIEEE754 = __webpack_require__(103).writeIEEE754,
+	  readIEEE754 = __webpack_require__(103).readIEEE754,
+	  Long = __webpack_require__(105).Long,
+	  Map = __webpack_require__(104),
+	  Double = __webpack_require__(106).Double,
+	  Timestamp = __webpack_require__(107).Timestamp,
+	  ObjectID = __webpack_require__(108).ObjectID,
+	  Symbol = __webpack_require__(111).Symbol,
+	  Code = __webpack_require__(112).Code,
+	  BSONRegExp = __webpack_require__(110).BSONRegExp,
+	  MinKey = __webpack_require__(113).MinKey,
+	  MaxKey = __webpack_require__(114).MaxKey,
+	  DBRef = __webpack_require__(115).DBRef,
+	  Binary = __webpack_require__(116).Binary;
 
 	var regexp = /\x00/
 
@@ -33352,24 +33365,24 @@
 
 
 /***/ },
-/* 118 */
+/* 119 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
 
-	var writeIEEE754 = __webpack_require__(102).writeIEEE754
-		, readIEEE754 = __webpack_require__(102).readIEEE754
-		, Long = __webpack_require__(104).Long
-	  , Double = __webpack_require__(105).Double
-	  , Timestamp = __webpack_require__(106).Timestamp
-	  , ObjectID = __webpack_require__(107).ObjectID
-	  , Symbol = __webpack_require__(110).Symbol
-	  , BSONRegExp = __webpack_require__(109).BSONRegExp
-	  , Code = __webpack_require__(111).Code
-	  , MinKey = __webpack_require__(112).MinKey
-	  , MaxKey = __webpack_require__(113).MaxKey
-	  , DBRef = __webpack_require__(114).DBRef
-	  , Binary = __webpack_require__(115).Binary;
+	var writeIEEE754 = __webpack_require__(103).writeIEEE754
+		, readIEEE754 = __webpack_require__(103).readIEEE754
+		, Long = __webpack_require__(105).Long
+	  , Double = __webpack_require__(106).Double
+	  , Timestamp = __webpack_require__(107).Timestamp
+	  , ObjectID = __webpack_require__(108).ObjectID
+	  , Symbol = __webpack_require__(111).Symbol
+	  , BSONRegExp = __webpack_require__(110).BSONRegExp
+	  , Code = __webpack_require__(112).Code
+	  , MinKey = __webpack_require__(113).MinKey
+	  , MaxKey = __webpack_require__(114).MaxKey
+	  , DBRef = __webpack_require__(115).DBRef
+	  , Binary = __webpack_require__(116).Binary;
 
 	// To ensure that 0.4 of node works correctly
 	var isDate = function isDate(d) {
@@ -33668,48 +33681,48 @@
 
 
 /***/ },
-/* 119 */
+/* 120 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./binary": 115,
-		"./binary.js": 115,
-		"./binary_parser": 108,
-		"./binary_parser.js": 108,
-		"./bson": 101,
-		"./bson.js": 101,
-		"./code": 111,
-		"./code.js": 111,
-		"./db_ref": 114,
-		"./db_ref.js": 114,
-		"./double": 105,
-		"./double.js": 105,
-		"./float_parser": 102,
-		"./float_parser.js": 102,
-		"./index": 100,
-		"./index.js": 100,
-		"./long": 104,
-		"./long.js": 104,
-		"./map": 103,
-		"./map.js": 103,
-		"./max_key": 113,
-		"./max_key.js": 113,
-		"./min_key": 112,
-		"./min_key.js": 112,
-		"./objectid": 107,
-		"./objectid.js": 107,
-		"./parser/calculate_size": 118,
-		"./parser/calculate_size.js": 118,
-		"./parser/deserializer": 116,
-		"./parser/deserializer.js": 116,
-		"./parser/serializer": 117,
-		"./parser/serializer.js": 117,
-		"./regexp": 109,
-		"./regexp.js": 109,
-		"./symbol": 110,
-		"./symbol.js": 110,
-		"./timestamp": 106,
-		"./timestamp.js": 106
+		"./binary": 116,
+		"./binary.js": 116,
+		"./binary_parser": 109,
+		"./binary_parser.js": 109,
+		"./bson": 102,
+		"./bson.js": 102,
+		"./code": 112,
+		"./code.js": 112,
+		"./db_ref": 115,
+		"./db_ref.js": 115,
+		"./double": 106,
+		"./double.js": 106,
+		"./float_parser": 103,
+		"./float_parser.js": 103,
+		"./index": 101,
+		"./index.js": 101,
+		"./long": 105,
+		"./long.js": 105,
+		"./map": 104,
+		"./map.js": 104,
+		"./max_key": 114,
+		"./max_key.js": 114,
+		"./min_key": 113,
+		"./min_key.js": 113,
+		"./objectid": 108,
+		"./objectid.js": 108,
+		"./parser/calculate_size": 119,
+		"./parser/calculate_size.js": 119,
+		"./parser/deserializer": 117,
+		"./parser/deserializer.js": 117,
+		"./parser/serializer": 118,
+		"./parser/serializer.js": 118,
+		"./regexp": 110,
+		"./regexp.js": 110,
+		"./symbol": 111,
+		"./symbol.js": 111,
+		"./timestamp": 107,
+		"./timestamp.js": 107
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -33722,17 +33735,17 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 119;
+	webpackContext.id = 120;
 
 
 /***/ },
-/* 120 */
+/* 121 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var f = __webpack_require__(10).format
-	  , MongoError = __webpack_require__(93);
+	  , MongoError = __webpack_require__(94);
 
 	// Filters for classes
 	var classFilters = {};
@@ -33927,7 +33940,7 @@
 	module.exports = Logger;
 
 /***/ },
-/* 121 */
+/* 122 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -34038,14 +34051,14 @@
 	module.exports = ReadPreference;
 
 /***/ },
-/* 122 */
+/* 123 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var Long = __webpack_require__(100).Long
-	  , Logger = __webpack_require__(120)
-	  , MongoError = __webpack_require__(93)
+	var Long = __webpack_require__(101).Long
+	  , Logger = __webpack_require__(121)
+	  , MongoError = __webpack_require__(94)
 	  , f = __webpack_require__(10).format;
 
 	/**
@@ -34740,14 +34753,14 @@
 
 
 /***/ },
-/* 123 */
+/* 124 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var setProperty = __webpack_require__(95).setProperty
-	  , getProperty = __webpack_require__(95).getProperty
-	  , getSingleProperty = __webpack_require__(95).getSingleProperty;
+	var setProperty = __webpack_require__(96).setProperty
+	  , getProperty = __webpack_require__(96).getProperty
+	  , getSingleProperty = __webpack_require__(96).getSingleProperty;
 
 	/**
 	 * Creates a new CommandResult instance
@@ -34782,25 +34795,25 @@
 	module.exports = CommandResult;
 
 /***/ },
-/* 124 */
+/* 125 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var Insert = __webpack_require__(125).Insert
-	  , Update = __webpack_require__(125).Update
-	  , Remove = __webpack_require__(125).Remove
-	  , Query = __webpack_require__(99).Query
-	  , copy = __webpack_require__(95).copy
-	  , KillCursor = __webpack_require__(99).KillCursor
-	  , GetMore = __webpack_require__(99).GetMore
-	  , Query = __webpack_require__(99).Query
-	  , ReadPreference = __webpack_require__(121)
+	var Insert = __webpack_require__(126).Insert
+	  , Update = __webpack_require__(126).Update
+	  , Remove = __webpack_require__(126).Remove
+	  , Query = __webpack_require__(100).Query
+	  , copy = __webpack_require__(96).copy
+	  , KillCursor = __webpack_require__(100).KillCursor
+	  , GetMore = __webpack_require__(100).GetMore
+	  , Query = __webpack_require__(100).Query
+	  , ReadPreference = __webpack_require__(122)
 	  , f = __webpack_require__(10).format
-	  , CommandResult = __webpack_require__(123)
-	  , MongoError = __webpack_require__(93)
-	  , Long = __webpack_require__(100).Long
-	  , getReadPreference = __webpack_require__(126).getReadPreference;
+	  , CommandResult = __webpack_require__(124)
+	  , MongoError = __webpack_require__(94)
+	  , Long = __webpack_require__(101).Long
+	  , getReadPreference = __webpack_require__(127).getReadPreference;
 
 	// Write concern fields
 	var writeConcernFields = ['w', 'wtimeout', 'j', 'fsync'];
@@ -35367,12 +35380,12 @@
 
 
 /***/ },
-/* 125 */
+/* 126 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var MongoError = __webpack_require__(93);
+	var MongoError = __webpack_require__(94);
 
 	// Wire command operation ids
 	var OP_UPDATE = 2001;
@@ -35730,10 +35743,10 @@
 
 
 /***/ },
-/* 126 */
+/* 127 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ReadPreference = __webpack_require__(121);
+	var ReadPreference = __webpack_require__(122);
 
 	var getReadPreference = function(cmd, options) {
 	  // Default to command version of the readPreference
@@ -35760,25 +35773,25 @@
 
 
 /***/ },
-/* 127 */
+/* 128 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var Insert = __webpack_require__(125).Insert
-	  , Update = __webpack_require__(125).Update
-	  , Remove = __webpack_require__(125).Remove
-	  , Query = __webpack_require__(99).Query
-	  , copy = __webpack_require__(95).copy
-	  , KillCursor = __webpack_require__(99).KillCursor
-	  , GetMore = __webpack_require__(99).GetMore
-	  , Query = __webpack_require__(99).Query
-	  , ReadPreference = __webpack_require__(121)
+	var Insert = __webpack_require__(126).Insert
+	  , Update = __webpack_require__(126).Update
+	  , Remove = __webpack_require__(126).Remove
+	  , Query = __webpack_require__(100).Query
+	  , copy = __webpack_require__(96).copy
+	  , KillCursor = __webpack_require__(100).KillCursor
+	  , GetMore = __webpack_require__(100).GetMore
+	  , Query = __webpack_require__(100).Query
+	  , ReadPreference = __webpack_require__(122)
 	  , f = __webpack_require__(10).format
-	  , CommandResult = __webpack_require__(123)
-	  , MongoError = __webpack_require__(93)
-	  , Long = __webpack_require__(100).Long
-	  , getReadPreference = __webpack_require__(126).getReadPreference;
+	  , CommandResult = __webpack_require__(124)
+	  , MongoError = __webpack_require__(94)
+	  , Long = __webpack_require__(101).Long
+	  , getReadPreference = __webpack_require__(127).getReadPreference;
 
 	var WireProtocol = function() {}
 
@@ -36083,25 +36096,25 @@
 
 
 /***/ },
-/* 128 */
+/* 129 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var Insert = __webpack_require__(125).Insert
-	  , Update = __webpack_require__(125).Update
-	  , Remove = __webpack_require__(125).Remove
-	  , Query = __webpack_require__(99).Query
-	  , copy = __webpack_require__(95).copy
-	  , KillCursor = __webpack_require__(99).KillCursor
-	  , GetMore = __webpack_require__(99).GetMore
-	  , Query = __webpack_require__(99).Query
-	  , ReadPreference = __webpack_require__(121)
+	var Insert = __webpack_require__(126).Insert
+	  , Update = __webpack_require__(126).Update
+	  , Remove = __webpack_require__(126).Remove
+	  , Query = __webpack_require__(100).Query
+	  , copy = __webpack_require__(96).copy
+	  , KillCursor = __webpack_require__(100).KillCursor
+	  , GetMore = __webpack_require__(100).GetMore
+	  , Query = __webpack_require__(100).Query
+	  , ReadPreference = __webpack_require__(122)
 	  , f = __webpack_require__(10).format
-	  , CommandResult = __webpack_require__(123)
-	  , MongoError = __webpack_require__(93)
-	  , Long = __webpack_require__(100).Long
-	  , getReadPreference = __webpack_require__(126).getReadPreference;
+	  , CommandResult = __webpack_require__(124)
+	  , MongoError = __webpack_require__(94)
+	  , Long = __webpack_require__(101).Long
+	  , getReadPreference = __webpack_require__(127).getReadPreference;
 
 	var WireProtocol = function(legacyWireProtocol) {
 	  this.legacyWireProtocol = legacyWireProtocol;
@@ -36607,7 +36620,7 @@
 
 
 /***/ },
-/* 129 */
+/* 130 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -36705,14 +36718,14 @@
 	module.exports = Session;
 
 /***/ },
-/* 130 */
+/* 131 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var f = __webpack_require__(10).format
 	  , crypto = __webpack_require__(56)
-	  , MongoError = __webpack_require__(93);
+	  , MongoError = __webpack_require__(94);
 
 	var AuthSession = function(db, username, password) {
 	  this.db = db;
@@ -36877,14 +36890,14 @@
 
 
 /***/ },
-/* 131 */
+/* 132 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var f = __webpack_require__(10).format
 	  , crypto = __webpack_require__(56)
-	  , MongoError = __webpack_require__(93);
+	  , MongoError = __webpack_require__(94);
 
 	var AuthSession = function(db, username, password) {
 	  this.db = db;
@@ -37034,15 +37047,15 @@
 
 
 /***/ },
-/* 132 */
+/* 133 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var f = __webpack_require__(10).format
 	  , crypto = __webpack_require__(56)
-	  , Binary = __webpack_require__(100).Binary
-	  , MongoError = __webpack_require__(93);
+	  , Binary = __webpack_require__(101).Binary
+	  , MongoError = __webpack_require__(94);
 
 	var AuthSession = function(db, username, password) {
 	  this.db = db;
@@ -37196,15 +37209,15 @@
 
 
 /***/ },
-/* 133 */
+/* 134 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var f = __webpack_require__(10).format
 	  , crypto = __webpack_require__(56)
-	  , require_optional = __webpack_require__(134)
-	  , MongoError = __webpack_require__(93);
+	  , require_optional = __webpack_require__(135)
+	  , MongoError = __webpack_require__(94);
 
 	var AuthSession = function(db, username, password, options) {
 	  this.db = db;
@@ -37453,14 +37466,14 @@
 
 
 /***/ },
-/* 134 */
+/* 135 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {var path = __webpack_require__(35),
 	  fs = __webpack_require__(13),
 	  f = __webpack_require__(10).format,
-	  resolveFrom = __webpack_require__(135),
-	  semver = __webpack_require__(137);
+	  resolveFrom = __webpack_require__(136),
+	  semver = __webpack_require__(138);
 
 	var exists = fs.existsSync || path.existsSync;
 
@@ -37518,7 +37531,7 @@
 
 	  try {
 	    // Validate if it's possible to read the module
-	    moduleEntry = __webpack_require__(138)(moduleEntryFile);
+	    moduleEntry = __webpack_require__(139)(moduleEntryFile);
 	  } catch(err) {
 	    // Attempt to resolve in top level package
 	    try {
@@ -37526,14 +37539,14 @@
 	      moduleEntryFile = resolveFrom(process.cwd(), name);
 	      if(moduleEntryFile == null) return undefined;
 	      // Attempt to resolve the module
-	      moduleEntry = __webpack_require__(138)(moduleEntryFile);
+	      moduleEntry = __webpack_require__(139)(moduleEntryFile);
 	    } catch(err) {
 	      if(err.code === 'MODULE_NOT_FOUND') return undefined;
 	    }
 	  }
 
 	  // Resolve the location of the module's package.json file
-	  var location = find_package_json(/*require.resolve*/(__webpack_require__(138).resolve(moduleEntryFile)));
+	  var location = find_package_json(/*require.resolve*/(__webpack_require__(139).resolve(moduleEntryFile)));
 	  if(!location) {
 	    throw new Error('package.json can not be located');
 	  }
@@ -37569,12 +37582,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)(module)))
 
 /***/ },
-/* 135 */
+/* 136 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	var path = __webpack_require__(35);
-	var Module = __webpack_require__(136);
+	var Module = __webpack_require__(137);
 
 	module.exports = function (fromDir, moduleId) {
 		if (typeof fromDir !== 'string' || typeof moduleId !== 'string') {
@@ -37598,13 +37611,13 @@
 
 
 /***/ },
-/* 136 */
+/* 137 */
 /***/ function(module, exports) {
 
 	module.exports = require("module");
 
 /***/ },
-/* 137 */
+/* 138 */
 /***/ function(module, exports) {
 
 	exports = module.exports = SemVer;
@@ -38813,15 +38826,15 @@
 
 
 /***/ },
-/* 138 */
+/* 139 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./index": 134,
-		"./index.js": 134,
-		"./package.json": 141,
-		"./test/require_optional_tests": 142,
-		"./test/require_optional_tests.js": 142
+		"./index": 135,
+		"./index.js": 135,
+		"./package.json": 142,
+		"./test/require_optional_tests": 143,
+		"./test/require_optional_tests.js": 143
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -38834,13 +38847,13 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 138;
+	webpackContext.id = 139;
 
 
 /***/ },
-/* 139 */,
 /* 140 */,
-/* 141 */
+/* 141 */,
+/* 142 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -38946,11 +38959,11 @@
 	};
 
 /***/ },
-/* 142 */
+/* 143 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var assert = __webpack_require__(143),
-	  require_optional = __webpack_require__(134);
+	var assert = __webpack_require__(144),
+	  require_optional = __webpack_require__(135);
 
 	describe('Require Optional', function() {
 	  describe('top level require', function() {
@@ -38994,21 +39007,21 @@
 
 
 /***/ },
-/* 143 */
+/* 144 */
 /***/ function(module, exports) {
 
 	module.exports = require("assert");
 
 /***/ },
-/* 144 */
+/* 145 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var f = __webpack_require__(10).format
 	  , crypto = __webpack_require__(56)
-	  , require_optional = __webpack_require__(134)
-	  , MongoError = __webpack_require__(93);
+	  , require_optional = __webpack_require__(135)
+	  , MongoError = __webpack_require__(94);
 
 	var AuthSession = function(db, username, password, options) {
 	  this.db = db;
@@ -39247,15 +39260,15 @@
 
 
 /***/ },
-/* 145 */
+/* 146 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var f = __webpack_require__(10).format
 	  , crypto = __webpack_require__(56)
-	  , Binary = __webpack_require__(100).Binary
-	  , MongoError = __webpack_require__(93);
+	  , Binary = __webpack_require__(101).Binary
+	  , MongoError = __webpack_require__(94);
 
 	var AuthSession = function(db, username, password) {
 	  this.db = db;
@@ -39580,32 +39593,32 @@
 
 
 /***/ },
-/* 146 */
+/* 147 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var inherits = __webpack_require__(10).inherits
 	  , f = __webpack_require__(10).format
-	  , b = __webpack_require__(100)
-	  , bindToCurrentDomain = __webpack_require__(95).bindToCurrentDomain
-	  , debugOptions = __webpack_require__(95).debugOptions
+	  , b = __webpack_require__(101)
+	  , bindToCurrentDomain = __webpack_require__(96).bindToCurrentDomain
+	  , debugOptions = __webpack_require__(96).debugOptions
 	  , EventEmitter = __webpack_require__(4).EventEmitter
-	  , Server = __webpack_require__(94)
-	  , ReadPreference = __webpack_require__(121)
-	  , MongoError = __webpack_require__(93)
-	  , Ping = __webpack_require__(147)
-	  , Session = __webpack_require__(129)
-	  , BasicCursor = __webpack_require__(122)
-	  , BSON = __webpack_require__(100).native().BSON
-	  , State = __webpack_require__(148)
-	  , MongoCR = __webpack_require__(130)
-	  , X509 = __webpack_require__(131)
-	  , Plain = __webpack_require__(132)
-	  , GSSAPI = __webpack_require__(133)
-	  , SSPI = __webpack_require__(144)
-	  , ScramSHA1 = __webpack_require__(145)
-	  , Logger = __webpack_require__(120);
+	  , Server = __webpack_require__(95)
+	  , ReadPreference = __webpack_require__(122)
+	  , MongoError = __webpack_require__(94)
+	  , Ping = __webpack_require__(148)
+	  , Session = __webpack_require__(130)
+	  , BasicCursor = __webpack_require__(123)
+	  , BSON = __webpack_require__(101).native().BSON
+	  , State = __webpack_require__(149)
+	  , MongoCR = __webpack_require__(131)
+	  , X509 = __webpack_require__(132)
+	  , Plain = __webpack_require__(133)
+	  , GSSAPI = __webpack_require__(134)
+	  , SSPI = __webpack_require__(145)
+	  , ScramSHA1 = __webpack_require__(146)
+	  , Logger = __webpack_require__(121);
 
 	/**
 	 * @fileOverview The **ReplSet** class is a class that represents a Replicaset topology and is
@@ -39873,9 +39886,9 @@
 	  var nBSON = null;
 
 	  if(type == 'c++') {
-	    nBSON = __webpack_require__(100).native().BSON;
+	    nBSON = __webpack_require__(101).native().BSON;
 	  } else if(type == 'js') {
-	    nBSON = __webpack_require__(100).pure().BSON;
+	    nBSON = __webpack_require__(101).pure().BSON;
 	  } else {
 	    throw new MongoError(f("% parser not supported", type));
 	  }
@@ -41329,12 +41342,12 @@
 
 
 /***/ },
-/* 147 */
+/* 148 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var Logger = __webpack_require__(120)
+	var Logger = __webpack_require__(121)
 	  , EventEmitter = __webpack_require__(4).EventEmitter
 	  , inherits = __webpack_require__(10).inherits
 	  , f = __webpack_require__(10).format;
@@ -41610,15 +41623,15 @@
 	module.exports = Ping;
 
 /***/ },
-/* 148 */
+/* 149 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var Logger = __webpack_require__(120)
+	var Logger = __webpack_require__(121)
 	  , f = __webpack_require__(10).format
-	  , ObjectId = __webpack_require__(100).ObjectId
-	  , MongoError = __webpack_require__(93);
+	  , ObjectId = __webpack_require__(101).ObjectId
+	  , MongoError = __webpack_require__(94);
 
 	var DISCONNECTED = 'disconnected';
 	var CONNECTING = 'connecting';
@@ -42344,30 +42357,30 @@
 
 
 /***/ },
-/* 149 */
+/* 150 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var inherits = __webpack_require__(10).inherits
 	  , f = __webpack_require__(10).format
-	  , b = __webpack_require__(100)
-	  , bindToCurrentDomain = __webpack_require__(95).bindToCurrentDomain
+	  , b = __webpack_require__(101)
+	  , bindToCurrentDomain = __webpack_require__(96).bindToCurrentDomain
 	  , EventEmitter = __webpack_require__(4).EventEmitter
-	  , BasicCursor = __webpack_require__(122)
-	  , BSON = __webpack_require__(100).native().BSON
-	  , BasicCursor = __webpack_require__(122)
-	  , Server = __webpack_require__(94)
-	  , MongoCR = __webpack_require__(130)
-	  , X509 = __webpack_require__(131)
-	  , Plain = __webpack_require__(132)
-	  , GSSAPI = __webpack_require__(133)
-	  , SSPI = __webpack_require__(144)
-	  , ScramSHA1 = __webpack_require__(145)
-	  , Logger = __webpack_require__(120)
-	  , ReadPreference = __webpack_require__(121)
-	  , Session = __webpack_require__(129)
-	  , MongoError = __webpack_require__(93);
+	  , BasicCursor = __webpack_require__(123)
+	  , BSON = __webpack_require__(101).native().BSON
+	  , BasicCursor = __webpack_require__(123)
+	  , Server = __webpack_require__(95)
+	  , MongoCR = __webpack_require__(131)
+	  , X509 = __webpack_require__(132)
+	  , Plain = __webpack_require__(133)
+	  , GSSAPI = __webpack_require__(134)
+	  , SSPI = __webpack_require__(145)
+	  , ScramSHA1 = __webpack_require__(146)
+	  , Logger = __webpack_require__(121)
+	  , ReadPreference = __webpack_require__(122)
+	  , Session = __webpack_require__(130)
+	  , MongoError = __webpack_require__(94);
 
 	/**
 	 * @fileOverview The **Mongos** class is a class that represents a Mongos Proxy topology and is
@@ -42805,9 +42818,9 @@
 	  var nBSON = null;
 
 	  if(type == 'c++') {
-	    nBSON = __webpack_require__(100).native().BSON;
+	    nBSON = __webpack_require__(101).native().BSON;
 	  } else if(type == 'js') {
-	    nBSON = __webpack_require__(100).pure().BSON;
+	    nBSON = __webpack_require__(101).pure().BSON;
 	  } else {
 	    throw new MongoError(f("% parser not supported", type));
 	  }
@@ -43585,25 +43598,25 @@
 
 
 /***/ },
-/* 150 */
+/* 151 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var EventEmitter = __webpack_require__(4).EventEmitter,
 	  inherits = __webpack_require__(10).inherits;
 
 	// Get prototypes
-	var AggregationCursor = __webpack_require__(151),
-	  CommandCursor = __webpack_require__(167),
-	  OrderedBulkOperation = __webpack_require__(168).OrderedBulkOperation,
-	  UnorderedBulkOperation = __webpack_require__(170).UnorderedBulkOperation,
-	  GridStore = __webpack_require__(171),
-	  Server = __webpack_require__(175),
-	  ReplSet = __webpack_require__(177),
-	  Mongos = __webpack_require__(178),
-	  Cursor = __webpack_require__(164),
-	  Collection = __webpack_require__(173),
-	  Db = __webpack_require__(179),
-	  Admin = __webpack_require__(180);
+	var AggregationCursor = __webpack_require__(152),
+	  CommandCursor = __webpack_require__(168),
+	  OrderedBulkOperation = __webpack_require__(169).OrderedBulkOperation,
+	  UnorderedBulkOperation = __webpack_require__(171).UnorderedBulkOperation,
+	  GridStore = __webpack_require__(172),
+	  Server = __webpack_require__(176),
+	  ReplSet = __webpack_require__(178),
+	  Mongos = __webpack_require__(179),
+	  Cursor = __webpack_require__(165),
+	  Collection = __webpack_require__(174),
+	  Db = __webpack_require__(180),
+	  Admin = __webpack_require__(181);
 
 	var basicOperationIdGenerator = {
 	  operationId: 1,
@@ -43853,8 +43866,8 @@
 	  // Inject ourselves into the Bulk methods
 	  var methods = ['execute'];
 	  var prototypes = [
-	    __webpack_require__(168).Bulk.prototype,
-	    __webpack_require__(170).Bulk.prototype
+	    __webpack_require__(169).Bulk.prototype,
+	    __webpack_require__(171).Bulk.prototype
 	  ]
 
 	  prototypes.forEach(function(proto) {
@@ -43900,9 +43913,9 @@
 	  // Inject ourselves into the Cursor methods
 	  var methods = ['_find', '_getmore', '_killcursor'];
 	  var prototypes = [
-	    __webpack_require__(164).prototype,
-	    __webpack_require__(167).prototype,
-	    __webpack_require__(151).prototype
+	    __webpack_require__(165).prototype,
+	    __webpack_require__(168).prototype,
+	    __webpack_require__(152).prototype
 	  ]
 
 	  // Command name translation
@@ -44198,26 +44211,26 @@
 
 
 /***/ },
-/* 151 */
+/* 152 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var inherits = __webpack_require__(10).inherits
 	  , f = __webpack_require__(10).format
-	  , toError = __webpack_require__(152).toError
-	  , getSingleProperty = __webpack_require__(152).getSingleProperty
-	  , formattedOrderClause = __webpack_require__(152).formattedOrderClause
-	  , handleCallback = __webpack_require__(152).handleCallback
-	  , Logger = __webpack_require__(92).Logger
+	  , toError = __webpack_require__(153).toError
+	  , getSingleProperty = __webpack_require__(153).getSingleProperty
+	  , formattedOrderClause = __webpack_require__(153).formattedOrderClause
+	  , handleCallback = __webpack_require__(153).handleCallback
+	  , Logger = __webpack_require__(93).Logger
 	  , EventEmitter = __webpack_require__(4).EventEmitter
-	  , ReadPreference = __webpack_require__(153)
-	  , MongoError = __webpack_require__(92).MongoError
-	  , Readable = __webpack_require__(53).Readable || __webpack_require__(154).Readable
-	  , Define = __webpack_require__(163)
-	  , CoreCursor = __webpack_require__(164)
-	  , Query = __webpack_require__(92).Query
-	  , CoreReadPreference = __webpack_require__(92).ReadPreference;
+	  , ReadPreference = __webpack_require__(154)
+	  , MongoError = __webpack_require__(93).MongoError
+	  , Readable = __webpack_require__(53).Readable || __webpack_require__(155).Readable
+	  , Define = __webpack_require__(164)
+	  , CoreCursor = __webpack_require__(165)
+	  , Query = __webpack_require__(93).Query
+	  , CoreReadPreference = __webpack_require__(93).ReadPreference;
 
 	/**
 	 * @fileOverview The **AggregationCursor** class is an internal class that embodies an aggregation cursor on MongoDB
@@ -44280,7 +44293,7 @@
 	  // No promise library selected fall back
 	  if(!promiseLibrary) {
 	    promiseLibrary = typeof global.Promise == 'function' ?
-	      global.Promise : __webpack_require__(165).Promise;
+	      global.Promise : __webpack_require__(166).Promise;
 	  }
 
 	  // Set up
@@ -44649,12 +44662,12 @@
 
 
 /***/ },
-/* 152 */
+/* 153 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var MongoError = __webpack_require__(92).MongoError,
+	var MongoError = __webpack_require__(93).MongoError,
 	  f = __webpack_require__(10).format;
 
 	var shallowClone = function(obj) {
@@ -44894,7 +44907,7 @@
 
 
 /***/ },
-/* 153 */
+/* 154 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -45003,19 +45016,19 @@
 	module.exports = ReadPreference;
 
 /***/ },
-/* 154 */
+/* 155 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(155);
+	exports = module.exports = __webpack_require__(156);
 	exports.Readable = exports;
-	exports.Writable = __webpack_require__(159);
-	exports.Duplex = __webpack_require__(160);
-	exports.Transform = __webpack_require__(161);
-	exports.PassThrough = __webpack_require__(162);
+	exports.Writable = __webpack_require__(160);
+	exports.Duplex = __webpack_require__(161);
+	exports.Transform = __webpack_require__(162);
+	exports.PassThrough = __webpack_require__(163);
 
 
 /***/ },
-/* 155 */
+/* 156 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -45042,7 +45055,7 @@
 	module.exports = Readable;
 
 	/*<replacement>*/
-	var isArray = __webpack_require__(156);
+	var isArray = __webpack_require__(157);
 	/*</replacement>*/
 
 
@@ -45063,7 +45076,7 @@
 	var Stream = __webpack_require__(53);
 
 	/*<replacement>*/
-	var util = __webpack_require__(157);
+	var util = __webpack_require__(158);
 	util.inherits = __webpack_require__(51);
 	/*</replacement>*/
 
@@ -45133,7 +45146,7 @@
 	  this.encoding = null;
 	  if (options.encoding) {
 	    if (!StringDecoder)
-	      StringDecoder = __webpack_require__(158).StringDecoder;
+	      StringDecoder = __webpack_require__(159).StringDecoder;
 	    this.decoder = new StringDecoder(options.encoding);
 	    this.encoding = options.encoding;
 	  }
@@ -45234,7 +45247,7 @@
 	// backwards compatibility.
 	Readable.prototype.setEncoding = function(enc) {
 	  if (!StringDecoder)
-	    StringDecoder = __webpack_require__(158).StringDecoder;
+	    StringDecoder = __webpack_require__(159).StringDecoder;
 	  this._readableState.decoder = new StringDecoder(enc);
 	  this._readableState.encoding = enc;
 	};
@@ -46003,7 +46016,7 @@
 
 
 /***/ },
-/* 156 */
+/* 157 */
 /***/ function(module, exports) {
 
 	module.exports = Array.isArray || function (arr) {
@@ -46012,7 +46025,7 @@
 
 
 /***/ },
-/* 157 */
+/* 158 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -46125,7 +46138,7 @@
 
 
 /***/ },
-/* 158 */
+/* 159 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -46352,7 +46365,7 @@
 
 
 /***/ },
-/* 159 */
+/* 160 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -46390,7 +46403,7 @@
 
 
 	/*<replacement>*/
-	var util = __webpack_require__(157);
+	var util = __webpack_require__(158);
 	util.inherits = __webpack_require__(51);
 	/*</replacement>*/
 
@@ -46476,7 +46489,7 @@
 	}
 
 	function Writable(options) {
-	  var Duplex = __webpack_require__(160);
+	  var Duplex = __webpack_require__(161);
 
 	  // Writable ctor is applied to Duplexes, though they're not
 	  // instanceof Writable, they're instanceof Readable.
@@ -46744,7 +46757,7 @@
 
 
 /***/ },
-/* 160 */
+/* 161 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -46785,12 +46798,12 @@
 
 
 	/*<replacement>*/
-	var util = __webpack_require__(157);
+	var util = __webpack_require__(158);
 	util.inherits = __webpack_require__(51);
 	/*</replacement>*/
 
-	var Readable = __webpack_require__(155);
-	var Writable = __webpack_require__(159);
+	var Readable = __webpack_require__(156);
+	var Writable = __webpack_require__(160);
 
 	util.inherits(Duplex, Readable);
 
@@ -46839,7 +46852,7 @@
 
 
 /***/ },
-/* 161 */
+/* 162 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -46908,10 +46921,10 @@
 
 	module.exports = Transform;
 
-	var Duplex = __webpack_require__(160);
+	var Duplex = __webpack_require__(161);
 
 	/*<replacement>*/
-	var util = __webpack_require__(157);
+	var util = __webpack_require__(158);
 	util.inherits = __webpack_require__(51);
 	/*</replacement>*/
 
@@ -47055,7 +47068,7 @@
 
 
 /***/ },
-/* 162 */
+/* 163 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -47085,10 +47098,10 @@
 
 	module.exports = PassThrough;
 
-	var Transform = __webpack_require__(161);
+	var Transform = __webpack_require__(162);
 
 	/*<replacement>*/
-	var util = __webpack_require__(157);
+	var util = __webpack_require__(158);
 	util.inherits = __webpack_require__(51);
 	/*</replacement>*/
 
@@ -47107,7 +47120,7 @@
 
 
 /***/ },
-/* 163 */
+/* 164 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var f = __webpack_require__(10).format;
@@ -47176,23 +47189,23 @@
 	module.exports = Define;
 
 /***/ },
-/* 164 */
+/* 165 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var inherits = __webpack_require__(10).inherits
 	  , f = __webpack_require__(10).format
-	  , formattedOrderClause = __webpack_require__(152).formattedOrderClause
-	  , handleCallback = __webpack_require__(152).handleCallback
-	  , ReadPreference = __webpack_require__(153)
-	  , MongoError = __webpack_require__(92).MongoError
-	  , Readable = __webpack_require__(53).Readable || __webpack_require__(154).Readable
-	  , Define = __webpack_require__(163)
-	  , CoreCursor = __webpack_require__(92).Cursor
-	  , Map = __webpack_require__(92).BSON.Map
-	  , Query = __webpack_require__(92).Query
-	  , CoreReadPreference = __webpack_require__(92).ReadPreference;
+	  , formattedOrderClause = __webpack_require__(153).formattedOrderClause
+	  , handleCallback = __webpack_require__(153).handleCallback
+	  , ReadPreference = __webpack_require__(154)
+	  , MongoError = __webpack_require__(93).MongoError
+	  , Readable = __webpack_require__(53).Readable || __webpack_require__(155).Readable
+	  , Define = __webpack_require__(164)
+	  , CoreCursor = __webpack_require__(93).Cursor
+	  , Map = __webpack_require__(93).BSON.Map
+	  , Query = __webpack_require__(93).Query
+	  , CoreReadPreference = __webpack_require__(93).ReadPreference;
 
 	/**
 	 * @fileOverview The **Cursor** class is an internal class that embodies a cursor on MongoDB
@@ -47296,7 +47309,7 @@
 	  // No promise library selected fall back
 	  if(!promiseLibrary) {
 	    promiseLibrary = typeof global.Promise == 'function' ?
-	      global.Promise : __webpack_require__(165).Promise;
+	      global.Promise : __webpack_require__(166).Promise;
 	  }
 
 	  // Set up
@@ -48350,7 +48363,7 @@
 
 
 /***/ },
-/* 165 */
+/* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var require;var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module) {/*!
@@ -49309,7 +49322,7 @@
 	    };
 
 	    /* global define:true module:true window: true */
-	    if ("function" === 'function' && __webpack_require__(166)['amd']) {
+	    if ("function" === 'function' && __webpack_require__(167)['amd']) {
 	      !(__WEBPACK_AMD_DEFINE_RESULT__ = function() { return lib$es6$promise$umd$$ES6Promise; }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	    } else if (typeof module !== 'undefined' && module['exports']) {
 	      module['exports'] = lib$es6$promise$umd$$ES6Promise;
@@ -49324,33 +49337,33 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)(module)))
 
 /***/ },
-/* 166 */
+/* 167 */
 /***/ function(module, exports) {
 
 	module.exports = function() { throw new Error("define cannot be used indirect"); };
 
 
 /***/ },
-/* 167 */
+/* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var inherits = __webpack_require__(10).inherits
 	  , f = __webpack_require__(10).format
-	  , toError = __webpack_require__(152).toError
-	  , getSingleProperty = __webpack_require__(152).getSingleProperty
-	  , formattedOrderClause = __webpack_require__(152).formattedOrderClause
-	  , handleCallback = __webpack_require__(152).handleCallback
-	  , Logger = __webpack_require__(92).Logger
+	  , toError = __webpack_require__(153).toError
+	  , getSingleProperty = __webpack_require__(153).getSingleProperty
+	  , formattedOrderClause = __webpack_require__(153).formattedOrderClause
+	  , handleCallback = __webpack_require__(153).handleCallback
+	  , Logger = __webpack_require__(93).Logger
 	  , EventEmitter = __webpack_require__(4).EventEmitter
-	  , ReadPreference = __webpack_require__(153)
-	  , MongoError = __webpack_require__(92).MongoError
-	  , Readable = __webpack_require__(53).Readable || __webpack_require__(154).Readable
-	  , Define = __webpack_require__(163)
-	  , CoreCursor = __webpack_require__(164)
-	  , Query = __webpack_require__(92).Query
-	  , CoreReadPreference = __webpack_require__(92).ReadPreference;
+	  , ReadPreference = __webpack_require__(154)
+	  , MongoError = __webpack_require__(93).MongoError
+	  , Readable = __webpack_require__(53).Readable || __webpack_require__(155).Readable
+	  , Define = __webpack_require__(164)
+	  , CoreCursor = __webpack_require__(165)
+	  , Query = __webpack_require__(93).Query
+	  , CoreReadPreference = __webpack_require__(93).ReadPreference;
 
 	/**
 	 * @fileOverview The **CommandCursor** class is an internal class that embodies a
@@ -49413,7 +49426,7 @@
 	  // No promise library selected fall back
 	  if(!promiseLibrary) {
 	    promiseLibrary = typeof global.Promise == 'function' ?
-	      global.Promise : __webpack_require__(165).Promise;
+	      global.Promise : __webpack_require__(166).Promise;
 	  }
 
 	  // Set up
@@ -49657,23 +49670,23 @@
 
 
 /***/ },
-/* 168 */
+/* 169 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var common = __webpack_require__(169)
-		, utils = __webpack_require__(152)
-	  , toError = __webpack_require__(152).toError
+	var common = __webpack_require__(170)
+		, utils = __webpack_require__(153)
+	  , toError = __webpack_require__(153).toError
 		, f = __webpack_require__(10).format
-		, handleCallback = __webpack_require__(152).handleCallback
+		, handleCallback = __webpack_require__(153).handleCallback
 		, shallowClone = utils.shallowClone
 	  , WriteError = common.WriteError
 	  , BulkWriteResult = common.BulkWriteResult
 	  , LegacyOp = common.LegacyOp
-	  , ObjectID = __webpack_require__(92).BSON.ObjectID
-	  , Define = __webpack_require__(163)
-		, BSON = __webpack_require__(92).BSON
+	  , ObjectID = __webpack_require__(93).BSON.ObjectID
+	  , Define = __webpack_require__(164)
+		, BSON = __webpack_require__(93).BSON
 	  , Batch = common.Batch
 	  , mergeBatchResults = common.mergeBatchResults;
 
@@ -49896,7 +49909,7 @@
 	  // No promise library selected fall back
 	  if(!promiseLibrary) {
 	    promiseLibrary = typeof global.Promise == 'function' ?
-	      global.Promise : __webpack_require__(165).Promise;
+	      global.Promise : __webpack_require__(166).Promise;
 	  }
 
 	  // Current batch
@@ -50200,14 +50213,14 @@
 
 
 /***/ },
-/* 169 */
+/* 170 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var utils = __webpack_require__(152),
-	  Long = __webpack_require__(92).BSON.Long,
-	  Timestamp = __webpack_require__(92).BSON.Timestamp;
+	var utils = __webpack_require__(153),
+	  Long = __webpack_require__(93).BSON.Long,
+	  Timestamp = __webpack_require__(93).BSON.Timestamp;
 
 	// Error codes
 	var UNKNOWN_ERROR = 8;
@@ -50637,23 +50650,23 @@
 
 
 /***/ },
-/* 170 */
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var common = __webpack_require__(169)
-		, utils = __webpack_require__(152)
-	  , toError = __webpack_require__(152).toError
+	var common = __webpack_require__(170)
+		, utils = __webpack_require__(153)
+	  , toError = __webpack_require__(153).toError
 	  , f = __webpack_require__(10).format
-		, handleCallback = __webpack_require__(152).handleCallback
+		, handleCallback = __webpack_require__(153).handleCallback
 	  , shallowClone = utils.shallowClone
 	  , WriteError = common.WriteError
 	  , BulkWriteResult = common.BulkWriteResult
 	  , LegacyOp = common.LegacyOp
-	  , ObjectID = __webpack_require__(92).BSON.ObjectID
-		, BSON = __webpack_require__(92).BSON
-	  , Define = __webpack_require__(163)
+	  , ObjectID = __webpack_require__(93).BSON.ObjectID
+		, BSON = __webpack_require__(93).BSON
+	  , Define = __webpack_require__(164)
 	  , Batch = common.Batch
 	  , mergeBatchResults = common.mergeBatchResults;
 
@@ -50889,7 +50902,7 @@
 	  // No promise library selected fall back
 	  if(!promiseLibrary) {
 	    promiseLibrary = typeof global.Promise == 'function' ?
-	      global.Promise : __webpack_require__(165).Promise;
+	      global.Promise : __webpack_require__(166).Promise;
 	  }
 
 	  // Final results
@@ -51185,7 +51198,7 @@
 
 
 /***/ },
-/* 171 */
+/* 172 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -51224,20 +51237,20 @@
 	 *   });
 	 * });
 	 */
-	var Chunk = __webpack_require__(172),
-	  ObjectID = __webpack_require__(92).BSON.ObjectID,
-	  ReadPreference = __webpack_require__(153),
+	var Chunk = __webpack_require__(173),
+	  ObjectID = __webpack_require__(93).BSON.ObjectID,
+	  ReadPreference = __webpack_require__(154),
 	  Buffer = __webpack_require__(31).Buffer,
-	  Collection = __webpack_require__(173),
+	  Collection = __webpack_require__(174),
 	  fs = __webpack_require__(13),
-	  timers = __webpack_require__(174),
+	  timers = __webpack_require__(175),
 	  f = __webpack_require__(10).format,
 	  util = __webpack_require__(10),
-	  Define = __webpack_require__(163),
-	  MongoError = __webpack_require__(92).MongoError,
+	  Define = __webpack_require__(164),
+	  MongoError = __webpack_require__(93).MongoError,
 	  inherits = util.inherits,
-	  Duplex = __webpack_require__(53).Duplex || __webpack_require__(154).Duplex,
-	  shallowClone = __webpack_require__(152).shallowClone;
+	  Duplex = __webpack_require__(53).Duplex || __webpack_require__(155).Duplex,
+	  shallowClone = __webpack_require__(153).shallowClone;
 
 	var REFERENCE_BY_FILENAME = 0,
 	  REFERENCE_BY_ID = 1;
@@ -51330,7 +51343,7 @@
 	  // No promise library selected fall back
 	  if(!promiseLibrary) {
 	    promiseLibrary = typeof global.Promise == 'function' ?
-	      global.Promise : __webpack_require__(165).Promise;
+	      global.Promise : __webpack_require__(166).Promise;
 	  }
 
 	  // Set the promiseLibrary
@@ -52486,7 +52499,7 @@
 	  // No promise library selected fall back
 	  if(!promiseLibrary) {
 	    promiseLibrary = typeof global.Promise == 'function' ?
-	      global.Promise : __webpack_require__(165).Promise;
+	      global.Promise : __webpack_require__(166).Promise;
 	  }
 
 	  // We provided a callback leg
@@ -52558,7 +52571,7 @@
 	  // No promise library selected fall back
 	  if(!promiseLibrary) {
 	    promiseLibrary = typeof global.Promise == 'function' ?
-	      global.Promise : __webpack_require__(165).Promise;
+	      global.Promise : __webpack_require__(166).Promise;
 	  }
 
 	  // We provided a callback leg
@@ -52643,7 +52656,7 @@
 	  // No promise library selected fall back
 	  if(!promiseLibrary) {
 	    promiseLibrary = typeof global.Promise == 'function' ?
-	      global.Promise : __webpack_require__(165).Promise;
+	      global.Promise : __webpack_require__(166).Promise;
 	  }
 
 	  // We provided a callback leg
@@ -52707,7 +52720,7 @@
 	  // No promise library selected fall back
 	  if(!promiseLibrary) {
 	    promiseLibrary = typeof global.Promise == 'function' ?
-	      global.Promise : __webpack_require__(165).Promise;
+	      global.Promise : __webpack_require__(166).Promise;
 	  }
 
 	  // We provided a callback leg
@@ -52758,7 +52771,7 @@
 	  // No promise library selected fall back
 	  if(!promiseLibrary) {
 	    promiseLibrary = typeof global.Promise == 'function' ?
-	      global.Promise : __webpack_require__(165).Promise;
+	      global.Promise : __webpack_require__(166).Promise;
 	  }
 
 	  // We provided a callback leg
@@ -53147,13 +53160,13 @@
 
 
 /***/ },
-/* 172 */
+/* 173 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var Binary = __webpack_require__(92).BSON.Binary,
-	  ObjectID = __webpack_require__(92).BSON.ObjectID;
+	var Binary = __webpack_require__(93).BSON.Binary,
+	  ObjectID = __webpack_require__(93).BSON.ObjectID;
 
 	/**
 	 * Class for representing a single chunk in GridFS.
@@ -53386,32 +53399,32 @@
 
 
 /***/ },
-/* 173 */
+/* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var checkCollectionName = __webpack_require__(152).checkCollectionName
-	  , ObjectID = __webpack_require__(92).BSON.ObjectID
-	  , Long = __webpack_require__(92).BSON.Long
-	  , Code = __webpack_require__(92).BSON.Code
+	var checkCollectionName = __webpack_require__(153).checkCollectionName
+	  , ObjectID = __webpack_require__(93).BSON.ObjectID
+	  , Long = __webpack_require__(93).BSON.Long
+	  , Code = __webpack_require__(93).BSON.Code
 	  , f = __webpack_require__(10).format
-	  , AggregationCursor = __webpack_require__(151)
-	  , MongoError = __webpack_require__(92).MongoError
-	  , shallowClone = __webpack_require__(152).shallowClone
-	  , isObject = __webpack_require__(152).isObject
-	  , toError = __webpack_require__(152).toError
-	  , normalizeHintField = __webpack_require__(152).normalizeHintField
-	  , handleCallback = __webpack_require__(152).handleCallback
-	  , decorateCommand = __webpack_require__(152).decorateCommand
-	  , formattedOrderClause = __webpack_require__(152).formattedOrderClause
-	  , ReadPreference = __webpack_require__(153)
-	  , CoreReadPreference = __webpack_require__(92).ReadPreference
-	  , CommandCursor = __webpack_require__(167)
-	  , Define = __webpack_require__(163)
-	  , Cursor = __webpack_require__(164)
-	  , unordered = __webpack_require__(170)
-	  , ordered = __webpack_require__(168);
+	  , AggregationCursor = __webpack_require__(152)
+	  , MongoError = __webpack_require__(93).MongoError
+	  , shallowClone = __webpack_require__(153).shallowClone
+	  , isObject = __webpack_require__(153).isObject
+	  , toError = __webpack_require__(153).toError
+	  , normalizeHintField = __webpack_require__(153).normalizeHintField
+	  , handleCallback = __webpack_require__(153).handleCallback
+	  , decorateCommand = __webpack_require__(153).decorateCommand
+	  , formattedOrderClause = __webpack_require__(153).formattedOrderClause
+	  , ReadPreference = __webpack_require__(154)
+	  , CoreReadPreference = __webpack_require__(93).ReadPreference
+	  , CommandCursor = __webpack_require__(168)
+	  , Define = __webpack_require__(164)
+	  , Cursor = __webpack_require__(165)
+	  , unordered = __webpack_require__(171)
+	  , ordered = __webpack_require__(169);
 
 	/**
 	 * @fileOverview The **Collection** class is an internal class that embodies a MongoDB collection
@@ -53465,7 +53478,7 @@
 	  // No promise library selected fall back
 	  if(!promiseLibrary) {
 	    promiseLibrary = typeof global.Promise == 'function' ?
-	      global.Promise : __webpack_require__(165).Promise;
+	      global.Promise : __webpack_require__(166).Promise;
 	  }
 
 	  // Assign the right collection level readPreference
@@ -56609,30 +56622,30 @@
 
 
 /***/ },
-/* 174 */
+/* 175 */
 /***/ function(module, exports) {
 
 	module.exports = require("timers");
 
 /***/ },
-/* 175 */
+/* 176 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var EventEmitter = __webpack_require__(4).EventEmitter
 	  , inherits = __webpack_require__(10).inherits
-	  , CServer = __webpack_require__(92).Server
-	  , Cursor = __webpack_require__(164)
-	  , AggregationCursor = __webpack_require__(151)
-	  , CommandCursor = __webpack_require__(167)
+	  , CServer = __webpack_require__(93).Server
+	  , Cursor = __webpack_require__(165)
+	  , AggregationCursor = __webpack_require__(152)
+	  , CommandCursor = __webpack_require__(168)
 	  , f = __webpack_require__(10).format
-	  , ServerCapabilities = __webpack_require__(176).ServerCapabilities
-	  , Store = __webpack_require__(176).Store
-	  , Define = __webpack_require__(163)
-	  , MongoError = __webpack_require__(92).MongoError
-	  , shallowClone = __webpack_require__(152).shallowClone
-	  , MAX_JS_INT = __webpack_require__(152).MAX_JS_INT;
+	  , ServerCapabilities = __webpack_require__(177).ServerCapabilities
+	  , Store = __webpack_require__(177).Store
+	  , Define = __webpack_require__(164)
+	  , MongoError = __webpack_require__(93).MongoError
+	  , shallowClone = __webpack_require__(153).shallowClone
+	  , MAX_JS_INT = __webpack_require__(153).MAX_JS_INT;
 
 	/**
 	 * @fileOverview The **Server** class is a class that represents a single server topology and is
@@ -57089,12 +57102,12 @@
 
 
 /***/ },
-/* 176 */
+/* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var MongoError = __webpack_require__(92).MongoError
+	var MongoError = __webpack_require__(93).MongoError
 	  , f = __webpack_require__(10).format;
 
 	// The store of ops
@@ -57247,7 +57260,7 @@
 
 
 /***/ },
-/* 177 */
+/* 178 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -57255,22 +57268,22 @@
 	var EventEmitter = __webpack_require__(4).EventEmitter
 	  , inherits = __webpack_require__(10).inherits
 	  , f = __webpack_require__(10).format
-	  , Server = __webpack_require__(175)
-	  , Mongos = __webpack_require__(178)
-	  , Cursor = __webpack_require__(164)
-	  , AggregationCursor = __webpack_require__(151)
-	  , CommandCursor = __webpack_require__(167)
-	  , ReadPreference = __webpack_require__(153)
-	  , MongoCR = __webpack_require__(92).MongoCR
-	  , MongoError = __webpack_require__(92).MongoError
-	  , ServerCapabilities = __webpack_require__(176).ServerCapabilities
-	  , Store = __webpack_require__(176).Store
-	  , Define = __webpack_require__(163)
-	  , CServer = __webpack_require__(92).Server
-	  , CReplSet = __webpack_require__(92).ReplSet
-	  , CoreReadPreference = __webpack_require__(92).ReadPreference
-	  , shallowClone = __webpack_require__(152).shallowClone
-	  , MAX_JS_INT = __webpack_require__(152).MAX_JS_INT;
+	  , Server = __webpack_require__(176)
+	  , Mongos = __webpack_require__(179)
+	  , Cursor = __webpack_require__(165)
+	  , AggregationCursor = __webpack_require__(152)
+	  , CommandCursor = __webpack_require__(168)
+	  , ReadPreference = __webpack_require__(154)
+	  , MongoCR = __webpack_require__(93).MongoCR
+	  , MongoError = __webpack_require__(93).MongoError
+	  , ServerCapabilities = __webpack_require__(177).ServerCapabilities
+	  , Store = __webpack_require__(177).Store
+	  , Define = __webpack_require__(164)
+	  , CServer = __webpack_require__(93).Server
+	  , CReplSet = __webpack_require__(93).ReplSet
+	  , CoreReadPreference = __webpack_require__(93).ReadPreference
+	  , shallowClone = __webpack_require__(153).shallowClone
+	  , MAX_JS_INT = __webpack_require__(153).MAX_JS_INT;
 
 	/**
 	 * @fileOverview The **ReplSet** class is a class that represents a Replicaset topology and is
@@ -57832,7 +57845,7 @@
 
 
 /***/ },
-/* 178 */
+/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -57840,18 +57853,18 @@
 	var EventEmitter = __webpack_require__(4).EventEmitter
 	  , inherits = __webpack_require__(10).inherits
 	  , f = __webpack_require__(10).format
-	  , ServerCapabilities = __webpack_require__(176).ServerCapabilities
-	  , MongoCR = __webpack_require__(92).MongoCR
-	  , MongoError = __webpack_require__(92).MongoError
-	  , CMongos = __webpack_require__(92).Mongos
-	  , Cursor = __webpack_require__(164)
-	  , AggregationCursor = __webpack_require__(151)
-	  , CommandCursor = __webpack_require__(167)
-	  , Define = __webpack_require__(163)
-	  , Server = __webpack_require__(175)
-	  , Store = __webpack_require__(176).Store
-	  , shallowClone = __webpack_require__(152).shallowClone
-	  , MAX_JS_INT = __webpack_require__(152).MAX_JS_INT;
+	  , ServerCapabilities = __webpack_require__(177).ServerCapabilities
+	  , MongoCR = __webpack_require__(93).MongoCR
+	  , MongoError = __webpack_require__(93).MongoError
+	  , CMongos = __webpack_require__(93).Mongos
+	  , Cursor = __webpack_require__(165)
+	  , AggregationCursor = __webpack_require__(152)
+	  , CommandCursor = __webpack_require__(168)
+	  , Define = __webpack_require__(164)
+	  , Server = __webpack_require__(176)
+	  , Store = __webpack_require__(177).Store
+	  , shallowClone = __webpack_require__(153).shallowClone
+	  , MAX_JS_INT = __webpack_require__(153).MAX_JS_INT;
 
 	/**
 	 * @fileOverview The **Mongos** class is a class that represents a Mongos Proxy topology and is
@@ -58357,30 +58370,30 @@
 
 
 /***/ },
-/* 179 */
+/* 180 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var EventEmitter = __webpack_require__(4).EventEmitter
 	  , inherits = __webpack_require__(10).inherits
-	  , getSingleProperty = __webpack_require__(152).getSingleProperty
-	  , shallowClone = __webpack_require__(152).shallowClone
-	  , parseIndexOptions = __webpack_require__(152).parseIndexOptions
-	  , debugOptions = __webpack_require__(152).debugOptions
-	  , CommandCursor = __webpack_require__(167)
-	  , handleCallback = __webpack_require__(152).handleCallback
-	  , toError = __webpack_require__(152).toError
-	  , ReadPreference = __webpack_require__(153)
+	  , getSingleProperty = __webpack_require__(153).getSingleProperty
+	  , shallowClone = __webpack_require__(153).shallowClone
+	  , parseIndexOptions = __webpack_require__(153).parseIndexOptions
+	  , debugOptions = __webpack_require__(153).debugOptions
+	  , CommandCursor = __webpack_require__(168)
+	  , handleCallback = __webpack_require__(153).handleCallback
+	  , toError = __webpack_require__(153).toError
+	  , ReadPreference = __webpack_require__(154)
 	  , f = __webpack_require__(10).format
-	  , Admin = __webpack_require__(180)
-	  , Code = __webpack_require__(92).BSON.Code
-	  , CoreReadPreference = __webpack_require__(92).ReadPreference
-	  , MongoError = __webpack_require__(92).MongoError
-	  , ObjectID = __webpack_require__(92).ObjectID
-	  , Define = __webpack_require__(163)
-	  , Logger = __webpack_require__(92).Logger
-	  , Collection = __webpack_require__(173)
+	  , Admin = __webpack_require__(181)
+	  , Code = __webpack_require__(93).BSON.Code
+	  , CoreReadPreference = __webpack_require__(93).ReadPreference
+	  , MongoError = __webpack_require__(93).MongoError
+	  , ObjectID = __webpack_require__(93).ObjectID
+	  , Define = __webpack_require__(164)
+	  , Logger = __webpack_require__(93).Logger
+	  , Collection = __webpack_require__(174)
 	  , crypto = __webpack_require__(56);
 
 	var debugFields = ['authSource', 'w', 'wtimeout', 'j', 'native_parser', 'forceServerObjectId'
@@ -58453,7 +58466,7 @@
 	  // No promise library selected fall back
 	  if(!promiseLibrary) {
 	    promiseLibrary = typeof global.Promise == 'function' ?
-	      global.Promise : __webpack_require__(165).Promise;
+	      global.Promise : __webpack_require__(166).Promise;
 	  }
 
 	  // Ensure we put the promiseLib in the options
@@ -60194,14 +60207,14 @@
 
 
 /***/ },
-/* 180 */
+/* 181 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var toError = __webpack_require__(152).toError,
-	  Define = __webpack_require__(163),
-	  shallowClone = __webpack_require__(152).shallowClone;
+	var toError = __webpack_require__(153).toError,
+	  Define = __webpack_require__(164),
+	  shallowClone = __webpack_require__(153).shallowClone;
 
 	/**
 	 * @fileOverview The **Admin** class is an internal class that allows convenient access to
@@ -60781,18 +60794,18 @@
 
 
 /***/ },
-/* 181 */
+/* 182 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var parse = __webpack_require__(182)
-	  , Server = __webpack_require__(175)
-	  , Mongos = __webpack_require__(178)
-	  , ReplSet = __webpack_require__(177)
-	  , Define = __webpack_require__(163)
-	  , ReadPreference = __webpack_require__(153)
-	  , Db = __webpack_require__(179);
+	var parse = __webpack_require__(183)
+	  , Server = __webpack_require__(176)
+	  , Mongos = __webpack_require__(179)
+	  , ReplSet = __webpack_require__(178)
+	  , Define = __webpack_require__(164)
+	  , ReadPreference = __webpack_require__(154)
+	  , Db = __webpack_require__(180);
 
 	/**
 	 * @fileOverview The **MongoClient** class is a class that allows for making Connections to MongoDB.
@@ -60878,7 +60891,7 @@
 	  // No promise library selected fall back
 	  if(!promiseLibrary) {
 	    promiseLibrary = typeof global.Promise == 'function' ?
-	      global.Promise : __webpack_require__(165).Promise;
+	      global.Promise : __webpack_require__(166).Promise;
 	  }
 
 	  // Return a promise
@@ -61207,7 +61220,7 @@
 	  if(typeof db_options.native_parser == 'boolean') return db_options.native_parser;
 
 	  try {
-	    __webpack_require__(92).BSON.BSONNative.BSON;
+	    __webpack_require__(93).BSON.BSONNative.BSON;
 	    return true;
 	  } catch(err) {
 	    return false;
@@ -61316,12 +61329,12 @@
 
 
 /***/ },
-/* 182 */
+/* 183 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var ReadPreference = __webpack_require__(153),
+	var ReadPreference = __webpack_require__(154),
 	  parser = __webpack_require__(37),
 	  f = __webpack_require__(10).format;
 
@@ -61723,14 +61736,14 @@
 
 
 /***/ },
-/* 183 */
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Emitter = __webpack_require__(4).EventEmitter;
-	var GridFSBucketReadStream = __webpack_require__(184);
-	var GridFSBucketWriteStream = __webpack_require__(185);
-	var shallowClone = __webpack_require__(152).shallowClone;
-	var toError = __webpack_require__(152).toError;
+	var GridFSBucketReadStream = __webpack_require__(185);
+	var GridFSBucketWriteStream = __webpack_require__(186);
+	var shallowClone = __webpack_require__(153).shallowClone;
+	var toError = __webpack_require__(153).toError;
 	var util = __webpack_require__(10);
 
 	var DEFAULT_GRIDFS_BUCKET_OPTIONS = {
@@ -61777,7 +61790,7 @@
 	    checkedIndexes: false,
 	    calledOpenUploadStream: false,
 	    promiseLibrary: db.s.promiseLibrary ||
-	      (typeof global.Promise == 'function' ? global.Promise : __webpack_require__(165).Promise)
+	      (typeof global.Promise == 'function' ? global.Promise : __webpack_require__(166).Promise)
 	  };
 	};
 
@@ -62064,10 +62077,10 @@
 
 
 /***/ },
-/* 184 */
+/* 185 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var shallowClone = __webpack_require__(152).shallowClone;
+	var shallowClone = __webpack_require__(153).shallowClone;
 	var stream = __webpack_require__(53);
 	var util = __webpack_require__(10);
 
@@ -62457,12 +62470,12 @@
 
 
 /***/ },
-/* 185 */
+/* 186 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var core = __webpack_require__(92);
+	var core = __webpack_require__(93);
 	var crypto = __webpack_require__(56);
-	var shallowClone = __webpack_require__(152).shallowClone;
+	var shallowClone = __webpack_require__(153).shallowClone;
 	var stream = __webpack_require__(53);
 	var util = __webpack_require__(10);
 
@@ -62978,7 +62991,7 @@
 
 
 /***/ },
-/* 186 */
+/* 187 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// vim:ts=4:sts=4:sw=4:
@@ -65032,14 +65045,14 @@
 
 
 /***/ },
-/* 187 */
+/* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	// Imports
-	var database_ts_1 = __webpack_require__(90);
-	var PersonBE_ts_1 = __webpack_require__(88);
-	var Q = __webpack_require__(186);
+	var database_ts_1 = __webpack_require__(91);
+	var PersonBE_ts_1 = __webpack_require__(89);
+	var Q = __webpack_require__(187);
 	// Exports
 	var Credential = (function () {
 	    // Constructor
@@ -65068,7 +65081,7 @@
 
 
 /***/ },
-/* 188 */
+/* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -65212,16 +65225,16 @@
 	  // this uses a switch for static require analysis
 	  switch (parserName) {
 	    case 'json':
-	      parser = __webpack_require__(189)
+	      parser = __webpack_require__(190)
 	      break
 	    case 'raw':
-	      parser = __webpack_require__(217)
-	      break
-	    case 'text':
 	      parser = __webpack_require__(218)
 	      break
-	    case 'urlencoded':
+	    case 'text':
 	      parser = __webpack_require__(219)
+	      break
+	    case 'urlencoded':
+	      parser = __webpack_require__(220)
 	      break
 	  }
 
@@ -65231,7 +65244,7 @@
 
 
 /***/ },
-/* 189 */
+/* 190 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -65248,11 +65261,11 @@
 	 * @private
 	 */
 
-	var bytes = __webpack_require__(190)
+	var bytes = __webpack_require__(191)
 	var contentType = __webpack_require__(47)
 	var createError = __webpack_require__(49)
 	var debug = __webpack_require__(8)('body-parser:json')
-	var read = __webpack_require__(191)
+	var read = __webpack_require__(192)
 	var typeis = __webpack_require__(77)
 
 	/**
@@ -65412,7 +65425,7 @@
 
 
 /***/ },
-/* 190 */
+/* 191 */
 /***/ function(module, exports) {
 
 	/*!
@@ -65575,7 +65588,7 @@
 
 
 /***/ },
-/* 191 */
+/* 192 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -65592,10 +65605,10 @@
 	 */
 
 	var createError = __webpack_require__(49)
-	var getBody = __webpack_require__(192)
-	var iconv = __webpack_require__(194)
+	var getBody = __webpack_require__(193)
+	var iconv = __webpack_require__(195)
 	var onFinished = __webpack_require__(16)
-	var zlib = __webpack_require__(216)
+	var zlib = __webpack_require__(217)
 
 	/**
 	 * Module exports.
@@ -65769,7 +65782,7 @@
 
 
 /***/ },
-/* 192 */
+/* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -65786,8 +65799,8 @@
 	 * @private
 	 */
 
-	var bytes = __webpack_require__(193)
-	var iconv = __webpack_require__(194)
+	var bytes = __webpack_require__(194)
+	var iconv = __webpack_require__(195)
 	var unpipe = __webpack_require__(20)
 
 	/**
@@ -66095,7 +66108,7 @@
 
 
 /***/ },
-/* 193 */
+/* 194 */
 /***/ function(module, exports) {
 
 	/*!
@@ -66258,12 +66271,12 @@
 
 
 /***/ },
-/* 194 */
+/* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
 
-	var bomHandling = __webpack_require__(195),
+	var bomHandling = __webpack_require__(196),
 	    iconv = module.exports;
 
 	// All codecs and aliases are kept here, keyed by encoding name/alias.
@@ -66321,7 +66334,7 @@
 	iconv._codecDataCache = {};
 	iconv.getCodec = function getCodec(encoding) {
 	    if (!iconv.encodings)
-	        iconv.encodings = __webpack_require__(196); // Lazy load all encoding definitions.
+	        iconv.encodings = __webpack_require__(197); // Lazy load all encoding definitions.
 	    
 	    // Canonicalize encoding name: strip all non-alphanumeric chars and appended year.
 	    var enc = (''+encoding).toLowerCase().replace(/[^0-9a-z]|:\d{4}$/g, "");
@@ -66395,17 +66408,17 @@
 	    // Load streaming support in Node v0.10+
 	    var nodeVerArr = nodeVer.split(".").map(Number);
 	    if (nodeVerArr[0] > 0 || nodeVerArr[1] >= 10) {
-	        __webpack_require__(214)(iconv);
+	        __webpack_require__(215)(iconv);
 	    }
 
 	    // Load Node primitive extensions.
-	    __webpack_require__(215)(iconv);
+	    __webpack_require__(216)(iconv);
 	}
 
 
 
 /***/ },
-/* 195 */
+/* 196 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -66463,7 +66476,7 @@
 
 
 /***/ },
-/* 196 */
+/* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -66471,14 +66484,14 @@
 	// Update this array if you add/rename/remove files in this directory.
 	// We support Browserify by skipping automatic module discovery and requiring modules directly.
 	var modules = [
-	    __webpack_require__(197),
-	    __webpack_require__(199),
+	    __webpack_require__(198),
 	    __webpack_require__(200),
 	    __webpack_require__(201),
 	    __webpack_require__(202),
 	    __webpack_require__(203),
 	    __webpack_require__(204),
 	    __webpack_require__(205),
+	    __webpack_require__(206),
 	];
 
 	// Put all encoding/alias/codec definitions to single object and export it. 
@@ -66491,7 +66504,7 @@
 
 
 /***/ },
-/* 197 */
+/* 198 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -66541,7 +66554,7 @@
 	//------------------------------------------------------------------------------
 
 	// We use node.js internal decoder. Its signature is the same as ours.
-	var StringDecoder = __webpack_require__(198).StringDecoder;
+	var StringDecoder = __webpack_require__(199).StringDecoder;
 
 	if (!StringDecoder.prototype.end) // Node v0.8 doesn't have this method.
 	    StringDecoder.prototype.end = function() {};
@@ -66684,13 +66697,13 @@
 
 
 /***/ },
-/* 198 */
+/* 199 */
 /***/ function(module, exports) {
 
 	module.exports = require("string_decoder");
 
 /***/ },
-/* 199 */
+/* 200 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -66870,7 +66883,7 @@
 
 
 /***/ },
-/* 200 */
+/* 201 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -67165,7 +67178,7 @@
 
 
 /***/ },
-/* 201 */
+/* 202 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -67243,7 +67256,7 @@
 
 
 /***/ },
-/* 202 */
+/* 203 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -67418,7 +67431,7 @@
 
 
 /***/ },
-/* 203 */
+/* 204 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -67874,7 +67887,7 @@
 	}
 
 /***/ },
-/* 204 */
+/* 205 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -68434,7 +68447,7 @@
 
 
 /***/ },
-/* 205 */
+/* 206 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -68480,7 +68493,7 @@
 
 	    'shiftjis': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(206) },
+	        table: function() { return __webpack_require__(207) },
 	        encodeAdd: {'\u00a5': 0x5C, '\u203E': 0x7E},
 	        encodeSkipVals: [{from: 0xED40, to: 0xF940}],
 	    },
@@ -68495,7 +68508,7 @@
 
 	    'eucjp': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(207) },
+	        table: function() { return __webpack_require__(208) },
 	        encodeAdd: {'\u00a5': 0x5C, '\u203E': 0x7E},
 	    },
 
@@ -68521,21 +68534,21 @@
 	    '936': 'cp936',
 	    'cp936': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(208) },
+	        table: function() { return __webpack_require__(209) },
 	    },
 
 	    // GBK (~22000 chars) is an extension of CP936 that added user-mapped chars and some other.
 	    'gbk': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(208).concat(__webpack_require__(209)) },
+	        table: function() { return __webpack_require__(209).concat(__webpack_require__(210)) },
 	    },
 	    'xgbk': 'gbk',
 
 	    // GB18030 is an algorithmic extension of GBK.
 	    'gb18030': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(208).concat(__webpack_require__(209)) },
-	        gb18030: function() { return __webpack_require__(210) },
+	        table: function() { return __webpack_require__(209).concat(__webpack_require__(210)) },
+	        gb18030: function() { return __webpack_require__(211) },
 	    },
 
 	    'chinese': 'gb18030',
@@ -68551,7 +68564,7 @@
 	    '949': 'cp949',
 	    'cp949': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(211) },
+	        table: function() { return __webpack_require__(212) },
 	    },
 
 	    'cseuckr': 'cp949',
@@ -68591,14 +68604,14 @@
 	    '950': 'cp950',
 	    'cp950': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(212) },
+	        table: function() { return __webpack_require__(213) },
 	    },
 
 	    // Big5 has many variations and is an extension of cp950. We use Encoding Standard's as a consensus.
 	    'big5': 'big5hkscs',
 	    'big5hkscs': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(212).concat(__webpack_require__(213)) },
+	        table: function() { return __webpack_require__(213).concat(__webpack_require__(214)) },
 	        encodeSkipVals: [0xa2cc],
 	    },
 
@@ -68610,7 +68623,7 @@
 
 
 /***/ },
-/* 206 */
+/* 207 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -69161,7 +69174,7 @@
 	];
 
 /***/ },
-/* 207 */
+/* 208 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -69986,7 +69999,7 @@
 	];
 
 /***/ },
-/* 208 */
+/* 209 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -72610,7 +72623,7 @@
 	];
 
 /***/ },
-/* 209 */
+/* 210 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -72873,7 +72886,7 @@
 	];
 
 /***/ },
-/* 210 */
+/* 211 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -73298,7 +73311,7 @@
 	};
 
 /***/ },
-/* 211 */
+/* 212 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -75681,7 +75694,7 @@
 	];
 
 /***/ },
-/* 212 */
+/* 213 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -76413,7 +76426,7 @@
 	];
 
 /***/ },
-/* 213 */
+/* 214 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -76922,7 +76935,7 @@
 	];
 
 /***/ },
-/* 214 */
+/* 215 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -77048,7 +77061,7 @@
 
 
 /***/ },
-/* 215 */
+/* 216 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -77268,13 +77281,13 @@
 
 
 /***/ },
-/* 216 */
+/* 217 */
 /***/ function(module, exports) {
 
 	module.exports = require("zlib");
 
 /***/ },
-/* 217 */
+/* 218 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -77289,9 +77302,9 @@
 	 * Module dependencies.
 	 */
 
-	var bytes = __webpack_require__(190)
+	var bytes = __webpack_require__(191)
 	var debug = __webpack_require__(8)('body-parser:raw')
-	var read = __webpack_require__(191)
+	var read = __webpack_require__(192)
 	var typeis = __webpack_require__(77)
 
 	/**
@@ -77381,7 +77394,7 @@
 
 
 /***/ },
-/* 218 */
+/* 219 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -77396,10 +77409,10 @@
 	 * Module dependencies.
 	 */
 
-	var bytes = __webpack_require__(190)
+	var bytes = __webpack_require__(191)
 	var contentType = __webpack_require__(47)
 	var debug = __webpack_require__(8)('body-parser:text')
-	var read = __webpack_require__(191)
+	var read = __webpack_require__(192)
 	var typeis = __webpack_require__(77)
 
 	/**
@@ -77508,7 +77521,7 @@
 
 
 /***/ },
-/* 219 */
+/* 220 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -77525,12 +77538,12 @@
 	 * @private
 	 */
 
-	var bytes = __webpack_require__(190)
+	var bytes = __webpack_require__(191)
 	var contentType = __webpack_require__(47)
 	var createError = __webpack_require__(49)
 	var debug = __webpack_require__(8)('body-parser:urlencoded')
 	var deprecate = __webpack_require__(29)('body-parser')
-	var read = __webpack_require__(191)
+	var read = __webpack_require__(192)
 	var typeis = __webpack_require__(77)
 
 	/**
