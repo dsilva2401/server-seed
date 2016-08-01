@@ -90,4 +90,9 @@
 				'doc:build',
 				'webpack:build'
 			]);
+		});
+
+	// Tests
+		gulp.task('test', function () {
+			shell.exec('node_modules/.bin/mocha --reporter spec test/**/*.spec.js');
 		})
