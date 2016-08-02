@@ -1,6 +1,6 @@
 
 // Imports
-	import {MongoModel} from '../services/database.ts';
+	import {MongoModel} from './MongoModel.ts';
 	import {IPerson} from '../interfaces/IPerson.ts';
 	import {PersonBE} from './PersonBE.ts';
 	import * as Q from 'q';

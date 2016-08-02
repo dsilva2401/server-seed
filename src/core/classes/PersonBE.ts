@@ -4,7 +4,7 @@
 	import {IPerson} from '../interfaces/IPerson.ts';
 	import {Credential} from './Credential.ts';
 	import {Session} from './Session.ts';
-	import {MongoModel} from '../services/database.ts';
+	import {MongoModel} from './MongoModel.ts';
 
 // Exports
 	export class PersonBE extends Person {

@@ -26,14 +26,9 @@ A NodeJS based server seed.
 	gulpfile.js
 	src/
 		core/
-			architecture/
-				classes/..
-				interfaces/..
-				..
-			app/
-				classes/..
-				interfaces/..
-				..
+			classes/..
+			interfaces/..
+			services/..
 		setup/
 			config.ts
 			proxy/..

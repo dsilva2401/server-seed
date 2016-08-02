@@ -24593,7 +24593,7 @@
 	};
 	// Imports
 	var Person_ts_1 = __webpack_require__(90);
-	var database_ts_1 = __webpack_require__(91);
+	var MongoModel_ts_1 = __webpack_require__(91);
 	// Exports
 	var PersonBE = (function (_super) {
 	    __extends(PersonBE, _super);
@@ -24606,7 +24606,7 @@
 	        else {
 	            _super.call(this, dataOrId);
 	        }
-	        this.personModel = new database_ts_1.MongoModel('person');
+	        this.personModel = new MongoModel_ts_1.MongoModel('person');
 	        this.personModel.createIndex({ email: 1 }, { unique: true });
 	    }
 	    PersonBE.prototype.load = function () {
@@ -65050,7 +65050,7 @@
 
 	"use strict";
 	// Imports
-	var database_ts_1 = __webpack_require__(91);
+	var MongoModel_ts_1 = __webpack_require__(91);
 	var PersonBE_ts_1 = __webpack_require__(89);
 	var Q = __webpack_require__(187);
 	// Exports
@@ -65060,7 +65060,7 @@
 	        this.email = email;
 	        if (password)
 	            this.password = password;
-	        this.personModel = new database_ts_1.MongoModel('person');
+	        this.personModel = new MongoModel_ts_1.MongoModel('person');
 	    }
 	    Credential.prototype.getOwner = function () {
 	        var deferred = Q.defer();

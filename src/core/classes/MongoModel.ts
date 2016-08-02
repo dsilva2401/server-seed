@@ -1,6 +1,6 @@
 
 // Imports
-	import {config} from '../../../config.ts';
+	import {config} from '../../config.ts';
 	import {MongoClient} from 'mongodb';
 	import * as Q from 'q';
 

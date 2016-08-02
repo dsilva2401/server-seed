@@ -1,7 +1,7 @@
 
 // Imports
-	import {PersonBE} from '../../../core/app/classes/PersonBE.ts';
-	import {Credential} from '../../../core/app/classes/Credential.ts';
+	import {PersonBE} from '../../../core/classes/PersonBE.ts';
+	import {Credential} from '../../../core/classes/Credential.ts';
 
 // Exports
 	export function controller (req, res, next) {

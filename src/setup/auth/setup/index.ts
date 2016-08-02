@@ -1,8 +1,8 @@
 
 // Imports
 	import * as express from 'express';
-	import {PersonBE} from '../../../core/app/classes/PersonBE.ts';
-	import {Credential} from '../../../core/app/classes/Credential.ts';
+	import {PersonBE} from '../../../core/classes/PersonBE.ts';
+	import {Credential} from '../../../core/classes/Credential.ts';
 	import {controller as registerController} from './register.ts';
 
 // Export router setup function
