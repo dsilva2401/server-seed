@@ -31,7 +31,8 @@
 						lastname: 'Lastame',
 						email: 'email'+Math.random()+'@domain.com',
 						birthday: new Date(),
-						sex: 'male'
+						sex: 'male',
+						password: data.person.password
 					},function (response, body) {
 						expect(response.statusCode).to.equal(200);
 						done();
@@ -43,7 +44,8 @@
 						lastname: 'Lastame',
 						email: 'invalidEmail',
 						birthday: new Date(),
-						sex: 'male'
+						sex: 'male',
+						password: data.person.password
 					},function (response, body) {
 						expect(response.statusCode).to.equal(400);
 						done();
@@ -55,7 +57,8 @@
 						lastname: data.person.lastname,
 						email: data.person.email,
 						birthday: data.person.birthday,
-						sex: data.person.sex
+						sex: data.person.sex,
+						password: data.person.password
 					},function (response, body) {
 						expect(response.statusCode).to.equal(409);
 						done();

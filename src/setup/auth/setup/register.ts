@@ -8,7 +8,7 @@
 		let currentPerson = new PersonBE(req.body);
 		// Data validation
 			let errors = currentPerson.validate();
-			if (errors) {
+			if (errors || !req.body.password) {
 				res.status(400);
 				res.json(errors);
 				res.end();
@@ -17,8 +17,8 @@
 		// Verify if not exists
 			let credential = new Credential(currentPerson.email);
 			credential.getOwner()
-			// Success
-			.then(function (owner) {
+			// Success getting owner
+			.then(function (owner?: PersonBE) {
 				if (owner) {
 					res.status(409);
 					res.json({
@@ -27,15 +27,28 @@
 					res.end();
 					return;
 				} 
-				// Save register
+				// Save current person data
 					currentPerson.save()
-					// Success
-					.then(function (result) {
-						res.status(200);
-						res.json(result);
-						res.end();
+					// Success saving current person
+					.then(function () {
+						currentPerson.credential.updatePassword(req.body.password)
+						// Success updating password
+						.then(function () {
+							res.status(200);
+							res.json(
+								currentPerson.basicData()
+							);
+							res.end();
+						})
+						// Error updating password
+						.catch(function (err) {
+							currentPerson.destroy();
+							res.status(500);
+							res.json(err);
+							res.end();
+						});	
 					})
-					// Error
+					// Error saving current person
 					.catch(function (err) {
 						res.status(500);
 						res.json(err);
@@ -43,7 +56,7 @@
 					});
 				
 			})
-			// Error
+			// Error getting owner
 			.catch(function (err) {
 				res.status(500);
 				res.json(err);

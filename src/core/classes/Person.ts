@@ -6,7 +6,7 @@
 	export abstract class Person implements IPerson {
 
 		// Attributes
-			protected id: string;
+			public id: string;
 			public name: string;
 			public lastname: string;
 			public email: string;
@@ -21,6 +21,16 @@
 					this.email = personData.email;
 					this.birthday = personData.birthday;
 					this.sex = personData.sex;
+				}
+			}
+			public basicData (): IPerson {
+				return {
+					id: this.id,
+					name: this.name,
+					lastname: this.lastname,
+					sex: this.sex,
+					birthday: this.birthday,
+					email: this.email
 				}
 			}
 			public validate (): any {

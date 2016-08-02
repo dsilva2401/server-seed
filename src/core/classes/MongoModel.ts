@@ -44,9 +44,36 @@
 				return deferred.promise;
 			}
 
+			public updateOrCreate (criteria: any, data: any) {
+				let deferred = Q.defer();
+				this.collection.update(criteria, data, {
+					upsert: true
+				}, function (err, resp) {
+					if (err) {
+						deferred.reject(err);
+						return;
+					}
+					resp.result = resp.result || {};
+					resp.result.upserted = resp.result.upserted || [];
+					deferred.resolve(resp.result.upserted[0]);
+				});
+				return deferred.promise;
+			}
+
 			public findOne (criteria: any) {
 				let deferred = Q.defer();
 				this.collection.findOne(criteria, function (err, resp) {
+					if (err) {
+						deferred.reject(err);
+						return;
+					}
+					deferred.resolve(resp);
+				});
+				return deferred.promise;
+			}
+			public remove (criteria: any) {
+				let deferred = Q.defer();
+				this.collection.remove(criteria, function (err, resp) {
 					if (err) {
 						deferred.reject(err);
 						return;
