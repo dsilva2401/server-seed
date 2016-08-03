@@ -57,7 +57,6 @@
 						deferred.reject(err);
 						return;
 					}
-					// resp.result.upserted = resp.result.upserted || [];
 					var r: any = {};
 					if (
 						resp.result.upserted &&
