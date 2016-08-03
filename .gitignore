@@ -41,3 +41,6 @@ typings
 
 # Mongo data
 mongodata
+
+# Tests project source copy
+test/project-src
