@@ -1,6 +1,7 @@
 
 // Imports
 	import * as express from 'express';
+	import {config} from '../../../config.ts';
 
 // Export router setup function
 	export function setupAPI (server: any) {
@@ -14,6 +15,6 @@
 		});
 
 		// Add router to server
-		server.use('/api', router);
+		server.use(config.httpRoutes.api.path, router);
 
 	}

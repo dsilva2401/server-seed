@@ -40,14 +40,13 @@
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 0:
+/******/ ([
+/* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	// Imports
-	var shell = __webpack_require__(210);
+	var shell = __webpack_require__(213);
 	var config_ts_1 = __webpack_require__(85);
 	// Setup
 	var databaseConfig = config_ts_1.config.servers.database;
@@ -64,50 +63,123 @@
 
 
 /***/ },
-
-/***/ 4:
+/* 1 */,
+/* 2 */,
+/* 3 */,
+/* 4 */
 /***/ function(module, exports) {
 
 	module.exports = require("events");
 
 /***/ },
-
-/***/ 10:
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */,
+/* 10 */
 /***/ function(module, exports) {
 
 	module.exports = require("util");
 
 /***/ },
-
-/***/ 13:
+/* 11 */,
+/* 12 */,
+/* 13 */
 /***/ function(module, exports) {
 
 	module.exports = require("fs");
 
 /***/ },
-
-/***/ 35:
+/* 14 */,
+/* 15 */,
+/* 16 */,
+/* 17 */,
+/* 18 */,
+/* 19 */,
+/* 20 */,
+/* 21 */,
+/* 22 */,
+/* 23 */,
+/* 24 */,
+/* 25 */,
+/* 26 */,
+/* 27 */,
+/* 28 */,
+/* 29 */,
+/* 30 */,
+/* 31 */,
+/* 32 */,
+/* 33 */,
+/* 34 */,
+/* 35 */
 /***/ function(module, exports) {
 
 	module.exports = require("path");
 
 /***/ },
-
-/***/ 51:
+/* 36 */,
+/* 37 */,
+/* 38 */,
+/* 39 */,
+/* 40 */,
+/* 41 */,
+/* 42 */,
+/* 43 */,
+/* 44 */,
+/* 45 */,
+/* 46 */,
+/* 47 */,
+/* 48 */,
+/* 49 */,
+/* 50 */,
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__(10).inherits
 
 
 /***/ },
-
-/***/ 85:
+/* 52 */,
+/* 53 */,
+/* 54 */,
+/* 55 */,
+/* 56 */,
+/* 57 */,
+/* 58 */,
+/* 59 */,
+/* 60 */,
+/* 61 */,
+/* 62 */,
+/* 63 */,
+/* 64 */,
+/* 65 */,
+/* 66 */,
+/* 67 */,
+/* 68 */,
+/* 69 */,
+/* 70 */,
+/* 71 */,
+/* 72 */,
+/* 73 */,
+/* 74 */,
+/* 75 */,
+/* 76 */,
+/* 77 */,
+/* 78 */,
+/* 79 */,
+/* 80 */,
+/* 81 */,
+/* 82 */,
+/* 83 */,
+/* 84 */,
+/* 85 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	// Imports
 	var path = __webpack_require__(35);
-	exports.config = {};
+	exports.config = { servers: null, httpRoutes: null };
 	/**
 	    === Servers configuration ===
 	*/
@@ -139,11 +211,185 @@
 	exports.config.servers.statics.domain = 'localhost';
 	exports.config.servers.statics.port = 8080;
 	exports.config.servers.statics.url = 'http://' + exports.config.servers.statics.domain + ':' + exports.config.servers.statics.port;
+	/**
+	    === HTTP Routes ===
+	*/
+	// Import configutation
+	exports.config.httpRoutes = __webpack_require__(86);
+	// Set url attribute
+	Object.keys(exports.config.httpRoutes).forEach(function (routerKey) {
+	    var buffRouter = exports.config.httpRoutes[routerKey];
+	    Object.keys(exports.config.httpRoutes[routerKey].services).forEach(function (serviceKey) {
+	        var buffService = buffRouter.services[serviceKey];
+	        exports.config.httpRoutes[routerKey].services[serviceKey].url = buffRouter.path + buffService.path;
+	    });
+	});
 
 
 /***/ },
+/* 86 */
+/***/ function(module, exports) {
 
-/***/ 210:
+	module.exports = {
+		"auth": {
+			"path": "/auth",
+			"services": {
+				"register": {
+					"method": "POST",
+					"path": "/register"
+				},
+				"login": {
+					"method": "POST",
+					"path": "/login"
+				},
+				"logout": {
+					"method": "DELETE",
+					"path": "/logout"
+				}
+			}
+		},
+		"api": {
+			"path": "/api",
+			"services": {}
+		},
+		"statics": {
+			"path": "/statics",
+			"services": {}
+		},
+		"views": {
+			"path": "/",
+			"services": {}
+		}
+	};
+
+/***/ },
+/* 87 */,
+/* 88 */,
+/* 89 */,
+/* 90 */,
+/* 91 */,
+/* 92 */,
+/* 93 */,
+/* 94 */,
+/* 95 */,
+/* 96 */,
+/* 97 */,
+/* 98 */,
+/* 99 */,
+/* 100 */,
+/* 101 */,
+/* 102 */,
+/* 103 */,
+/* 104 */,
+/* 105 */,
+/* 106 */,
+/* 107 */,
+/* 108 */,
+/* 109 */,
+/* 110 */,
+/* 111 */,
+/* 112 */,
+/* 113 */,
+/* 114 */,
+/* 115 */,
+/* 116 */,
+/* 117 */,
+/* 118 */,
+/* 119 */,
+/* 120 */,
+/* 121 */,
+/* 122 */,
+/* 123 */,
+/* 124 */,
+/* 125 */,
+/* 126 */,
+/* 127 */,
+/* 128 */,
+/* 129 */,
+/* 130 */,
+/* 131 */,
+/* 132 */,
+/* 133 */,
+/* 134 */,
+/* 135 */,
+/* 136 */,
+/* 137 */,
+/* 138 */,
+/* 139 */,
+/* 140 */,
+/* 141 */,
+/* 142 */,
+/* 143 */,
+/* 144 */,
+/* 145 */,
+/* 146 */,
+/* 147 */,
+/* 148 */,
+/* 149 */,
+/* 150 */,
+/* 151 */,
+/* 152 */,
+/* 153 */,
+/* 154 */,
+/* 155 */,
+/* 156 */,
+/* 157 */,
+/* 158 */,
+/* 159 */,
+/* 160 */,
+/* 161 */,
+/* 162 */,
+/* 163 */,
+/* 164 */,
+/* 165 */,
+/* 166 */,
+/* 167 */,
+/* 168 */,
+/* 169 */,
+/* 170 */,
+/* 171 */,
+/* 172 */,
+/* 173 */,
+/* 174 */,
+/* 175 */,
+/* 176 */,
+/* 177 */,
+/* 178 */,
+/* 179 */,
+/* 180 */,
+/* 181 */,
+/* 182 */,
+/* 183 */,
+/* 184 */,
+/* 185 */,
+/* 186 */,
+/* 187 */,
+/* 188 */,
+/* 189 */,
+/* 190 */,
+/* 191 */,
+/* 192 */,
+/* 193 */,
+/* 194 */,
+/* 195 */,
+/* 196 */,
+/* 197 */,
+/* 198 */,
+/* 199 */,
+/* 200 */,
+/* 201 */,
+/* 202 */,
+/* 203 */,
+/* 204 */,
+/* 205 */,
+/* 206 */,
+/* 207 */,
+/* 208 */,
+/* 209 */,
+/* 210 */,
+/* 211 */,
+/* 212 */,
+/* 213 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//
@@ -154,7 +400,7 @@
 	// http://github.com/arturadib/shelljs
 	//
 
-	var common = __webpack_require__(211);
+	var common = __webpack_require__(214);
 
 	//@
 	//@ All commands run synchronously, unless otherwise stated.
@@ -181,70 +427,70 @@
 	// with wildcards, such as with the regexes for sed & grep
 
 	//@include ./src/cd
-	__webpack_require__(227);
-
-	//@include ./src/pwd
-	__webpack_require__(228);
-
-	//@include ./src/ls
-	__webpack_require__(229);
-
-	//@include ./src/find
 	__webpack_require__(230);
 
-	//@include ./src/cp
+	//@include ./src/pwd
 	__webpack_require__(231);
 
-	//@include ./src/rm
+	//@include ./src/ls
 	__webpack_require__(232);
 
-	//@include ./src/mv
+	//@include ./src/find
 	__webpack_require__(233);
 
-	//@include ./src/mkdir
+	//@include ./src/cp
 	__webpack_require__(234);
 
-	//@include ./src/test
+	//@include ./src/rm
 	__webpack_require__(235);
 
-	//@include ./src/cat
+	//@include ./src/mv
 	__webpack_require__(236);
 
-	//@include ./src/head
+	//@include ./src/mkdir
 	__webpack_require__(237);
 
-	//@include ./src/tail
+	//@include ./src/test
 	__webpack_require__(238);
 
-	//@include ./src/to
+	//@include ./src/cat
 	__webpack_require__(239);
 
-	//@include ./src/toEnd
+	//@include ./src/head
 	__webpack_require__(240);
 
-	//@include ./src/sed
+	//@include ./src/tail
 	__webpack_require__(241);
 
-	//@include ./src/sort
+	//@include ./src/to
 	__webpack_require__(242);
 
-	//@include ./src/uniq
+	//@include ./src/toEnd
 	__webpack_require__(243);
 
-	//@include ./src/grep
+	//@include ./src/sed
 	__webpack_require__(244);
 
-	//@include ./src/which
+	//@include ./src/sort
 	__webpack_require__(245);
 
-	//@include ./src/echo
+	//@include ./src/uniq
 	__webpack_require__(246);
 
-	//@include ./src/dirs
+	//@include ./src/grep
 	__webpack_require__(247);
 
-	//@include ./src/ln
+	//@include ./src/which
 	__webpack_require__(248);
+
+	//@include ./src/echo
+	__webpack_require__(249);
+
+	//@include ./src/dirs
+	__webpack_require__(250);
+
+	//@include ./src/ln
+	__webpack_require__(251);
 
 	//@
 	//@ ### exit(code)
@@ -257,16 +503,16 @@
 	exports.env = process.env;
 
 	//@include ./src/exec
-	__webpack_require__(249);
-
-	//@include ./src/chmod
 	__webpack_require__(252);
 
+	//@include ./src/chmod
+	__webpack_require__(255);
+
 	//@include ./src/touch
-	__webpack_require__(253);
+	__webpack_require__(256);
 
 	//@include ./src/set
-	__webpack_require__(254);
+	__webpack_require__(257);
 
 
 	//@
@@ -274,11 +520,11 @@
 	//@
 
 	//@include ./src/tempdir
-	__webpack_require__(250);
+	__webpack_require__(253);
 
 	//@include ./src/error
 
-	exports.error = __webpack_require__(255);
+	exports.error = __webpack_require__(258);
 
 	//@include ./src/common
 	exports.ShellString = common.ShellString;
@@ -367,18 +613,17 @@
 
 
 /***/ },
-
-/***/ 211:
+/* 214 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// jshint -W053
 	// Ignore warning about 'new String()'
 	'use strict';
 
-	var os = __webpack_require__(212);
+	var os = __webpack_require__(215);
 	var fs = __webpack_require__(13);
-	var glob = __webpack_require__(213);
-	var shell = __webpack_require__(210);
+	var glob = __webpack_require__(216);
+	var shell = __webpack_require__(213);
 
 	var DEFAULT_ERROR_CODE = 1;
 	var shellMethods = Object.create(shell);
@@ -757,15 +1002,13 @@
 
 
 /***/ },
-
-/***/ 212:
+/* 215 */
 /***/ function(module, exports) {
 
 	module.exports = require("os");
 
 /***/ },
-
-/***/ 213:
+/* 216 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Approach:
@@ -811,26 +1054,26 @@
 	module.exports = glob
 
 	var fs = __webpack_require__(13)
-	var rp = __webpack_require__(214)
-	var minimatch = __webpack_require__(216)
+	var rp = __webpack_require__(217)
+	var minimatch = __webpack_require__(219)
 	var Minimatch = minimatch.Minimatch
 	var inherits = __webpack_require__(51)
 	var EE = __webpack_require__(4).EventEmitter
 	var path = __webpack_require__(35)
-	var assert = __webpack_require__(220)
-	var isAbsolute = __webpack_require__(221)
-	var globSync = __webpack_require__(222)
-	var common = __webpack_require__(223)
+	var assert = __webpack_require__(223)
+	var isAbsolute = __webpack_require__(224)
+	var globSync = __webpack_require__(225)
+	var common = __webpack_require__(226)
 	var alphasort = common.alphasort
 	var alphasorti = common.alphasorti
 	var setopts = common.setopts
 	var ownProp = common.ownProp
-	var inflight = __webpack_require__(224)
+	var inflight = __webpack_require__(227)
 	var util = __webpack_require__(10)
 	var childrenIgnored = common.childrenIgnored
 	var isIgnored = common.isIgnored
 
-	var once = __webpack_require__(226)
+	var once = __webpack_require__(229)
 
 	function glob (pattern, options, cb) {
 	  if (typeof options === 'function') cb = options, options = {}
@@ -1554,8 +1797,7 @@
 
 
 /***/ },
-
-/***/ 214:
+/* 217 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = realpath
@@ -1571,7 +1813,7 @@
 
 	var version = process.version
 	var ok = /^v[0-5]\./.test(version)
-	var old = __webpack_require__(215)
+	var old = __webpack_require__(218)
 
 	function newError (er) {
 	  return er && er.syscall === 'realpath' && (
@@ -1627,8 +1869,7 @@
 
 
 /***/ },
-
-/***/ 215:
+/* 218 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -1937,8 +2178,7 @@
 
 
 /***/ },
-
-/***/ 216:
+/* 219 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = minimatch
@@ -1950,7 +2190,7 @@
 	} catch (er) {}
 
 	var GLOBSTAR = minimatch.GLOBSTAR = Minimatch.GLOBSTAR = {}
-	var expand = __webpack_require__(217)
+	var expand = __webpack_require__(220)
 
 	// any single thing other than /
 	// don't need to escape / when using new RegExp()
@@ -2868,12 +3108,11 @@
 
 
 /***/ },
-
-/***/ 217:
+/* 220 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var concatMap = __webpack_require__(218);
-	var balanced = __webpack_require__(219);
+	var concatMap = __webpack_require__(221);
+	var balanced = __webpack_require__(222);
 
 	module.exports = expandTop;
 
@@ -3076,8 +3315,7 @@
 
 
 /***/ },
-
-/***/ 218:
+/* 221 */
 /***/ function(module, exports) {
 
 	module.exports = function (xs, fn) {
@@ -3096,8 +3334,7 @@
 
 
 /***/ },
-
-/***/ 219:
+/* 222 */
 /***/ function(module, exports) {
 
 	module.exports = balanced;
@@ -3161,15 +3398,13 @@
 
 
 /***/ },
-
-/***/ 220:
+/* 223 */
 /***/ function(module, exports) {
 
 	module.exports = require("assert");
 
 /***/ },
-
-/***/ 221:
+/* 224 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -3195,23 +3430,22 @@
 
 
 /***/ },
-
-/***/ 222:
+/* 225 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = globSync
 	globSync.GlobSync = GlobSync
 
 	var fs = __webpack_require__(13)
-	var rp = __webpack_require__(214)
-	var minimatch = __webpack_require__(216)
+	var rp = __webpack_require__(217)
+	var minimatch = __webpack_require__(219)
 	var Minimatch = minimatch.Minimatch
-	var Glob = __webpack_require__(213).Glob
+	var Glob = __webpack_require__(216).Glob
 	var util = __webpack_require__(10)
 	var path = __webpack_require__(35)
-	var assert = __webpack_require__(220)
-	var isAbsolute = __webpack_require__(221)
-	var common = __webpack_require__(223)
+	var assert = __webpack_require__(223)
+	var isAbsolute = __webpack_require__(224)
+	var common = __webpack_require__(226)
 	var alphasort = common.alphasort
 	var alphasorti = common.alphasorti
 	var setopts = common.setopts
@@ -3670,8 +3904,7 @@
 
 
 /***/ },
-
-/***/ 223:
+/* 226 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports.alphasort = alphasort
@@ -3689,8 +3922,8 @@
 	}
 
 	var path = __webpack_require__(35)
-	var minimatch = __webpack_require__(216)
-	var isAbsolute = __webpack_require__(221)
+	var minimatch = __webpack_require__(219)
+	var isAbsolute = __webpack_require__(224)
 	var Minimatch = minimatch.Minimatch
 
 	function alphasorti (a, b) {
@@ -3912,13 +4145,12 @@
 
 
 /***/ },
-
-/***/ 224:
+/* 227 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var wrappy = __webpack_require__(225)
+	var wrappy = __webpack_require__(228)
 	var reqs = Object.create(null)
-	var once = __webpack_require__(226)
+	var once = __webpack_require__(229)
 
 	module.exports = wrappy(inflight)
 
@@ -3963,8 +4195,7 @@
 
 
 /***/ },
-
-/***/ 225:
+/* 228 */
 /***/ function(module, exports) {
 
 	// Returns a wrapper function that returns a wrapped callback
@@ -4003,11 +4234,10 @@
 
 
 /***/ },
-
-/***/ 226:
+/* 229 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var wrappy = __webpack_require__(225)
+	var wrappy = __webpack_require__(228)
 	module.exports = wrappy(once)
 
 	once.proto = once(function () {
@@ -4031,12 +4261,11 @@
 
 
 /***/ },
-
-/***/ 227:
+/* 230 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var fs = __webpack_require__(13);
-	var common = __webpack_require__(211);
+	var common = __webpack_require__(214);
 
 	common.register('cd', _cd, {});
 
@@ -4076,12 +4305,11 @@
 
 
 /***/ },
-
-/***/ 228:
+/* 231 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var path = __webpack_require__(35);
-	var common = __webpack_require__(211);
+	var common = __webpack_require__(214);
 
 	common.register('pwd', _pwd, {
 	  allowGlobbing: false,
@@ -4098,14 +4326,13 @@
 
 
 /***/ },
-
-/***/ 229:
+/* 232 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var path = __webpack_require__(35);
 	var fs = __webpack_require__(13);
-	var common = __webpack_require__(211);
-	var glob = __webpack_require__(213);
+	var common = __webpack_require__(214);
+	var glob = __webpack_require__(216);
 
 	var globPatternRecursive = path.sep + '**' + path.sep + '*';
 
@@ -4223,14 +4450,13 @@
 
 
 /***/ },
-
-/***/ 230:
+/* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var fs = __webpack_require__(13);
 	var path = __webpack_require__(35);
-	var common = __webpack_require__(211);
-	var _ls = __webpack_require__(229);
+	var common = __webpack_require__(214);
+	var _ls = __webpack_require__(232);
 
 	common.register('find', _find, {});
 
@@ -4283,14 +4509,13 @@
 
 
 /***/ },
-
-/***/ 231:
+/* 234 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var fs = __webpack_require__(13);
 	var path = __webpack_require__(35);
-	var common = __webpack_require__(211);
-	var os = __webpack_require__(212);
+	var common = __webpack_require__(214);
+	var os = __webpack_require__(215);
 
 	common.register('cp', _cp, {
 	  cmdOptions: {
@@ -4544,11 +4769,10 @@
 
 
 /***/ },
-
-/***/ 232:
+/* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(211);
+	var common = __webpack_require__(214);
 	var fs = __webpack_require__(13);
 
 	common.register('rm', _rm, {
@@ -4704,15 +4928,14 @@
 
 
 /***/ },
-
-/***/ 233:
+/* 236 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var fs = __webpack_require__(13);
 	var path = __webpack_require__(35);
-	var common = __webpack_require__(211);
-	var cp = __webpack_require__(231);
-	var rm = __webpack_require__(232);
+	var common = __webpack_require__(214);
+	var cp = __webpack_require__(234);
+	var rm = __webpack_require__(235);
 
 	common.register('mv', _mv, {
 	  cmdOptions: {
@@ -4803,11 +5026,10 @@
 
 
 /***/ },
-
-/***/ 234:
+/* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(211);
+	var common = __webpack_require__(214);
 	var fs = __webpack_require__(13);
 	var path = __webpack_require__(35);
 
@@ -4899,11 +5121,10 @@
 
 
 /***/ },
-
-/***/ 235:
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(211);
+	var common = __webpack_require__(214);
 	var fs = __webpack_require__(13);
 
 	common.register('test', _test, {
@@ -4995,11 +5216,10 @@
 
 
 /***/ },
-
-/***/ 236:
+/* 239 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(211);
+	var common = __webpack_require__(214);
 	var fs = __webpack_require__(13);
 
 	common.register('cat', _cat, {
@@ -5042,11 +5262,10 @@
 
 
 /***/ },
-
-/***/ 237:
+/* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(211);
+	var common = __webpack_require__(214);
 	var fs = __webpack_require__(13);
 
 	common.register('head', _head, {
@@ -5151,11 +5370,10 @@
 
 
 /***/ },
-
-/***/ 238:
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(211);
+	var common = __webpack_require__(214);
 	var fs = __webpack_require__(13);
 
 	common.register('tail', _tail, {
@@ -5229,11 +5447,10 @@
 
 
 /***/ },
-
-/***/ 239:
+/* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(211);
+	var common = __webpack_require__(214);
 	var fs = __webpack_require__(13);
 	var path = __webpack_require__(35);
 
@@ -5272,11 +5489,10 @@
 
 
 /***/ },
-
-/***/ 240:
+/* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(211);
+	var common = __webpack_require__(214);
 	var fs = __webpack_require__(13);
 	var path = __webpack_require__(35);
 
@@ -5314,11 +5530,10 @@
 
 
 /***/ },
-
-/***/ 241:
+/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(211);
+	var common = __webpack_require__(214);
 	var fs = __webpack_require__(13);
 
 	common.register('sed', _sed, {
@@ -5393,11 +5608,10 @@
 
 
 /***/ },
-
-/***/ 242:
+/* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(211);
+	var common = __webpack_require__(214);
 	var fs = __webpack_require__(13);
 
 	common.register('sort', _sort, {
@@ -5490,11 +5704,10 @@
 
 
 /***/ },
-
-/***/ 243:
+/* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(211);
+	var common = __webpack_require__(214);
 	var fs = __webpack_require__(13);
 
 	//add c spaces to the left of str
@@ -5575,11 +5788,10 @@
 
 
 /***/ },
-
-/***/ 244:
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(211);
+	var common = __webpack_require__(214);
 	var fs = __webpack_require__(13);
 
 	common.register('grep', _grep, {
@@ -5647,11 +5859,10 @@
 
 
 /***/ },
-
-/***/ 245:
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(211);
+	var common = __webpack_require__(214);
 	var fs = __webpack_require__(13);
 	var path = __webpack_require__(35);
 
@@ -5756,11 +5967,10 @@
 
 
 /***/ },
-
-/***/ 246:
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(211);
+	var common = __webpack_require__(214);
 
 	common.register('echo', _echo, {
 	  allowGlobbing: false,
@@ -5788,12 +5998,11 @@
 
 
 /***/ },
-
-/***/ 247:
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(211);
-	var _cd = __webpack_require__(227);
+	var common = __webpack_require__(214);
+	var _cd = __webpack_require__(230);
 	var path = __webpack_require__(35);
 
 	common.register('dirs', _dirs, {
@@ -5996,13 +6205,12 @@
 
 
 /***/ },
-
-/***/ 248:
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var fs = __webpack_require__(13);
 	var path = __webpack_require__(35);
-	var common = __webpack_require__(211);
+	var common = __webpack_require__(214);
 
 	common.register('ln', _ln, {
 	  cmdOptions: {
@@ -6075,16 +6283,15 @@
 
 
 /***/ },
-
-/***/ 249:
+/* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(211);
-	var _tempDir = __webpack_require__(250);
-	var _pwd = __webpack_require__(228);
+	var common = __webpack_require__(214);
+	var _tempDir = __webpack_require__(253);
+	var _pwd = __webpack_require__(231);
 	var path = __webpack_require__(35);
 	var fs = __webpack_require__(13);
-	var child = __webpack_require__(251);
+	var child = __webpack_require__(254);
 
 	var DEFAULT_MAXBUFFER_SIZE = 20*1024*1024;
 
@@ -6351,12 +6558,11 @@
 
 
 /***/ },
-
-/***/ 250:
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(211);
-	var os = __webpack_require__(212);
+	var common = __webpack_require__(214);
+	var os = __webpack_require__(215);
 	var fs = __webpack_require__(13);
 
 	common.register('tempdir', _tempDir, {
@@ -6420,18 +6626,16 @@
 
 
 /***/ },
-
-/***/ 251:
+/* 254 */
 /***/ function(module, exports) {
 
 	module.exports = require("child_process");
 
 /***/ },
-
-/***/ 252:
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(211);
+	var common = __webpack_require__(214);
 	var fs = __webpack_require__(13);
 	var path = __webpack_require__(35);
 
@@ -6650,11 +6854,10 @@
 
 
 /***/ },
-
-/***/ 253:
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(211);
+	var common = __webpack_require__(214);
 	var fs = __webpack_require__(13);
 
 	common.register('touch', _touch, {
@@ -6766,11 +6969,10 @@
 
 
 /***/ },
-
-/***/ 254:
+/* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(211);
+	var common = __webpack_require__(214);
 
 	common.register('set', _set, {
 	  allowGlobbing: false,
@@ -6829,11 +7031,10 @@
 
 
 /***/ },
-
-/***/ 255:
+/* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(211);
+	var common = __webpack_require__(214);
 
 	//@
 	//@ ### error()
@@ -6850,5 +7051,4 @@
 
 
 /***/ }
-
-/******/ });
+/******/ ]);

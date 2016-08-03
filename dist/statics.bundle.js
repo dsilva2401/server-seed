@@ -47,7 +47,7 @@
 
 	"use strict";
 	// Imports
-	var server_ts_1 = __webpack_require__(367);
+	var server_ts_1 = __webpack_require__(370);
 	// Start server
 	server_ts_1.startServer();
 
@@ -24529,7 +24529,7 @@
 	"use strict";
 	// Imports
 	var path = __webpack_require__(35);
-	exports.config = {};
+	exports.config = { servers: null, httpRoutes: null };
 	/**
 	    === Servers configuration ===
 	*/
@@ -24561,11 +24561,61 @@
 	exports.config.servers.statics.domain = 'localhost';
 	exports.config.servers.statics.port = 8080;
 	exports.config.servers.statics.url = 'http://' + exports.config.servers.statics.domain + ':' + exports.config.servers.statics.port;
+	/**
+	    === HTTP Routes ===
+	*/
+	// Import configutation
+	exports.config.httpRoutes = __webpack_require__(86);
+	// Set url attribute
+	Object.keys(exports.config.httpRoutes).forEach(function (routerKey) {
+	    var buffRouter = exports.config.httpRoutes[routerKey];
+	    Object.keys(exports.config.httpRoutes[routerKey].services).forEach(function (serviceKey) {
+	        var buffService = buffRouter.services[serviceKey];
+	        exports.config.httpRoutes[routerKey].services[serviceKey].url = buffRouter.path + buffService.path;
+	    });
+	});
 
 
 /***/ },
 
-/***/ 367:
+/***/ 86:
+/***/ function(module, exports) {
+
+	module.exports = {
+		"auth": {
+			"path": "/auth",
+			"services": {
+				"register": {
+					"method": "POST",
+					"path": "/register"
+				},
+				"login": {
+					"method": "POST",
+					"path": "/login"
+				},
+				"logout": {
+					"method": "DELETE",
+					"path": "/logout"
+				}
+			}
+		},
+		"api": {
+			"path": "/api",
+			"services": {}
+		},
+		"statics": {
+			"path": "/statics",
+			"services": {}
+		},
+		"views": {
+			"path": "/",
+			"services": {}
+		}
+	};
+
+/***/ },
+
+/***/ 370:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -24578,7 +24628,7 @@
 	exports.server = express();
 	// Setup statics
 	var staticsPath = path.join(process.cwd(), 'src/setup/statics/files');
-	exports.server.use('/statics', express.static(staticsPath));
+	exports.server.use(config_ts_1.config.httpRoutes.statics.path, express.static(staticsPath));
 	// Start function
 	function startServer() {
 	    exports.server.listen(serverConfig.port, function () {

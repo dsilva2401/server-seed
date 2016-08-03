@@ -10,7 +10,7 @@
 
 // Setup statics
 	let staticsPath = path.join(process.cwd(), 'src/setup/statics/files');
-	server.use('/statics', express.static(staticsPath));
+	server.use(config.httpRoutes.statics.path, express.static(staticsPath));
 
 // Start function
 	export function startServer () {

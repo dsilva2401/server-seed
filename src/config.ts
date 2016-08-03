@@ -2,9 +2,15 @@
 // Imports
 	import * as path from 'path';
 
+// Config interface
+	interface Configuration {
+		servers: any;
+		httpRoutes: any;
+	}
+
 // Exports
-	export let config: any;
-	config = {};
+	export let config: Configuration;
+	config = { servers: null, httpRoutes: null };
 
 /**
 	=== Servers configuration ===
@@ -42,3 +48,18 @@
 	config.servers.statics.domain = 'localhost';
 	config.servers.statics.port = 8080;
 	config.servers.statics.url = 'http://'+config.servers.statics.domain+':'+config.servers.statics.port;
+
+/**
+	=== HTTP Routes ===
+*/	
+	// Import configutation
+	config.httpRoutes = require('./settings/http-routes.json');
+	// Set url attribute
+	Object.keys(config.httpRoutes).forEach(function (routerKey: string) {
+		let buffRouter = config.httpRoutes[routerKey];
+		Object.keys(config.httpRoutes[routerKey].services).forEach(function (serviceKey: string) {
+			let buffService = buffRouter.services[serviceKey];
+			config.httpRoutes[routerKey].services[serviceKey].url = buffRouter.path+buffService.path;
+		});
+	});
+

@@ -1,0 +1,34 @@
+{
+
+
+	"auth": {
+		"path": "/auth",
+		"services": {
+
+			"register": { "method": "POST", "path": "/register" },
+			"login": { "method": "POST", "path": "/login" },
+			"logout": { "method": "DELETE", "path": "/logout" }
+
+		}
+	},
+
+
+	"api": {
+		"path": "/api",
+		"services": {}
+	},
+
+
+	"statics": {
+		"path": "/statics",
+		"services": {}
+	},
+
+
+	"views": {
+		"path": "/",
+		"services": {}
+	}
+
+
+}
