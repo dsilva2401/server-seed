@@ -64,7 +64,27 @@
 						done();
 					});
 				});
+		});
 
+		describe('Login', function () {
+
+			// Login method
+				var login = function (data, cb) {
+					request({
+						json: true,
+						body: data,
+						method: 'POST',
+						url: domain+'/auth/login'
+					}, function (error, response, body) {
+						if (error) throw error;
+						if (response.statusCode == 500) throw body;
+						cb(response, body);
+					});
+				}
+
+			it('Login with missing fields', function () {});
+			it('Login with invalid credentials', function () {});
+			it('Login with valid credentials', function () {});
 		});
 
 		/*describe('Login', function () {

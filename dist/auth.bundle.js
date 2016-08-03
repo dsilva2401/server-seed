@@ -24840,7 +24840,6 @@
 	                deferred.reject(err);
 	                return;
 	            }
-	            // resp.result.upserted = resp.result.upserted || [];
 	            var r = {};
 	            if (resp.result.upserted &&
 	                resp.result.upserted[0] &&
