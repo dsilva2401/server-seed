@@ -3,7 +3,7 @@ Server Seed
 
 A NodeJS based server seed.
 
-## App Classes diagram
+## Classes diagram
 
 ![Classes diagram](media/app-classes-diagram.png)
 
