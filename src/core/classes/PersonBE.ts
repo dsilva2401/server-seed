@@ -60,7 +60,7 @@
 				};
 				this.personModel.updateOrCreate({email: this.email}, data)
 				.then(function (personData: any) {
-					if (personData && personData._id) self.id = personData._id.toString();
+					if (personData && personData._id) self.id = personData._id;
 					deferred.resolve();
 				}).catch(function (err) {
 					deferred.reject(err);

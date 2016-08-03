@@ -24490,7 +24490,7 @@
 	var express = __webpack_require__(2);
 	var index_ts_1 = __webpack_require__(87);
 	var config_ts_1 = __webpack_require__(85);
-	var bodyParser = __webpack_require__(189);
+	var bodyParser = __webpack_require__(178);
 	// Server setup
 	var serverConfig = config_ts_1.config.servers.auth;
 	exports.server = express();
@@ -24604,7 +24604,7 @@
 	var Person_ts_1 = __webpack_require__(90);
 	var Credential_ts_1 = __webpack_require__(91);
 	var MongoModel_ts_1 = __webpack_require__(92);
-	var Q = __webpack_require__(188);
+	var Q = __webpack_require__(177);
 	// Exports
 	var PersonBE = (function (_super) {
 	    __extends(PersonBE, _super);
@@ -24650,7 +24650,7 @@
 	        this.personModel.updateOrCreate({ email: this.email }, data)
 	            .then(function (personData) {
 	            if (personData && personData._id)
-	                self.id = personData._id.toString();
+	                self.id = personData._id;
 	            deferred.resolve();
 	        }).catch(function (err) {
 	            deferred.reject(err);
@@ -24728,7 +24728,7 @@
 	// Imports
 	var MongoModel_ts_1 = __webpack_require__(92);
 	var PersonBE_ts_1 = __webpack_require__(89);
-	var Q = __webpack_require__(188);
+	var Q = __webpack_require__(177);
 	// Exports
 	var Credential = (function () {
 	    // Constructor
@@ -24796,8 +24796,11 @@
 	// Imports
 	var config_ts_1 = __webpack_require__(85);
 	var mongodb_1 = __webpack_require__(93);
-	var Q = __webpack_require__(188);
+	var Q = __webpack_require__(177);
+	// import * as promisedMongo from 'promised-mongo';
+	// import promisedMongo = require('promised-mongo');
 	// Setup
+	// console.log(mongoose);
 	var db;
 	setTimeout(function () {
 	    mongodb_1.MongoClient.connect(config_ts_1.config.servers.database.url, function (err, _db) {
@@ -24837,9 +24840,13 @@
 	                deferred.reject(err);
 	                return;
 	            }
-	            resp.result = resp.result || {};
-	            resp.result.upserted = resp.result.upserted || [];
-	            deferred.resolve(resp.result.upserted[0]);
+	            // resp.result.upserted = resp.result.upserted || [];
+	            var r = {};
+	            if (resp.result.upserted &&
+	                resp.result.upserted[0] &&
+	                resp.result.upserted[0]._id)
+	                r._id = resp.result.upserted[0]._id.toString();
+	            deferred.resolve(r);
 	        });
 	        return deferred.promise;
 	    };
@@ -24876,28 +24883,28 @@
 
 	// Core module
 	var core = __webpack_require__(94),
-	  Instrumentation = __webpack_require__(152);
+	  Instrumentation = __webpack_require__(141);
 
 	// Set up the connect function
-	var connect = __webpack_require__(183).connect;
+	var connect = __webpack_require__(172).connect;
 
 	// Expose error class
 	connect.MongoError = core.MongoError;
 
 	// Actual driver classes exported
-	connect.Admin = __webpack_require__(182);
-	connect.MongoClient = __webpack_require__(183);
-	connect.Db = __webpack_require__(181);
-	connect.Collection = __webpack_require__(175);
-	connect.Server = __webpack_require__(177);
-	connect.ReplSet = __webpack_require__(179);
-	connect.Mongos = __webpack_require__(180);
-	connect.ReadPreference = __webpack_require__(155);
-	connect.GridStore = __webpack_require__(173);
-	connect.Chunk = __webpack_require__(174);
+	connect.Admin = __webpack_require__(171);
+	connect.MongoClient = __webpack_require__(172);
+	connect.Db = __webpack_require__(170);
+	connect.Collection = __webpack_require__(164);
+	connect.Server = __webpack_require__(166);
+	connect.ReplSet = __webpack_require__(168);
+	connect.Mongos = __webpack_require__(169);
+	connect.ReadPreference = __webpack_require__(144);
+	connect.GridStore = __webpack_require__(162);
+	connect.Chunk = __webpack_require__(163);
 	connect.Logger = core.Logger;
-	connect.Cursor = __webpack_require__(166);
-	connect.GridFSBucket = __webpack_require__(185);
+	connect.Cursor = __webpack_require__(155);
+	connect.GridFSBucket = __webpack_require__(174);
 
 	// BSON types exported
 	connect.Binary = core.BSON.Binary;
@@ -24933,8 +24940,8 @@
 	module.exports = {
 	    MongoError: __webpack_require__(95)
 	  , Server: __webpack_require__(96)
-	  , ReplSet: __webpack_require__(148)
-	  , Mongos: __webpack_require__(151)
+	  , ReplSet: __webpack_require__(137)
+	  , Mongos: __webpack_require__(140)
 	  , Logger: __webpack_require__(122)
 	  , Cursor: __webpack_require__(124)
 	  , ReadPreference: __webpack_require__(123)
@@ -24942,11 +24949,11 @@
 	  // Raw operations
 	  , Query: __webpack_require__(101).Query
 	  // Auth mechanisms
-	  , MongoCR: __webpack_require__(132)
-	  , X509: __webpack_require__(133)
-	  , Plain: __webpack_require__(134)
-	  , GSSAPI: __webpack_require__(135)
-	  , ScramSHA1: __webpack_require__(147)
+	  , MongoCR: __webpack_require__(131)
+	  , X509: __webpack_require__(132)
+	  , Plain: __webpack_require__(133)
+	  , GSSAPI: __webpack_require__(134)
+	  , ScramSHA1: __webpack_require__(136)
 	}
 
 
@@ -25004,7 +25011,7 @@
 /* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	 "use strict";
 
 	var inherits = __webpack_require__(10).inherits
 	  , f = __webpack_require__(10).format
@@ -25012,7 +25019,6 @@
 	  , EventEmitter = __webpack_require__(4).EventEmitter
 	  , Pool = __webpack_require__(98)
 	  , b = __webpack_require__(102)
-	  , crypto = __webpack_require__(56)
 	  , Query = __webpack_require__(101).Query
 	  , MongoError = __webpack_require__(95)
 	  , ReadPreference = __webpack_require__(123)
@@ -25023,16 +25029,16 @@
 	  , debugOptions = __webpack_require__(97).debugOptions
 	  , BSON = __webpack_require__(102).native().BSON
 	  , PreTwoSixWireProtocolSupport = __webpack_require__(126)
-	  , TwoSixWireProtocolSupport = __webpack_require__(129)
-	  , ThreeTwoWireProtocolSupport = __webpack_require__(130)
-	  , Session = __webpack_require__(131)
+	  , TwoSixWireProtocolSupport = __webpack_require__(128)
+	  , ThreeTwoWireProtocolSupport = __webpack_require__(129)
+	  , Session = __webpack_require__(130)
 	  , Logger = __webpack_require__(122)
-	  , MongoCR = __webpack_require__(132)
-	  , X509 = __webpack_require__(133)
-	  , Plain = __webpack_require__(134)
-	  , GSSAPI = __webpack_require__(135)
-	  , SSPI = __webpack_require__(146)
-	  , ScramSHA1 = __webpack_require__(147);
+	  , MongoCR = __webpack_require__(131)
+	  , X509 = __webpack_require__(132)
+	  , Plain = __webpack_require__(133)
+	  , GSSAPI = __webpack_require__(134)
+	  , SSPI = __webpack_require__(135)
+	  , ScramSHA1 = __webpack_require__(136);
 
 	/**
 	 * @fileOverview The **Server** class is a class that represents a single server topology and is
@@ -25096,29 +25102,6 @@
 	  }
 	}
 
-	//
-	// Flush all callbacks
-	Callbacks.prototype.flushConnection = function(err, connection) {
-	  for(var id in this.callbacks) {
-	    if(!isNaN(parseInt(id, 10))) {
-	      var callback = this.callbacks[id];
-
-	      // Validate if the operation ran on the connection
-	      if(callback.connection && callback.connection.id === connection.id) {
-	        delete this.callbacks[id];
-	        callback(err, null);
-	      } else if(!callback.connection && callback.monitoring) {
-	        delete this.callbacks[id];
-	        callback(err, null);
-	      }
-	    }
-	  }
-	}
-
-	Callbacks.prototype.callback = function(id) {
-	  return this.callbacks[id];
-	}
-
 	Callbacks.prototype.emit = function(id, err, value) {
 	  var callback = this.callbacks[id];
 	  delete this.callbacks[id];
@@ -25141,6 +25124,15 @@
 
 	Callbacks.prototype.register = function(id, callback) {
 	  this.callbacks[id] = bindToCurrentDomain(callback);
+	}
+
+	/**
+	 * @ignore
+	 */
+	var bindToCurrentDomain = function(callback) {
+	  var domain = process.domain;
+	  if(domain == null || callback == null) return callback;
+	  return domain.bind(callback);
 	}
 
 	var DISCONNECTED = 'disconnected';
@@ -25170,91 +25162,9 @@
 	  return new PreTwoSixWireProtocolSupport();
 	}
 
-	var errorHandler = function(self, state) {
-	  return function(err, connection) {
-	    if(state.state == DISCONNECTED || state.state == DESTROYED) return;
-	    // Flush the connection operations
-	    if(self.s.callbacks) {
-	      self.s.callbacks.flushConnection(new MongoError(f("server %s received an error %s", self.name, JSON.stringify(err))), connection);
-	    }
-
-	    // Emit error event
-	    if(state.emitError && self.listeners('error').length > 0) {
-	      self.emit('error', err, self);
-	    }
-
-	    // No more connections left, emit a close
-	    if(state.pool.getAll().length == 0) {
-	      // Set disconnected state
-	      state.state = DISCONNECTED;
-	      // Notify any strategies for read Preferences about closure
-	      if(state.readPreferenceStrategies != null) notifyStrategies(self, self.s, 'error', [self]);
-	      if(state.logger.isInfo()) state.logger.info(f('server %s errored out with %s', self.name, JSON.stringify(err)));
-	      // Flush out all the callbacks
-	      if(state.callbacks) {
-	        state.callbacks.flushConnection(new MongoError(f("server %s received an error %s", self.name, JSON.stringify(err))), connection);
-	      }
-	      // Destroy all connections
-	      self.destroy();
-	      // Emit error event
-	      if(state.emitError && self.listeners('error').length > 0) self.emit('error', err, self);
-	      // If we specified the driver to reconnect perform it
-	      if(state.reconnect) return setTimeout(function() {
-	        reconnectServer(self, state)
-	      }, state.reconnectInterval);
-	      // No reconnect destroy instance
-	      self.destroy();
-	    }
-	  }
-	}
-
-	//
-	// reconnect error handler
-	var reconnectErrorHandler = function(self, state) {
-	  return function(err, connection) {
-	    if(state.state == DESTROYED) return;
-
-	    // Flush the connection operations
-	    if(self.s.callbacks) {
-	      self.s.callbacks.flushConnection(new MongoError(f("server %s received an error %s", self.name, JSON.stringify(err))), connection);
-	    }
-
-	    // Emit error event
-	    if(state.emitError && self.listeners('error').length > 0) {
-	      self.emit('error', err, self);
-	    }
-
-	    // No more connections left, emit a close
-	    if(state.pool.getAll().length == 0) {
-	      // No more retries
-	      if(state.currentReconnectRetry == 0) {
-	        // Set state to destroyed
-	        self.state = DESTROYED;
-	        // Destroy pool
-	        self.destroy();
-
-	        if(self.listeners('error').length > 0) {
-	          self.emit('error', new MongoError(f('failed to connect to %s:%s after %s retries', state.options.host, state.options.port, state.reconnectTries)), self);
-	        }
-	      } else {
-	        // Do we have an error listener emit the error
-	        if(self.listeners('error').length > 0) {
-	          self.emit('error', new MongoError(f('failed to connect to %s:%s, %s connection attempts left ', state.options.host, state.options.port, state.currentReconnectRetry)), self);
-	        }
-
-	        // Retry connection
-	        setTimeout(function() {
-	          reconnectServer(self, state);
-	        }, state.reconnectInterval);
-	      }
-	    }
-	  }
-	}
-
 	//
 	// Reconnect server
 	var reconnectServer = function(self, state) {
-	  if(state.state == DESTROYED) return;
 	  // Flush out any left over callbacks
 	  if(self && state && state.callbacks) {
 	    state.callbacks.flush(new MongoError(f("server %s received a broken socket pipe error", self.name)));
@@ -25270,11 +25180,26 @@
 
 	  // Set status to connecting
 	  state.state = CONNECTING;
-
-	  // If we have a pool destroy it
-	  if(state.pool) state.pool.destroy();
 	  // Create a new Pool
 	  state.pool = new Pool(state.options);
+	  // error handler
+	  var reconnectErrorHandler = function(err) {
+	    // Set the state to disconnected so we can peform a proper reconnect
+	    state.state = DISCONNECTED;
+	    // Destroy the pool
+	    state.pool.destroy();
+	    // Adjust the number of retries
+	    state.currentReconnectRetry = state.currentReconnectRetry - 1;
+	    // No more retries
+	    if(state.currentReconnectRetry <= 0) {
+	      self.state = DESTROYED;
+	      self.emit('error', f('failed to connect to %s:%s after %s retries', state.options.host, state.options.port, state.reconnectTries));
+	    } else {
+	      setTimeout(function() {
+	        reconnectServer(self, state);
+	      }, state.reconnectInterval);
+	    }
+	  }
 
 	  //
 	  // Attempt to connect
@@ -25283,9 +25208,7 @@
 	    state.currentReconnectRetry = state.reconnectTries;
 
 	    // Remove any non used handlers
-	    var events = ['error', 'close', 'timeout', 'parseError',
-	      'serverOpening', 'serverDescriptionChanged', 'serverHeartbeatStarted',
-	      'serverHeartbeatSucceeded', 'serverHearbeatFailed', 'serverClosed'];
+	    var events = ['error', 'close', 'timeout', 'parseError'];
 	    events.forEach(function(e) {
 	      state.pool.removeAllListeners(e);
 	    });
@@ -25294,29 +25217,23 @@
 	    state.state = CONNECTED;
 
 	    // Add proper handlers
-	    state.pool.once('error', self.s.inTopology ? errorHandler(self, state) : reconnectErrorHandler(self, state));
-	    state.pool.on('close', closeHandler(self, state));
-	    state.pool.on('timeout', timeoutHandler(self, state));
-	    state.pool.on('parseError', fatalErrorHandler(self, state));
+	    state.pool.once('error', reconnectErrorHandler);
+	    state.pool.once('close', closeHandler(self, state));
+	    state.pool.once('timeout', timeoutHandler(self, state));
+	    state.pool.once('parseError', fatalErrorHandler(self, state));
 
 	    // We need to ensure we have re-authenticated
 	    var keys = Object.keys(state.authProviders);
 	    if(keys.length == 0) return self.emit('reconnect', self);
 
-	    // Get all connections
-	    var connections = state.pool.getAll();
 	    // Execute all providers
 	    var count = keys.length;
 	    // Iterate over keys
 	    for(var i = 0; i < keys.length; i++) {
-	      state.authProviders[keys[i]].reauthenticate(self, connections, function(err, r) {
+	      state.authProviders[keys[i]].reauthenticate(self, state.pool, function(err, r) {
 	        count = count - 1;
 	        // We are done, emit reconnect event
 	        if(count == 0) {
-	          if(!state.ismaster) {
-	            return connectHandler(self, state)();
-	          }
-
 	          return self.emit('reconnect', self);
 	        }
 	      });
@@ -25325,7 +25242,7 @@
 
 	  //
 	  // Handle connection failure
-	  state.pool.once('error', self.s.inTopology ? errorHandler(self, state) : reconnectErrorHandler(self, state));
+	  state.pool.once('error', errorHandler(self, state));
 	  state.pool.once('close', errorHandler(self, state));
 	  state.pool.once('timeout', errorHandler(self, state));
 	  state.pool.once('parseError', errorHandler(self, state));
@@ -25338,162 +25255,118 @@
 	// Handlers
 	var messageHandler = function(self, state) {
 	  return function(response, connection) {
-	    // Attempt to parse the message
 	    try {
-	      // Get the callback
-	      var cb = state.callbacks.callback(response.responseTo);
-
-	      // Parse options
-	      var parseOptions = {
-	        raw: state.callbacks.raw(response.responseTo),
-	        promoteLongs: cb && typeof cb.promoteLongs == 'boolean' ? cb.promoteLongs : true,
-	        documentsReturnedIn: state.callbacks.documentsReturnedIn(response.responseTo)
-	      };
-
 	      // Parse the message
-	      response.parse(parseOptions);
-
-	      // If no
-	      if((cb && !cb.noRelease) || !cb) {
-	        self.s.pool.connectionAvailable(connection);
-	      }
-
-	      // Log if debug enabled
+	      response.parse({raw: state.callbacks.raw(response.responseTo), documentsReturnedIn: state.callbacks.documentsReturnedIn(response.responseTo)});
 	      if(state.logger.isDebug()) state.logger.debug(f('message [%s] received from %s', response.raw.toString('hex'), self.name));
-	      // Execute the registered callback
 	      state.callbacks.emit(response.responseTo, null, response);
 	    } catch (err) {
-	      state.callbacks.flushConnection(new MongoError(err), connection);
+	      state.callbacks.flush(new MongoError(err));
 	      self.destroy();
 	    }
+	  }
+	}
+
+	var errorHandler = function(self, state) {
+	  return function(err, connection) {
+	    if(state.state == DISCONNECTED || state.state == DESTROYED) return;
+	    // Set disconnected state
+	    state.state = DISCONNECTED;
+	    if(state.readPreferenceStrategies != null) notifyStrategies(self, self.s, 'error', [self]);
+	    if(state.logger.isInfo()) state.logger.info(f('server %s errored out with %s', self.name, JSON.stringify(err)));
+	    // Flush out all the callbacks
+	    if(state.callbacks) state.callbacks.flush(new MongoError(f("server %s received an error %s", self.name, JSON.stringify(err))));
+	    // Destroy all connections
+	    self.destroy();
+	    // Emit error event
+	    if(state.emitError && self.listeners('error').length > 0) self.emit('error', err, self);
+	    // If we specified the driver to reconnect perform it
+	    if(state.reconnect) setTimeout(function() {
+	      reconnectServer(self, state)
+	    }, state.reconnectInterval);
 	  }
 	}
 
 	var fatalErrorHandler = function(self, state) {
 	  return function(err, connection) {
 	    if(state.state == DISCONNECTED || state.state == DESTROYED) return;
+	    // Set disconnected state
+	    state.state = DISCONNECTED;
 
-	    // Flush the connection operations
-	    if(self.s.callbacks) {
-	      self.s.callbacks.flushConnection(new MongoError(f("server %s received an error %s", self.name, JSON.stringify(err))), connection);
-	    }
-
-	    // No more connections left, emit a close
-	    if(state.pool.getAll().length == 0) {
-	      // Set disconnected state
-	      state.state = DISCONNECTED;
-	      // Notify any strategies for read Preferences about closure
-	      if(state.readPreferenceStrategies != null) notifyStrategies(self, self.s, 'error', [self]);
-	      if(state.logger.isInfo()) state.logger.info(f('server %s errored out with %s', self.name, JSON.stringify(err)));
-	      // Flush out all the callbacks
-	      if(state.callbacks) {
-	        state.callbacks.flushConnection(new MongoError(f("server %s received an error %s", self.name, JSON.stringify(err))), connection);
-	      }
-	      // Emit error event
-	      if(self.listeners('error').length > 0) self.emit('error', err, self);
-	      // If we specified the driver to reconnect perform it
-	      if(state.reconnect) return setTimeout(function() {
-	        reconnectServer(self, state)
-	      }, state.reconnectInterval);
-	      // No reconnect destroy instance
-	      self.destroy();
-	    }
+	    if(state.readPreferenceStrategies != null) notifyStrategies(self, self.s, 'error', [self]);
+	    if(state.logger.isInfo()) state.logger.info(f('server %s errored out with %s', self.name, JSON.stringify(err)));
+	    // Flush out all the callbacks
+	    if(state.callbacks) state.callbacks.flush(new MongoError(f("server %s received an error %s", self.name, JSON.stringify(err))));
+	    // Emit error event
+	    if(self.listeners('error').length > 0) self.emit('error', err, self);
+	    // If we specified the driver to reconnect perform it
+	    if(state.reconnect) setTimeout(function() {
+	      // state.currentReconnectRetry = state.reconnectTries,
+	      reconnectServer(self, state)
+	    }, state.reconnectInterval);
+	    // Destroy all connections
+	    self.destroy();
 	  }
 	}
 
 	var timeoutHandler = function(self, state) {
 	  return function(err, connection) {
 	    if(state.state == DISCONNECTED || state.state == DESTROYED) return;
+	    // Set disconnected state
+	    state.state = DISCONNECTED;
 
-	    // Flush the connection operations
-	    if(self.s.callbacks) {
-	      self.s.callbacks.flushConnection(new MongoError(f("server %s timed out", self.name)), connection);
-	    }
-
-	    // No more connections left, emit a close
-	    if(state.pool.getAll().length == 0) {
-	      // Set disconnected state
-	      state.state = DISCONNECTED;
-	      // Notify any strategies for read Preferences about closure
-	      if(state.readPreferenceStrategies != null) notifyStrategies(self, self.s, 'timeout', [self]);
-	      if(state.logger.isInfo()) state.logger.info(f('server %s timed out', self.name));
-	      // Flush out all the callbacks
-	      if(state.callbacks) {
-	        state.callbacks.flushConnection(new MongoError(f("server %s timed out", self.name)), connection);
-	      }
-	      // Emit error event
-	      self.emit('timeout', err, self);
-	      // If we specified the driver to reconnect perform it
-	      if(state.reconnect) return setTimeout(function() {
-	        reconnectServer(self, state)
-	      }, state.reconnectInterval);
-	      // No reconnect destroy instance
-	      self.destroy();
-	    }
+	    if(state.readPreferenceStrategies != null) notifyStrategies(self, self.s, 'timeout', [self]);
+	    if(state.logger.isInfo()) state.logger.info(f('server %s timed out', self.name));
+	    // Flush out all the callbacks
+	    if(state.callbacks) state.callbacks.flush(new MongoError(f("server %s timed out", self.name)));
+	    // Emit error event
+	    self.emit('timeout', err, self);
+	    // If we specified the driver to reconnect perform it
+	    if(state.reconnect) setTimeout(function() {
+	      // state.currentReconnectRetry = state.reconnectTries,
+	      reconnectServer(self, state)
+	    }, state.reconnectInterval);
+	    // Destroy all connections
+	    self.destroy();
 	  }
 	}
 
 	var closeHandler = function(self, state) {
 	  return function(err, connection) {
 	    if(state.state == DISCONNECTED || state.state == DESTROYED) return;
+	    // Set disconnected state
+	    state.state = DISCONNECTED;
 
-	    // Flush the connection operations
-	    if(self.s.callbacks) {
-	      self.s.callbacks.flushConnection(new MongoError(f("server %s timed out", self.name)), connection);
-	    }
-
-	    // No more connections left, emit a close
-	    if(state.pool.getAll().length == 0) {
-	      // Set state to disconnected
-	      state.state = DISCONNECTED;
-	      // Notify any strategies for read Preferences about closure
-	      if(state.readPreferenceStrategies != null) notifyStrategies(self, self.s, 'close', [self]);
-	      if(state.logger.isInfo()) state.logger.info(f('server %s closed', self.name));
-	      // Flush out all the callbacks
-	      if(state.callbacks) {
-	        state.callbacks.flushConnection(new MongoError(f("server %s sockets closed", self.name)), connection);
-	      }
-
-	      // Emit opening server event
-	      if(self.listeners('serverClosed').length > 0) self.emit('serverClosed', {
-	        topologyId: self.s.topologyId != -1 ? self.s.topologyId : self.s.id, address: self.name
-	      });
-
-	      // Emit toplogy opening event if not in topology
-	      if(self.listeners('topologyClosed').length > 0 && !self.s.inTopology) {
-	        self.emit('topologyClosed', { topologyId: self.s.id });
-	      }
-
-	      // Emit close event
-	      self.emit('close', err, self);
-	      // If we specified the driver to reconnect perform it
-	      if(state.reconnect) return setTimeout(function() {
-	        reconnectServer(self, state)
-	      }, state.reconnectInterval);
-	      // No reconnect destroy instance
-	      self.destroy();
-	    }
+	    if(state.readPreferenceStrategies != null) notifyStrategies(self, self.s, 'close', [self]);
+	    if(state.logger.isInfo()) state.logger.info(f('server %s closed', self.name));
+	    // Flush out all the callbacks
+	    if(state.callbacks) state.callbacks.flush(new MongoError(f("server %s sockets closed", self.name)));
+	    // Emit error event
+	    self.emit('close', err, self);
+	    // If we specified the driver to reconnect perform it
+	    if(state.reconnect) setTimeout(function() {
+	      // state.currentReconnectRetry = state.reconnectTries,
+	      reconnectServer(self, state)
+	    }, state.reconnectInterval);
+	    // Destroy all connections
+	    self.destroy();
 	  }
 	}
 
 	var connectHandler = function(self, state) {
 	  // Apply all stored authentications
-	  var applyAuthentications = function(ismaster, callback) {
-	    // Do not authenticate if we have an arbiter
-	    if(ismaster && ismaster.arbiterOnly) return callback(null, null);
+	  var applyAuthentications = function(callback) {
 	    // We need to ensure we have re-authenticated
 	    var keys = Object.keys(state.authProviders);
 	    if(keys.length == 0) return callback(null, null);
 
-	    // Get all connections
-	    var connections = state.pool.getAll();
 	    // Execute all providers
 	    var count = keys.length;
 	    // Iterate over keys
 	    for(var i = 0; i < keys.length; i++) {
-	      state.authProviders[keys[i]].reauthenticate(self, connections, function(err, r) {
+	      state.authProviders[keys[i]].reauthenticate(self, state.pool, function(err, r) {
 	        count = count - 1;
-	        // We are done
+	        // We are done, emit reconnect event
 	        if(count == 0) {
 	          return callback(null, null);
 	        }
@@ -25501,45 +25374,17 @@
 	    }
 	  }
 
-	  return function() {
+	  return function(connection) {
 	    // Apply any applyAuthentications
-	    // applyAuthentications(function() {
-	    // Initiate monitoring
-	    if(state.monitoring) {
-	      self.s.inquireServerStateTimeout = setTimeout(inquireServerState(self), state.haInterval);
-	    }
-
-	    // Get the actual latency of the ismaster
-	    var start = new Date().getTime();
-	    // Execute an ismaster
-	    self.command('admin.$cmd', {ismaster:true}, function(err, r) {
-	      if(err) {
-	        state.state = DISCONNECTED;
-
-	        // Emit opening closed event
-	        if(self.listeners('serverClosed').length > 0) self.emit('serverClosed', {
-	          topologyId: self.s.topologyId != -1 ? self.s.topologyId : self.s.id, address: self.name
-	        });
-
-	        // Emit toplogy opening event if not in topology
-	        if(!self.s.inTopology) {
-	          self.emit('topologyOpening', { topologyId: self.s.id });
+	    applyAuthentications(function() {
+	      // Get the actual latency of the ismaster
+	      var start = new Date().getTime();
+	      // Execute an ismaster
+	      self.command('admin.$cmd', {ismaster:true}, function(err, r) {
+	        if(err) {
+	          state.state = DISCONNECTED;
+	          return self.emit('close', err, self);
 	        }
-
-	        return self.emit('close', err, self);
-	      }
-
-	      // Apply authentication
-	      applyAuthentications(r.result, function() {
-	        // Emit server description changed if something listening
-	        emitServerDescriptionChanged(self, {
-	          address: self.name, arbiters: [], hosts: [], passives: [], type: !self.s.inTopology ? 'Standalone' : getTopologyType(self)
-	        });
-
-	        // Emit topology description changed if something listening
-	        emitTopologyDescriptionChanged(self, {
-	          topologyType: 'Single', servers: [{address: self.name, arbiters: [], hosts: [], passives: [], type: 'Standalone'}]
-	        });
 
 	        // Set the latency for this instance
 	        state.isMasterLatencyMS = new Date().getTime() - start;
@@ -25568,9 +25413,7 @@
 	        }
 
 	        // Set the details
-	        if(state.ismaster && state.ismaster.me) {
-	          state.serverDetails.name = state.ismaster.me;
-	        }
+	        if(state.ismaster && state.ismaster.me) state.serverDetails.name = state.ismaster.me;
 
 	        // No read preference strategies just emit connect
 	        if(state.readPreferenceStrategies == null) {
@@ -25585,7 +25428,6 @@
 	        });
 	      });
 	    });
-	    // });
 	  }
 	}
 
@@ -25649,7 +25491,6 @@
 	 * @param {boolean} [options.noDelay=true] TCP Connection no delay
 	 * @param {number} [options.connectionTimeout=0] TCP Connection timeout setting
 	 * @param {number} [options.socketTimeout=0] TCP Socket timeout setting
-	 * @param {number} [options.monitoringSocketTimeout=30000] TCP Socket timeout setting for replicaset monitoring socket
 	 * @param {boolean} [options.ssl=false] Use SSL for connection
 	 * @param {boolean|function} [options.checkServerIdentity=true] Ensure we check server identify during SSL, set to false to disable checking. Only works for Node 0.12.x or higher. You can pass in a boolean or your own checkServerIdentity override function.
 	 * @param {Buffer} [options.ca] SSL Certificate store binary buffer
@@ -25706,50 +25547,29 @@
 	    , authProviders: options.authProviders || {}
 	    // Server instance id
 	    , id: serverId++
-	    // Shared topology id if part of another one
-	    , topologyId: options.topologyId || -1
 	    // Grouping tag used for debugging purposes
 	    , tag: options.tag
 	    // Do we have a not connected handler
 	    , disconnectHandler: options.disconnectHandler
-	    // If we are monitoring this server we will create an exclusive reserved socket for that
-	    , monitoring: typeof options.monitoring == 'boolean' ? options.monitoring : false
-	    // High availability monitoring interval
-	    , haInterval: options.haInterval || 10000
 	    // wireProtocolHandler methods
 	    , wireProtocolHandler: options.wireProtocolHandler || new PreTwoSixWireProtocolSupport()
 	    // Factory overrides
 	    , Cursor: options.cursorFactory || BasicCursor
 	    // BSON Parser, ensure we have a single instance
 	    , bsonInstance: bsonInstance
-	    // Contains the inquireServerState timeout reference
-	    , inquireServerStateTimeout: null
 	    // Pick the right bson parser
 	    , bson: options.bson ? options.bson : bsonInstance
 	    // Internal connection pool
 	    , pool: null
 	    // Is master latency
 	    , isMasterLatencyMS: 0
-	    // Is the server in a topology
-	    , inTopology: typeof options.inTopology == 'boolean' ? options.inTopology : false
 	    // Server details
 	    , serverDetails: {
 	        host: options.host
 	      , port: options.port
 	      , name: options.port ? f("%s:%s", options.host, options.port) : options.host
 	    }
-	    // Current server description
-	    , serverDescription: null
-	    // Current topology description
-	    , topologyDescription: null
 	  }
-
-	  // Create hash method
-	  var hash = crypto.createHash('sha1');
-	  hash.update(f('%s:%s', this.host, this.port));
-
-	  // Create a hash name
-	  this.hashedName = hash.digest('hex');
 
 	  // Reference state
 	  var s = this.s;
@@ -25763,98 +25583,16 @@
 	  getProperty(this, 'wireProtocolHandler', 'wireProtocolHandler', s.options, {});
 	  getSingleProperty(this, 'id', s.id);
 
-	  // If we do not have an inherited authorization mechanism
-	  if(!options.authProviders) {
-	    this.addAuthProvider('mongocr', new MongoCR());
-	    this.addAuthProvider('x509', new X509());
-	    this.addAuthProvider('plain', new Plain());
-	    this.addAuthProvider('gssapi', new GSSAPI());
-	    this.addAuthProvider('sspi', new SSPI());
-	    this.addAuthProvider('scram-sha-1', new ScramSHA1());
-	  }
+	  // Add auth providers
+	  this.addAuthProvider('mongocr', new MongoCR());
+	  this.addAuthProvider('x509', new X509());
+	  this.addAuthProvider('plain', new Plain());
+	  this.addAuthProvider('gssapi', new GSSAPI());
+	  this.addAuthProvider('sspi', new SSPI());
+	  this.addAuthProvider('scram-sha-1', new ScramSHA1());
 	}
 
 	inherits(Server, EventEmitter);
-
-	var getPreviousDescription = function(self) {
-	  if(!self.s.serverDescription) {
-	    self.s.serverDescription = {
-	      address: self.name,
-	      arbiters: [], hosts: [], passives: [], type: 'Unknown'
-	    }
-	  }
-
-	  return self.s.serverDescription;
-	}
-
-	var emitServerDescriptionChanged = function(self, description) {
-	  if(self.listeners('serverDescriptionChanged').length > 0) {
-	    // Emit the server description changed events
-	    self.emit('serverDescriptionChanged', {
-	      topologyId: self.s.topologyId != -1 ? self.s.topologyId : self.s.id, address: self.name,
-	      previousDescription: getPreviousDescription(self),
-	      newDescription: description
-	    });
-
-	    self.s.serverDescription = description;
-	  }
-	}
-
-	var getPreviousTopologyDescription = function(self) {
-	  if(!self.s.topologyDescription) {
-	    self.s.topologyDescription = {
-	      topologyType: 'Unknown',
-	      servers: [{
-	        address: self.name, arbiters: [], hosts: [], passives: [], type: 'Unknown'
-	      }]
-	    }
-	  }
-
-	  return self.s.topologyDescription;
-	}
-
-	var emitTopologyDescriptionChanged = function(self, description) {
-	  if(self.listeners('topologyDescriptionChanged').length > 0) {
-	    // Emit the server description changed events
-	    self.emit('topologyDescriptionChanged', {
-	      topologyId: self.s.topologyId != -1 ? self.s.topologyId : self.s.id, address: self.name,
-	      previousDescription: getPreviousTopologyDescription(self),
-	      newDescription: description
-	    });
-
-	    self.s.serverDescription = description;
-	  }
-	}
-
-	/**
-	 * Emit event if it exists
-	 * @method
-	 */
-	function emitSDAMEvent(self, event, description) {
-	  if(self.listeners(event).length > 0) {
-	    self.emit(event, description);
-	  }
-	}
-
-	/**
-	 * Get the server description
-	 * @method
-	 * @return {object}
-	*/
-	Server.prototype.getDescription = function() {
-	  var ismaster = this.s.ismaster || {};
-	  var description = {
-	    type: getTopologyType(this),
-	    address: this.name,
-	  };
-
-	  // Add fields if available
-	  if(ismaster.hosts) description.hosts = ismaster.hosts;
-	  if(ismaster.arbiters) description.arbiters = ismaster.arbiters;
-	  if(ismaster.passives) description.passives = ismaster.passives;
-	  if(ismaster.setName) description.setName = ismaster.setName;
-	  return description;
-	}
 
 	/**
 	 * Execute a command
@@ -25876,21 +25614,21 @@
 	}
 
 	/**
+	 * Reduce the poolSize to the provided max connections value
+	 * @method
+	 * @param {number} maxConnections reduce the poolsize to maxConnections
+	 */
+	Server.prototype.capConnections = function(maxConnections) {
+	  this.s.pool.capConnections(maxConnections);
+	}
+
+	/**
 	 * Returns the last known ismaster document for this server
 	 * @method
 	 * @return {object}
 	 */
 	Server.prototype.lastIsMaster = function() {
 	  return this.s.ismaster;
-	}
-
-	/**
-	 * Returns the last known ismaster response latency
-	 * @method
-	 * @return {object}
-	 */
-	Server.prototype.isMasterLatencyMS = function() {
-	  return this.s.isMasterLatencyMS;
 	}
 
 	/**
@@ -25906,139 +25644,29 @@
 	    self.s.options.promoteLongs = _options.promoteLongs;
 	  }
 
-	  // Destroy existing pool connections if connection called
-	  // Multiple times
+	  // Destroy existing pool
 	  if(self.s.pool) {
 	    self.s.pool.destroy();
+	    self.s.pool = null;
 	  }
 
 	  // Set the state to connection
 	  self.s.state = CONNECTING;
-
 	  // Create a new connection pool
-	  self.s.options.messageHandler = messageHandler(self, self.s);
-	  self.s.pool = new Pool(self.s.options);
-
-	  // Add all the event handlers
-	  self.s.pool.on('timeout', timeoutHandler(self, self.s));
-	  self.s.pool.on('close', closeHandler(self, self.s));
-	  self.s.pool.once('error', self.s.inTopology ? errorHandler(self, self.s) : reconnectErrorHandler(self, self.s));
-	  self.s.pool.once('connect', connectHandler(self, self.s));
-	  self.s.pool.on('parseError', fatalErrorHandler(self, self.s));
-
-	  // Emit toplogy opening event if not in topology
-	  if(!self.s.inTopology) {
-	    this.emit('topologyOpening', { topologyId: this.s.id });
+	  if(!self.s.pool) {
+	    self.s.options.messageHandler = messageHandler(self, self.s);
+	    self.s.pool = new Pool(self.s.options);
 	  }
 
-	  // Emit opening server event
-	  self.emit('serverOpening', {
-	    topologyId: self.s.topologyId != -1 ? self.s.topologyId : self.s.id, address: self.name
-	  });
-
-	  //
-	  // Handle new connections
-	  self.s.pool.on('connection', function(connection) {
-	    // No auth handler used, return the connection
-	    var keys = Object.keys(self.s.authProviders);
-	    if(keys.length == 0) {
-	      return self.s.pool.connectionAvailable(connection);
-	    }
-
-	    // Get all connections
-	    var connections = [connection];
-	    // Execute all providers
-	    var count = keys.length;
-
-	    // Iterate over all auth methods
-	    for(var i = 0; i < keys.length; i++) {
-	      // reauthenticate the connection
-	      self.s.authProviders[keys[i]].reauthenticate(self, connections, function(err, r) {
-	        count = count - 1;
-
-	        // We are done, Make the connection available
-	        if(count == 0) {
-	          return self.s.pool.connectionAvailable(connection);
-	        }
-	      });
-	    }
-	  });
+	  // Add all the event handlers
+	  self.s.pool.once('timeout', timeoutHandler(self, self.s));
+	  self.s.pool.once('close', closeHandler(self, self.s));
+	  self.s.pool.once('error', errorHandler(self, self.s));
+	  self.s.pool.once('connect', connectHandler(self, self.s));
+	  self.s.pool.once('parseError', fatalErrorHandler(self, self.s));
 
 	  // Connect the pool
 	  self.s.pool.connect();
-	}
-
-	var getTopologyType = function(self, ismaster) {
-	  if(!ismaster) {
-	    ismaster = self.s.ismaster;
-	  }
-
-	  if(!ismaster) return 'Unknown';
-	  if(ismaster.ismaster && !ismaster.hosts) return 'Standalone';
-	  if(ismaster.ismaster && ismaster.msg == 'isdbgrid') return 'Mongos';
-	  if(ismaster.ismaster) return 'RSPrimary';
-	  if(ismaster.secondary) return 'RSSecondary';
-	  if(ismaster.arbiterOnly) return 'RSArbiter';
-	  return 'Unknown';
-	}
-
-	var changedIsMaster = function(self, currentIsmaster, ismaster) {
-	  var currentType = getTopologyType(self, currentIsmaster);
-	  var newType = getTopologyType(self, ismaster);
-	  if(newType != currentType) return true;
-	  return false;
-	}
-
-	var inquireServerState = function(self) {
-	  return function() {
-	    if(self.s.state == DESTROYED) return;
-	    // Record response time
-	    var start = new Date().getTime();
-
-	    // emitSDAMEvent
-	    emitSDAMEvent(self, 'serverHeartbeatStarted', { connectionId: self.name });
-
-	    // Attempt to execute ismaster command
-	    self.command('admin.$cmd', { ismaster:true },  { monitoring:true }, function(err, r) {
-	      if(!err) {
-	        // Legacy event sender
-	        self.emit('ismaster', r, self);
-
-	        // Calculate latencyMS
-	        var latencyMS = new Date().getTime() - start;
-
-	        // Server heart beat event
-	        emitSDAMEvent(self, 'serverHeartbeatSucceeded', { durationMS: latencyMS, reply: r.result, connectionId: self.name });
-
-	        // Did the server change
-	        if(changedIsMaster(self, self.s.ismaster, r.result)) {
-	          // Emit server description changed if something listening
-	          emitServerDescriptionChanged(self, {
-	            address: self.name, arbiters: [], hosts: [], passives: [], type: !self.s.inTopology ? 'Standalone' : getTopologyType(self)
-	          });
-	        }
-
-	        // Updat ismaster view
-	        self.s.ismaster = r.result;
-
-	        // Set server response time
-	        self.s.isMasterLatencyMS = latencyMS;
-	      } else {
-	        emitSDAMEvent(self, 'serverHearbeatFailed', { durationMS: latencyMS, failure: err, connectionId: self.name });
-	      }
-
-	      // Perform another sweep
-	      self.s.inquireServerStateTimeout = setTimeout(inquireServerState(self), self.s.haInterval);
-	    });
-	  };
-	}
-
-	/**
-	 * Unref all connections belong to this server
-	 * @method
-	 */
-	Server.prototype.unref = function() {
-	  this.s.pool.unref();
 	}
 
 	/**
@@ -26048,27 +25676,10 @@
 	Server.prototype.destroy = function(emitClose, emitDestroy) {
 	  var self = this;
 	  if(self.s.logger.isDebug()) self.s.logger.debug(f('destroy called on server %s', self.name));
-	  // If we already destroyed ignore
-	  if(self.s.state == DESTROYED) return;
-
-	  // Do we have a inquireServerState running
-	  if(this.s.inquireServerStateTimeout) {
-	    clearTimeout(this.s.inquireServerStateTimeout);
-	  }
 
 	  // Emit close
 	  if(emitClose && self.listeners('close').length > 0) {
 	    self.emit('close', null, self);
-	  }
-
-	  // Emit opening server event
-	  if(self.listeners('serverClosed').length > 0) self.emit('serverClosed', {
-	    topologyId: self.s.topologyId != -1 ? self.s.topologyId : self.s.id, address: self.name
-	  });
-
-	  // Emit toplogy opening event if not in topology
-	  if(self.listeners('topologyClosed').length > 0 && !self.s.inTopology) {
-	    self.emit('topologyClosed', { topologyId: self.s.id });
 	  }
 
 	  // Emit destroy event
@@ -26076,7 +25687,7 @@
 	  // Set state as destroyed
 	  self.s.state = DESTROYED;
 	  // Close the pool
-	  if(self.s.pool) self.s.pool.destroy();
+	  self.s.pool.destroy();
 	  // Flush out all the callbacks
 	  if(self.s.callbacks) self.s.callbacks.flush(new MongoError(f("server %s sockets closed", self.name)));
 	}
@@ -26108,16 +25719,23 @@
 	  query.slaveOk = slaveOk(options.readPreference);
 
 	  // Notify query start to any read Preference strategies
-	  if(self.s.readPreferenceStrategies != null) {
+	  if(self.s.readPreferenceStrategies != null)
 	    notifyStrategies(self, self.s, 'startOperation', [self, query, new Date()]);
+
+	  // Get a connection (either passed or from the pool)
+	  var connection = options.connection || self.s.pool.get(options);
+
+	  // Double check if we have a valid connection
+	  // Checking that the connection exists to avoid an uncaught exception in case there is an issue with the pool
+	  if(!(connection && connection.isConnected())) {
+	    return callback(new MongoError(f("no connection available to server %s", self.name)));
 	  }
 
-	  // Raw BSON response
-	  var raw = typeof options.raw == 'boolean' ? options.raw : false;
-	  // Do not promote longs
-	  var promoteLongs = typeof options.promoteLongs == 'boolean' ? options.promoteLongs : true;
-	  // Monitoring
-	  var monitoring = typeof options.monitoring == 'boolean' ? options.monitoring : false;
+	  // Print cmd and execution connection if in debug mode for logging
+	  if(self.s.logger.isDebug()) {
+	    var json = connection.toJSON();
+	    self.s.logger.debug(f('cmd [%s] about to be executed on connection with id %s at %s:%s', JSON.stringify(cmd), json.id, json.host, json.port));
+	  }
 
 	  // Execute multiple queries
 	  if(onAll) {
@@ -26127,31 +25745,6 @@
 	    var error = null;
 	    // Execute on all connections
 	    for(var i = 0; i < connections.length; i++) {
-	      // Command callback
-	      var commandCallback = function(_connection) {
-	        return function(err, result) {
-	          if(err) error = err;
-	          total = total - 1;
-
-	          // Done
-	          if(total == 0) {
-	            // Notify end of command
-	            notifyStrategies(self, self.s, 'endOperation', [self, error, result, new Date()]);
-	            if(error) return callback(MongoError.create(error));
-
-	            // Add the connection details
-	            result.hashedName = _connection.hashedName;
-
-	            // Execute callback, catch and rethrow if needed
-	            try {
-	              callback(null, new CommandResult(options.fullResult ? result : result.documents[0], connections));
-	            } catch(err) {
-	              process.nextTick(function() { throw err});
-	            }
-	          }
-	        }
-	      };
-
 	      try {
 	        query.incRequestId();
 	        connections[i].write(query.toBin());
@@ -26160,77 +25753,46 @@
 	        if(total == 0) return callback(MongoError.create(err));
 	      }
 
-	      // Return raw BSON docs
-	      if(raw) {
-	        commandCallback.raw = true;
-	      }
-
-	      // Add promote long
-	      commandCallback.promoteLongs = promoteLongs;
-
-	      // Add monitoring
-	      commandCallback.monitoring = monitoring;
-
-	      // Set the executed connection on the callback
-	      commandCallback.connection = connections[i];
-
 	      // Register the callback
-	      self.s.callbacks.register(query.requestId, commandCallback(connections[i]));
+	      self.s.callbacks.register(query.requestId, function(err, result) {
+	        if(err) error = err;
+	        total = total - 1;
+
+	        // Done
+	        if(total == 0) {
+	          // Notify end of command
+	          notifyStrategies(self, self.s, 'endOperation', [self, error, result, new Date()]);
+	          if(error) return callback(MongoError.create(error));
+	          // Execute callback, catch and rethrow if needed
+	          try { callback(null, new CommandResult(result.documents[0], connections)); }
+	          catch(err) { process.nextTick(function() { throw err}); }
+	        }
+	      });
 	    }
 
 	    return;
 	  }
 
-	  // Command callback
-	  var commandCallback = function(err, result) {
-	    // Notify end of command
-	    notifyStrategies(self, self.s, 'endOperation', [self, err, result, new Date()]);
-	    if(err) return callback(err);
-
-	    if(result.documents[0]['$err']
-	      || result.documents[0]['errmsg']
-	      || result.documents[0]['err']
-	      || result.documents[0]['code']) return callback(MongoError.create(result.documents[0]));
-
-	      // Add the connection details
-	      result.hashedName = result.connection.hashedName;
-
-	      // Execute callback, catch and rethrow if needed
-	      try {
-	        callback(null, new CommandResult(options.fullResult ? result : result.documents[0], result.connection));
-	      } catch(err) {
-	        process.nextTick(function() { throw err});
-	      }
-	  };
-
+	  // Execute a single command query
 	  try {
-	    // Add monitoring
-	    commandCallback.monitoring = monitoring;
-	    // Write the query out to the passed in connection or use the pool
-	    // Passed in connections are used for authentication mechanisms
-	    if(options.connection) {
-	      // Add the reference to the connection to the callback so
-	      // we can flush only the affected operations
-	      commandCallback.connection = options.connection;
-	      commandCallback.noRelease = true;
-
-	      // Write out the command
-	      options.connection.write(query.toBin());
-	    } else {
-	      self.s.pool.write(query.toBin(), commandCallback, options);
-	    }
-
+	    connection.write(query.toBin());
 	  } catch(err) {
 	    return callback(MongoError.create(err));
 	  }
 
-	  // Return raw BSON docs
-	  if(raw) commandCallback.raw = true;
-	  // Promote long setting
-	  commandCallback.promoteLongs = promoteLongs;
-
 	  // Register the callback
-	  self.s.callbacks.register(query.requestId, commandCallback);
+	  self.s.callbacks.register(query.requestId, function(err, result) {
+	    // Notify end of command
+	    notifyStrategies(self, self.s, 'endOperation', [self, err, result, new Date()]);
+	    if(err) return callback(err);
+	    if(result.documents[0]['$err']
+	      || result.documents[0]['errmsg']
+	      || result.documents[0]['err']
+	      || result.documents[0]['code']) return callback(MongoError.create(result.documents[0]));
+	      // Execute callback, catch and rethrow if needed
+	      try { callback(null, new CommandResult(result.documents[0], connection)); }
+	      catch(err) { process.nextTick(function() { throw err}); }
+	  });
 	}
 
 	/**
@@ -26239,9 +25801,9 @@
 	 * @param {string} ns The MongoDB fully qualified namespace (ex: db1.collection1)
 	 * @param {object} cmd The command hash
 	 * @param {ReadPreference} [options.readPreference] Specify read preference if command supports it
+	 * @param {Connection} [options.connection] Specify connection object to execute command against
 	 * @param {Boolean} [options.serializeFunctions=false] Specify if functions on an object should be serialized.
 	 * @param {Boolean} [options.ignoreUndefined=false] Specify if the BSON serializer should ignore undefined fields.
-	 * @param {Boolean} [options.fullResult=false] Return the full envelope instead of just the result document.
 	 * @param {opResultCallback} callback A callback function
 	 */
 	Server.prototype.command = function(ns, cmd, options, callback) {
@@ -26250,7 +25812,6 @@
 	  if(this.s.state == DESTROYED) return callback(new MongoError(f('topology was destroyed')));
 	  // Ensure we have no options
 	  options = options || {};
-
 	  // Do we have a read Preference it need to be of type ReadPreference
 	  if(options.readPreference && !(options.readPreference instanceof ReadPreference)) {
 	    throw new Error("readPreference must be an instance of ReadPreference");
@@ -26285,9 +25846,6 @@
 	  // Ignore undefined values
 	  var ignoreUndefined = typeof options.ignoreUndefined == 'boolean' ? options.ignoreUndefined : false;
 
-	  // Raw BSON response
-	  var raw = typeof options.raw == 'boolean' ? options.raw : false;
-
 	  // Query options
 	  var queryOptions = {
 	    numberToSkip: 0, numberToReturn: -1, checkKeys: checkKeys
@@ -26298,7 +25856,100 @@
 	  if(ignoreUndefined) queryOptions.ignoreUndefined = ignoreUndefined;
 
 	  // Single operation execution
-	  executeSingleOperation(self, ns, cmd, queryOptions, options, onAll, callback);
+	  if(!Array.isArray(cmd)) {
+	    return executeSingleOperation(self, ns, cmd, queryOptions, options, onAll, callback);
+	  }
+
+	  // Build commands for each of the instances
+	  var queries = new Array(cmd.length);
+	  for(var i = 0; i < cmd.length; i++) {
+	    queries[i] = new Query(self.s.bson, ns, cmd[i], queryOptions);
+	    queries[i].slaveOk = slaveOk(options.readPreference);
+	  }
+
+	  // Notify query start to any read Preference strategies
+	  if(self.s.readPreferenceStrategies != null) {
+	    notifyStrategies(self, self.s, 'startOperation', [self, queries, new Date()]);
+	  }
+
+	  // Get a connection (either passed or from the pool)
+	  var connection = options.connection || self.s.pool.get(options);
+
+	  // Double check if we have a valid connection
+	  if(!connection.isConnected()) {
+	    return callback(new MongoError(f("no connection available to server %s", self.name)));
+	  }
+
+	  // Print cmd and execution connection if in debug mode for logging
+	  if(self.s.logger.isDebug()) {
+	    var json = connection.toJSON();
+	    self.s.logger.debug(f('cmd [%s] about to be executed on connection with id %s at %s:%s', JSON.stringify(queries), json.id, json.host, json.port));
+	  }
+
+	  // Canceled operations
+	  var canceled = false;
+	  // Number of operations left
+	  var operationsLeft = queries.length;
+	  // Results
+	  var results = [];
+
+	  // We need to nest the callbacks
+	  for(var i = 0; i < queries.length; i++) {
+	    // Get the query object
+	    var query = queries[i];
+
+	    // Execute a single command query
+	    try {
+	      connection.write(query.toBin());
+	    } catch(err) {
+	      return callback(MongoError.create(err));
+	    }
+
+	    // Register the callback
+	    self.s.callbacks.register(query.requestId, function(err, result) {
+	      // If it's canceled ignore the operation
+	      if(canceled) return;
+	      // Update the current index
+	      operationsLeft = operationsLeft - 1;
+
+	      // If we have an error cancel the operation
+	      if(err) {
+	        canceled = true;
+	        return callback(err);
+	      }
+
+	      // Return the result
+	      if(result.documents[0]['$err']
+	        || result.documents[0]['errmsg']
+	        || result.documents[0]['err']
+	        || result.documents[0]['code']) {
+
+	        // Set to canceled
+	        canceled = true;
+	        // Return the error
+	        return callback(MongoError.create(result.documents[0]));
+	      }
+
+	      // Push results
+	      results.push(result.documents[0]);
+
+	      // We are done, return the result
+	      if(operationsLeft == 0) {
+	        // Notify end of command
+	        notifyStrategies(self, self.s, 'endOperation', [self, err, result, new Date()]);
+
+	        // Turn into command results
+	        var commandResults = new Array(results.length);
+	        for(var i = 0; i < results.length; i++) {
+	          commandResults[i] = new CommandResult(results[i], connection);
+	        }
+
+	        // Execute callback, catch and rethrow if needed
+	        try { callback(null, commandResults); }
+	        catch(err) { process.nextTick(function() { throw err}); }
+	      }
+	    });
+	  }
 	}
 
 	/**
@@ -26412,11 +26063,8 @@
 	    mechanism = 'mongocr';
 	  }
 
-	  // Get all available connections
-	  var connections = self.s.pool.getAll();
-
 	  // Actual arguments
-	  var finalArguments = [self, connections, db].concat(args.slice(0)).concat([function(err, r) {
+	  var finalArguments = [self, self.s.pool, db].concat(args.slice(0)).concat([function(err, r) {
 	    if(err) return callback(err);
 	    if(!r) return callback(new MongoError('could not authenticate'));
 	    callback(null, new Session({}, self));
@@ -26485,16 +26133,6 @@
 	 * @return {Server}
 	 */
 	Server.prototype.getServer = function(options) {
-	  return this;
-	}
-
-	/**
-	 * Get correct server for a given connection
-	 * @method
-	 * @param {Connection} [connection] A Connection showing a current server
-	 * @return {Server}
-	 */
-	Server.prototype.getServerFrom = function(connection) {
 	  return this;
 	}
 
@@ -26652,7 +26290,7 @@
 	      set: function(value) {
 	        if(typeof value != 'boolean') throw new Error(f("%s required a boolean", prop.name));
 	        // Flip the bit to 1
-	        if(value == true) values.flags |= flag;
+	        if(value == true) values.flags |= flag;        
 	        // Flip the bit to 0 if it's set, otherwise ignore
 	        if(value == false && (values.flags & flag) == flag) values.flags ^= flag;
 	        prop.value = value;
@@ -26665,7 +26303,7 @@
 	var getProperty = function(obj, propName, fieldName, values, func) {
 	  Object.defineProperty(obj, propName, {
 	    enumerable:true,
-	    get: function() {
+	    get: function() { 
 	      // Not parsed yet, parse it
 	      if(values[fieldName] == null && obj.isParsed && !obj.isParsed()) {
 	        obj.parse();
@@ -26684,9 +26322,9 @@
 	  Object.defineProperty(obj, name, {
 	    enumerable:true,
 	    get: function() {
-	      return value
+	      return value 
 	    }
-	  });
+	  });  
 	}
 
 	// Shallow copy
@@ -26711,15 +26349,7 @@
 	var bindToCurrentDomain = function(callback) {
 	  var domain = process.domain;
 	  if(domain == null || callback == null) return callback;
-	  var boundCallback = domain.bind(callback);
-
-	  // Copy all fields over
-	  for(var name in callback) {
-	    boundCallback[name] = callback[name];
-	  }
-
-	  // Return the bound callback
-	  return boundCallback;
+	  return domain.bind(callback);
 	}
 
 	exports.setProperty = setProperty;
@@ -26728,7 +26358,6 @@
 	exports.copy = copy;
 	exports.bindToCurrentDomain = bindToCurrentDomain;
 	exports.debugOptions = debugOptions;
-
 
 /***/ },
 /* 98 */
@@ -26755,7 +26384,7 @@
 	 * @class
 	 * @param {string} options.host The server host
 	 * @param {number} options.port The server port
-	 * @param {number} [options.size=1] Max server connection pool size
+	 * @param {number} [options.size=5] Server connection pool size
 	 * @param {boolean} [options.keepAlive=true] TCP Connection keep alive enabled
 	 * @param {number} [options.keepAliveInitialDelay=0] Initial delay before TCP keep alive enabled
 	 * @param {boolean} [options.noDelay=true] TCP Connection no delay
@@ -26784,75 +26413,37 @@
 	  // Set empty if no options passed
 	  this.options = options || {};
 	  this.size = typeof options.size == 'number' && !isNaN(options.size) ? options.size : 5;
-	  this.waitMS = typeof options.waitMS == 'number' && !isNaN(options.waitMS) ? options.waitMS : 1000;
-
-	  // Save host and port
-	  this.host = options.host;
-	  this.port = options.port;
 
 	  // Message handler
 	  this.messageHandler = options.messageHandler;
 	  // No bson parser passed in
 	  if(!options.bson) throw new Error("must pass in valid bson parser");
-	  // // Contains all connections
-	  // this.connections = [];
-	  // Contains all available connections
-	  this.availableConnections = [];
-	  this.inUseConnections = [];
-	  this.newConnections = [];
-	  this.connectingConnections = [];
-	  // Current status of the pool
+	  // Contains all connections
+	  this.connections = [];
 	  this.state = DISCONNECTED;
 	  // Round robin index
 	  this.index = 0;
 	  this.dead = false;
 	  // Logger instance
 	  this.logger = Logger('Pool', options);
+	  // If we are monitoring this server we will create an exclusive reserved socket for that
+	  this.monitoring = typeof options.monitoring == 'boolean' ? options.monitoring : false;
 	  // Pool id
 	  this.id = _id++;
 	  // Grouping tag used for debugging purposes
 	  this.tag = options.tag;
-	  // Operation work queue
-	  this.queue = [];
-	  // Currently executing
-	  this.executing = false;
-	  // Unref pool
-	  this.unreference = false;
 	}
 
 	inherits(Pool, EventEmitter);
 
-	var removeConnection = function(self, connection) {
-	  // Destroy connection
-	  connection.destroy();
-
-	  // Remove connection method
-	  var remove = function(connections) {
-	    for(var i = 0; i < connections.length; i++) {
-	      if(connections[i] === connection) {
-	        connections.splice(i, 1);
-	        return true;
-	      }
-	    }
-	  }
-
-	  // Clean out the connection
-	  if(remove(self.availableConnections)) return;
-	  if(remove(self.inUseConnections)) return;
-	  if(remove(self.newConnections)) return;
-	  if(remove(self.connectingConnections)) return;
-	}
-
 	var errorHandler = function(self) {
 	  return function(err, connection) {
 	    if(self.logger.isDebug()) self.logger.debug(f('pool [%s] errored out [%s] with connection [%s]', this.dead, JSON.stringify(err), JSON.stringify(connection)));
-	    // Destroy the connection
-	    connection.destroy();
-	    // Remove the connection
-	    removeConnection(self, connection);
-	    // Emit error
-	    if(self.listeners('error').length > 0) {
-	      self.emit('error', err, connection);
+	    if(!self.dead) {
+	      self.state = DISCONNECTED;
+	      self.dead = true;
+	      self.destroy();
+	      self.emit('error', err, self);
 	    }
 	  }
 	}
@@ -26860,48 +26451,49 @@
 	var timeoutHandler = function(self) {
 	  return function(err, connection) {
 	    if(self.logger.isDebug()) self.logger.debug(f('pool [%s] timed out [%s] with connection [%s]', this.dead, JSON.stringify(err), JSON.stringify(connection)));
-	    // Destroy the connection
-	    connection.destroy();
-	    // Remove the connection
-	    removeConnection(self, connection);
-	    // Emit connection timeout to server instance
-	    self.emit('timeout', err, connection);
+	    if(!self.dead) {
+	      self.state = DISCONNECTED;
+	      self.dead = true;
+	      self.destroy();
+	      self.emit('timeout', err, self);
+	    }
 	  }
 	}
 
 	var closeHandler = function(self) {
 	  return function(err, connection) {
 	    if(self.logger.isDebug()) self.logger.debug(f('pool [%s] closed [%s] with connection [%s]', this.dead, JSON.stringify(err), JSON.stringify(connection)));
-	    // Destroy the connection
-	    connection.destroy();
-	    // Remove the connection
-	    removeConnection(self, connection);
-	    // Emit connection close to server instance
-	    self.emit('close', err, connection);
+	    if(!self.dead) {
+	      self.state = DISCONNECTED;
+	      self.dead = true;
+	      self.destroy();
+	      self.emit('close', err, self);
+	    }
 	  }
 	}
 
 	var parseErrorHandler = function(self) {
 	  return function(err, connection) {
 	    if(self.logger.isDebug()) self.logger.debug(f('pool [%s] errored out [%s] with connection [%s]', this.dead, JSON.stringify(err), JSON.stringify(connection)));
-	    // Destroy the connection
-	    connection.destroy();
-	    // Remove the connection
-	    removeConnection(self, connection);
-	    // Emit error to server instance
-	    self.emit('parseError', err, connection);
+	    if(!self.dead) {
+	      self.state = DISCONNECTED;
+	      self.dead = true;
+	      self.destroy();
+	      self.emit('parseError', err, self);
+	    }
 	  }
 	}
 
-	/**
-	 * Unref the pool
-	 * @method
-	 */
-	Pool.prototype.unref = function() {
-	  this.unreference = true;
-	  this.getAll().forEach(function(c) {
-	    c.unref();
-	  });
+	var connectHandler = function(self) {
+	  return function(connection) {
+	    self.connections.push(connection);
+	    // We have connected to all servers
+	    if(self.connections.length == self.size) {
+	      self.state = CONNECTED;
+	      // Done connecting
+	      self.emit("connect", self);
+	    }
+	  }
 	}
 
 	/**
@@ -26912,10 +26504,8 @@
 	  this.state = DESTROYED;
 	  // Set dead
 	  this.dead = true;
-	  // Get all the connections
-	  var connections = this.getAll();
 	  // Destroy all the connections
-	  connections.forEach(function(c) {
+	  this.connections.forEach(function(c) {
 	    // Destroy all event emitters
 	    ["close", "message", "error", "timeout", "parseError", "connect"].forEach(function(e) {
 	      c.removeAllListeners(e);
@@ -26924,12 +26514,14 @@
 	    // Destroy the connection
 	    c.destroy();
 	  });
+	}
 
-	  // Wipe out all connection arrays
-	  this.availableConnections = [];
-	  this.connectingConnections = [];
-	  this.inUseConnections = [];
-	  this.newConnections = [];
+	var execute = null;
+
+	try {
+	  execute = setImmediate;
+	} catch(err) {
+	  execute = process.nextTick;
 	}
 
 	/**
@@ -26943,221 +26535,31 @@
 	  // No dead
 	  this.dead = false;
 
-	  // Set the message handler
-	  self.options.messageHandler = self.messageHandler;
-	  // Create a new connection
-	  var connection = new Connection(self.options);
+	  // Ensure we allow for a little time to setup connections
+	  var wait = 1;
 
-	  // Delete all the event handlers
-	  ['close', 'error', 'timeout', 'parseError', 'connect'].forEach(function(x) {
-	    connection.removeAllListeners(x);
-	  })
+	  // Connect all sockets
+	  for(var i = 0; i < this.size; i++) {
+	    setTimeout(function() {
+	      execute(function() {
+	        self.options.messageHandler = self.messageHandler;
+	        var connection = new Connection(self.options);
 
-	  // Add all handlers
-	  connection.once('close', closeHandler(self));
-	  connection.once('error', errorHandler(self));
-	  connection.once('timeout', timeoutHandler(self));
-	  connection.once('parseError', parseErrorHandler(self));
-	  connection.on('connect', function(connection) {
-	    if(self.state == 'DESTROYED') {
-	      return connection.destroy();
-	    }
+	        // Add all handlers
+	        connection.once('close', closeHandler(self));
+	        connection.once('error', errorHandler(self));
+	        connection.once('timeout', timeoutHandler(self));
+	        connection.once('parseError', parseErrorHandler(self));
+	        connection.on('connect', connectHandler(self));
 
-	    // Add the connection to the list of available connections
-	    self.availableConnections.push(connection);
-	    // Emit connected event
-	    self.emit("connect", self);
-	  });
-
-	  // Start connection
-	  connection.connect(_options);
-	}
-
-	var _createConnection = function(self) {
-	  self.options.messageHandler = self.messageHandler;
-	  var connection = new Connection(self.options);
-
-	  // Push the connection
-	  self.connectingConnections.push(connection);
-
-	  // Handle any errors
-	  var tempErrorHandler = function(_connection) {
-	    return function(err) {
-	      _connection.destroy();
-	    }
-	  }
-
-	  // All event handlers
-	  var handlers = ["close", "message", "error", "timeout", "parseError", "connect"];
-
-	  // Handle successful connection
-	  var tempConnectHandler = function(_connection) {
-	    return function() {
-	      if(self.state == 'DESTROYED') {
-	        // Remove the connection from the connectingConnections
-	        var index = self.connectingConnections.indexOf(_connection);
-	        if(index != -1) {
-	          self.connectingConnections.splice(index, 1);
-	        }
-
-	        return _connection.destroy();
-	      }
-
-	      // Destroy all event emitters
-	      handlers.forEach(function(e) {
-	        _connection.removeAllListeners(e);
+	        // Start connection
+	        connection.connect(_options);
 	      });
+	    }, wait);
 
-	      // Add the final handlers
-	      _connection.once('close', closeHandler(self));
-	      _connection.once('error', errorHandler(self));
-	      _connection.once('timeout', timeoutHandler(self));
-	      _connection.once('parseError', parseErrorHandler(self));
-
-	      // Remove the connection from the connectingConnections
-	      var index = self.connectingConnections.indexOf(_connection);
-	      if(index != -1) {
-	        self.connectingConnections.splice(index, 1);
-	      }
-
-	      // Add to queue of new connection
-	      self.newConnections.push(_connection);
-	      // Emit connection to server instance
-	      // alowing it to apply any needed authentication
-	      self.emit('connection', _connection);
-
-	      // Execute any work waiting
-	      _execute(self)();
-	    }
+	    // wait for 1 miliseconds before attempting to connect, spacing out connections
+	    wait = wait + 1;
 	  }
-
-	  // Add all handlers
-	  connection.once('close', tempErrorHandler(connection));
-	  connection.once('error', tempErrorHandler(connection));
-	  connection.once('timeout', tempErrorHandler(connection));
-	  connection.once('parseError', tempErrorHandler(connection));
-	  connection.once('connect', tempConnectHandler(connection));
-
-	  // Start connection
-	  connection.connect();
-	}
-
-	var _execute = function(self) {
-	  return function() {
-	    if(self.state == 'DESTROYED') return;
-	    // Already executing, skip
-	    if(self.executing) return;
-	    // Set pool as executing
-	    self.executing = true;
-
-	    // Total availble connections
-	    var totalConnections = self.availableConnections.length
-	      + self.connectingConnections.length
-	      + self.inUseConnections.length
-	      + self.newConnections.length;
-
-	    // Have we not reached the max connection size yet
-	    if(self.availableConnections.length == 0
-	      && self.connectingConnections.length == 0
-	      && totalConnections < self.size
-	      && self.queue.length > 0) {
-	      // Create a new connection
-	      _createConnection(self);
-	      // Attempt to execute again
-	      self.executing = false;
-	      return;
-	    }
-
-	    // Number of ops to do
-	    var numberOfOps = self.availableConnections.length > self.queue.length
-	      ? self.queue.length : self.availableConnections.length;
-
-	    // As long as we have available connections
-	    while(true) {
-	      // No available connections available
-	      if(self.availableConnections.length == 0) break;
-	      if(self.queue.length == 0) break;
-
-	      // Get a connection
-	      var connection = self.availableConnections.pop();
-	      if(connection.isConnected()) {
-	        var workItem = self.queue.shift();
-
-	        // Add connection to callback so we can flush out
-	        // only ops for that connection on a socket closure
-	        if(workItem.cb) {
-	          workItem.cb.connection = connection;
-	        }
-
-	        // Get actual binary commands
-	        var buffer = workItem.buffer;
-
-	        // Add connection to workers in flight
-	        self.inUseConnections.push(connection);
-
-	        if(Array.isArray(buffer)) {
-	          for(var i = 0; i < buffer.length; i++) {
-	            connection.write(buffer[i]);
-	          }
-	        } else {
-	          connection.write(buffer);
-	        }
-
-	        // Fire and forgot message
-	        if(workItem.immediateRelease) {
-	          self.availableConnections.push(connection);
-	        }
-	      }
-	    }
-
-	    self.executing = false;
-	  }
-	}
-
-	/**
-	 * Write a message to MongoDB
-	 * @method
-	 * @return {Connection}
-	 */
-	Pool.prototype.write = function(buffer, cb, options) {
-	  // Do we have an operation
-	  var operation = {buffer:buffer, cb: cb};
-	  // Do we immediately release the connection back to available (fire and forget)
-	  if(options && options.immediateRelease) {
-	    operation.immediateRelease = true;
-	  }
-
-	  // Push the operation to the queue of operations in progress
-	  this.queue.push(operation);
-	  // Attempt to write all buffers out
-	  _execute(this)();
-	}
-
-	/**
-	 * Make a passed connection available
-	 * @method
-	 * @return {Connection}
-	 */
-	Pool.prototype.connectionAvailable = function(connection) {
-	  // Get the connection from the newConnections
-	  var index = this.newConnections.indexOf(connection);
-	  if(index != -1) {
-	    this.newConnections.splice(index, 1);
-	  }
-
-	  // If it's in the inUseConnections
-	  index = this.inUseConnections.indexOf(connection);
-	  if(index != -1) {
-	    this.inUseConnections.splice(index, 1);
-	  }
-
-	  // Add the connection to available connections if it's not a monitoring threads
-	  if(this.availableConnections.indexOf(connection) == -1) {
-	    this.availableConnections.push(connection);
-	  }
-
-	  // Fire execute loop
-	  _execute(this)();
 	}
 
 	/**
@@ -27171,14 +26573,46 @@
 	  // Set the current index
 	  this.index = this.index + 1;
 
-	  // Get all connections
-	  var connections = this.availableConnections.slice(0);
-
-	  if(connections.length == 1) {
-	    return connections[0];
+	  if(this.connections.length == 1) {
+	    return this.connections[0];
+	  } else if(this.monitoring && options.monitoring) {
+	    return this.connections[this.connections.length - 1];
+	  } else if(this.monitoring) {
+	    this.index = this.index % (this.connections.length - 1);
+	    return this.connections[this.index];
 	  } else {
-	    this.index = this.index % connections.length;
-	    return connections[this.index];
+	    this.index = this.index % this.connections.length;
+	    return this.connections[this.index];
+	  }
+	}
+
+	/**
+	 * Reduce the poolSize to the provided max connections value
+	 * @method
+	 * @param {number} maxConnections reduce the poolsize to maxConnections
+	 */
+	Pool.prototype.capConnections = function(maxConnections) {
+	  // Do we have more connections than specified slice it
+	  if(this.connections.length > maxConnections) {
+	    // Get the rest of the connections
+	    var connections = this.connections.slice(maxConnections);
+	    // Cap the active connections
+	    this.connections = this.connections.slice(0, maxConnections);
+
+	    if (this.index >= maxConnections){
+	      // Go back to the beggining of the pool if capping connections
+	      this.index = 0;
+	    }
+
+	    // Remove all listeners
+	    for(var i = 0; i < connections.length; i++) {
+	      connections[i].removeAllListeners('close');
+	      connections[i].removeAllListeners('error');
+	      connections[i].removeAllListeners('timeout');
+	      connections[i].removeAllListeners('parseError');
+	      connections[i].removeAllListeners('connect');
+	      connections[i].destroy();
+	    }
 	  }
 	}
 
@@ -27188,10 +26622,7 @@
 	 * @return {array}
 	 */
 	Pool.prototype.getAll = function() {
-	  return this.availableConnections
-	    .concat(this.inUseConnections)
-	    .concat(this.connectingConnections)
-	    .concat(this.newConnections);
+	  return this.connections.slice(0);
 	}
 
 	/**
@@ -27200,18 +26631,8 @@
 	 * @return {boolean}
 	 */
 	Pool.prototype.isConnected = function() {
-	  // Available connections
-	  for(var i = 0; i < this.availableConnections.length; i++) {
-	    if(this.availableConnections[i].isConnected()) return true;
-	  }
-
-	  // inUseConnections
-	  for(var i = 0; i < this.inUseConnections.length; i++) {
-	    if(this.inUseConnections[i].isConnected()) return true;
-	  }
-
-	  for(var i = 0; i < this.newConnections.length; i++) {
-	    if(this.newConnections[i].isConnected()) return true;
+	  for(var i = 0; i < this.connections.length; i++) {
+	    if(!this.connections[i].isConnected()) return false;
 	  }
 
 	  return this.state == CONNECTED;
@@ -27276,7 +26697,6 @@
 	  , net = __webpack_require__(14)
 	  , tls = __webpack_require__(100)
 	  , f = __webpack_require__(10).format
-	  , crypto = __webpack_require__(56)
 	  , getSingleProperty = __webpack_require__(97).getSingleProperty
 	  , debugOptions = __webpack_require__(97).debugOptions
 	  , Response = __webpack_require__(101).Response
@@ -27382,35 +26802,9 @@
 	  // Internal state
 	  this.connection = null;
 	  this.writeStream = null;
-
-	  // Create hash method
-	  var hash = crypto.createHash('sha1');
-	  hash.update(f('%s:%s', this.host, this.port));
-
-	  // Create a hash name
-	  this.hashedName = hash.digest('hex');
 	}
 
 	inherits(Connection, EventEmitter);
-
-	Object.defineProperty(Connection.prototype, 'name', {
-	  enumerable:true,
-	  get: function() {
-	    return this.port ? f("%s:%s", this.host, this.port) : this.host;
-	  }
-	});
-
-	Object.defineProperty(Connection.prototype, 'socketTimeoutMS', {
-	  enumerable:true,
-	  set: function(value) {
-	    if(typeof value != 'number') throw new Error("socketTimeoutMS requires a boolean");
-	    // Set the socket timeout
-	    this.socketTimeout = value;
-	    // Set the socket timeout on the socket
-	    this.connection.setTimeout(value);
-	  },
-	  get: function() { return this.socketTimeout; }
-	});
 
 	//
 	// Connection handlers
@@ -27479,7 +26873,7 @@
 	            self.bytesRead = 0;
 	            self.stubBuffer = null;
 	            // Emit the buffer
-	            self.messageHandler(new Response(self, self.bson, emitBuffer, self.responseOptions), self);
+	            self.messageHandler(new Response(self.bson, emitBuffer, self.responseOptions), self);
 	          } catch(err) {
 	            var errorObject = {err:"socketHandler", trace:err, bin:self.buffer, parseState:{
 	              sizeOfMessage:self.sizeOfMessage,
@@ -27560,7 +26954,7 @@
 	                // Exit parsing loop
 	                data = new Buffer(0);
 	                // Emit the message
-	                self.messageHandler(new Response(self, self.bson, emitBuffer, self.responseOptions), self);
+	                self.messageHandler(new Response(self.bson, emitBuffer, self.responseOptions), self);
 	              } catch (err) {
 	                var errorObject = {err:"socketHandler", trace:err, bin:self.buffer, parseState:{
 	                  sizeOfMessage:self.sizeOfMessage,
@@ -27595,7 +26989,7 @@
 	              // Copy rest of message
 	              data = data.slice(sizeOfMessage);
 	              // Emit the message
-	              self.messageHandler(new Response(self, self.bson, emitBuffer, self.responseOptions), self);
+	              self.messageHandler(new Response(self.bson, emitBuffer, self.responseOptions), self);
 	            }
 	          } else {
 	            // Create a buffer that contains the space for the non-complete message
@@ -27656,28 +27050,18 @@
 	      sslOptions.checkServerIdentity = self.checkServerIdentity;
 	    }
 
-	    try {
-	      self.connection = tls.connect(self.port, self.host, sslOptions, function() {
-	        // Error on auth or skip
-	        if(self.connection.authorizationError && self.rejectUnauthorized) {
-	          return self.emit("error", self.connection.authorizationError, self, {ssl:true});
-	        }
+	    // Attempt SSL connection
+	    self.connection = tls.connect(self.port, self.host, sslOptions, function() {
+	      // Error on auth or skip
+	      if(self.connection.authorizationError && self.rejectUnauthorized) {
+	        return self.emit("error", self.connection.authorizationError, self, {ssl:true});
+	      }
 
-	        // Set socket timeout instead of connection timeout
-	        self.connection.setTimeout(self.socketTimeout);
-	        // We are done emit connect
-	        self.emit('connect', self);
-	      });
-	    }
-	    catch (error) {
-	      // In the case of an invalid key, the Node tls module raises the error
-	      // Error: error:0B080074:x509 certificate routines:X509_check_private_key
-	      // but does not emit an error event like all other errors. We handle this
-	      // and other potential inconsistencies here.
-	      process.nextTick(function() {
-	        return self.emit("error", MongoError.create(error), self, {ssl:true});
-	      });
-	    }
+	      // Set socket timeout instead of connection timeout
+	      self.connection.setTimeout(self.socketTimeout);
+	      // We are done emit connect
+	      self.emit('connect', self);
+	    });
 	    self.connection.setTimeout(self.connectionTimeout);
 	  } else {
 	    self.connection.on('connect', function() {
@@ -27696,29 +27080,11 @@
 	}
 
 	/**
-	 * Unref this connection
-	 * @method
-	 * @return {boolean}
-	 */
-	Connection.prototype.unref = function() {
-	  if (this.connection) this.connection.unref();
-	  else {
-	    var self = this;
-	    this.once('connect', function() {
-	      self.connection.unref();
-	    });
-	  }
-	}
-
-	/**
 	 * Destroy connection
 	 * @method
 	 */
 	Connection.prototype.destroy = function() {
 	  if(this.connection) {
-	    if (this.connection.unref) {
-	      this.connection.unref();
-	    }
 	    this.connection.end();
 	    this.connection.destroy();
 	  }
@@ -27850,11 +27216,8 @@
 	var OPTS_EXHAUST = 64;
 	var OPTS_PARTIAL = 128;
 
-	// Request Id Max Value in JS
-	var JS_INT_MAX = 0x20000000000000;
-
 	// Response flags
-	var CURSOR_NOT_FOUND = 1;
+	var CURSOR_NOT_FOUND = 0;
 	var QUERY_FAILURE = 2;
 	var SHARD_CONFIG_STALE = 4;
 	var AWAIT_CAPABLE = 8;
@@ -27885,7 +27248,7 @@
 	  this.numberToSkip = options.numberToSkip || 0;
 	  this.numberToReturn = options.numberToReturn || 0;
 	  this.returnFieldSelector = options.returnFieldSelector || null;
-	  this.requestId = (_requestId++) % JS_INT_MAX;
+	  this.requestId = _requestId++;
 
 	  // Serialization option
 	  this.serializeFunctions = typeof options.serializeFunctions == 'boolean' ? options.serializeFunctions : false;
@@ -27907,13 +27270,13 @@
 	//
 	// Assign a new request Id
 	Query.prototype.incRequestId = function() {
-	  this.requestId = (_requestId++) % JS_INT_MAX;
+	  this.requestId = _requestId++;
 	}
 
 	//
 	// Assign a new request Id
 	Query.nextRequestId = function() {
-	  return (_requestId + 1) % JS_INT_MAX;
+	  return _requestId + 1;
 	}
 
 	//
@@ -27936,11 +27299,11 @@
 	  if(this.oplogReplay) {
 	    flags |= OPTS_OPLOG_REPLAY;
 	  }
-
+	  
 	  if(this.noCursorTimeout) {
 	    flags |= OPTS_NO_CURSOR_TIMEOUT;
 	  }
-
+	  
 	  if(this.awaitData) {
 	    flags |= OPTS_AWAIT_DATA;
 	  }
@@ -27948,7 +27311,7 @@
 	  if(this.exhaust) {
 	    flags |= OPTS_EXHAUST;
 	  }
-
+	  
 	  if(this.partial) {
 	    flags |= OPTS_PARTIAL;
 	  }
@@ -28048,7 +27411,7 @@
 	}
 
 	Query.getRequestId = function() {
-	  return (++_requestId) % JS_INT_MAX;
+	  return ++_requestId;
 	}
 
 	/**************************************************************
@@ -28057,7 +27420,7 @@
 	var GetMore = function(bson, ns, cursorId, opts) {
 	  opts = opts || {};
 	  this.numberToReturn = opts.numberToReturn || 0;
-	  this.requestId = (_requestId++) % JS_INT_MAX;
+	  this.requestId = _requestId++;
 	  this.bson = bson;
 	  this.ns = ns;
 	  this.cursorId = cursorId;
@@ -28143,7 +27506,7 @@
 	 * KILLCURSOR
 	 **************************************************************/
 	var KillCursor = function(bson, cursorIds) {
-	  this.requestId = (_requestId++) % JS_INT_MAX;
+	  this.requestId = _requestId++;
 	  this.cursorIds = cursorIds;
 	}
 
@@ -28222,10 +27585,9 @@
 	  return _buffer;
 	}
 
-	var Response = function(connection, bson, data, opts) {
+	var Response = function(bson, data, opts) {
 	  opts = opts || {promoteLongs: true};
 	  this.parsed = false;
-	  this.connection = connection;
 
 	  //
 	  // Parse Header
@@ -28319,11 +27681,6 @@
 	    // Set up the options
 	    var _options = {promoteLongs: this.opts.promoteLongs, fieldsAsRaw: fieldsAsRaw};
 
-	    // Do we have a promoteLongs value on the options
-	    if(typeof options.promoteLongs == 'boolean') {
-	      _options.promoteLongs = options.promoteLongs;
-	    }
-
 	    // Deserialize but keep the array of documents in non-parsed form
 	    var doc = this.bson.deserialize(document, _options);
 
@@ -28350,11 +27707,6 @@
 	    var bsonSize = this.data[this.index] | this.data[this.index + 1] << 8 | this.data[this.index + 2] << 16 | this.data[this.index + 3] << 24;
 	    // Parse options
 	    var _options = {promoteLongs: this.opts.promoteLongs};
-
-	    // Do we have a promoteLongs value on the options
-	    if(typeof options.promoteLongs == 'boolean') {
-	      _options.promoteLongs = options.promoteLongs;
-	    }
 
 	    // If we have raw results specified slice the return document
 	    if(raw) {
@@ -34264,8 +33616,8 @@
 	  // Initial query
 	  var query = null;
 
-	  // Cursor pool
-	  this.pool = null;
+	  // Cursor connection
+	  this.connection = null;
 	  // Cursor server
 	  this.server = null;
 
@@ -34295,11 +33647,6 @@
 	    , currentLimit: 0
 	    // Result field name if not a cursor (contains the array of results)
 	    , transforms: options.transforms
-	  }
-
-	  // Add promoteLong to cursor state
-	  if(typeof topologyOptions.promoteLongs == 'boolean') {
-	    this.cursorState.promoteLongs = topologyOptions.promoteLongs;
 	  }
 
 	  // Callback controller
@@ -34344,6 +33691,96 @@
 	}
 
 	//
+	// Execute the first query
+	var execInitialQuery = function(self, query, cmd, options, cursorState, connection, logger, callbacks, callback) {
+	  if(logger.isDebug()) {
+	    logger.debug(f("issue initial query [%s] with flags [%s]"
+	      , JSON.stringify(cmd)
+	      , JSON.stringify(query)));
+	  }
+
+	  var queryCallback = function(err, result) {
+	    if(err) return callback(err);
+
+	    if(result.queryFailure) {
+	      return callback(MongoError.create(result.documents[0]), null);
+	    }
+
+	    // Check if we have a command cursor
+	    if(Array.isArray(result.documents) && result.documents.length == 1
+	      && (!cmd.find || (cmd.find && cmd.virtual == false))
+	      && (result.documents[0].cursor != 'string'
+	        || result.documents[0]['$err']
+	        || result.documents[0]['errmsg']
+	        || Array.isArray(result.documents[0].result))
+	      ) {
+
+	      // We have a an error document return the error
+	      if(result.documents[0]['$err']
+	        || result.documents[0]['errmsg']) {
+	        return callback(MongoError.create(result.documents[0]), null);
+	      }
+
+	      // We have a cursor document
+	      if(result.documents[0].cursor != null
+	        && typeof result.documents[0].cursor != 'string') {
+	          var id = result.documents[0].cursor.id;
+	          // If we have a namespace change set the new namespace for getmores
+	          if(result.documents[0].cursor.ns) {
+	            self.ns = result.documents[0].cursor.ns;
+	          }
+	          // Promote id to long if needed
+	          cursorState.cursorId = typeof id == 'number' ? Long.fromNumber(id) : id;
+	          cursorState.lastCursorId = cursorState.cursorId;
+
+	          // If we have a firstBatch set it
+	          if(Array.isArray(result.documents[0].cursor.firstBatch)) {
+	            cursorState.documents = result.documents[0].cursor.firstBatch;//.reverse();
+	          }
+
+	          // Return after processing command cursor
+	          return callback(null, null);
+	      }
+
+	      if(Array.isArray(result.documents[0].result)) {
+	        cursorState.documents = result.documents[0].result;
+	        cursorState.cursorId = Long.ZERO;
+	        return callback(null, null);
+	      }
+	    }
+
+	    // Otherwise fall back to regular find path
+	    cursorState.cursorId = result.cursorId;
+	    cursorState.lastCursorId = result.cursorId;
+	    cursorState.documents = result.documents;
+
+	    // Transform the results with passed in transformation method if provided
+	    if(cursorState.transforms && typeof cursorState.transforms.query == 'function') {
+	      cursorState.documents = cursorState.transforms.query(result);
+	    }
+
+	    // Return callback
+	    callback(null, null);
+	  }
+
+	  // If we have a raw query decorate the function
+	  if(options.raw || cmd.raw) {
+	    queryCallback.raw = options.raw || cmd.raw;
+	  }
+
+	  // Do we have documentsReturnedIn set on the query
+	  if(typeof query.documentsReturnedIn == 'string') {
+	    queryCallback.documentsReturnedIn = query.documentsReturnedIn;
+	  }
+
+	  // Set up callback
+	  callbacks.register(query.requestId, queryCallback);
+
+	  // Write the initial command out
+	  connection.write(query.toBin());
+	}
+
+	//
 	// Handle callback (including any exceptions thrown)
 	var handleCallback = function(callback, err, result) {
 	  try {
@@ -34358,7 +33795,7 @@
 	// Internal methods
 	Cursor.prototype._find = function(callback) {
 	  var self = this;
-
+	  // execInitialQuery(self, self.query, self.cmd, self.options, self.cursorState, self.connection, self.logger, self.callbacks, function(err, r) {
 	  if(self.logger.isDebug()) {
 	    self.logger.debug(f("issue initial query [%s] with flags [%s]"
 	      , JSON.stringify(self.cmd)
@@ -34368,13 +33805,9 @@
 	  var queryCallback = function(err, result) {
 	    if(err) return callback(err);
 
-	    // Query failure bit set
 	    if(result.queryFailure) {
 	      return callback(MongoError.create(result.documents[0]), null);
 	    }
-
-	    // Store the connection for usage with getMore command
-	    self.connection = result.connection;
 
 	    // Check if we have a command cursor
 	    if(Array.isArray(result.documents) && result.documents.length == 1
@@ -34442,16 +33875,11 @@
 	    queryCallback.documentsReturnedIn = self.query.documentsReturnedIn;
 	  }
 
-	  // Add promote Long value if defined
-	  if(typeof self.cursorState.promoteLongs == 'boolean') {
-	    queryCallback.promoteLongs = self.cursorState.promoteLongs;
-	  }
-
 	  // Set up callback
 	  self.callbacks.register(self.query.requestId, queryCallback);
 
 	  // Write the initial command out
-	  self.pool.write(self.query.toBin(), queryCallback);
+	  self.connection.write(self.query.toBin());
 	}
 
 	Cursor.prototype._getmore = function(callback) {
@@ -34466,20 +33894,8 @@
 	    batchSize = this.cursorState.limit - this.cursorState.currentLimit;
 	  }
 
-	  // Default pool
-	  var pool = this.pool;
-	  // If we have a connection get the corresponding pool
-	  if(this.connection && this.connection.isConnected()) {
-	    // Get the server
-	    var server = this.topology.getServerFrom(this.connection);
-	    // Get the pool
-	    if(server && server.s.pool) {
-	      pool = server.s.pool;
-	    }
-	  }
-
 	  // We have a wire protocol handler
-	  this.server.wireProtocolHandler.getMore(this.bson, this.ns, this.cursorState, batchSize, raw, pool, this.callbacks, this.options, callback);
+	  this.server.wireProtocolHandler.getMore(this.bson, this.ns, this.cursorState, batchSize, raw, this.connection, this.callbacks, this.options, callback);
 	}
 
 	Cursor.prototype._killcursor = function(callback) {
@@ -34495,20 +33911,8 @@
 	    return;
 	  }
 
-	  // Default pool
-	  var pool = this.pool;
-	  // If we have a connection get the corresponding pool
-	  if(this.connection && this.connection.isConnected()) {
-	    // Get the server
-	    var server = this.topology.getServerFrom(this.connection);
-	    // Get the pool
-	    if(server && server.s.pool) {
-	      pool = server.s.pool;
-	    }
-	  }
-
 	  // Execute command
-	  this.server.wireProtocolHandler.killCursor(this.bson, this.ns, this.cursorState.cursorId, pool, this.callbacks, callback);
+	  this.server.wireProtocolHandler.killCursor(this.bson, this.ns, this.cursorState.cursorId, this.connection, this.callbacks, callback);
 	}
 
 	/**
@@ -34621,16 +34025,16 @@
 	}
 
 	/**
-	 * Validate if the pool is dead and return error
+	 * Validate if the connection is dead and return error
 	 */
 	var isConnectionDead = function(self, callback) {
-	  if(self.pool
-	    && !self.pool.isConnected()) {
+	  if(self.connection
+	    && !self.connection.isConnected()) {
 	    self.cursorState.notified = true;
 	    self.cursorState.killed = true;
 	    self.cursorState.documents = [];
 	    self.cursorState.cursorIndex = 0;
-	    callback(MongoError.create(f('connection to host %s:%s was destroyed', self.pool.host, self.pool.port)))
+	    callback(MongoError.create(f('connection to host %s:%s was destroyed', self.connection.host, self.connection.port)))
 	    return true;
 	  }
 
@@ -34702,9 +34106,9 @@
 	  handleCallback(callback, null, null);
 	}
 
-	var push = Array.prototype.push;
-
 	var nextFunction = function(self, callback) {
+	  // Exhaust message and cursor already finished and notified
+	  if(self.cmd.exhaust && self.cursorState.notified) return;
 	  // We have notified about it
 	  if(self.cursorState.notified) {
 	    return callback(new Error('cursor is exhausted'));
@@ -34730,17 +34134,11 @@
 	    try {
 	      // Get a server
 	      self.server = self.topology.getServer(self.options);
-	      // Get a reference to the pool
-	      self.pool = self.server.s.pool;
+	      // Get a connection
+	      self.connection = self.server.getConnection();
 	      // Get the callbacks
 	      self.callbacks = self.server.getCallbacks();
 	    } catch(err) {
-	      // Handle the error and add object to next method call
-	      if(self.disconnectHandler != null) {
-	        return self.disconnectHandler.addObjectAndMethod('cursor', self, 'next', [callback], callback);
-	      }
-
-	      // Otherwise return the error
 	      return callback(err);
 	    }
 
@@ -34748,15 +34146,63 @@
 	    self.cursorState.init = true;
 
 	    try {
+	      // Get the right wire protocol command
 	      self.query = self.server.wireProtocolHandler.command(self.bson, self.ns, self.cmd, self.cursorState, self.topology, self.options);
 	    } catch(err) {
 	      return callback(err);
 	    }
 	  }
 
+	  // Process exhaust messages
+	  var processExhaustMessages = function(err, result) {
+	    if(err) {
+	      self.cursorState.dead = true;
+	      self.callbacks.unregister(self.query.requestId);
+	      return callback(err);
+	    }
+
+	    // Concatenate all the documents
+	    self.cursorState.documents = self.cursorState.documents.concat(result.documents);
+
+	    // If we have no documents left
+	    if(Long.ZERO.equals(result.cursorId)) {
+	      self.cursorState.cursorId = Long.ZERO;
+	      self.callbacks.unregister(self.query.requestId);
+	      return nextFunction(self, callback);
+	    }
+
+	    // Set up next listener
+	    self.callbacks.register(result.requestId, processExhaustMessages)
+
+	    // Initial result
+	    if(self.cursorState.cursorId == null) {
+	      self.cursorState.cursorId = result.cursorId;
+	      self.cursorState.lastCursorId = result.cursorId;
+	      nextFunction(self, callback);
+	    }
+	  }
+
+	  // If we have exhaust
+	  if(self.cmd.exhaust && self.cursorState.cursorId == null) {
+	    // Handle all the exhaust responses
+	    self.callbacks.register(self.query.requestId, processExhaustMessages);
+	    // Write the initial command out
+	    return self.connection.write(self.query.toBin());
+	  } else if(self.cmd.exhaust && self.cursorState.cursorIndex < self.cursorState.documents.length) {
+	    return handleCallback(callback, null, self.cursorState.documents[self.cursorState.cursorIndex++]);
+	  } else if(self.cmd.exhaust && Long.ZERO.equals(self.cursorState.cursorId)) {
+	    self.callbacks.unregister(self.query.requestId);
+	    return setCursorNotified(self, callback);
+	  } else if(self.cmd.exhaust) {
+	    return setTimeout(function() {
+	      if(Long.ZERO.equals(self.cursorState.cursorId)) return;
+	      nextFunction(self, callback);
+	    }, 1);
+	  }
+
 	  // If we don't have a cursorId execute the first query
 	  if(self.cursorState.cursorId == null) {
-	    // Check if pool is dead and return if not possible to
+	    // Check if connection is dead and return if not possible to
 	    // execute the query against the db
 	    if(isConnectionDead(self, callback)) return;
 
@@ -34766,10 +34212,7 @@
 	    // query, cmd, options, cursorState, callback
 	    self._find(function(err, r) {
 	      if(err) return handleCallback(callback, err, null);
-
-	      if(self.cursorState.documents.length == 0
-	        && self.cursorState.cursorId && self.cursorState.cursorId.isZero()
-	        && !self.cmd.tailable && !self.cmd.awaitData) {
+	      if(self.cursorState.documents.length == 0 && !self.cmd.tailable && !self.cmd.awaitData) {
 	        return setCursorNotified(self, callback);
 	      }
 
@@ -34794,35 +34237,24 @@
 	      if(isConnectionDead(self, callback)) return;
 
 	      // Execute the next get more
-	      self._getmore(function(err, doc, connection) {
-	        // General error
-	        // if(err && err.code != 43) return handleCallback(callback, err);
-	        if(err && err.code != 43) return handleCallback(callback, err);
-	        // No cursor found error from mongos
-	        if((err && err.code == 43) || (self.cursorState.documents.length == 0
-	          && Long.ZERO.equals(self.cursorState.cursorId) && !self.cmd.tailable)) {
+	      self._getmore(function(err, doc) {
+	        if(err) return handleCallback(callback, err);
+	        if(self.cursorState.documents.length == 0
+	          && Long.ZERO.equals(self.cursorState.cursorId) && !self.cmd.tailable) {
 	            self.cursorState.dead = true;
 	            // Finished iterating over the cursor
 	            return setCursorDeadAndNotified(self, callback);
 	          }
 
-	        // Save the returned connection to ensure all getMore's fire over the same connection
-	        self.connection = connection;
-
 	        // Tailable cursor getMore result, notify owner about it
 	        // No attempt is made here to retry, this is left to the user of the
 	        // core module to handle to keep core simple
-	        if(self.cursorState.documents.length == 0
-	          && self.cmd.tailable && Long.ZERO.equals(self.cursorState.cursorId)) {
-	          // No more documents in the tailed cursor
+	        if(self.cursorState.documents.length == 0 && self.cmd.tailable) {
 	          return handleCallback(callback, MongoError.create({
 	              message: "No more documents in tailed cursor"
 	            , tailable: self.cmd.tailable
 	            , awaitData: self.cmd.awaitData
 	          }));
-	        } else if(self.cursorState.documents.length == 0
-	          && self.cmd.tailable && !Long.ZERO.equals(self.cursorState.cursorId)) {
-	          return nextFunction(self, callback);
 	        }
 
 	        if(self.cursorState.limit > 0 && self.cursorState.currentLimit >= self.cursorState.limit) {
@@ -34832,7 +34264,7 @@
 	        nextFunction(self, callback);
 	      });
 	  } else if(self.cursorState.documents.length == self.cursorState.cursorIndex
-	    && self.cmd.tailable && Long.ZERO.equals(self.cursorState.cursorId)) {
+	    && self.cmd.tailable) {
 	      return handleCallback(callback, MongoError.create({
 	          message: "No more documents in tailed cursor"
 	        , tailable: self.cmd.tailable
@@ -34947,8 +34379,7 @@
 	  , f = __webpack_require__(10).format
 	  , CommandResult = __webpack_require__(125)
 	  , MongoError = __webpack_require__(95)
-	  , Long = __webpack_require__(102).Long
-	  , getReadPreference = __webpack_require__(128).getReadPreference;
+	  , Long = __webpack_require__(102).Long;
 
 	// Write concern fields
 	var writeConcernFields = ['w', 'wtimeout', 'j', 'fsync'];
@@ -35014,11 +34445,11 @@
 	  return executeOrdered('remove', Remove, ismaster, ns, bson, pool, callbacks, ops, options, callback);
 	}
 
-	WireProtocol.prototype.killCursor = function(bson, ns, cursorId, pool, callbacks, callback) {
+	WireProtocol.prototype.killCursor = function(bson, ns, cursorId, connection, callbacks, callback) {
 	  // Create a kill cursor command
 	  var killCursor = new KillCursor(bson, [cursorId]);
 	  // Execute the kill cursor command
-	  if(pool && pool.isConnected()) pool.write(killCursor.toBin(), callback, {immediateRelease:true});
+	  if(connection && connection.isConnected()) connection.write(killCursor.toBin());
 	  // Set cursor to 0
 	  cursorId = Long.ZERO;
 	  // Return to caller
@@ -35048,7 +34479,7 @@
 	    cursorState.cursorId = cursorId;
 
 	    // Return
-	    callback(null, null, r.connection);
+	    callback(null);
 	  }
 
 	  // If we have a raw query decorate the function
@@ -35056,15 +34487,10 @@
 	    queryCallback.raw = raw;
 	  }
 
-	  // Check if we need to promote longs
-	  if(typeof cursorState.promoteLongs == 'boolean') {
-	    queryCallback.promoteLongs = cursorState.promoteLongs;
-	  }
-
 	  // Register a callback
 	  callbacks.register(getMore.requestId, queryCallback);
 	  // Write out the getMore command
-	  connection.write(getMore.toBin(), queryCallback);
+	  connection.write(getMore.toBin());
 	}
 
 	WireProtocol.prototype.command = function(bson, ns, cmd, cursorState, topology, options) {
@@ -35082,10 +34508,17 @@
 	//
 	// Execute a find command
 	var setupClassicFind = function(bson, ns, cmd, cursorState, topology, options) {
+	  var readPreference = options.readPreference || new ReadPreference('primary');
+	  if(typeof readPreference == 'string') readPreference = new ReadPreference(readPreference);
+	  if(!(readPreference instanceof ReadPreference)) throw new MongoError('readPreference must be a ReadPreference instance');
+
+	  // Does the cmd have a readPreference
+	  if(cmd.readPreference) {
+	    readPreference = cmd.readPreference;
+	  }
+
 	  // Ensure we have at least some options
 	  options = options || {};
-	  // Get the readPreference
-	  var readPreference = getReadPreference(cmd, options);
 	  // Set the optional batchSize
 	  cursorState.batchSize = cmd.batchSize || cursorState.batchSize;
 	  var numberToReturn = 0;
@@ -35170,6 +34603,7 @@
 	  if(typeof cmd.oplogReplay == 'boolean') query.oplogReplay = cmd.oplogReplay;
 	  if(typeof cmd.noCursorTimeout == 'boolean') query.noCursorTimeout = cmd.noCursorTimeout;
 	  if(typeof cmd.awaitData == 'boolean') query.awaitData = cmd.awaitData;
+	  if(typeof cmd.exhaust == 'boolean') query.exhaust = cmd.exhaust;
 	  if(typeof cmd.partial == 'boolean') query.partial = cmd.partial;
 	  // Return the query
 	  return query;
@@ -35178,10 +34612,18 @@
 	//
 	// Set up a command cursor
 	var setupCommand = function(bson, ns, cmd, cursorState, topology, options) {
+	  var readPreference = options.readPreference || new ReadPreference('primary');
+	  if(typeof readPreference == 'string') readPreference = new ReadPreference(readPreference);
+	  if(!(readPreference instanceof ReadPreference)) throw new MongoError('readPreference must be a ReadPreference instance');
+
+	  // Does the cmd have a readPreference
+	  if(cmd.readPreference) {
+	    readPreference = cmd.readPreference;
+	  }
+
 	  // Set empty options object
 	  options = options || {}
-	  // Get the readPreference
-	  var readPreference = getReadPreference(cmd, options);
+
 	  // Final query
 	  var finalCmd = {};
 	  for(var name in cmd) {
@@ -35346,15 +34788,18 @@
 
 	  // Execute an operation
 	  var executeOp = function(list, _callback) {
+	    // Get a pool connection
+	    var connection = pool.get();
 	    // No more items in the list
 	    if(list.length == 0) {
 	      return process.nextTick(function() {
-	        _callback(null, aggregateWriteOperationResults(opType, ops, getLastErrors, null));
+	        _callback(null, aggregateWriteOperationResults(opType, ops, getLastErrors, connection));
 	      });
 	    }
 
 	    // Get the first operation
 	    var doc = list.shift();
+
 	    // Create an insert command
 	    var op = new command(Query.getRequestId(), ismaster, bson, ns, [doc], options);
 	    // Write concern
@@ -35365,49 +34810,39 @@
 	    // Get the db name
 	    var db = ns.split('.').shift();
 
+	    // Error out if no connection available
+	    if(connection == null)
+	      return _callback(new MongoError("no connection available"));
+
 	    try {
-	      // Add binary message to list of commands to execute
-	      var commands = [op.toBin()];
+	      // Execute the insert
+	      connection.write(op.toBin());
 
 	      // If write concern 0 don't fire getLastError
 	      if(hasWriteConcern(writeConcern)) {
 	        var getLastErrorCmd = {getlasterror: 1};
 	        // Merge all the fields
 	        for(var i = 0; i < writeConcernFields.length; i++) {
-	          if(writeConcern[writeConcernFields[i]] != null) {
+	          if(writeConcern[writeConcernFields[i]] != null)
 	            getLastErrorCmd[writeConcernFields[i]] = writeConcern[writeConcernFields[i]];
-	          }
 	        }
 
 	        // Create a getLastError command
 	        var getLastErrorOp = new Query(bson, f("%s.$cmd", db), getLastErrorCmd, {numberToReturn: -1});
-	        // Add getLastError command to list of ops to execute
-	        commands.push(getLastErrorOp.toBin());
-
-	        // getLastError callback
-	        var getLastErrorCallback = function(err, result) {
+	        // Write the lastError message
+	        connection.write(getLastErrorOp.toBin());
+	        // Register the callback
+	        callbacks.register(getLastErrorOp.requestId, function(err, result) {
 	          if(err) return callback(err);
 	          // Get the document
 	          var doc = result.documents[0];
 	          // Save the getLastError document
 	          getLastErrors.push(doc);
-
 	          // If we have an error terminate
-	          if(doc.ok == 0 || doc.err || doc.errmsg) {
-	            return callback(null, aggregateWriteOperationResults(opType, ops, getLastErrors, result.connection));
-	          }
-
+	          if(doc.ok == 0 || doc.err || doc.errmsg) return callback(null, aggregateWriteOperationResults(opType, ops, getLastErrors, connection));
 	          // Execute the next op in the list
 	          executeOp(list, callback);
-	        }
-
-	        // Register the callback
-	        callbacks.register(getLastErrorOp.requestId, getLastErrorCallback);
-	        // Write both commands out at the same time
-	        pool.write(commands, getLastErrorCallback);
-	      } else {
-	        // Write both commands out at the same time
-	        pool.write(commands, callback, {immediateRelease:true});
+	        });
 	      }
 	    } catch(err) {
 	      if(typeof err == 'string') err = new MongoError(err);
@@ -35416,7 +34851,7 @@
 	      getLastErrors.push({ ok: 1, errmsg: err.message, code: 14 });
 	      // Return due to an error
 	      process.nextTick(function() {
-	        callback(null, aggregateWriteOperationResults(opType, ops, getLastErrors, null));
+	        callback(null, aggregateWriteOperationResults(opType, ops, getLastErrors, connection));
 	      });
 	    }
 	  }
@@ -35446,9 +34881,19 @@
 	    // Get db name
 	    var db = ns.split('.').shift();
 
+	    // Get a pool connection
+	    var connection = pool.get();
+
+	    // Error out if no connection available
+	    if(connection == null) {
+	      return process.nextTick(function() {
+	        _callback(new MongoError("no connection available"));
+	      });
+	    }
+
 	    try {
-	      // Add binary message to list of commands to execute
-	      var commands = [op.toBin()];
+	      // Execute the insert
+	      connection.write(op.toBin());
 
 	      // If write concern 0 don't fire getLastError
 	      if(hasWriteConcern(writeConcern)) {
@@ -35461,8 +34906,8 @@
 
 	        // Create a getLastError command
 	        var getLastErrorOp = new Query(bson, f("%s.$cmd", db), getLastErrorCmd, {numberToReturn: -1});
-	        // Add getLastError command to list of ops to execute
-	        commands.push(getLastErrorOp.toBin());
+	        // Write the lastError message
+	        connection.write(getLastErrorOp.toBin());
 
 	        // Give the result from getLastError the right index
 	        var callbackOp = function(_index) {
@@ -35476,7 +34921,7 @@
 	            if(totalOps == 0) {
 	              process.nextTick(function() {
 	                if(error) return callback(error);
-	                callback(null, aggregateWriteOperationResults(opType, ops, getLastErrors, result.connection));
+	                callback(null, aggregateWriteOperationResults(opType, ops, getLastErrors, connection));
 	              });
 	            }
 	          }
@@ -35484,11 +34929,6 @@
 
 	        // Register the callback
 	        callbacks.register(getLastErrorOp.requestId, callbackOp(i));
-	        // Write both commands out at the same time
-	        pool.write(commands, callbackOp(i));
-	      } else {
-	        // Write both commands out at the same time
-	        pool.write(commands, callback, {immediateRelease:true});
 	      }
 	    } catch(err) {
 	      if(typeof err == 'string') err = new MongoError(err);
@@ -35499,7 +34939,7 @@
 	      getLastErrors[i] = { ok: 1, errmsg: err.message, code: 14 };
 	      // Check if we are done
 	      if(totalOps == 0) {
-	        callback(null, aggregateWriteOperationResults(opType, ops, getLastErrors, null));
+	        callback(null, aggregateWriteOperationResults(opType, ops, getLastErrors, connection));
 	      }
 	    }
 	  }
@@ -35881,36 +35321,6 @@
 /* 128 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ReadPreference = __webpack_require__(123);
-
-	var getReadPreference = function(cmd, options) {
-	  // Default to command version of the readPreference
-	  var readPreference = cmd.readPreference || new ReadPreference('primary');
-	  // If we have an option readPreference override the command one
-	  if(options.readPreference) {
-	    readPreference = options.readPreference;
-	  }
-
-	  if(typeof readPreference == 'string') {
-	    readPreference = new ReadPreference(readPreference);
-	  }
-
-	  if(!(readPreference instanceof ReadPreference)) {
-	    throw new MongoError('readPreference must be a ReadPreference instance');
-	  }
-
-	  return readPreference;
-	}
-
-	module.exports = {
-	  getReadPreference: getReadPreference
-	}
-
-
-/***/ },
-/* 129 */
-/***/ function(module, exports, __webpack_require__) {
-
 	"use strict";
 
 	var Insert = __webpack_require__(127).Insert
@@ -35925,8 +35335,7 @@
 	  , f = __webpack_require__(10).format
 	  , CommandResult = __webpack_require__(125)
 	  , MongoError = __webpack_require__(95)
-	  , Long = __webpack_require__(102).Long
-	  , getReadPreference = __webpack_require__(128).getReadPreference;
+	  , Long = __webpack_require__(102).Long;
 
 	var WireProtocol = function() {}
 
@@ -35982,11 +35391,11 @@
 	  executeWrite(topology, 'delete', 'deletes', ns, ops, options, callback);
 	}
 
-	WireProtocol.prototype.killCursor = function(bson, ns, cursorId, pool, callbacks, callback) {
+	WireProtocol.prototype.killCursor = function(bson, ns, cursorId, connection, callbacks, callback) {
 	  // Create a kill cursor command
 	  var killCursor = new KillCursor(bson, [cursorId]);
 	  // Execute the kill cursor command
-	  if(pool && pool.isConnected()) pool.write(killCursor.toBin(), callback, {immediateRelease:true});
+	  if(connection && connection.isConnected()) connection.write(killCursor.toBin());
 	  // Set cursor to 0
 	  cursorId = Long.ZERO;
 	  // Return to caller
@@ -36016,7 +35425,7 @@
 	    cursorState.cursorId = cursorId;
 
 	    // Return
-	    callback(null, null, r.connection);
+	    callback(null);
 	  }
 
 	  // If we have a raw query decorate the function
@@ -36024,15 +35433,10 @@
 	    queryCallback.raw = raw;
 	  }
 
-	  // Check if we need to promote longs
-	  if(typeof cursorState.promoteLongs == 'boolean') {
-	    queryCallback.promoteLongs = cursorState.promoteLongs;
-	  }
-
 	  // Register a callback
 	  callbacks.register(getMore.requestId, queryCallback);
 	  // Write out the getMore command
-	  connection.write(getMore.toBin(), queryCallback);
+	  connection.write(getMore.toBin());
 	}
 
 	WireProtocol.prototype.command = function(bson, ns, cmd, cursorState, topology, options) {
@@ -36050,10 +35454,17 @@
 	//
 	// Execute a find command
 	var setupClassicFind = function(bson, ns, cmd, cursorState, topology, options) {
+	  var readPreference = options.readPreference || new ReadPreference('primary');
+	  if(typeof readPreference == 'string') readPreference = new ReadPreference(readPreference);
+	  if(!(readPreference instanceof ReadPreference)) throw new MongoError('readPreference must be a ReadPreference instance');
+
+	  // Does the cmd have a readPreference
+	  if(cmd.readPreference) {
+	    readPreference = cmd.readPreference;
+	  }
+
 	  // Ensure we have at least some options
 	  options = options || {};
-	  // Get the readPreference
-	  var readPreference = getReadPreference(cmd, options);
 	  // Set the optional batchSize
 	  cursorState.batchSize = cmd.batchSize || cursorState.batchSize;
 	  var numberToReturn = 0;
@@ -36151,6 +35562,10 @@
 	    query.awaitData = cmd.awaitData;
 	  }
 
+	  if(typeof cmd.exhaust == 'boolean') {
+	    query.exhaust = cmd.exhaust;
+	  }
+
 	  if(typeof cmd.partial == 'boolean') {
 	    query.partial = cmd.partial;
 	  }
@@ -36162,10 +35577,17 @@
 	//
 	// Set up a command cursor
 	var setupCommand = function(bson, ns, cmd, cursorState, topology, options) {
+	  var readPreference = options.readPreference || new ReadPreference('primary');
+	  if(typeof readPreference == 'string') readPreference = new ReadPreference(readPreference);
+	  if(!(readPreference instanceof ReadPreference)) throw new MongoError('readPreference must be a ReadPreference instance');
+
+	  // Does the cmd have a readPreference
+	  if(cmd.readPreference) {
+	    readPreference = cmd.readPreference;
+	  }
+
 	  // Set empty options object
 	  options = options || {}
-	  // Get the readPreference
-	  var readPreference = getReadPreference(cmd, options);
 
 	  // Final query
 	  var finalCmd = {};
@@ -36231,7 +35653,7 @@
 
 
 /***/ },
-/* 130 */
+/* 129 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -36248,8 +35670,7 @@
 	  , f = __webpack_require__(10).format
 	  , CommandResult = __webpack_require__(125)
 	  , MongoError = __webpack_require__(95)
-	  , Long = __webpack_require__(102).Long
-	  , getReadPreference = __webpack_require__(128).getReadPreference;
+	  , Long = __webpack_require__(102).Long;
 
 	var WireProtocol = function(legacyWireProtocol) {
 	  this.legacyWireProtocol = legacyWireProtocol;
@@ -36313,7 +35734,7 @@
 	  executeWrite(topology, 'delete', 'deletes', ns, ops, options, callback);
 	}
 
-	WireProtocol.prototype.killCursor = function(bson, ns, cursorId, pool, callbacks, callback) {
+	WireProtocol.prototype.killCursor = function(bson, ns, cursorId, connection, callbacks, callback) {
 	  // Build command namespace
 	  var parts = ns.split(/\./);
 	  // Command namespace
@@ -36334,8 +35755,8 @@
 	  query.slaveOk = true;
 
 	  // Execute the kill cursor command
-	  if(pool && pool.isConnected()) {
-	    pool.write(query.toBin(), callback);
+	  if(connection && connection.isConnected()) {
+	    connection.write(query.toBin());
 	  }
 
 	  // Kill cursor callback
@@ -36353,7 +35774,7 @@
 
 	    if(!Array.isArray(r.documents) || r.documents.length == 0) {
 	      if(typeof callback != 'function') return;
-	      return callback(new MongoError(f('invalid killCursors result returned for cursor id %s', cursorState.cursorId)));
+	      return callback(new MongoError(f('invalid getMore result returned for cursor id %s', cursorState.cursorId)));
 	    }
 
 	    // Return the result
@@ -36367,7 +35788,9 @@
 	}
 
 	WireProtocol.prototype.getMore = function(bson, ns, cursorState, batchSize, raw, connection, callbacks, options, callback) {
-	  options = options || {};
+	  var readPreference = options.readPreference || new ReadPreference('primary');
+	  if(typeof readPreference == 'string') readPreference = new ReadPreference(readPreference);
+	  if(!(readPreference instanceof ReadPreference)) throw new MongoError('readPreference must be a ReadPreference instance');
 	  // Build command namespace
 	  var parts = ns.split(/\./);
 	  // Command namespace
@@ -36406,6 +35829,14 @@
 	      return callback(new MongoError("cursor killed or timed out"), null);
 	    }
 
+	    if(!Array.isArray(r.documents) || r.documents.length == 0)
+	      return callback(new MongoError(f('invalid getMore result returned for cursor id %s', cursorState.cursorId)));
+
+	    // We have an error detected
+	    if(r.documents[0].ok == 0) {
+	      return callback(MongoError.create(r.documents[0]));
+	    }
+
 	    // Raw, return all the extracted documents
 	    if(raw) {
 	      cursorState.documents = r.documents;
@@ -36413,12 +35844,7 @@
 	      return callback(null, r.documents);
 	    }
 
-	    // We have an error detected
-	    if(r.documents[0].ok == 0) {
-	      return callback(MongoError.create(r.documents[0]));
-	    }
-
-	    // Ensure we have a Long valid cursor id
+	    // Ensure we have a Long valie cursor id
 	    var cursorId = typeof r.documents[0].cursor.id == 'number'
 	      ? Long.fromNumber(r.documents[0].cursor.id)
 	      : r.documents[0].cursor.id;
@@ -36428,7 +35854,7 @@
 	    cursorState.cursorId = cursorId;
 
 	    // Return the result
-	    callback(null, r.documents[0], r.connection);
+	    callback(null, r.documents[0]);
 	  }
 
 	  // If we have a raw query decorate the function
@@ -36439,20 +35865,19 @@
 	  // Add the result field needed
 	  queryCallback.documentsReturnedIn = 'nextBatch';
 
-	  // Check if we need to promote longs
-	  if(typeof cursorState.promoteLongs == 'boolean') {
-	    queryCallback.promoteLongs = cursorState.promoteLongs;
-	  }
-
 	  // Register a callback
 	  callbacks.register(query.requestId, queryCallback);
 	  // Write out the getMore command
-	  connection.write(query.toBin(), queryCallback);
+	  connection.write(query.toBin());
 	}
 
 	WireProtocol.prototype.command = function(bson, ns, cmd, cursorState, topology, options) {
 	  // Establish type of command
 	  if(cmd.find) {
+	    if(cmd.exhaust) {
+	      return this.legacyWireProtocol.command(bson, ns, cmd, cursorState, topology, options);
+	    }
+
 	    // Create the find command
 	    var query = executeFindCommand(bson, ns, cmd, cursorState, topology, options)
 	    // Mark the cmd as virtual
@@ -36527,10 +35952,17 @@
 	//
 	// Execute a find command
 	var executeFindCommand = function(bson, ns, cmd, cursorState, topology, options) {
+	  var readPreference = options.readPreference || new ReadPreference('primary');
+	  if(typeof readPreference == 'string') readPreference = new ReadPreference(readPreference);
+	  if(!(readPreference instanceof ReadPreference)) throw new MongoError('readPreference must be a ReadPreference instance');
+
+	  // Does the cmd have a readPreference
+	  if(cmd.readPreference) {
+	    readPreference = cmd.readPreference;
+	  }
+
 	  // Ensure we have at least some options
 	  options = options || {};
-	  // Get the readPreference
-	  var readPreference = getReadPreference(cmd, options);
 	  // Set the optional batchSize
 	  cursorState.batchSize = cmd.batchSize || cursorState.batchSize;
 
@@ -36545,14 +35977,7 @@
 	  };
 
 	  // I we provided a filter
-	  if(cmd.query) {
-	    // Check if the user is passing in the $query parameter
-	    if(cmd.query['$query']) {
-	      findCmd.filter = cmd.query['$query'];
-	    } else {
-	      findCmd.filter = cmd.query;
-	    }
-	  }
+	  if(cmd.query) findCmd.filter = cmd.query;
 
 	  // Sort value
 	  var sortValue = cmd.sort;
@@ -36693,10 +36118,12 @@
 	//
 	// Set up a command cursor
 	var setupCommand = function(bson, ns, cmd, cursorState, topology, options) {
+	  var readPreference = options.readPreference || new ReadPreference('primary');
+	  if(typeof readPreference == 'string') readPreference = new ReadPreference(readPreference);
+	  if(!(readPreference instanceof ReadPreference)) throw new MongoError('readPreference must be a ReadPreference instance');
+
 	  // Set empty options object
 	  options = options || {}
-	  // Get the readPreference
-	  var readPreference = getReadPreference(cmd, options);
 
 	  // Final query
 	  var finalCmd = {};
@@ -36755,7 +36182,7 @@
 
 
 /***/ },
-/* 131 */
+/* 130 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -36853,7 +36280,7 @@
 	module.exports = Session;
 
 /***/ },
-/* 132 */
+/* 131 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -36869,9 +36296,9 @@
 	}
 
 	AuthSession.prototype.equal = function(session) {
-	  return session.db == this.db
+	  return session.db == this.db 
 	    && session.username == this.username
-	    && session.password == this.password;
+	    && session.password == this.password;  
 	}
 
 	/**
@@ -36901,15 +36328,17 @@
 	 * Authenticate
 	 * @method
 	 * @param {{Server}|{ReplSet}|{Mongos}} server Topology the authentication method is being called on
-	 * @param {[]Connections} connections Connections to authenticate using this authenticator
+	 * @param {Pool} pool Connection pool for this topology
 	 * @param {string} db Name of the database
 	 * @param {string} username Username
 	 * @param {string} password Password
 	 * @param {authResultCallback} callback The callback to return the result from the authentication
 	 * @return {object}
 	 */
-	MongoCR.prototype.auth = function(server, connections, db, username, password, callback) {
+	MongoCR.prototype.auth = function(server, pool, db, username, password, callback) {
 	  var self = this;
+	  // Get all the connections
+	  var connections = pool.getAll();
 	  // Total connections
 	  var count = connections.length;
 	  if(count == 0) return callback(null, null);
@@ -36920,7 +36349,7 @@
 	  var errorObject = null;
 
 	  // For each connection we need to authenticate
-	  while(connections.length > 0) {
+	  while(connections.length > 0) {    
 	    // Execute MongoCR
 	    var executeMongoCR = function(connection) {
 	      // Let's start the process
@@ -36929,7 +36358,7 @@
 	        , { connection: connection }, function(err, r) {
 	          var nonce = null;
 	          var key = null;
-
+	          
 	          // Adjust the number of connections left
 	          // Get nonce
 	          if(err == null) {
@@ -36937,11 +36366,11 @@
 	            // Use node md5 generator
 	            var md5 = crypto.createHash('md5');
 	            // Generate keys used for authentication
-	            md5.update(username + ":mongo:" + password, 'utf8');
+	            md5.update(username + ":mongo:" + password);
 	            var hash_password = md5.digest('hex');
 	            // Final key
 	            md5 = crypto.createHash('md5');
-	            md5.update(nonce + username + hash_password, 'utf8');
+	            md5.update(nonce + username + hash_password);
 	            key = md5.digest('hex');
 	          }
 
@@ -36977,13 +36406,8 @@
 	      });
 	    }
 
-	    var _execute = function(_connection) {
-	      process.nextTick(function() {
-	        executeMongoCR(_connection);
-	      });
-	    }
-
-	    _execute(connections.shift());
+	    // Get the connection
+	    executeMongoCR(connections.shift());
 	  }
 	}
 
@@ -36991,23 +36415,20 @@
 	 * Re authenticate pool
 	 * @method
 	 * @param {{Server}|{ReplSet}|{Mongos}} server Topology the authentication method is being called on
-	 * @param {[]Connections} connections Connections to authenticate using this authenticator
+	 * @param {Pool} pool Connection pool for this topology
 	 * @param {authResultCallback} callback The callback to return the result from the authentication
 	 * @return {object}
 	 */
-	MongoCR.prototype.reauthenticate = function(server, connections, callback) {
-	  var authStore = this.authStore.slice(0);
-	  var err = null;
-	  var count = authStore.length;
+	MongoCR.prototype.reauthenticate = function(server, pool, callback) {
+	  var count = this.authStore.length;
 	  if(count == 0) return callback(null, null);
 	  // Iterate over all the auth details stored
-	  for(var i = 0; i < authStore.length; i++) {
-	    this.auth(server, connections, authStore[i].db, authStore[i].username, authStore[i].password, function(err, r) {
-	      if(err) err = err;
+	  for(var i = 0; i < this.authStore.length; i++) {
+	    this.auth(server, pool, this.authStore[i].db, this.authStore[i].username, this.authStore[i].password, function(err, r) {
 	      count = count - 1;
 	      // Done re-authenticating
 	      if(count == 0) {
-	        callback(err, null);
+	        callback(null, null);
 	      }
 	    });
 	  }
@@ -37023,9 +36444,8 @@
 
 	module.exports = MongoCR;
 
-
 /***/ },
-/* 133 */
+/* 132 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -37041,7 +36461,7 @@
 	}
 
 	AuthSession.prototype.equal = function(session) {
-	  return session.db == this.db
+	  return session.db == this.db 
 	    && session.username == this.username
 	    && session.password == this.password;
 	}
@@ -37059,15 +36479,17 @@
 	 * Authenticate
 	 * @method
 	 * @param {{Server}|{ReplSet}|{Mongos}} server Topology the authentication method is being called on
-	 * @param {[]Connections} connections Connections to authenticate using this authenticator
+	 * @param {Pool} pool Connection pool for this topology
 	 * @param {string} db Name of the database
 	 * @param {string} username Username
 	 * @param {string} password Password
 	 * @param {authResultCallback} callback The callback to return the result from the authentication
 	 * @return {object}
 	 */
-	X509.prototype.auth = function(server, connections, db, username, password, callback) {
+	X509.prototype.auth = function(server, pool, db, username, password, callback) {
 	  var self = this;
+	  // Get all the connections
+	  var connections = pool.getAll();
 	  // Total connections
 	  var count = connections.length;
 	  if(count == 0) return callback(null, null);
@@ -37078,7 +36500,7 @@
 	  var errorObject = null;
 
 	  // For each connection we need to authenticate
-	  while(connections.length > 0) {
+	  while(connections.length > 0) {    
 	    // Execute MongoCR
 	    var execute = function(connection) {
 	      // Let's start the sasl process
@@ -37120,13 +36542,8 @@
 	      });
 	    }
 
-	    var _execute = function(_connection) {
-	      process.nextTick(function() {
-	        execute(_connection);
-	      });
-	    }
-
-	    _execute(connections.shift());
+	    // Get the connection
+	    execute(connections.shift());
 	  }
 	}
 
@@ -37148,23 +36565,20 @@
 	 * Re authenticate pool
 	 * @method
 	 * @param {{Server}|{ReplSet}|{Mongos}} server Topology the authentication method is being called on
-	 * @param {[]Connections} connections Connections to authenticate using this authenticator
+	 * @param {Pool} pool Connection pool for this topology
 	 * @param {authResultCallback} callback The callback to return the result from the authentication
 	 * @return {object}
 	 */
-	X509.prototype.reauthenticate = function(server, connections, callback) {
-	  var authStore = this.authStore.slice(0);
-	  var err = null;
-	  var count = authStore.length;
+	X509.prototype.reauthenticate = function(server, pool, callback) {
+	  var count = this.authStore.length;
 	  if(count == 0) return callback(null, null);
 	  // Iterate over all the auth details stored
-	  for(var i = 0; i < authStore.length; i++) {
-	    this.auth(server, connections, authStore[i].db, authStore[i].username, authStore[i].password, function(err, r) {
-	      if(err) err = err;
+	  for(var i = 0; i < this.authStore.length; i++) {
+	    this.auth(server, pool, this.authStore[i].db, this.authStore[i].username, this.authStore[i].password, function(err, r) {
 	      count = count - 1;
 	      // Done re-authenticating
 	      if(count == 0) {
-	        callback(err, null);
+	        callback(null, null);
 	      }
 	    });
 	  }
@@ -37180,9 +36594,8 @@
 
 	module.exports = X509;
 
-
 /***/ },
-/* 134 */
+/* 133 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -37199,7 +36612,7 @@
 	}
 
 	AuthSession.prototype.equal = function(session) {
-	  return session.db == this.db
+	  return session.db == this.db 
 	    && session.username == this.username
 	    && session.password == this.password;
 	}
@@ -37217,15 +36630,17 @@
 	 * Authenticate
 	 * @method
 	 * @param {{Server}|{ReplSet}|{Mongos}} server Topology the authentication method is being called on
-	 * @param {[]Connections} connections Connections to authenticate using this authenticator
+	 * @param {Pool} pool Connection pool for this topology
 	 * @param {string} db Name of the database
 	 * @param {string} username Username
 	 * @param {string} password Password
 	 * @param {authResultCallback} callback The callback to return the result from the authentication
 	 * @return {object}
 	 */
-	Plain.prototype.auth = function(server, connections, db, username, password, callback) {
+	Plain.prototype.auth = function(server, pool, db, username, password, callback) {
 	  var self = this;
+	  // Get all the connections
+	  var connections = pool.getAll();
 	  // Total connections
 	  var count = connections.length;
 	  if(count == 0) return callback(null, null);
@@ -37236,7 +36651,7 @@
 	  var errorObject = null;
 
 	  // For each connection we need to authenticate
-	  while(connections.length > 0) {
+	  while(connections.length > 0) {    
 	    // Execute MongoCR
 	    var execute = function(connection) {
 	      // Create payload
@@ -37282,13 +36697,8 @@
 	      });
 	    }
 
-	    var _execute = function(_connection) {
-	      process.nextTick(function() {
-	        execute(_connection);
-	      });
-	    }
-
-	    _execute(connections.shift());
+	    // Get the connection
+	    execute(connections.shift());
 	  }
 	}
 
@@ -37310,23 +36720,20 @@
 	 * Re authenticate pool
 	 * @method
 	 * @param {{Server}|{ReplSet}|{Mongos}} server Topology the authentication method is being called on
-	 * @param {[]Connections} connections Connections to authenticate using this authenticator
+	 * @param {Pool} pool Connection pool for this topology
 	 * @param {authResultCallback} callback The callback to return the result from the authentication
 	 * @return {object}
 	 */
-	Plain.prototype.reauthenticate = function(server, connections, callback) {
-	  var authStore = this.authStore.slice(0);
-	  var err = null;
-	  var count = authStore.length;
+	Plain.prototype.reauthenticate = function(server, pool, callback) {
+	  var count = this.authStore.length;
 	  if(count == 0) return callback(null, null);
 	  // Iterate over all the auth details stored
-	  for(var i = 0; i < authStore.length; i++) {
-	    this.auth(server, connections, authStore[i].db, authStore[i].username, authStore[i].password, function(err, r) {
-	      if(err) err = err;
+	  for(var i = 0; i < this.authStore.length; i++) {
+	    this.auth(server, pool, this.authStore[i].db, this.authStore[i].username, this.authStore[i].password, function(err, r) {
 	      count = count - 1;
 	      // Done re-authenticating
 	      if(count == 0) {
-	        callback(err, null);
+	        callback(null, null);
 	      }
 	    });
 	  }
@@ -37342,16 +36749,14 @@
 
 	module.exports = Plain;
 
-
 /***/ },
-/* 135 */
+/* 134 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var f = __webpack_require__(10).format
 	  , crypto = __webpack_require__(56)
-	  , require_optional = __webpack_require__(136)
 	  , MongoError = __webpack_require__(95);
 
 	var AuthSession = function(db, username, password, options) {
@@ -37362,7 +36767,7 @@
 	}
 
 	AuthSession.prototype.equal = function(session) {
-	  return session.db == this.db
+	  return session.db == this.db 
 	    && session.username == this.username
 	    && session.password == this.password;
 	}
@@ -37373,9 +36778,9 @@
 
 	// Try to grab the Kerberos class
 	try {
-	  Kerberos = require_optional('kerberos').Kerberos;
+	  Kerberos = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"kerberos\""); e.code = 'MODULE_NOT_FOUND'; throw e; }())).Kerberos
 	  // Authentication process for Mongo
-	  MongoAuthProcess = require_optional('kerberos').processes.MongoAuthProcess
+	  MongoAuthProcess = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"kerberos\""); e.code = 'MODULE_NOT_FOUND'; throw e; }())).processes.MongoAuthProcess
 	} catch(err) {}
 
 	/**
@@ -37391,18 +36796,20 @@
 	 * Authenticate
 	 * @method
 	 * @param {{Server}|{ReplSet}|{Mongos}} server Topology the authentication method is being called on
-	 * @param {[]Connections} connections Connections to authenticate using this authenticator
+	 * @param {Pool} pool Connection pool for this topology
 	 * @param {string} db Name of the database
 	 * @param {string} username Username
 	 * @param {string} password Password
 	 * @param {authResultCallback} callback The callback to return the result from the authentication
 	 * @return {object}
 	 */
-	GSSAPI.prototype.auth = function(server, connections, db, username, password, options, callback) {
+	GSSAPI.prototype.auth = function(server, pool, db, username, password, options, callback) {
 	  var self = this;
 	  // We don't have the Kerberos library
-	  if(Kerberos == null) return callback(new Error("Kerberos library is not installed"));
+	  if(Kerberos == null) return callback(new Error("Kerberos library is not installed"));  
 	  var gssapiServiceName = options['gssapiServiceName'] || 'mongodb';
+	  // Get all the connections
+	  var connections = pool.getAll();
 	  // Total connections
 	  var count = connections.length;
 	  if(count == 0) return callback(null, null);
@@ -37413,11 +36820,11 @@
 	  var errorObject = null;
 
 	  // For each connection we need to authenticate
-	  while(connections.length > 0) {
+	  while(connections.length > 0) {    
 	    // Execute MongoCR
 	    var execute = function(connection) {
 	      // Start Auth process for a connection
-	      GSSAPIInitialize(db, username, password, db, gssapiServiceName, server, connection, options, function(err, r) {
+	      GSSAPIInitialize(db, username, password, db, gssapiServiceName, server, connection, function(err, r) {
 	        // Adjust count
 	        count = count - 1;
 
@@ -37446,21 +36853,16 @@
 	      });
 	    }
 
-	    var _execute = function(_connection) {
-	      process.nextTick(function() {
-	        execute(_connection);
-	      });
-	    }
-
-	    _execute(connections.shift());
+	    // Get the connection
+	    execute(connections.shift());
 	  }
 	}
 
 	//
 	// Initialize step
-	var GSSAPIInitialize = function(db, username, password, authdb, gssapiServiceName, server, connection, options, callback) {
+	var GSSAPIInitialize = function(db, username, password, authdb, gssapiServiceName, server, connection, callback) {
 	  // Create authenticator
-	  var mongo_auth_process = new MongoAuthProcess(connection.host, connection.port, gssapiServiceName, options);
+	  var mongo_auth_process = new MongoAuthProcess(connection.host, connection.port, gssapiServiceName);
 
 	  // Perform initialization
 	  mongo_auth_process.init(username, password, function(err, context) {
@@ -37491,7 +36893,7 @@
 	  server.command("$external.$cmd"
 	    , command
 	    , { connection: connection }, function(err, r) {
-	    if(err) return callback(err, false);
+	    if(err) return callback(err, false);    
 	    var doc = r.result;
 	    // Execute mongodb transition
 	    mongo_auth_process.transition(r.result.payload, function(err, payload) {
@@ -37525,7 +36927,7 @@
 
 	      // Call the last and third step
 	      MongoDBGSSAPIThirdStep(mongo_auth_process, payload, doc, db, username, password, authdb, server, connection, callback);
-	    });
+	    });    
 	  });
 	}
 
@@ -37567,23 +36969,20 @@
 	 * Re authenticate pool
 	 * @method
 	 * @param {{Server}|{ReplSet}|{Mongos}} server Topology the authentication method is being called on
-	 * @param {[]Connections} connections Connections to authenticate using this authenticator
+	 * @param {Pool} pool Connection pool for this topology
 	 * @param {authResultCallback} callback The callback to return the result from the authentication
 	 * @return {object}
 	 */
-	GSSAPI.prototype.reauthenticate = function(server, connections, callback) {
-	  var authStore = this.authStore.slice(0);
-	  var err = null;
-	  var count = authStore.length;
+	GSSAPI.prototype.reauthenticate = function(server, pool, callback) {
+	  var count = this.authStore.length;
 	  if(count == 0) return callback(null, null);
 	  // Iterate over all the auth details stored
-	  for(var i = 0; i < authStore.length; i++) {
-	    this.auth(server, connections, authStore[i].db, authStore[i].username, authStore[i].password, authStore[i].options, function(err, r) {
-	      if(err) err = err;
+	  for(var i = 0; i < this.authStore.length; i++) {
+	    this.auth(server, pool, this.authStore[i].db, this.authStore[i].username, this.authStore[i].password, this.authStore[i].options, function(err, r) {
 	      count = count - 1;
 	      // Done re-authenticating
 	      if(count == 0) {
-	        callback(err, null);
+	        callback(null, null);
 	      }
 	    });
 	  }
@@ -37599,1563 +36998,14 @@
 
 	module.exports = GSSAPI;
 
-
 /***/ },
-/* 136 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(module) {var path = __webpack_require__(35),
-	  fs = __webpack_require__(13),
-	  f = __webpack_require__(10).format,
-	  resolveFrom = __webpack_require__(137),
-	  semver = __webpack_require__(139);
-
-	var exists = fs.existsSync || path.existsSync;
-
-	var find_package_json = function(location) {
-	  var found = false;
-
-	  while(!found) {
-	    if (exists(location + '/package.json')) {
-	      found = location;
-	    } else if (location !== '/') {
-	      location = path.dirname(location);
-	    } else {
-	      return false;
-	    }
-	  }
-
-	  return location;
-	}
-
-	var require_optional = function(name, options) {
-	  options = options || {};
-	  options.strict = typeof options.strict == 'boolean' ? options.strict : true;
-
-	  // Current location
-	  var location = __dirname;
-	  // Check if we have a parent
-	  if(module.parent) {
-	    location = module.parent.filename;
-	  }
-
-	  // Locate this module's package.json file
-	  var location = find_package_json(location);
-	  if(!location) {
-	    throw new Error('package.json can not be located');
-	  }
-
-	  // Read the package.json file
-	  var object = JSON.parse(fs.readFileSync(f('%s/package.json', location)));
-	  // Is the name defined by interal file references
-	  var parts = name.split(/\//);
-
-	  // Optional dependencies exist
-	  if(!object.peerOptionalDependencies) {
-	    throw new Error(f('no optional dependency [%s] defined in peerOptionalDependencies in package.json', parts[0]));
-	  } else if(object.peerOptionalDependencies && !object.peerOptionalDependencies[parts[0]]) {
-	    throw new Error(f('no optional dependency [%s] defined in peerOptionalDependencies in package.json', parts[0]));
-	  }
-
-	  // Unpack the expected version
-	  var expectedVersions = object.peerOptionalDependencies[parts[0]];
-	  // The resolved package
-	  var moduleEntry = undefined;
-	  // Module file
-	  var moduleEntryFile = name;
-
-	  try {
-	    // Validate if it's possible to read the module
-	    moduleEntry = __webpack_require__(140)(moduleEntryFile);
-	  } catch(err) {
-	    // Attempt to resolve in top level package
-	    try {
-	      // Get the module entry file
-	      moduleEntryFile = resolveFrom(process.cwd(), name);
-	      if(moduleEntryFile == null) return undefined;
-	      // Attempt to resolve the module
-	      moduleEntry = __webpack_require__(140)(moduleEntryFile);
-	    } catch(err) {
-	      if(err.code === 'MODULE_NOT_FOUND') return undefined;
-	    }
-	  }
-
-	  // Resolve the location of the module's package.json file
-	  var location = find_package_json(/*require.resolve*/(__webpack_require__(140).resolve(moduleEntryFile)));
-	  if(!location) {
-	    throw new Error('package.json can not be located');
-	  }
-
-	  // Read the module file
-	  var dependentOnModule = JSON.parse(fs.readFileSync(f('%s/package.json', location)));
-	  // Get the version
-	  var version = dependentOnModule.version;
-	  // Validate if the found module satisfies the version id
-	  if(semver.satisfies(version, expectedVersions) == false
-	    && options.strict) {
-	      var error = new Error(f('optional dependency [%s] found but version [%s] did not satisfy constraint [%s]', parts[0], version, expectedVersions));
-	      error.code = 'OPTIONAL_MODULE_NOT_FOUND';
-	      throw error;
-	  }
-
-	  // Satifies the module requirement
-	  return moduleEntry;
-	}
-
-	require_optional.exists = function(name) {
-	  try {
-	    var m = require_optional(name);
-	    if(m === undefined) return false;
-	    return true;
-	  } catch(err) {
-	    return false;
-	  }
-	}
-
-	module.exports = require_optional;
-
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)(module)))
-
-/***/ },
-/* 137 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	var path = __webpack_require__(35);
-	var Module = __webpack_require__(138);
-
-	module.exports = function (fromDir, moduleId) {
-		if (typeof fromDir !== 'string' || typeof moduleId !== 'string') {
-			throw new TypeError('Expected `fromDir` and `moduleId` to be a string');
-		}
-
-		fromDir = path.resolve(fromDir);
-
-		var fromFile = path.join(fromDir, 'noop.js');
-
-		try {
-			return Module._resolveFilename(moduleId, {
-				id: fromFile,
-				filename: fromFile,
-				paths: Module._nodeModulePaths(fromDir)
-			});
-		} catch (err) {
-			return null;
-		}
-	};
-
-
-/***/ },
-/* 138 */
-/***/ function(module, exports) {
-
-	module.exports = require("module");
-
-/***/ },
-/* 139 */
-/***/ function(module, exports) {
-
-	exports = module.exports = SemVer;
-
-	// The debug function is excluded entirely from the minified version.
-	/* nomin */ var debug;
-	/* nomin */ if (typeof process === 'object' &&
-	    /* nomin */ process.env &&
-	    /* nomin */ process.env.NODE_DEBUG &&
-	    /* nomin */ /\bsemver\b/i.test(process.env.NODE_DEBUG))
-	  /* nomin */ debug = function() {
-	    /* nomin */ var args = Array.prototype.slice.call(arguments, 0);
-	    /* nomin */ args.unshift('SEMVER');
-	    /* nomin */ console.log.apply(console, args);
-	    /* nomin */ };
-	/* nomin */ else
-	  /* nomin */ debug = function() {};
-
-	// Note: this is the semver.org version of the spec that it implements
-	// Not necessarily the package version of this code.
-	exports.SEMVER_SPEC_VERSION = '2.0.0';
-
-	var MAX_LENGTH = 256;
-	var MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991;
-
-	// The actual regexps go on exports.re
-	var re = exports.re = [];
-	var src = exports.src = [];
-	var R = 0;
-
-	// The following Regular Expressions can be used for tokenizing,
-	// validating, and parsing SemVer version strings.
-
-	// ## Numeric Identifier
-	// A single `0`, or a non-zero digit followed by zero or more digits.
-
-	var NUMERICIDENTIFIER = R++;
-	src[NUMERICIDENTIFIER] = '0|[1-9]\\d*';
-	var NUMERICIDENTIFIERLOOSE = R++;
-	src[NUMERICIDENTIFIERLOOSE] = '[0-9]+';
-
-
-	// ## Non-numeric Identifier
-	// Zero or more digits, followed by a letter or hyphen, and then zero or
-	// more letters, digits, or hyphens.
-
-	var NONNUMERICIDENTIFIER = R++;
-	src[NONNUMERICIDENTIFIER] = '\\d*[a-zA-Z-][a-zA-Z0-9-]*';
-
-
-	// ## Main Version
-	// Three dot-separated numeric identifiers.
-
-	var MAINVERSION = R++;
-	src[MAINVERSION] = '(' + src[NUMERICIDENTIFIER] + ')\\.' +
-	                   '(' + src[NUMERICIDENTIFIER] + ')\\.' +
-	                   '(' + src[NUMERICIDENTIFIER] + ')';
-
-	var MAINVERSIONLOOSE = R++;
-	src[MAINVERSIONLOOSE] = '(' + src[NUMERICIDENTIFIERLOOSE] + ')\\.' +
-	                        '(' + src[NUMERICIDENTIFIERLOOSE] + ')\\.' +
-	                        '(' + src[NUMERICIDENTIFIERLOOSE] + ')';
-
-	// ## Pre-release Version Identifier
-	// A numeric identifier, or a non-numeric identifier.
-
-	var PRERELEASEIDENTIFIER = R++;
-	src[PRERELEASEIDENTIFIER] = '(?:' + src[NUMERICIDENTIFIER] +
-	                            '|' + src[NONNUMERICIDENTIFIER] + ')';
-
-	var PRERELEASEIDENTIFIERLOOSE = R++;
-	src[PRERELEASEIDENTIFIERLOOSE] = '(?:' + src[NUMERICIDENTIFIERLOOSE] +
-	                                 '|' + src[NONNUMERICIDENTIFIER] + ')';
-
-
-	// ## Pre-release Version
-	// Hyphen, followed by one or more dot-separated pre-release version
-	// identifiers.
-
-	var PRERELEASE = R++;
-	src[PRERELEASE] = '(?:-(' + src[PRERELEASEIDENTIFIER] +
-	                  '(?:\\.' + src[PRERELEASEIDENTIFIER] + ')*))';
-
-	var PRERELEASELOOSE = R++;
-	src[PRERELEASELOOSE] = '(?:-?(' + src[PRERELEASEIDENTIFIERLOOSE] +
-	                       '(?:\\.' + src[PRERELEASEIDENTIFIERLOOSE] + ')*))';
-
-	// ## Build Metadata Identifier
-	// Any combination of digits, letters, or hyphens.
-
-	var BUILDIDENTIFIER = R++;
-	src[BUILDIDENTIFIER] = '[0-9A-Za-z-]+';
-
-	// ## Build Metadata
-	// Plus sign, followed by one or more period-separated build metadata
-	// identifiers.
-
-	var BUILD = R++;
-	src[BUILD] = '(?:\\+(' + src[BUILDIDENTIFIER] +
-	             '(?:\\.' + src[BUILDIDENTIFIER] + ')*))';
-
-
-	// ## Full Version String
-	// A main version, followed optionally by a pre-release version and
-	// build metadata.
-
-	// Note that the only major, minor, patch, and pre-release sections of
-	// the version string are capturing groups.  The build metadata is not a
-	// capturing group, because it should not ever be used in version
-	// comparison.
-
-	var FULL = R++;
-	var FULLPLAIN = 'v?' + src[MAINVERSION] +
-	                src[PRERELEASE] + '?' +
-	                src[BUILD] + '?';
-
-	src[FULL] = '^' + FULLPLAIN + '$';
-
-	// like full, but allows v1.2.3 and =1.2.3, which people do sometimes.
-	// also, 1.0.0alpha1 (prerelease without the hyphen) which is pretty
-	// common in the npm registry.
-	var LOOSEPLAIN = '[v=\\s]*' + src[MAINVERSIONLOOSE] +
-	                 src[PRERELEASELOOSE] + '?' +
-	                 src[BUILD] + '?';
-
-	var LOOSE = R++;
-	src[LOOSE] = '^' + LOOSEPLAIN + '$';
-
-	var GTLT = R++;
-	src[GTLT] = '((?:<|>)?=?)';
-
-	// Something like "2.*" or "1.2.x".
-	// Note that "x.x" is a valid xRange identifer, meaning "any version"
-	// Only the first item is strictly required.
-	var XRANGEIDENTIFIERLOOSE = R++;
-	src[XRANGEIDENTIFIERLOOSE] = src[NUMERICIDENTIFIERLOOSE] + '|x|X|\\*';
-	var XRANGEIDENTIFIER = R++;
-	src[XRANGEIDENTIFIER] = src[NUMERICIDENTIFIER] + '|x|X|\\*';
-
-	var XRANGEPLAIN = R++;
-	src[XRANGEPLAIN] = '[v=\\s]*(' + src[XRANGEIDENTIFIER] + ')' +
-	                   '(?:\\.(' + src[XRANGEIDENTIFIER] + ')' +
-	                   '(?:\\.(' + src[XRANGEIDENTIFIER] + ')' +
-	                   '(?:' + src[PRERELEASE] + ')?' +
-	                   src[BUILD] + '?' +
-	                   ')?)?';
-
-	var XRANGEPLAINLOOSE = R++;
-	src[XRANGEPLAINLOOSE] = '[v=\\s]*(' + src[XRANGEIDENTIFIERLOOSE] + ')' +
-	                        '(?:\\.(' + src[XRANGEIDENTIFIERLOOSE] + ')' +
-	                        '(?:\\.(' + src[XRANGEIDENTIFIERLOOSE] + ')' +
-	                        '(?:' + src[PRERELEASELOOSE] + ')?' +
-	                        src[BUILD] + '?' +
-	                        ')?)?';
-
-	var XRANGE = R++;
-	src[XRANGE] = '^' + src[GTLT] + '\\s*' + src[XRANGEPLAIN] + '$';
-	var XRANGELOOSE = R++;
-	src[XRANGELOOSE] = '^' + src[GTLT] + '\\s*' + src[XRANGEPLAINLOOSE] + '$';
-
-	// Tilde ranges.
-	// Meaning is "reasonably at or greater than"
-	var LONETILDE = R++;
-	src[LONETILDE] = '(?:~>?)';
-
-	var TILDETRIM = R++;
-	src[TILDETRIM] = '(\\s*)' + src[LONETILDE] + '\\s+';
-	re[TILDETRIM] = new RegExp(src[TILDETRIM], 'g');
-	var tildeTrimReplace = '$1~';
-
-	var TILDE = R++;
-	src[TILDE] = '^' + src[LONETILDE] + src[XRANGEPLAIN] + '$';
-	var TILDELOOSE = R++;
-	src[TILDELOOSE] = '^' + src[LONETILDE] + src[XRANGEPLAINLOOSE] + '$';
-
-	// Caret ranges.
-	// Meaning is "at least and backwards compatible with"
-	var LONECARET = R++;
-	src[LONECARET] = '(?:\\^)';
-
-	var CARETTRIM = R++;
-	src[CARETTRIM] = '(\\s*)' + src[LONECARET] + '\\s+';
-	re[CARETTRIM] = new RegExp(src[CARETTRIM], 'g');
-	var caretTrimReplace = '$1^';
-
-	var CARET = R++;
-	src[CARET] = '^' + src[LONECARET] + src[XRANGEPLAIN] + '$';
-	var CARETLOOSE = R++;
-	src[CARETLOOSE] = '^' + src[LONECARET] + src[XRANGEPLAINLOOSE] + '$';
-
-	// A simple gt/lt/eq thing, or just "" to indicate "any version"
-	var COMPARATORLOOSE = R++;
-	src[COMPARATORLOOSE] = '^' + src[GTLT] + '\\s*(' + LOOSEPLAIN + ')$|^$';
-	var COMPARATOR = R++;
-	src[COMPARATOR] = '^' + src[GTLT] + '\\s*(' + FULLPLAIN + ')$|^$';
-
-
-	// An expression to strip any whitespace between the gtlt and the thing
-	// it modifies, so that `> 1.2.3` ==> `>1.2.3`
-	var COMPARATORTRIM = R++;
-	src[COMPARATORTRIM] = '(\\s*)' + src[GTLT] +
-	                      '\\s*(' + LOOSEPLAIN + '|' + src[XRANGEPLAIN] + ')';
-
-	// this one has to use the /g flag
-	re[COMPARATORTRIM] = new RegExp(src[COMPARATORTRIM], 'g');
-	var comparatorTrimReplace = '$1$2$3';
-
-
-	// Something like `1.2.3 - 1.2.4`
-	// Note that these all use the loose form, because they'll be
-	// checked against either the strict or loose comparator form
-	// later.
-	var HYPHENRANGE = R++;
-	src[HYPHENRANGE] = '^\\s*(' + src[XRANGEPLAIN] + ')' +
-	                   '\\s+-\\s+' +
-	                   '(' + src[XRANGEPLAIN] + ')' +
-	                   '\\s*$';
-
-	var HYPHENRANGELOOSE = R++;
-	src[HYPHENRANGELOOSE] = '^\\s*(' + src[XRANGEPLAINLOOSE] + ')' +
-	                        '\\s+-\\s+' +
-	                        '(' + src[XRANGEPLAINLOOSE] + ')' +
-	                        '\\s*$';
-
-	// Star ranges basically just allow anything at all.
-	var STAR = R++;
-	src[STAR] = '(<|>)?=?\\s*\\*';
-
-	// Compile to actual regexp objects.
-	// All are flag-free, unless they were created above with a flag.
-	for (var i = 0; i < R; i++) {
-	  debug(i, src[i]);
-	  if (!re[i])
-	    re[i] = new RegExp(src[i]);
-	}
-
-	exports.parse = parse;
-	function parse(version, loose) {
-	  if (version instanceof SemVer)
-	    return version;
-
-	  if (typeof version !== 'string')
-	    return null;
-
-	  if (version.length > MAX_LENGTH)
-	    return null;
-
-	  var r = loose ? re[LOOSE] : re[FULL];
-	  if (!r.test(version))
-	    return null;
-
-	  try {
-	    return new SemVer(version, loose);
-	  } catch (er) {
-	    return null;
-	  }
-	}
-
-	exports.valid = valid;
-	function valid(version, loose) {
-	  var v = parse(version, loose);
-	  return v ? v.version : null;
-	}
-
-
-	exports.clean = clean;
-	function clean(version, loose) {
-	  var s = parse(version.trim().replace(/^[=v]+/, ''), loose);
-	  return s ? s.version : null;
-	}
-
-	exports.SemVer = SemVer;
-
-	function SemVer(version, loose) {
-	  if (version instanceof SemVer) {
-	    if (version.loose === loose)
-	      return version;
-	    else
-	      version = version.version;
-	  } else if (typeof version !== 'string') {
-	    throw new TypeError('Invalid Version: ' + version);
-	  }
-
-	  if (version.length > MAX_LENGTH)
-	    throw new TypeError('version is longer than ' + MAX_LENGTH + ' characters')
-
-	  if (!(this instanceof SemVer))
-	    return new SemVer(version, loose);
-
-	  debug('SemVer', version, loose);
-	  this.loose = loose;
-	  var m = version.trim().match(loose ? re[LOOSE] : re[FULL]);
-
-	  if (!m)
-	    throw new TypeError('Invalid Version: ' + version);
-
-	  this.raw = version;
-
-	  // these are actually numbers
-	  this.major = +m[1];
-	  this.minor = +m[2];
-	  this.patch = +m[3];
-
-	  if (this.major > MAX_SAFE_INTEGER || this.major < 0)
-	    throw new TypeError('Invalid major version')
-
-	  if (this.minor > MAX_SAFE_INTEGER || this.minor < 0)
-	    throw new TypeError('Invalid minor version')
-
-	  if (this.patch > MAX_SAFE_INTEGER || this.patch < 0)
-	    throw new TypeError('Invalid patch version')
-
-	  // numberify any prerelease numeric ids
-	  if (!m[4])
-	    this.prerelease = [];
-	  else
-	    this.prerelease = m[4].split('.').map(function(id) {
-	      if (/^[0-9]+$/.test(id)) {
-	        var num = +id;
-	        if (num >= 0 && num < MAX_SAFE_INTEGER)
-	          return num;
-	      }
-	      return id;
-	    });
-
-	  this.build = m[5] ? m[5].split('.') : [];
-	  this.format();
-	}
-
-	SemVer.prototype.format = function() {
-	  this.version = this.major + '.' + this.minor + '.' + this.patch;
-	  if (this.prerelease.length)
-	    this.version += '-' + this.prerelease.join('.');
-	  return this.version;
-	};
-
-	SemVer.prototype.toString = function() {
-	  return this.version;
-	};
-
-	SemVer.prototype.compare = function(other) {
-	  debug('SemVer.compare', this.version, this.loose, other);
-	  if (!(other instanceof SemVer))
-	    other = new SemVer(other, this.loose);
-
-	  return this.compareMain(other) || this.comparePre(other);
-	};
-
-	SemVer.prototype.compareMain = function(other) {
-	  if (!(other instanceof SemVer))
-	    other = new SemVer(other, this.loose);
-
-	  return compareIdentifiers(this.major, other.major) ||
-	         compareIdentifiers(this.minor, other.minor) ||
-	         compareIdentifiers(this.patch, other.patch);
-	};
-
-	SemVer.prototype.comparePre = function(other) {
-	  if (!(other instanceof SemVer))
-	    other = new SemVer(other, this.loose);
-
-	  // NOT having a prerelease is > having one
-	  if (this.prerelease.length && !other.prerelease.length)
-	    return -1;
-	  else if (!this.prerelease.length && other.prerelease.length)
-	    return 1;
-	  else if (!this.prerelease.length && !other.prerelease.length)
-	    return 0;
-
-	  var i = 0;
-	  do {
-	    var a = this.prerelease[i];
-	    var b = other.prerelease[i];
-	    debug('prerelease compare', i, a, b);
-	    if (a === undefined && b === undefined)
-	      return 0;
-	    else if (b === undefined)
-	      return 1;
-	    else if (a === undefined)
-	      return -1;
-	    else if (a === b)
-	      continue;
-	    else
-	      return compareIdentifiers(a, b);
-	  } while (++i);
-	};
-
-	// preminor will bump the version up to the next minor release, and immediately
-	// down to pre-release. premajor and prepatch work the same way.
-	SemVer.prototype.inc = function(release, identifier) {
-	  switch (release) {
-	    case 'premajor':
-	      this.prerelease.length = 0;
-	      this.patch = 0;
-	      this.minor = 0;
-	      this.major++;
-	      this.inc('pre', identifier);
-	      break;
-	    case 'preminor':
-	      this.prerelease.length = 0;
-	      this.patch = 0;
-	      this.minor++;
-	      this.inc('pre', identifier);
-	      break;
-	    case 'prepatch':
-	      // If this is already a prerelease, it will bump to the next version
-	      // drop any prereleases that might already exist, since they are not
-	      // relevant at this point.
-	      this.prerelease.length = 0;
-	      this.inc('patch', identifier);
-	      this.inc('pre', identifier);
-	      break;
-	    // If the input is a non-prerelease version, this acts the same as
-	    // prepatch.
-	    case 'prerelease':
-	      if (this.prerelease.length === 0)
-	        this.inc('patch', identifier);
-	      this.inc('pre', identifier);
-	      break;
-
-	    case 'major':
-	      // If this is a pre-major version, bump up to the same major version.
-	      // Otherwise increment major.
-	      // 1.0.0-5 bumps to 1.0.0
-	      // 1.1.0 bumps to 2.0.0
-	      if (this.minor !== 0 || this.patch !== 0 || this.prerelease.length === 0)
-	        this.major++;
-	      this.minor = 0;
-	      this.patch = 0;
-	      this.prerelease = [];
-	      break;
-	    case 'minor':
-	      // If this is a pre-minor version, bump up to the same minor version.
-	      // Otherwise increment minor.
-	      // 1.2.0-5 bumps to 1.2.0
-	      // 1.2.1 bumps to 1.3.0
-	      if (this.patch !== 0 || this.prerelease.length === 0)
-	        this.minor++;
-	      this.patch = 0;
-	      this.prerelease = [];
-	      break;
-	    case 'patch':
-	      // If this is not a pre-release version, it will increment the patch.
-	      // If it is a pre-release it will bump up to the same patch version.
-	      // 1.2.0-5 patches to 1.2.0
-	      // 1.2.0 patches to 1.2.1
-	      if (this.prerelease.length === 0)
-	        this.patch++;
-	      this.prerelease = [];
-	      break;
-	    // This probably shouldn't be used publicly.
-	    // 1.0.0 "pre" would become 1.0.0-0 which is the wrong direction.
-	    case 'pre':
-	      if (this.prerelease.length === 0)
-	        this.prerelease = [0];
-	      else {
-	        var i = this.prerelease.length;
-	        while (--i >= 0) {
-	          if (typeof this.prerelease[i] === 'number') {
-	            this.prerelease[i]++;
-	            i = -2;
-	          }
-	        }
-	        if (i === -1) // didn't increment anything
-	          this.prerelease.push(0);
-	      }
-	      if (identifier) {
-	        // 1.2.0-beta.1 bumps to 1.2.0-beta.2,
-	        // 1.2.0-beta.fooblz or 1.2.0-beta bumps to 1.2.0-beta.0
-	        if (this.prerelease[0] === identifier) {
-	          if (isNaN(this.prerelease[1]))
-	            this.prerelease = [identifier, 0];
-	        } else
-	          this.prerelease = [identifier, 0];
-	      }
-	      break;
-
-	    default:
-	      throw new Error('invalid increment argument: ' + release);
-	  }
-	  this.format();
-	  this.raw = this.version;
-	  return this;
-	};
-
-	exports.inc = inc;
-	function inc(version, release, loose, identifier) {
-	  if (typeof(loose) === 'string') {
-	    identifier = loose;
-	    loose = undefined;
-	  }
-
-	  try {
-	    return new SemVer(version, loose).inc(release, identifier).version;
-	  } catch (er) {
-	    return null;
-	  }
-	}
-
-	exports.diff = diff;
-	function diff(version1, version2) {
-	  if (eq(version1, version2)) {
-	    return null;
-	  } else {
-	    var v1 = parse(version1);
-	    var v2 = parse(version2);
-	    if (v1.prerelease.length || v2.prerelease.length) {
-	      for (var key in v1) {
-	        if (key === 'major' || key === 'minor' || key === 'patch') {
-	          if (v1[key] !== v2[key]) {
-	            return 'pre'+key;
-	          }
-	        }
-	      }
-	      return 'prerelease';
-	    }
-	    for (var key in v1) {
-	      if (key === 'major' || key === 'minor' || key === 'patch') {
-	        if (v1[key] !== v2[key]) {
-	          return key;
-	        }
-	      }
-	    }
-	  }
-	}
-
-	exports.compareIdentifiers = compareIdentifiers;
-
-	var numeric = /^[0-9]+$/;
-	function compareIdentifiers(a, b) {
-	  var anum = numeric.test(a);
-	  var bnum = numeric.test(b);
-
-	  if (anum && bnum) {
-	    a = +a;
-	    b = +b;
-	  }
-
-	  return (anum && !bnum) ? -1 :
-	         (bnum && !anum) ? 1 :
-	         a < b ? -1 :
-	         a > b ? 1 :
-	         0;
-	}
-
-	exports.rcompareIdentifiers = rcompareIdentifiers;
-	function rcompareIdentifiers(a, b) {
-	  return compareIdentifiers(b, a);
-	}
-
-	exports.major = major;
-	function major(a, loose) {
-	  return new SemVer(a, loose).major;
-	}
-
-	exports.minor = minor;
-	function minor(a, loose) {
-	  return new SemVer(a, loose).minor;
-	}
-
-	exports.patch = patch;
-	function patch(a, loose) {
-	  return new SemVer(a, loose).patch;
-	}
-
-	exports.compare = compare;
-	function compare(a, b, loose) {
-	  return new SemVer(a, loose).compare(b);
-	}
-
-	exports.compareLoose = compareLoose;
-	function compareLoose(a, b) {
-	  return compare(a, b, true);
-	}
-
-	exports.rcompare = rcompare;
-	function rcompare(a, b, loose) {
-	  return compare(b, a, loose);
-	}
-
-	exports.sort = sort;
-	function sort(list, loose) {
-	  return list.sort(function(a, b) {
-	    return exports.compare(a, b, loose);
-	  });
-	}
-
-	exports.rsort = rsort;
-	function rsort(list, loose) {
-	  return list.sort(function(a, b) {
-	    return exports.rcompare(a, b, loose);
-	  });
-	}
-
-	exports.gt = gt;
-	function gt(a, b, loose) {
-	  return compare(a, b, loose) > 0;
-	}
-
-	exports.lt = lt;
-	function lt(a, b, loose) {
-	  return compare(a, b, loose) < 0;
-	}
-
-	exports.eq = eq;
-	function eq(a, b, loose) {
-	  return compare(a, b, loose) === 0;
-	}
-
-	exports.neq = neq;
-	function neq(a, b, loose) {
-	  return compare(a, b, loose) !== 0;
-	}
-
-	exports.gte = gte;
-	function gte(a, b, loose) {
-	  return compare(a, b, loose) >= 0;
-	}
-
-	exports.lte = lte;
-	function lte(a, b, loose) {
-	  return compare(a, b, loose) <= 0;
-	}
-
-	exports.cmp = cmp;
-	function cmp(a, op, b, loose) {
-	  var ret;
-	  switch (op) {
-	    case '===':
-	      if (typeof a === 'object') a = a.version;
-	      if (typeof b === 'object') b = b.version;
-	      ret = a === b;
-	      break;
-	    case '!==':
-	      if (typeof a === 'object') a = a.version;
-	      if (typeof b === 'object') b = b.version;
-	      ret = a !== b;
-	      break;
-	    case '': case '=': case '==': ret = eq(a, b, loose); break;
-	    case '!=': ret = neq(a, b, loose); break;
-	    case '>': ret = gt(a, b, loose); break;
-	    case '>=': ret = gte(a, b, loose); break;
-	    case '<': ret = lt(a, b, loose); break;
-	    case '<=': ret = lte(a, b, loose); break;
-	    default: throw new TypeError('Invalid operator: ' + op);
-	  }
-	  return ret;
-	}
-
-	exports.Comparator = Comparator;
-	function Comparator(comp, loose) {
-	  if (comp instanceof Comparator) {
-	    if (comp.loose === loose)
-	      return comp;
-	    else
-	      comp = comp.value;
-	  }
-
-	  if (!(this instanceof Comparator))
-	    return new Comparator(comp, loose);
-
-	  debug('comparator', comp, loose);
-	  this.loose = loose;
-	  this.parse(comp);
-
-	  if (this.semver === ANY)
-	    this.value = '';
-	  else
-	    this.value = this.operator + this.semver.version;
-
-	  debug('comp', this);
-	}
-
-	var ANY = {};
-	Comparator.prototype.parse = function(comp) {
-	  var r = this.loose ? re[COMPARATORLOOSE] : re[COMPARATOR];
-	  var m = comp.match(r);
-
-	  if (!m)
-	    throw new TypeError('Invalid comparator: ' + comp);
-
-	  this.operator = m[1];
-	  if (this.operator === '=')
-	    this.operator = '';
-
-	  // if it literally is just '>' or '' then allow anything.
-	  if (!m[2])
-	    this.semver = ANY;
-	  else
-	    this.semver = new SemVer(m[2], this.loose);
-	};
-
-	Comparator.prototype.toString = function() {
-	  return this.value;
-	};
-
-	Comparator.prototype.test = function(version) {
-	  debug('Comparator.test', version, this.loose);
-
-	  if (this.semver === ANY)
-	    return true;
-
-	  if (typeof version === 'string')
-	    version = new SemVer(version, this.loose);
-
-	  return cmp(version, this.operator, this.semver, this.loose);
-	};
-
-
-	exports.Range = Range;
-	function Range(range, loose) {
-	  if ((range instanceof Range) && range.loose === loose)
-	    return range;
-
-	  if (!(this instanceof Range))
-	    return new Range(range, loose);
-
-	  this.loose = loose;
-
-	  // First, split based on boolean or ||
-	  this.raw = range;
-	  this.set = range.split(/\s*\|\|\s*/).map(function(range) {
-	    return this.parseRange(range.trim());
-	  }, this).filter(function(c) {
-	    // throw out any that are not relevant for whatever reason
-	    return c.length;
-	  });
-
-	  if (!this.set.length) {
-	    throw new TypeError('Invalid SemVer Range: ' + range);
-	  }
-
-	  this.format();
-	}
-
-	Range.prototype.format = function() {
-	  this.range = this.set.map(function(comps) {
-	    return comps.join(' ').trim();
-	  }).join('||').trim();
-	  return this.range;
-	};
-
-	Range.prototype.toString = function() {
-	  return this.range;
-	};
-
-	Range.prototype.parseRange = function(range) {
-	  var loose = this.loose;
-	  range = range.trim();
-	  debug('range', range, loose);
-	  // `1.2.3 - 1.2.4` => `>=1.2.3 <=1.2.4`
-	  var hr = loose ? re[HYPHENRANGELOOSE] : re[HYPHENRANGE];
-	  range = range.replace(hr, hyphenReplace);
-	  debug('hyphen replace', range);
-	  // `> 1.2.3 < 1.2.5` => `>1.2.3 <1.2.5`
-	  range = range.replace(re[COMPARATORTRIM], comparatorTrimReplace);
-	  debug('comparator trim', range, re[COMPARATORTRIM]);
-
-	  // `~ 1.2.3` => `~1.2.3`
-	  range = range.replace(re[TILDETRIM], tildeTrimReplace);
-
-	  // `^ 1.2.3` => `^1.2.3`
-	  range = range.replace(re[CARETTRIM], caretTrimReplace);
-
-	  // normalize spaces
-	  range = range.split(/\s+/).join(' ');
-
-	  // At this point, the range is completely trimmed and
-	  // ready to be split into comparators.
-
-	  var compRe = loose ? re[COMPARATORLOOSE] : re[COMPARATOR];
-	  var set = range.split(' ').map(function(comp) {
-	    return parseComparator(comp, loose);
-	  }).join(' ').split(/\s+/);
-	  if (this.loose) {
-	    // in loose mode, throw out any that are not valid comparators
-	    set = set.filter(function(comp) {
-	      return !!comp.match(compRe);
-	    });
-	  }
-	  set = set.map(function(comp) {
-	    return new Comparator(comp, loose);
-	  });
-
-	  return set;
-	};
-
-	// Mostly just for testing and legacy API reasons
-	exports.toComparators = toComparators;
-	function toComparators(range, loose) {
-	  return new Range(range, loose).set.map(function(comp) {
-	    return comp.map(function(c) {
-	      return c.value;
-	    }).join(' ').trim().split(' ');
-	  });
-	}
-
-	// comprised of xranges, tildes, stars, and gtlt's at this point.
-	// already replaced the hyphen ranges
-	// turn into a set of JUST comparators.
-	function parseComparator(comp, loose) {
-	  debug('comp', comp);
-	  comp = replaceCarets(comp, loose);
-	  debug('caret', comp);
-	  comp = replaceTildes(comp, loose);
-	  debug('tildes', comp);
-	  comp = replaceXRanges(comp, loose);
-	  debug('xrange', comp);
-	  comp = replaceStars(comp, loose);
-	  debug('stars', comp);
-	  return comp;
-	}
-
-	function isX(id) {
-	  return !id || id.toLowerCase() === 'x' || id === '*';
-	}
-
-	// ~, ~> --> * (any, kinda silly)
-	// ~2, ~2.x, ~2.x.x, ~>2, ~>2.x ~>2.x.x --> >=2.0.0 <3.0.0
-	// ~2.0, ~2.0.x, ~>2.0, ~>2.0.x --> >=2.0.0 <2.1.0
-	// ~1.2, ~1.2.x, ~>1.2, ~>1.2.x --> >=1.2.0 <1.3.0
-	// ~1.2.3, ~>1.2.3 --> >=1.2.3 <1.3.0
-	// ~1.2.0, ~>1.2.0 --> >=1.2.0 <1.3.0
-	function replaceTildes(comp, loose) {
-	  return comp.trim().split(/\s+/).map(function(comp) {
-	    return replaceTilde(comp, loose);
-	  }).join(' ');
-	}
-
-	function replaceTilde(comp, loose) {
-	  var r = loose ? re[TILDELOOSE] : re[TILDE];
-	  return comp.replace(r, function(_, M, m, p, pr) {
-	    debug('tilde', comp, _, M, m, p, pr);
-	    var ret;
-
-	    if (isX(M))
-	      ret = '';
-	    else if (isX(m))
-	      ret = '>=' + M + '.0.0 <' + (+M + 1) + '.0.0';
-	    else if (isX(p))
-	      // ~1.2 == >=1.2.0 <1.3.0
-	      ret = '>=' + M + '.' + m + '.0 <' + M + '.' + (+m + 1) + '.0';
-	    else if (pr) {
-	      debug('replaceTilde pr', pr);
-	      if (pr.charAt(0) !== '-')
-	        pr = '-' + pr;
-	      ret = '>=' + M + '.' + m + '.' + p + pr +
-	            ' <' + M + '.' + (+m + 1) + '.0';
-	    } else
-	      // ~1.2.3 == >=1.2.3 <1.3.0
-	      ret = '>=' + M + '.' + m + '.' + p +
-	            ' <' + M + '.' + (+m + 1) + '.0';
-
-	    debug('tilde return', ret);
-	    return ret;
-	  });
-	}
-
-	// ^ --> * (any, kinda silly)
-	// ^2, ^2.x, ^2.x.x --> >=2.0.0 <3.0.0
-	// ^2.0, ^2.0.x --> >=2.0.0 <3.0.0
-	// ^1.2, ^1.2.x --> >=1.2.0 <2.0.0
-	// ^1.2.3 --> >=1.2.3 <2.0.0
-	// ^1.2.0 --> >=1.2.0 <2.0.0
-	function replaceCarets(comp, loose) {
-	  return comp.trim().split(/\s+/).map(function(comp) {
-	    return replaceCaret(comp, loose);
-	  }).join(' ');
-	}
-
-	function replaceCaret(comp, loose) {
-	  debug('caret', comp, loose);
-	  var r = loose ? re[CARETLOOSE] : re[CARET];
-	  return comp.replace(r, function(_, M, m, p, pr) {
-	    debug('caret', comp, _, M, m, p, pr);
-	    var ret;
-
-	    if (isX(M))
-	      ret = '';
-	    else if (isX(m))
-	      ret = '>=' + M + '.0.0 <' + (+M + 1) + '.0.0';
-	    else if (isX(p)) {
-	      if (M === '0')
-	        ret = '>=' + M + '.' + m + '.0 <' + M + '.' + (+m + 1) + '.0';
-	      else
-	        ret = '>=' + M + '.' + m + '.0 <' + (+M + 1) + '.0.0';
-	    } else if (pr) {
-	      debug('replaceCaret pr', pr);
-	      if (pr.charAt(0) !== '-')
-	        pr = '-' + pr;
-	      if (M === '0') {
-	        if (m === '0')
-	          ret = '>=' + M + '.' + m + '.' + p + pr +
-	                ' <' + M + '.' + m + '.' + (+p + 1);
-	        else
-	          ret = '>=' + M + '.' + m + '.' + p + pr +
-	                ' <' + M + '.' + (+m + 1) + '.0';
-	      } else
-	        ret = '>=' + M + '.' + m + '.' + p + pr +
-	              ' <' + (+M + 1) + '.0.0';
-	    } else {
-	      debug('no pr');
-	      if (M === '0') {
-	        if (m === '0')
-	          ret = '>=' + M + '.' + m + '.' + p +
-	                ' <' + M + '.' + m + '.' + (+p + 1);
-	        else
-	          ret = '>=' + M + '.' + m + '.' + p +
-	                ' <' + M + '.' + (+m + 1) + '.0';
-	      } else
-	        ret = '>=' + M + '.' + m + '.' + p +
-	              ' <' + (+M + 1) + '.0.0';
-	    }
-
-	    debug('caret return', ret);
-	    return ret;
-	  });
-	}
-
-	function replaceXRanges(comp, loose) {
-	  debug('replaceXRanges', comp, loose);
-	  return comp.split(/\s+/).map(function(comp) {
-	    return replaceXRange(comp, loose);
-	  }).join(' ');
-	}
-
-	function replaceXRange(comp, loose) {
-	  comp = comp.trim();
-	  var r = loose ? re[XRANGELOOSE] : re[XRANGE];
-	  return comp.replace(r, function(ret, gtlt, M, m, p, pr) {
-	    debug('xRange', comp, ret, gtlt, M, m, p, pr);
-	    var xM = isX(M);
-	    var xm = xM || isX(m);
-	    var xp = xm || isX(p);
-	    var anyX = xp;
-
-	    if (gtlt === '=' && anyX)
-	      gtlt = '';
-
-	    if (xM) {
-	      if (gtlt === '>' || gtlt === '<') {
-	        // nothing is allowed
-	        ret = '<0.0.0';
-	      } else {
-	        // nothing is forbidden
-	        ret = '*';
-	      }
-	    } else if (gtlt && anyX) {
-	      // replace X with 0
-	      if (xm)
-	        m = 0;
-	      if (xp)
-	        p = 0;
-
-	      if (gtlt === '>') {
-	        // >1 => >=2.0.0
-	        // >1.2 => >=1.3.0
-	        // >1.2.3 => >= 1.2.4
-	        gtlt = '>=';
-	        if (xm) {
-	          M = +M + 1;
-	          m = 0;
-	          p = 0;
-	        } else if (xp) {
-	          m = +m + 1;
-	          p = 0;
-	        }
-	      } else if (gtlt === '<=') {
-	        // <=0.7.x is actually <0.8.0, since any 0.7.x should
-	        // pass.  Similarly, <=7.x is actually <8.0.0, etc.
-	        gtlt = '<';
-	        if (xm)
-	          M = +M + 1;
-	        else
-	          m = +m + 1;
-	      }
-
-	      ret = gtlt + M + '.' + m + '.' + p;
-	    } else if (xm) {
-	      ret = '>=' + M + '.0.0 <' + (+M + 1) + '.0.0';
-	    } else if (xp) {
-	      ret = '>=' + M + '.' + m + '.0 <' + M + '.' + (+m + 1) + '.0';
-	    }
-
-	    debug('xRange return', ret);
-
-	    return ret;
-	  });
-	}
-
-	// Because * is AND-ed with everything else in the comparator,
-	// and '' means "any version", just remove the *s entirely.
-	function replaceStars(comp, loose) {
-	  debug('replaceStars', comp, loose);
-	  // Looseness is ignored here.  star is always as loose as it gets!
-	  return comp.trim().replace(re[STAR], '');
-	}
-
-	// This function is passed to string.replace(re[HYPHENRANGE])
-	// M, m, patch, prerelease, build
-	// 1.2 - 3.4.5 => >=1.2.0 <=3.4.5
-	// 1.2.3 - 3.4 => >=1.2.0 <3.5.0 Any 3.4.x will do
-	// 1.2 - 3.4 => >=1.2.0 <3.5.0
-	function hyphenReplace($0,
-	                       from, fM, fm, fp, fpr, fb,
-	                       to, tM, tm, tp, tpr, tb) {
-
-	  if (isX(fM))
-	    from = '';
-	  else if (isX(fm))
-	    from = '>=' + fM + '.0.0';
-	  else if (isX(fp))
-	    from = '>=' + fM + '.' + fm + '.0';
-	  else
-	    from = '>=' + from;
-
-	  if (isX(tM))
-	    to = '';
-	  else if (isX(tm))
-	    to = '<' + (+tM + 1) + '.0.0';
-	  else if (isX(tp))
-	    to = '<' + tM + '.' + (+tm + 1) + '.0';
-	  else if (tpr)
-	    to = '<=' + tM + '.' + tm + '.' + tp + '-' + tpr;
-	  else
-	    to = '<=' + to;
-
-	  return (from + ' ' + to).trim();
-	}
-
-
-	// if ANY of the sets match ALL of its comparators, then pass
-	Range.prototype.test = function(version) {
-	  if (!version)
-	    return false;
-
-	  if (typeof version === 'string')
-	    version = new SemVer(version, this.loose);
-
-	  for (var i = 0; i < this.set.length; i++) {
-	    if (testSet(this.set[i], version))
-	      return true;
-	  }
-	  return false;
-	};
-
-	function testSet(set, version) {
-	  for (var i = 0; i < set.length; i++) {
-	    if (!set[i].test(version))
-	      return false;
-	  }
-
-	  if (version.prerelease.length) {
-	    // Find the set of versions that are allowed to have prereleases
-	    // For example, ^1.2.3-pr.1 desugars to >=1.2.3-pr.1 <2.0.0
-	    // That should allow `1.2.3-pr.2` to pass.
-	    // However, `1.2.4-alpha.notready` should NOT be allowed,
-	    // even though it's within the range set by the comparators.
-	    for (var i = 0; i < set.length; i++) {
-	      debug(set[i].semver);
-	      if (set[i].semver === ANY)
-	        continue;
-
-	      if (set[i].semver.prerelease.length > 0) {
-	        var allowed = set[i].semver;
-	        if (allowed.major === version.major &&
-	            allowed.minor === version.minor &&
-	            allowed.patch === version.patch)
-	          return true;
-	      }
-	    }
-
-	    // Version has a -pre, but it's not one of the ones we like.
-	    return false;
-	  }
-
-	  return true;
-	}
-
-	exports.satisfies = satisfies;
-	function satisfies(version, range, loose) {
-	  try {
-	    range = new Range(range, loose);
-	  } catch (er) {
-	    return false;
-	  }
-	  return range.test(version);
-	}
-
-	exports.maxSatisfying = maxSatisfying;
-	function maxSatisfying(versions, range, loose) {
-	  return versions.filter(function(version) {
-	    return satisfies(version, range, loose);
-	  }).sort(function(a, b) {
-	    return rcompare(a, b, loose);
-	  })[0] || null;
-	}
-
-	exports.minSatisfying = minSatisfying;
-	function minSatisfying(versions, range, loose) {
-	  return versions.filter(function(version) {
-	    return satisfies(version, range, loose);
-	  }).sort(function(a, b) {
-	    return compare(a, b, loose);
-	  })[0] || null;
-	}
-
-	exports.validRange = validRange;
-	function validRange(range, loose) {
-	  try {
-	    // Return '*' instead of '' so that truthiness works.
-	    // This will throw if it's invalid anyway
-	    return new Range(range, loose).range || '*';
-	  } catch (er) {
-	    return null;
-	  }
-	}
-
-	// Determine if version is less than all the versions possible in the range
-	exports.ltr = ltr;
-	function ltr(version, range, loose) {
-	  return outside(version, range, '<', loose);
-	}
-
-	// Determine if version is greater than all the versions possible in the range.
-	exports.gtr = gtr;
-	function gtr(version, range, loose) {
-	  return outside(version, range, '>', loose);
-	}
-
-	exports.outside = outside;
-	function outside(version, range, hilo, loose) {
-	  version = new SemVer(version, loose);
-	  range = new Range(range, loose);
-
-	  var gtfn, ltefn, ltfn, comp, ecomp;
-	  switch (hilo) {
-	    case '>':
-	      gtfn = gt;
-	      ltefn = lte;
-	      ltfn = lt;
-	      comp = '>';
-	      ecomp = '>=';
-	      break;
-	    case '<':
-	      gtfn = lt;
-	      ltefn = gte;
-	      ltfn = gt;
-	      comp = '<';
-	      ecomp = '<=';
-	      break;
-	    default:
-	      throw new TypeError('Must provide a hilo val of "<" or ">"');
-	  }
-
-	  // If it satisifes the range it is not outside
-	  if (satisfies(version, range, loose)) {
-	    return false;
-	  }
-
-	  // From now on, variable terms are as if we're in "gtr" mode.
-	  // but note that everything is flipped for the "ltr" function.
-
-	  for (var i = 0; i < range.set.length; ++i) {
-	    var comparators = range.set[i];
-
-	    var high = null;
-	    var low = null;
-
-	    comparators.forEach(function(comparator) {
-	      if (comparator.semver === ANY) {
-	        comparator = new Comparator('>=0.0.0')
-	      }
-	      high = high || comparator;
-	      low = low || comparator;
-	      if (gtfn(comparator.semver, high.semver, loose)) {
-	        high = comparator;
-	      } else if (ltfn(comparator.semver, low.semver, loose)) {
-	        low = comparator;
-	      }
-	    });
-
-	    // If the edge version comparator has a operator then our version
-	    // isn't outside it
-	    if (high.operator === comp || high.operator === ecomp) {
-	      return false;
-	    }
-
-	    // If the lowest version comparator has an operator and our version
-	    // is less than it then it isn't higher than the range
-	    if ((!low.operator || low.operator === comp) &&
-	        ltefn(version, low.semver)) {
-	      return false;
-	    } else if (low.operator === ecomp && ltfn(version, low.semver)) {
-	      return false;
-	    }
-	  }
-	  return true;
-	}
-
-	exports.prerelease = prerelease;
-	function prerelease(version, loose) {
-	  var parsed = parse(version, loose);
-	  return (parsed && parsed.prerelease.length) ? parsed.prerelease : null;
-	}
-
-
-/***/ },
-/* 140 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var map = {
-		"./index": 136,
-		"./index.js": 136,
-		"./package.json": 143,
-		"./test/require_optional_tests": 144,
-		"./test/require_optional_tests.js": 144
-	};
-	function webpackContext(req) {
-		return __webpack_require__(webpackContextResolve(req));
-	};
-	function webpackContextResolve(req) {
-		return map[req] || (function() { throw new Error("Cannot find module '" + req + "'.") }());
-	};
-	webpackContext.keys = function webpackContextKeys() {
-		return Object.keys(map);
-	};
-	webpackContext.resolve = webpackContextResolve;
-	module.exports = webpackContext;
-	webpackContext.id = 140;
-
-
-/***/ },
-/* 141 */,
-/* 142 */,
-/* 143 */
-/***/ function(module, exports) {
-
-	module.exports = {
-		"_args": [
-			[
-				{
-					"name": "require_optional",
-					"raw": "require_optional@~1.0.0",
-					"rawSpec": "~1.0.0",
-					"scope": null,
-					"spec": ">=1.0.0 <1.1.0",
-					"type": "range"
-				},
-				"/Users/dsilva/ds/github/server-seed/node_modules/mongodb-core"
-			]
-		],
-		"_from": "require_optional@>=1.0.0 <1.1.0",
-		"_id": "require_optional@1.0.0",
-		"_inCache": true,
-		"_installable": true,
-		"_location": "/require_optional",
-		"_nodeVersion": "4.2.4",
-		"_npmOperationalInternal": {
-			"host": "packages-5-east.internal.npmjs.com",
-			"tmp": "tmp/require_optional-1.0.0.tgz_1454503936164_0.7571216486394405"
-		},
-		"_npmUser": {
-			"email": "christkv@gmail.com",
-			"name": "christkv"
-		},
-		"_npmVersion": "2.14.12",
-		"_phantomChildren": {},
-		"_requested": {
-			"name": "require_optional",
-			"raw": "require_optional@~1.0.0",
-			"rawSpec": "~1.0.0",
-			"scope": null,
-			"spec": ">=1.0.0 <1.1.0",
-			"type": "range"
-		},
-		"_requiredBy": [
-			"/mongodb-core"
-		],
-		"_resolved": "https://registry.npmjs.org/require_optional/-/require_optional-1.0.0.tgz",
-		"_shasum": "52a86137a849728eb60a55533617f8f914f59abf",
-		"_shrinkwrap": null,
-		"_spec": "require_optional@~1.0.0",
-		"_where": "/Users/dsilva/ds/github/server-seed/node_modules/mongodb-core",
-		"author": {
-			"name": "Christian Kvalheim Amor"
-		},
-		"bugs": {
-			"url": "https://github.com/christkv/require_optional/issues"
-		},
-		"dependencies": {
-			"resolve-from": "^2.0.0",
-			"semver": "^5.1.0"
-		},
-		"description": "Allows you declare optionalPeerDependencies that can be satisfied by the top level module but ignored if they are not.",
-		"devDependencies": {
-			"bson": "0.4.21",
-			"co": "4.6.0",
-			"es6-promise": "^3.0.2",
-			"mocha": "^2.4.5"
-		},
-		"directories": {},
-		"dist": {
-			"shasum": "52a86137a849728eb60a55533617f8f914f59abf",
-			"tarball": "https://registry.npmjs.org/require_optional/-/require_optional-1.0.0.tgz"
-		},
-		"gitHead": "8eac964c8e31166a8fb483d0d56025b185cee03f",
-		"homepage": "https://github.com/christkv/require_optional",
-		"keywords": [
-			"optional",
-			"require",
-			"optionalPeerDependencies"
-		],
-		"license": "Apache-2.0",
-		"main": "index.js",
-		"maintainers": [
-			{
-				"email": "christkv@gmail.com",
-				"name": "christkv"
-			}
-		],
-		"name": "require_optional",
-		"optionalDependencies": {},
-		"peerOptionalDependencies": {
-			"bson": "0.4.21",
-			"co": ">=5.6.0",
-			"es6-promise": "^3.0.2",
-			"es6-promise2": "^4.0.2"
-		},
-		"readme": "ERROR: No README data found!",
-		"repository": {
-			"type": "git",
-			"url": "git+https://github.com/christkv/require_optional.git"
-		},
-		"scripts": {
-			"test": "mocha"
-		},
-		"version": "1.0.0"
-	};
-
-/***/ },
-/* 144 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var assert = __webpack_require__(145),
-	  require_optional = __webpack_require__(136);
-
-	describe('Require Optional', function() {
-	  describe('top level require', function() {
-	    it('should correctly require co library', function() {
-	      var promise = require_optional('es6-promise');
-	      assert.ok(promise);
-	    });
-
-	    it('should fail to require es6-promise library', function() {
-	      try {
-	        require_optional('co');
-	      } catch(e) {
-	        assert.equal('OPTIONAL_MODULE_NOT_FOUND', e.code);
-	        return;
-	      }
-
-	      assert.ok(false);
-	    });
-
-	    it('should ignore optional library not defined', function() {
-	      assert.equal(undefined, require_optional('es6-promise2'));
-	    });
-	  });
-
-	  describe('internal module file require', function() {
-	    it('should correctly require co library', function() {
-	      var Long = require_optional('bson/lib/bson/long.js');
-	      assert.ok(Long);
-	    });
-	  });
-
-	  describe('top level resolve', function() {
-	    it('should correctly use exists method', function() {
-	      assert.equal(false, require_optional.exists('co'));
-	      assert.equal(true, require_optional.exists('es6-promise'));
-	      assert.equal(true, require_optional.exists('bson/lib/bson/long.js'));
-	      assert.equal(false, require_optional.exists('es6-promise2'));
-	    });
-	  });
-	});
-
-
-/***/ },
-/* 145 */
-/***/ function(module, exports) {
-
-	module.exports = require("assert");
-
-/***/ },
-/* 146 */
+/* 135 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var f = __webpack_require__(10).format
 	  , crypto = __webpack_require__(56)
-	  , require_optional = __webpack_require__(136)
 	  , MongoError = __webpack_require__(95);
 
 	var AuthSession = function(db, username, password, options) {
@@ -39166,7 +37016,7 @@
 	}
 
 	AuthSession.prototype.equal = function(session) {
-	  return session.db == this.db
+	  return session.db == this.db 
 	    && session.username == this.username
 	    && session.password == this.password;
 	}
@@ -39177,9 +37027,9 @@
 
 	// Try to grab the Kerberos class
 	try {
-	  Kerberos = require_optional('kerberos').Kerberos
+	  Kerberos = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"kerberos\""); e.code = 'MODULE_NOT_FOUND'; throw e; }())).Kerberos
 	  // Authentication process for Mongo
-	  MongoAuthProcess = require_optional('kerberos').processes.MongoAuthProcess
+	  MongoAuthProcess = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"kerberos\""); e.code = 'MODULE_NOT_FOUND'; throw e; }())).processes.MongoAuthProcess
 	} catch(err) {}
 
 	/**
@@ -39195,18 +37045,20 @@
 	 * Authenticate
 	 * @method
 	 * @param {{Server}|{ReplSet}|{Mongos}} server Topology the authentication method is being called on
-	 * @param {[]Connections} connections Connections to authenticate using this authenticator
+	 * @param {Pool} pool Connection pool for this topology
 	 * @param {string} db Name of the database
 	 * @param {string} username Username
 	 * @param {string} password Password
 	 * @param {authResultCallback} callback The callback to return the result from the authentication
 	 * @return {object}
 	 */
-	SSPI.prototype.auth = function(server, connections, db, username, password, options, callback) {
+	SSPI.prototype.auth = function(server, pool, db, username, password, options, callback) {
 	  var self = this;
 	  // We don't have the Kerberos library
-	  if(Kerberos == null) return callback(new Error("Kerberos library is not installed"));
+	  if(Kerberos == null) return callback(new Error("Kerberos library is not installed"));  
 	  var gssapiServiceName = options['gssapiServiceName'] || 'mongodb';
+	  // Get all the connections
+	  var connections = pool.getAll();
 	  // Total connections
 	  var count = connections.length;
 	  if(count == 0) return callback(null, null);
@@ -39217,11 +37069,11 @@
 	  var errorObject = null;
 
 	  // For each connection we need to authenticate
-	  while(connections.length > 0) {
+	  while(connections.length > 0) {    
 	    // Execute MongoCR
 	    var execute = function(connection) {
 	      // Start Auth process for a connection
-	      SSIPAuthenticate(username, password, gssapiServiceName, server, connection, options, function(err, r) {
+	      SSIPAuthenticate(username, password, gssapiServiceName, server, connection, function(err, r) {
 	        // Adjust count
 	        count = count - 1;
 
@@ -39250,17 +37102,12 @@
 	      });
 	    }
 
-	    var _execute = function(_connection) {
-	      process.nextTick(function() {
-	        execute(_connection);
-	      });
-	    }
-
-	    _execute(connections.shift());
+	    // Get the connection
+	    execute(connections.shift());
 	  }
 	}
 
-	var SSIPAuthenticate = function(username, password, gssapiServiceName, server, connection, options, callback) {
+	var SSIPAuthenticate = function(username, password, gssapiServiceName, server, connection, callback) {
 	  // Build Authentication command to send to MongoDB
 	  var command = {
 	      saslStart: 1
@@ -39270,13 +37117,13 @@
 	  };
 
 	  // Create authenticator
-	  var mongo_auth_process = new MongoAuthProcess(connection.host, connection.port, gssapiServiceName, options);
+	  var mongo_auth_process = new MongoAuthProcess(connection.host, connection.port, gssapiServiceName);
 
 	  // Execute first sasl step
 	  server.command("$external.$cmd"
 	    , command
 	    , { connection: connection }, function(err, r) {
-	    if(err) return callback(err, false);
+	    if(err) return callback(err, false);    
 	    var doc = r.result;
 
 	    mongo_auth_process.init(username, password, function(err) {
@@ -39315,7 +37162,7 @@
 	              , { connection: connection }, function(err, r) {
 	              if(err) return callback(err, false);
 	              var doc = r.result;
-
+	              
 	              mongo_auth_process.transition(doc.payload, function(err, payload) {
 	                // Perform the next step against mongod
 	                var command = {
@@ -39333,14 +37180,14 @@
 
 	                  if(doc.done) return callback(null, true);
 	                  callback(new Error("Authentication failed"), false);
-	                });
+	                });        
 	              });
 	            });
 	          });
 	        });
 	      });
 	    });
-	  });
+	  });  
 	}
 
 	// Add to store only if it does not exist
@@ -39361,23 +37208,20 @@
 	 * Re authenticate pool
 	 * @method
 	 * @param {{Server}|{ReplSet}|{Mongos}} server Topology the authentication method is being called on
-	 * @param {[]Connections} connections Connections to authenticate using this authenticator
+	 * @param {Pool} pool Connection pool for this topology
 	 * @param {authResultCallback} callback The callback to return the result from the authentication
 	 * @return {object}
 	 */
-	SSPI.prototype.reauthenticate = function(server, connections, callback) {
-	  var authStore = this.authStore.slice(0);
-	  var err = null;
-	  var count = authStore.length;
+	SSPI.prototype.reauthenticate = function(server, pool, callback) {
+	  var count = this.authStore.length;
 	  if(count == 0) return callback(null, null);
 	  // Iterate over all the auth details stored
-	  for(var i = 0; i < authStore.length; i++) {
-	    this.auth(server, connections, authStore[i].db, authStore[i].username, authStore[i].password, authStore[i].options, function(err, r) {
-	      if(err) err = err;
+	  for(var i = 0; i < this.authStore.length; i++) {
+	    this.auth(server, pool, this.authStore[i].db, this.authStore[i].username, this.authStore[i].password, this.authStore[i].options, function(err, r) {
 	      count = count - 1;
 	      // Done re-authenticating
 	      if(count == 0) {
-	        callback(err, null);
+	        callback(null, null);
 	      }
 	    });
 	  }
@@ -39393,9 +37237,8 @@
 
 	module.exports = SSPI;
 
-
 /***/ },
-/* 147 */
+/* 136 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -39409,15 +37252,13 @@
 	  this.db = db;
 	  this.username = username;
 	  this.password = password;
-	}
+	} 
 
 	AuthSession.prototype.equal = function(session) {
-	  return session.db == this.db
+	  return session.db == this.db 
 	    && session.username == this.username
 	    && session.password == this.password;
 	}
-
-	var id = 0;
 
 	/**
 	 * Creates a new ScramSHA1 authentication mechanism
@@ -39426,7 +37267,6 @@
 	 */
 	var ScramSHA1 = function() {
 	  this.authStore = [];
-	  this.id = id++;
 	}
 
 	var parsePayload = function(payload) {
@@ -39448,7 +37288,7 @@
 	  // Use node md5 generator
 	  var md5 = crypto.createHash('md5');
 	  // Generate keys used for authentication
-	  md5.update(username + ":mongo:" + password, 'utf8');
+	  md5.update(username + ":mongo:" + password);
 	  return md5.digest('hex');
 	}
 
@@ -39482,7 +37322,7 @@
 	  salt = Buffer.concat([salt, new Buffer('\x00\x00\x00\x01')])
 	  var ui = digest(salt);
 	  var u1 = ui;
-
+	  
 	  for(var i = 0; i < iterations - 1; i++) {
 	    u1 = digest(u1);
 	    ui = xor(ui, u1);
@@ -39495,15 +37335,17 @@
 	 * Authenticate
 	 * @method
 	 * @param {{Server}|{ReplSet}|{Mongos}} server Topology the authentication method is being called on
-	 * @param {[]Connections} connections Connections to authenticate using this authenticator
+	 * @param {Pool} pool Connection pool for this topology
 	 * @param {string} db Name of the database
 	 * @param {string} username Username
 	 * @param {string} password Password
 	 * @param {authResultCallback} callback The callback to return the result from the authentication
 	 * @return {object}
 	 */
-	ScramSHA1.prototype.auth = function(server, connections, db, username, password, callback) {
+	ScramSHA1.prototype.auth = function(server, pool, db, username, password, callback) {
 	  var self = this;
+	  // Get all the connections
+	  var connections = pool.getAll();
 	  // Total connections
 	  var count = connections.length;
 	  if(count == 0) return callback(null, null);
@@ -39513,172 +37355,167 @@
 	  var credentialsValid = false;
 	  var errorObject = null;
 
-	  // Execute MongoCR
-	  var executeScram = function(connection) {
-	    // Clean up the user
-	    username = username.replace('=', "=3D").replace(',', '=2C');
+	  // For each connection we need to authenticate
+	  while(connections.length > 0) {    
+	    // Execute MongoCR
+	    var executeScram = function(connection) {
+	      // Clean up the user
+	      username = username.replace('=', "=3D").replace(',', '=2C');
 
-	    // Create a random nonce
-	    var nonce = crypto.randomBytes(24).toString('base64');
-	    // var nonce = 'MsQUY9iw0T9fx2MUEz6LZPwGuhVvWAhc'
-	    var firstBare = f("n=%s,r=%s", username, nonce);
+	      // Create a random nonce
+	      var nonce = crypto.randomBytes(24).toString('base64');
+	      // var nonce = 'MsQUY9iw0T9fx2MUEz6LZPwGuhVvWAhc'
+	      var firstBare = f("n=%s,r=%s", username, nonce);
 
-	    // Build command structure
-	    var cmd = {
-	        saslStart: 1
-	      , mechanism: 'SCRAM-SHA-1'
-	      , payload: new Binary(f("n,,%s", firstBare))
-	      , autoAuthorize: 1
-	    }
-
-	    // Handle the error
-	    var handleError = function(err, r) {
-	      if(err) {
-	        numberOfValidConnections = numberOfValidConnections - 1;
-	        errorObject = err; return false;
-	      } else if(r.result['$err']) {
-	        errorObject = r.result; return false;
-	      } else if(r.result['errmsg']) {
-	        errorObject = r.result; return false;
-	      } else {
-	        credentialsValid = true;
-	        numberOfValidConnections = numberOfValidConnections + 1;
+	      // Build command structure
+	      var cmd = {
+	          saslStart: 1
+	        , mechanism: 'SCRAM-SHA-1'
+	        , payload: new Binary(f("n,,%s", firstBare))
+	        , autoAuthorize: 1
 	      }
 
-	      return true
-	    }
+	      // Handle the error
+	      var handleError = function(err, r) {
+	        if(err) {
+	          numberOfValidConnections = numberOfValidConnections - 1;            
+	          errorObject = err; return false;
+	        } else if(r.result['$err']) {
+	          errorObject = r.result; return false;
+	        } else if(r.result['errmsg']) {
+	          errorObject = r.result; return false;
+	        } else {
+	          credentialsValid = true;
+	          numberOfValidConnections = numberOfValidConnections + 1;            
+	        }
 
-	    // Finish up
-	    var finish = function(_count, _numberOfValidConnections) {
-	      if(_count == 0 && _numberOfValidConnections > 0) {
-	        // Store the auth details
-	        addAuthSession(self.authStore, new AuthSession(db, username, password));
-	        // Return correct authentication
-	        return callback(null, true);
-	      } else if(_count == 0) {
-	        if(errorObject == null) errorObject = new MongoError(f("failed to authenticate using scram"));
-	        return callback(errorObject, false);
+	        return true
 	      }
-	    }
 
-	    var handleEnd = function(_err, _r) {
-	      // Handle any error
-	      handleError(_err, _r)
-	      // Adjust the number of connections
-	      count = count - 1;
-	      // Execute the finish
-	      finish(count, numberOfValidConnections);
-	    }
-
-	    // Execute start sasl command
-	    server.command(f("%s.$cmd", db)
-	      , cmd, { connection: connection }, function(err, r) {
-
-	      // Do we have an error, handle it
-	      if(handleError(err, r) == false) {
-	        count = count - 1;
-
-	        if(count == 0 && numberOfValidConnections > 0) {
+	      // Finish up
+	      var finish = function(_count, _numberOfValidConnections) {
+	        if(_count == 0 && _numberOfValidConnections > 0) {
 	          // Store the auth details
 	          addAuthSession(self.authStore, new AuthSession(db, username, password));
 	          // Return correct authentication
 	          return callback(null, true);
-	        } else if(count == 0) {
+	        } else if(_count == 0) {
 	          if(errorObject == null) errorObject = new MongoError(f("failed to authenticate using scram"));
 	          return callback(errorObject, false);
 	        }
-
-	        return;
 	      }
 
-	      // Get the dictionary
-	      var dict = parsePayload(r.result.payload.value())
-
-	      // Unpack dictionary
-	      var iterations = parseInt(dict.i, 10);
-	      var salt = dict.s;
-	      var rnonce = dict.r;
-
-	      // Set up start of proof
-	      var withoutProof = f("c=biws,r=%s", rnonce);
-	      var passwordDig = passwordDigest(username, password);
-	      var saltedPassword = hi(passwordDig
-	          , new Buffer(salt, 'base64')
-	          , iterations);
-
-	      // Create the client key
-	      var hmac = crypto.createHmac('sha1', saltedPassword);
-	      hmac.update(new Buffer("Client Key"));
-	      var clientKey = new Buffer(hmac.digest('base64'), 'base64');
-
-	      // Create the stored key
-	      var hash = crypto.createHash('sha1');
-	      hash.update(clientKey);
-	      var storedKey = new Buffer(hash.digest('base64'), 'base64');
-
-	      // Create the authentication message
-	      var authMsg = [firstBare, r.result.payload.value().toString('base64'), withoutProof].join(',');
-
-	      // Create client signature
-	      var hmac = crypto.createHmac('sha1', storedKey);
-	      hmac.update(new Buffer(authMsg));
-	      var clientSig = new Buffer(hmac.digest('base64'), 'base64');
-
-	      // Create client proof
-	      var clientProof = f("p=%s", new Buffer(xor(clientKey, clientSig)).toString('base64'));
-
-	      // Create client final
-	      var clientFinal = [withoutProof, clientProof].join(',');
-
-	      // Generate server key
-	      var hmac = crypto.createHmac('sha1', saltedPassword);
-	      hmac.update(new Buffer('Server Key'))
-	      var serverKey = new Buffer(hmac.digest('base64'), 'base64');
-
-	      // Generate server signature
-	      var hmac = crypto.createHmac('sha1', serverKey);
-	      hmac.update(new Buffer(authMsg))
-	      var serverSig = new Buffer(hmac.digest('base64'), 'base64');
-
-	      //
-	      // Create continue message
-	      var cmd = {
-	          saslContinue: 1
-	        , conversationId: r.result.conversationId
-	        , payload: new Binary(new Buffer(clientFinal))
+	      var handleEnd = function(_err, _r) {
+	        // Handle any error
+	        handleError(_err, _r)
+	        // Adjust the number of connections
+	        count = count - 1;
+	        // Execute the finish
+	        finish(count, numberOfValidConnections);                
 	      }
 
-	      //
-	      // Execute sasl continue
+	      // Execute start sasl command
 	      server.command(f("%s.$cmd", db)
 	        , cmd, { connection: connection }, function(err, r) {
-	          if(r && r.result.done == false) {
-	            var cmd = {
-	                saslContinue: 1
-	              , conversationId: r.result.conversationId
-	              , payload: new Buffer(0)
-	            }
+	        
+	        // Do we have an error, handle it
+	        if(handleError(err, r) == false) {
+	          count = count - 1;
 
-	            server.command(f("%s.$cmd", db)
-	              , cmd, { connection: connection }, function(err, r) {
-	                handleEnd(err, r);
-	            });
-	          } else {
-	            handleEnd(err, r);
+	          if(count == 0 && numberOfValidConnections > 0) {
+	            // Store the auth details
+	            addAuthSession(self.authStore, new AuthSession(db, username, password));
+	            // Return correct authentication
+	            return callback(null, true);
+	          } else if(count == 0) {
+	            if(errorObject == null) errorObject = new MongoError(f("failed to authenticate using scram"));
+	            return callback(errorObject, false);
 	          }
+
+	          return;
+	        }
+
+	        // Get the dictionary
+	        var dict = parsePayload(r.result.payload.value())
+
+	        // Unpack dictionary
+	        var iterations = parseInt(dict.i, 10);
+	        var salt = dict.s;
+	        var rnonce = dict.r;
+
+	        // Set up start of proof
+	        var withoutProof = f("c=biws,r=%s", rnonce);
+	        var passwordDig = passwordDigest(username, password);
+	        var saltedPassword = hi(passwordDig
+	            , new Buffer(salt, 'base64')
+	            , iterations);
+	        
+	        // Create the client key
+	        var hmac = crypto.createHmac('sha1', saltedPassword);
+	        hmac.update(new Buffer("Client Key"));
+	        var clientKey = new Buffer(hmac.digest('base64'), 'base64');
+
+	        // Create the stored key
+	        var hash = crypto.createHash('sha1');
+	        hash.update(clientKey);
+	        var storedKey = new Buffer(hash.digest('base64'), 'base64');
+
+	        // Create the authentication message
+	        var authMsg = [firstBare, r.result.payload.value().toString('base64'), withoutProof].join(',');
+
+	        // Create client signature
+	        var hmac = crypto.createHmac('sha1', storedKey);
+	        hmac.update(new Buffer(authMsg));          
+	        var clientSig = new Buffer(hmac.digest('base64'), 'base64');
+
+	        // Create client proof
+	        var clientProof = f("p=%s", new Buffer(xor(clientKey, clientSig)).toString('base64'));
+
+	        // Create client final
+	        var clientFinal = [withoutProof, clientProof].join(',');
+
+	        // Generate server key
+	        var hmac = crypto.createHmac('sha1', saltedPassword);
+	        hmac.update(new Buffer('Server Key'))
+	        var serverKey = new Buffer(hmac.digest('base64'), 'base64');
+
+	        // Generate server signature
+	        var hmac = crypto.createHmac('sha1', serverKey);
+	        hmac.update(new Buffer(authMsg))
+	        var serverSig = new Buffer(hmac.digest('base64'), 'base64');
+
+	        //
+	        // Create continue message
+	        var cmd = {
+	            saslContinue: 1
+	          , conversationId: r.result.conversationId
+	          , payload: new Binary(new Buffer(clientFinal))
+	        }
+
+	        //
+	        // Execute sasl continue
+	        server.command(f("%s.$cmd", db)
+	          , cmd, { connection: connection }, function(err, r) {
+	            if(r && r.result.done == false) {
+	              var cmd = {
+	                  saslContinue: 1
+	                , conversationId: r.result.conversationId
+	                , payload: new Buffer(0)
+	              }
+
+	              server.command(f("%s.$cmd", db)
+	                , cmd, { connection: connection }, function(err, r) {
+	                  handleEnd(err, r);
+	              });
+	            } else {
+	              handleEnd(err, r);
+	            }
+	        });
 	      });
-	    });
-	  }
+	    }
 
-	  var _execute = function(_connection) {
-	    process.nextTick(function() {
-	      executeScram(_connection);
-	    });
-	  }
-
-	  // For each connection we need to authenticate
-	  while(connections.length > 0) {
-	    _execute(connections.shift());
+	    // Get the connection
+	    executeScram(connections.shift());
 	  }
 	}
 
@@ -39700,24 +37537,20 @@
 	 * Re authenticate pool
 	 * @method
 	 * @param {{Server}|{ReplSet}|{Mongos}} server Topology the authentication method is being called on
-	 * @param {[]Connections} connections Connections to authenticate using this authenticator
+	 * @param {Pool} pool Connection pool for this topology
 	 * @param {authResultCallback} callback The callback to return the result from the authentication
 	 * @return {object}
 	 */
-	ScramSHA1.prototype.reauthenticate = function(server, connections, callback) {
-	  var authStore = this.authStore.slice(0);
-	  var count = authStore.length;
-	  var err = null;
-	  // No connections
+	ScramSHA1.prototype.reauthenticate = function(server, pool, callback) {
+	  var count = this.authStore.length;
 	  if(count == 0) return callback(null, null);
 	  // Iterate over all the auth details stored
-	  for(var i = 0; i < authStore.length; i++) {
-	    this.auth(server, connections, authStore[i].db, authStore[i].username, authStore[i].password, function(err, r) {
-	      if(err) err = err;
+	  for(var i = 0; i < this.authStore.length; i++) {
+	    this.auth(server, pool, this.authStore[i].db, this.authStore[i].username, this.authStore[i].password, function(err, r) {
 	      count = count - 1;
 	      // Done re-authenticating
 	      if(count == 0) {
-	        callback(err, null);
+	        callback(null, null);
 	      }
 	    });
 	  }
@@ -39728,7 +37561,7 @@
 
 
 /***/ },
-/* 148 */
+/* 137 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -39742,17 +37575,11 @@
 	  , Server = __webpack_require__(96)
 	  , ReadPreference = __webpack_require__(123)
 	  , MongoError = __webpack_require__(95)
-	  , Ping = __webpack_require__(149)
-	  , Session = __webpack_require__(131)
+	  , Ping = __webpack_require__(138)
+	  , Session = __webpack_require__(130)
 	  , BasicCursor = __webpack_require__(124)
 	  , BSON = __webpack_require__(102).native().BSON
-	  , State = __webpack_require__(150)
-	  , MongoCR = __webpack_require__(132)
-	  , X509 = __webpack_require__(133)
-	  , Plain = __webpack_require__(134)
-	  , GSSAPI = __webpack_require__(135)
-	  , SSPI = __webpack_require__(146)
-	  , ScramSHA1 = __webpack_require__(147)
+	  , State = __webpack_require__(139)
 	  , Logger = __webpack_require__(122);
 
 	/**
@@ -39804,7 +37631,7 @@
 	 * @param {array} seedlist A list of seeds for the replicaset
 	 * @param {boolean} options.setName The Replicaset set name
 	 * @param {boolean} [options.secondaryOnlyConnectionAllowed=false] Allow connection to a secondary only replicaset
-	 * @param {number} [options.haInterval=10000] The High availability period for replicaset inquiry
+	 * @param {number} [options.haInterval=5000] The High availability period for replicaset inquiry
 	 * @param {boolean} [options.emitError=false] Server will emit errors events
 	 * @param {Cursor} [options.cursorFactory=Cursor] The cursor factory class used for all query cursors
 	 * @param {number} [options.size=5] Server connection pool size
@@ -39813,7 +37640,6 @@
 	 * @param {boolean} [options.noDelay=true] TCP Connection no delay
 	 * @param {number} [options.connectionTimeout=10000] TCP Connection timeout setting
 	 * @param {number} [options.socketTimeout=0] TCP Socket timeout setting
-	 * @param {number} [options.monitoringSocketTimeout=30000] TCP Socket timeout setting for replicaset monitoring socket
 	 * @param {boolean} [options.singleBufferSerializtion=true] Serialize into single buffer, trade of peak memory for serialization speed
 	 * @param {boolean} [options.ssl=false] Use SSL for connection
 	 * @param {boolean|function} [options.checkServerIdentity=true] Ensure we check server identify during SSL, set to false to disable checking. Only works for Node 0.12.x or higher. You can pass in a boolean or your own checkServerIdentity override function.
@@ -39876,8 +37702,6 @@
 	    , secondaryOnlyConnectionAllowed: typeof options.secondaryOnlyConnectionAllowed == 'boolean'
 	    ? options.secondaryOnlyConnectionAllowed : false
 	    , haInterval: options.haInterval || 10000
-	    // Current haInterval
-	    , currentHaInterval: options.haInterval || 10000
 	    // Are we running in debug mode
 	    , debug: typeof options.debug == 'boolean' ? options.debug : false
 	    // The replicaset name
@@ -39888,6 +37712,8 @@
 	    , tag: options.tag
 	    // Do we have a not connected handler
 	    , disconnectHandler: options.disconnectHandler
+	    // Currently connecting servers
+	    , connectingServers: {}
 	    // Contains any alternate strategies for picking
 	    , readPreferenceStrategies: {}
 	    // Auth providers
@@ -39922,20 +37748,12 @@
 	  // Replicaset state
 	  var replState = new State(this, {
 	      id: this.s.id, setName: this.s.setName
-	    // , connectingServers: this.s.connectingServers
+	    , connectingServers: this.s.connectingServers
 	    , secondaryOnlyConnectionAllowed: this.s.secondaryOnlyConnectionAllowed
 	  });
 
 	  // Add Replicaset state to our internal state
 	  this.s.replState = replState;
-
-	  // Add the authentication mechanisms
-	  this.addAuthProvider('mongocr', new MongoCR());
-	  this.addAuthProvider('x509', new X509());
-	  this.addAuthProvider('plain', new Plain());
-	  this.addAuthProvider('gssapi', new GSSAPI());
-	  this.addAuthProvider('sspi', new SSPI());
-	  this.addAuthProvider('scram-sha-1', new ScramSHA1());
 
 	  // BSON property (find a server and pass it along)
 	  Object.defineProperty(this, 'bson', {
@@ -40062,7 +37880,7 @@
 	 * @return {Connection[]}
 	 */
 	ReplSet.prototype.connections = function() {
-	  return this.s.replState.getAllConnections({includeArbiters:true});
+	  return this.s.replState.getAllConnections();
 	}
 
 	/**
@@ -40076,22 +37894,6 @@
 	  options = options || {};
 	  // Pick the right server based on readPreference
 	  return pickServer(this, this.s, options.readPreference);
-	}
-
-	/**
-	 * Get correct server for a given connection
-	 * @method
-	 * @param {Connection} [connection] A Connection showing a current server
-	 * @return {Server}
-	 */
-	ReplSet.prototype.getServerFrom = function(connection) {
-	  var servers = this.s.replState.getAll();
-	  // Go through all the server
-	  for(var i = 0; i < servers.length; i++) {
-	    if(servers[i].equals(connection.name)) return servers[i];
-	  }
-
-	  return null;
 	}
 
 	/**
@@ -40137,12 +37939,7 @@
 	  // Handler
 	  var handler = function(err, r) {
 	    // We have a no master error, immediately refresh the view of the replicaset
-	    if((notMasterError(r) || notMasterError(err)) && !self.s.highAvailabilityProcessRunning) {
-	      // Set he current interval to minHeartbeatFrequencyMS
-	      self.s.currentHaInterval = self.s.minHeartbeatFrequencyMS;
-	      // Attempt to locate the current master immediately
-	      replicasetInquirer(self, self.s, true)();
-	    }
+	    if(notMasterError(r) || notMasterError(err)) replicasetInquirer(self, self.s, true)();
 	    // Return the result
 	    callback(err, r);
 	  }
@@ -40167,6 +37964,7 @@
 	ReplSet.prototype.command = function(ns, cmd, options, callback) {
 	  if(typeof options == 'function') callback = options, options = {};
 	  if(this.s.replState.state == DESTROYED) return callback(new MongoError(f('topology was destroyed')));
+
 	  var server = null;
 	  var self = this;
 	  // Ensure we have no options
@@ -40193,10 +37991,7 @@
 	          // Was it a logout command clear any credentials
 	          if(cmd.logout) clearCredentials(self.s, ns);
 	          // We have a no master error, immediately refresh the view of the replicaset
-	          if((notMasterError(r) || notMasterError(err)) && !self.s.highAvailabilityProcessRunning) {
-	            replicasetInquirer(self, self.s, true)();
-	          }
-
+	          if(notMasterError(r) || notMasterError(err)) replicasetInquirer(self, self.s, true)();
 	          // Return the error
 	          callback(err, r);
 	        }
@@ -40221,7 +38016,7 @@
 	    // Was it a logout command clear any credentials
 	    if(cmd.logout) clearCredentials(self.s, ns);
 	    // We have a no master error, immediately refresh the view of the replicaset
-	    if((notMasterError(r) || notMasterError(err)) && !self.s.highAvailabilityProcessRunning) {
+	    if(notMasterError(r) || notMasterError(err)) {
 	      replicasetInquirer(self, self.s, true)();
 	    }
 	    // Return the error
@@ -40316,9 +38111,8 @@
 	  var callback = args.pop();
 
 	  // If we don't have the mechanism fail
-	  if(this.s.authProviders[mechanism] == null && mechanism != 'default') {
+	  if(this.s.authProviders[mechanism] == null && mechanism != 'default')
 	    throw new MongoError(f("auth provider %s does not exist", mechanism));
-	  }
 
 	  // Authenticate against all the servers
 	  var servers = this.s.replState.getAll().slice(0);
@@ -40384,16 +38178,6 @@
 	}
 
 	/**
-	 * Emit event if it exists
-	 * @method
-	 */
-	function emitSDAMEvent(self, event, description) {
-	  if(self.listeners(event).length > 0) {
-	    self.emit(event, description);
-	  }
-	}
-
-	/**
 	 * Initiate server connect
 	 * @method
 	 */
@@ -40410,9 +38194,6 @@
 	  // No fullsetup reached
 	  this.s.fullsetup = false;
 
-	  // Reset the replState
-	  this.s.replState.resetDescription();
-
 	  // For all entries in the seedlist build a server instance
 	  this.s.seedlist.forEach(function(e) {
 	    // Clone options
@@ -40426,9 +38207,6 @@
 	    // Add a reserved connection for monitoring
 	    opts.size = opts.size + 1;
 	    opts.monitoring = true;
-	    opts.topologyId = self.s.id;
-	    // Server is in topology
-	    opts.inTopology = true;
 	    // Set up tags if any
 	    if(self.s.tag) opts.tag = self.s.tag;
 	    // Share the auth store
@@ -40443,29 +38221,16 @@
 	    self.s.initialConnectionServers.push(server);
 	  });
 
-	  // Emit the topology opening event
-	  emitSDAMEvent(this, 'topologyOpening', { topologyId: this.s.id });
-
 	  // Attempt to connect to all the servers
 	  while(this.s.disconnectedServers.length > 0) {
 	    // Get the server
 	    var server = self.s.disconnectedServers.shift();
-	    // Ensure the server is properly disconnected
-	    server.destroy();
 
 	    // Set up the event handlers
 	    server.once('error', errorHandlerTemp(self, self.s, 'error'));
 	    server.once('close', errorHandlerTemp(self, self.s, 'close'));
 	    server.once('timeout', errorHandlerTemp(self, self.s, 'timeout'));
 	    server.once('connect', connectHandler(self, self.s));
-
-	    // SDAM Monitoring events
-	    server.on('serverOpening', function(e) { self.emit('serverOpening', e); });
-	    server.on('serverDescriptionChanged', function(e) { self.emit('serverDescriptionChanged', e); });
-	    server.on('serverHeartbeatStarted', function(e) { self.emit('serverHeartbeatStarted', e); });
-	    server.on('serverHeartbeatSucceeded', function(e) { self.emit('serverHeartbeatSucceeded', e); });
-	    server.on('serverHearbeatFailed', function(e) { self.emit('serverHearbeatFailed', e); });
-	    server.on('serverClosed', function(e) { self.emit('serverClosed', e); });
 
 	    // Ensure we schedule the opening of new socket
 	    // on separate ticks of the event loop
@@ -40490,29 +38255,23 @@
 	  // If we specified a read preference check if we are connected to something
 	  // than can satisfy this
 	  if(options.readPreference
-	    && options.readPreference.equals(ReadPreference.secondary)) {
+	    && options.readPreference.equals(ReadPreference.secondary))
 	    return this.s.replState.isSecondaryConnected();
-	  }
 
 	  if(options.readPreference
-	    && options.readPreference.equals(ReadPreference.primary)) {
-	    return this.s.replState.isPrimaryConnected();
-	  }
-
-	  if(options.readPreference
-	    && options.readPreference.equals(ReadPreference.primaryPreferred)) {
+	    && options.readPreference.equals(ReadPreference.primary))
 	    return this.s.replState.isSecondaryConnected() || this.s.replState.isPrimaryConnected();
-	  }
 
 	  if(options.readPreference
-	    && options.readPreference.equals(ReadPreference.secondaryPreferred)) {
+	    && options.readPreference.equals(ReadPreference.primaryPreferred))
 	    return this.s.replState.isSecondaryConnected() || this.s.replState.isPrimaryConnected();
-	  }
+
+	  if(options.readPreference
+	    && options.readPreference.equals(ReadPreference.secondaryPreferred))
+	    return this.s.replState.isSecondaryConnected() || this.s.replState.isPrimaryConnected();
 
 	  if(this.s.secondaryOnlyConnectionAllowed
-	    && this.s.replState.isSecondaryConnected()) {
-	      return true;
-	  }
+	    && this.s.replState.isSecondaryConnected()) return true;
 
 	  return this.s.replState.isPrimaryConnected();
 	}
@@ -40527,31 +38286,6 @@
 	}
 
 	/**
-	 * Unref all connections belong to this server
-	 * @method
-	 */
-	ReplSet.prototype.unref = function(emitClose) {
-	  var self = this;
-	  if(this.s.logger.isInfo()) this.s.logger.info(f('[%s] unreferenced', this.s.id));
-
-	  // Emit close
-	  if(emitClose && self.listeners('close').length > 0) self.emit('close', self);
-
-	  // Unref sockets
-	  this.s.replState.unref();
-
-	  // Clear out any listeners
-	  var events = ['timeout', 'error', 'close', 'joined', 'left',
-	    'serverOpening', 'serverDescriptionChanged', 'serverHeartbeatStarted',
-	    'serverHeartbeatSucceeded', 'serverHearbeatFailed', 'serverClosed'];
-	  events.forEach(function(e) {
-	    self.removeAllListeners(e);
-	  });
-
-	  clearTimeout(self.s.haTimer);
-	}
-
-	/**
 	 * Destroy the server connection
 	 * @method
 	 */
@@ -40560,22 +38294,14 @@
 	  if(this.s.logger.isInfo()) this.s.logger.info(f('[%s] destroyed', this.s.id));
 	  this.s.replState.state = DESTROYED;
 
-	  // Clear the ha timer
-	  if(self.s.haTimer) clearTimeout(self.s.haTimer);
-
 	  // Emit close
 	  if(emitClose && self.listeners('close').length > 0) self.emit('close', self);
 
 	  // Destroy state
 	  this.s.replState.destroy();
 
-	  // Emit toplogy closing event
-	  emitSDAMEvent(this, 'topologyClosed', { topologyId: this.s.id });
-
 	  // Clear out any listeners
-	  var events = ['timeout', 'error', 'close', 'joined', 'left',
-	    'serverOpening', 'serverDescriptionChanged', 'serverHeartbeatStarted',
-	    'serverHeartbeatSucceeded', 'serverHearbeatFailed', 'serverClosed'];
+	  var events = ['timeout', 'error', 'close', 'joined', 'left'];
 	  events.forEach(function(e) {
 	    self.removeAllListeners(e);
 	  });
@@ -40681,45 +38407,6 @@
 	  return filteredServers;
 	}
 
-	var eventHandler = {
-	  fullsetup: function(self, state) {
-	    // If no more initial servers and new scheduled servers to connect
-	    if (!state.replState.primary) return;
-	    if (state.replState.secondaries.length === 0) return;
-	    if (state.fullsetup) return;
-
-	    // Only emit if there is a listener
-	    if(self.listeners('fullsetup').length > 0) {
-	      state.fullsetup = true;
-	      self.emit('fullsetup', self);
-	    }
-	  },
-	  all: function(self, state) {
-	    // If all servers are accounted for and we have not sent the all event
-	    if (!state.replState.primary) return;
-	    if (!self.lastIsMaster()) return;
-	    if (!Array.isArray(self.lastIsMaster().hosts)) return;
-	    if (state.all) return;
-
-	    var length = 1 + state.replState.secondaries.length;
-	    // If we have all secondaries + primary
-	    if (length !== self.lastIsMaster().hosts.length) return;
-
-	    // Only emit if there is a listener
-	    if(self.listeners('all').length > 0) {
-	      state.all = true;
-	      self.emit('all', self);
-	    }
-	  }
-	}
-
-	var checkAndEmitEvent = function(self, state, event) {
-	  var handler = eventHandler[event];
-	  if (!handler) throw new MongoError(event + " event not implemented");
-
-	  handler(self, state);
-	}
-
 	//
 	// Pick a server based on readPreference
 	var pickServer = function(self, s, readPreference) {
@@ -40734,8 +38421,11 @@
 	    return server;
 	  }
 
-	  // Get all the secondaries
-	  var secondaries = s.replState.getSecondaries();
+	  // Filter out any hidden secondaries
+	  var secondaries = s.replState.secondaries.filter(function(server) {
+	    if(server.lastIsMaster().hidden) return false;
+	    return true;
+	  });
 
 	  // Check if we can satisfy and of the basic read Preferences
 	  if(readPreference.equals(ReadPreference.secondary)
@@ -40795,9 +38485,8 @@
 	}
 
 	var setHaTimer = function(self, state) {
-	  if(state.highAvailabilityProcessRunning) return;
 	  // all haTimers are set to to repeat, so we pass norepeat false
-	  self.s.haTimer = setTimeout(replicasetInquirer(self, state, false), state.currentHaInterval);
+	  self.s.haTimer = setTimeout(replicasetInquirer(self, state, false), state.haInterval);
 	  return self.s.haTimer;
 	}
 
@@ -40809,43 +38498,9 @@
 	    return true;
 	}
 
-	var merge = function(list, newList) {
-	  var finalList = list.slice(0)
-
-	  for(var i = 0; i < newList.length; i++) {
-	    if(finalList.indexOf(newList[i]) == -1) finalList.push(newList[i]);
-	  }
-
-	  return finalList;
-	}
-
 	var replicasetInquirer = function(self, state, norepeat) {
 	  return function() {
-	    // Process already running don't rerun
-	    if(state.highAvailabilityProcessRunning) {
-	      return;
-	    }
-
-	    // State destroyed return
-	    if(state.replState.state == DESTROYED) {
-	      return
-	    }
-
-	    // Do we have a primary, ensure we only monitor by the haInterval
-	    if(state.replState.isPrimaryConnected()) {
-	      self.s.currentHaInterval = self.s.haInterval;
-	    } else {
-	      self.s.currentHaInterval = self.s.minHeartbeatFrequencyMS;
-	    }
-
-	    // Clean out any failed connection attempts
-	    state.replState.clearConnectingServers();
-
-	    // Cleanup state (removed disconnected servers)
-	    state.replState.clean();
-
-	    // Started processes
-	    state.highAvailabilityProcessRunning = true;
+	    if(state.replState.state == DESTROYED) return
 	    // We have no connections we need to reseed the disconnected list
 	    if(!haveAvailableServers(state)) {
 	      // For all entries in the seedlist build a server instance
@@ -40861,11 +38516,8 @@
 	        // Add a reserved connection for monitoring
 	        opts.size = opts.size + 1;
 	        opts.monitoring = true;
-	        opts.topologyId = self.s.id;
-	        // Server is in topology
-	        opts.inTopology = true;
 	        // Set up tags if any
-	        if(state.tag) opts.tag = state.tag;
+	        if(state.tag) opts.tag = stage.tag;
 	        // Share the auth store
 	        opts.authProviders = state.authProviders;
 	        // Create a new Server
@@ -40876,10 +38528,17 @@
 	      });
 	    }
 
+	    // Process already running don't rerun
+	    if(state.highAvailabilityProcessRunning) return;
+	    // Started processes
+	    state.highAvailabilityProcessRunning = true;
 	    if(state.logger.isInfo()) state.logger.info(f('[%s] monitoring process running %s', state.id, JSON.stringify(state.replState)));
 
 	    // Unique HA id to identify the current look running
 	    var localHaId = state.haId++;
+
+	    // Clean out any failed connection attempts
+	    state.connectingServers = {};
 
 	    // Controls if we are doing a single inquiry or repeating
 	    norepeat = typeof norepeat == 'boolean' ? norepeat : false;
@@ -40904,14 +38563,6 @@
 	      server.once('timeout', errorHandlerTemp(self, state, 'timeout'));
 	      server.once('connect', connectHandler(self, state));
 
-	      // SDAM Monitoring events
-	      server.on('serverOpening', function(e) { self.emit('serverOpening', e); });
-	      server.on('serverDescriptionChanged', function(e) { self.emit('serverDescriptionChanged', e); });
-	      server.on('serverHeartbeatStarted', function(e) { self.emit('serverHeartbeatStarted', e); });
-	      server.on('serverHeartbeatSucceeded', function(e) { self.emit('serverHeartbeatSucceeded', e); });
-	      server.on('serverHearbeatFailed', function(e) { self.emit('serverHearbeatFailed', e); });
-	      server.on('serverClosed', function(e) { self.emit('serverClosed', e); });
-
 	      // Ensure we schedule the opening of new socket
 	      // on separate ticks of the event loop
 	      var execute = function(_server) {
@@ -40924,6 +38575,9 @@
 	      execute(server);
 	    }
 
+	    // Cleanup state (removed disconnected servers)
+	    state.replState.clean();
+
 	    // We need to query all servers
 	    var servers = state.replState.getAll({includeArbiters:true});
 	    var serversLeft = servers.length;
@@ -40935,10 +38589,7 @@
 	      // Ended highAvailabilityProcessRunning
 	      state.highAvailabilityProcessRunning = false;
 	      // Restart ha process
-	      if(!norepeat) {
-	        setHaTimer(self, state);
-	      }
-
+	      if(!norepeat) setHaTimer(self, state);
 	      return;
 	    }
 
@@ -40946,41 +38597,45 @@
 	    // ismaster for Master server
 	    var primaryIsMaster = null;
 
+	    // Kill the server connection if it hangs
+	    var timeoutServer = function(_server) {
+	      return setTimeout(function() {
+	        if(_server.isConnected()) {
+	          _server.connections()[0].connection.destroy();
+	        }
+	      }, self.s.options.connectionTimeout);
+	    }
+
 	    //
 	    // Inspect a specific servers ismaster
-	    var inspectServer = function(server, callback) {
-	      if(state.replState.state == DESTROYED) {
-	        return;
-	      }
-
-	      if(server && !server.isConnected()) {
-	        return callback();
-	      }
-
+	    var inspectServer = function(server) {
+	      if(state.replState.state == DESTROYED) return;
 	      // Did we get a server
 	      if(server && server.isConnected()) {
+	        // Get the timeout id
+	        var timeoutId = timeoutServer(server);
 	        // Execute ismaster
-	        server.command('admin.$cmd', { ismaster:true }, {monitoring: true}, function(err, r) {
+	        server.command('admin.$cmd', { ismaster:true },  { monitoring:true }, function(err, r) {
+	          // Clear out the timeoutServer
+	          clearTimeout(timeoutId);
+
 	          // If the state was destroyed
-	          if(state.replState.state == DESTROYED) {
-	            return callback();
-	          }
+	          if(state.replState.state == DESTROYED) return;
 
 	          // Count down the number of servers left
 	          serversLeft = serversLeft - 1;
 
 	          // If we have an error but still outstanding server request return
-	          if(err && serversLeft > 0) {
-	            return callback();
-	          }
+	          if(err && serversLeft > 0) return;
 
 	          // We had an error and have no more servers to inspect, schedule a new check
 	          if(err && serversLeft == 0) {
 	            self.emit('ha', 'end', {norepeat: norepeat, id: localHaId, state: state.replState ? state.replState.toJSON() : {}});
-	            // Ended highAvailabilityProcessRunning
+	            // Ended highAvailabilityProcessRunnfing
 	            state.highAvailabilityProcessRunning = false;
 	            // Return the replicasetInquirer
-	            return callback();
+	            if(!norepeat) setHaTimer(self, state);
+	            return;
 	          }
 
 	          // Let all the read Preferences do things to the servers
@@ -40990,17 +38645,8 @@
 	          var ismaster = r.result;
 	          if(state.logger.isDebug()) state.logger.debug(f('[%s] monitoring process ismaster %s', state.id, JSON.stringify(ismaster)));
 
-	          // Update server instance ismaster to ensure proper sync
-	          // when producing SDAM monitoring events
-	          server.s.ismaster = ismaster;
-
 	          // Update the replicaset state
-	          if(!state.replState.update(ismaster, server) && !state.replState.contains(server)) {
-	            // Destroy the instance
-	            server.destroy();
-	            // Return
-	            return callback();
-	          }
+	          state.replState.update(ismaster, server);
 
 	          //
 	          // Process hosts list from ismaster under two conditions
@@ -41022,24 +38668,20 @@
 	            // Process all the hsots
 	            processHosts(self, state, hosts);
 	          } else if(err == null && !Array.isArray(ismaster.hosts)) {
-	            // Destroy the instance
 	            server.destroy();
-	            // Return
-	            return callback();
 	          }
 
 	          // No read Preferences strategies
 	          if(rPreferencesCount == 0) {
 	            // Don't schedule a new inquiry
-	            if(serversLeft > 0) {
-	              return callback();
-	            }
-
+	            if(serversLeft > 0) return;
 	            // Emit ha process end
 	            self.emit('ha', 'end', {norepeat: norepeat, id: localHaId, state: state.replState ? state.replState.toJSON() : {}});
 	            // Ended highAvailabilityProcessRunning
 	            state.highAvailabilityProcessRunning = false;
-	            return callback();
+	            // Let's keep monitoring
+	            if(!norepeat) setHaTimer(self, state);
+	            return;
 	          }
 
 	          // No servers left to query, execute read preference strategies
@@ -41061,51 +38703,37 @@
 	                  self.emit('ha', 'end', {norepeat: norepeat, id: localHaId, state: state.replState ? state.replState.toJSON() : {}});
 	                  // Ended highAvailabilityProcessRunning
 	                  state.highAvailabilityProcessRunning = false;
-	                  return callback();
+	                  // Let's keep monitoring
+	                  if(!norepeat) setHaTimer(self, state);
+	                  return;
 	                }
 	              });
 	            }
 	          }
-
-	          callback();
 	        });
 	      }
 	    }
 
-	    // Go over all the servers
-	    if(servers.length == 0) {
-	      // Set the high availability
-	      state.highAvailabilityProcessRunning = false;
-	      // Check if we need to emit a fullsetup event
-	      checkAndEmitEvent(self, state, 'fullsetup');
-	      // Check if we need to emit the all event
-	      checkAndEmitEvent(self, state, 'all');
-	      // Repeat the process
-	      if(!norepeat) {
-	        setHaTimer(self, state);
-	      }
-	    }
-
-	    // Ge the number of servers left
-	    var left = servers.length;
 	    // Call ismaster on all servers
 	    for(var i = 0; i < servers.length; i++) {
-	      inspectServer(servers[i], function() {
-	        left = left - 1;
+	      inspectServer(servers[i]);
+	    }
 
-	        if(left == 0) {
-	          // Set the high availability
-	          state.highAvailabilityProcessRunning = false;
-	          // Check if we need to emit a fullsetup event
-	          checkAndEmitEvent(self, state, 'fullsetup');
-	          // Check if we need to emit the all event
-	          checkAndEmitEvent(self, state, 'all');
-	          // Repeat the process
-	          if(!norepeat) {
-	            setHaTimer(self, state);
-	          }
-	        }
-	      });
+	    // If no more initial servers and new scheduled servers to connect
+	    if(state.replState.secondaries.length >= 1 && state.replState.primary != null && !state.fullsetup) {
+	      state.fullsetup = true;
+	      self.emit('fullsetup', self);
+	    }
+
+	    // If all servers are accounted for and we have not sent the all event
+	    if(state.replState.primary != null && self.lastIsMaster()
+	      && Array.isArray(self.lastIsMaster().hosts) && !state.all) {
+	      var length = 1 + state.replState.secondaries.length;
+	      // If we have all secondaries + primary
+	      if(length == self.lastIsMaster().hosts.length + 1) {
+	        state.all = true;
+	        self.emit('all', self);
+	      }
 	    }
 	  }
 	}
@@ -41113,8 +38741,6 @@
 	// Error handler for initial connect
 	var errorHandlerTemp = function(self, state, event) {
 	  return function(err, server) {
-	    // Destroy the server
-	    server.destroy();
 	    // Log the information
 	    if(state.logger.isInfo()) state.logger.info(f('[%s] server %s disconnected', state.id, server.lastIsMaster() ? server.lastIsMaster().me : server.name));
 	    // Filter out any connection servers
@@ -41122,16 +38748,11 @@
 	      return server.name != _server.name;
 	    });
 
-	    // Remove from list of connected servers
-	    state.replState.removeConnectingServer(server.name);
-
 	    // Connection is destroyed, ignore
 	    if(state.replState.state == DESTROYED) return;
 
 	    // Remove any non used handlers
-	    ['error', 'close', 'timeout', 'connect',
-	      'serverOpening', 'serverDescriptionChanged', 'serverHeartbeatStarted',
-	      'serverHeartbeatSucceeded', 'serverHearbeatFailed', 'serverClosed'].forEach(function(e) {
+	    ['error', 'close', 'timeout', 'connect'].forEach(function(e) {
 	      server.removeAllListeners(e);
 	    })
 
@@ -41144,9 +38765,8 @@
 	        || (!state.secondaryOnlyConnectionAllowed && !state.replState.isPrimaryConnected())) {
 	          if(state.logger.isInfo()) state.logger.info(f('[%s] no valid seed servers in list', state.id));
 
-	          if(self.listeners('error').length > 0) {
+	          if(self.listeners('error').length > 0)
 	            return self.emit('error', new MongoError('no valid seed servers in list'));
-	          }
 	       }
 	    }
 
@@ -41156,13 +38776,14 @@
 	      if(state.emitError && self.listeners('error').length > 0) {
 	        if(state.logger.isInfo()) state.logger.info(f('[%s] no valid seed servers in list', state.id));
 
-	        if(self.listeners('error').length > 0) {
+	        if(self.listeners('error').length > 0)
 	          self.emit('error', new MongoError('no valid seed servers in list'));
-	        }
 	      }
 	    }
 	  }
 	}
+	// TODO with arbiter
+	//  - if connected to an arbiter, shut down all but single server connection
 
 	// Connect handler
 	var connectHandler = function(self, state) {
@@ -41170,7 +38791,8 @@
 	    if(state.logger.isInfo()) state.logger.info(f('[%s] connected to %s', state.id, server.name));
 	    // Destroyed connection
 	    if(state.replState.state == DESTROYED) {
-	      return server.destroy(false, false);
+	      server.destroy(false, false);
+	      return;
 	    }
 
 	    // Filter out any connection servers
@@ -41178,30 +38800,31 @@
 	      return server.name != _server.name;
 	    });
 
-	    var ismaster = server.lastIsMaster();
-
 	    // Process the new server
 	    var processNewServer = function() {
 	      // Discover any additional servers
 	      var ismaster = server.lastIsMaster();
 
+	      // Are we an arbiter, restrict number of connections to
+	      // one single connection
+	      if(ismaster.arbiterOnly) {
+	        server.capConnections(1);
+	      }
+
 	      // Deal with events
-	      var events = ['error', 'close', 'timeout', 'connect', 'message',
-	        'serverOpening', 'serverDescriptionChanged', 'serverHeartbeatStarted',
-	        'serverHeartbeatSucceeded', 'serverHearbeatFailed', 'serverClosed'];
+	      var events = ['error', 'close', 'timeout', 'connect', 'message'];
 	      // Remove any non used handlers
 	      events.forEach(function(e) {
 	        server.removeAllListeners(e);
 	      })
 
 	      // Clean up
-	      // delete state.connectingServers[server.name];
-	      state.replState.removeConnectingServer(server.name);
-
+	      delete state.connectingServers[server.name];
 	      // Update the replicaset state, destroy if not added
-	      if(!state.replState.update(ismaster, server) && !state.replState.contains(server)) {
+	      if(!state.replState.update(ismaster, server)) {
 	        // Destroy the server instance
 	        server.destroy();
+
 	        // No more candiate servers
 	        if(state.state == CONNECTING && state.initialConnectionServers.length == 0
 	          && state.replState.primary == null && state.replState.secondaries.length == 0) {
@@ -41216,14 +38839,6 @@
 	        server.on('error', errorHandler(self, state));
 	        server.on('close', closeHandler(self, state));
 	        server.on('timeout', timeoutHandler(self, state));
-
-	        // SDAM Monitoring events
-	        server.on('serverOpening', function(e) { self.emit('serverOpening', e); });
-	        server.on('serverDescriptionChanged', function(e) { self.emit('serverDescriptionChanged', e); });
-	        server.on('serverHeartbeatStarted', function(e) { self.emit('serverHeartbeatStarted', e); });
-	        server.on('serverHeartbeatSucceeded', function(e) { self.emit('serverHeartbeatSucceeded', e); });
-	        server.on('serverHearbeatFailed', function(e) { self.emit('serverHearbeatFailed', e); });
-	        server.on('serverClosed', function(e) { self.emit('serverClosed', e); });
 	      }
 
 	      // Hosts to process
@@ -41241,17 +38856,18 @@
 	      processHosts(self, state, hosts);
 
 	      // If have the server instance already destroy it
-	      if(state.initialConnectionServers.length == 0 && state.replState.connectingServersCount() == 0
+	      if(state.initialConnectionServers.length == 0 && Object.keys(state.connectingServers).length == 0
 	        && !state.replState.isPrimaryConnected() && !state.secondaryOnlyConnectionAllowed && state.replState.state == CONNECTING) {
 	        if(state.logger.isInfo()) state.logger.info(f('[%s] no primary found in replicaset', state.id));
 	        self.emit('error', new MongoError("no primary found in replicaset"));
 	        return self.destroy();
 	      }
 
-	      // Check if we need to emit a fullsetup event
-	      checkAndEmitEvent(self, state, 'fullsetup');
-	      // Check if we need to emit the all event
-	      checkAndEmitEvent(self, state, 'all');
+	      // If no more initial servers and new scheduled servers to connect
+	      if(state.replState.secondaries.length >= 1 && state.replState.primary != null && !state.fullsetup) {
+	        state.fullsetup = true;
+	        self.emit('fullsetup', self);
+	      }
 	    }
 
 	    // Save up new members to be authenticated against
@@ -41261,28 +38877,15 @@
 
 	    // No credentials just process server
 	    if(state.credentials.length == 0) return processNewServer();
-
-	    // Apply all the credentials serially
-	    var applyCredentials = function(server, index, credentials, callback) {
-	      // Do not apply credentials if we have an arbiter
-	      if(server.lastIsMaster() && server.lastIsMaster().arbiterOnly) return callback();
-	      // Done applying the credentials return
-	      if(index >= credentials.length || credentials.length == 0) return callback();
-	      // Apply the credential
-	      server.auth.apply(server, credentials[index].concat([function(err, r) {
-	        if(err) return callback(err);
-	        applyCredentials(server, index + 1, credentials, callback);
+	    // Do we have credentials, let's apply them all
+	    var count = state.credentials.length;
+	    // Apply the credentials
+	    for(var i = 0; i < state.credentials.length; i++) {
+	      server.auth.apply(server, state.credentials[i].concat([function(err, r) {
+	        count = count - 1;
+	        if(count == 0) processNewServer();
 	      }]));
 	    }
-
-	    applyCredentials(server, 0, state.credentials, function(err) {
-	      if(err) {
-	        return server.destroy();
-	      }
-
-	      // Did not fail the authentication, process the instance
-	      processNewServer();
-	    });
 	  }
 	}
 
@@ -41305,10 +38908,10 @@
 
 	      // If not found we need to create a new connection
 	      if(!state.replState.contains(host)) {
-	        if(!state.replState.isConnectingServer(host) && !inInitialConnectingServers(self, state, host)) {
+	        if(state.connectingServers[host] == null && !inInitialConnectingServers(self, state, host)) {
 	          if(state.logger.isInfo()) state.logger.info(f('[%s] scheduled server %s for connection', state.id, host));
 	          // Make sure we know what is trying to connect
-	          state.replState.addConnectingServer(host, host);
+	          state.connectingServers[host] = host;
 	          // Connect the server
 	          connectToServer(self, state, host.split(':')[0], parseInt(host.split(':')[1], 10), options);
 	        }
@@ -41336,20 +38939,14 @@
 	  // Share the auth store
 	  opts.authProviders = state.authProviders;
 	  opts.emitError = true;
-	  // Server is in topology
-	  opts.inTopology = true;
 	  // Set the size to size + 1 and mark monitoring
 	  opts.size = opts.size + 1;
 	  opts.monitoring = true;
-	  opts.topologyId = self.s.id;
 
 	  // Do we have an arbiter set the poolSize to 1
 	  if(options.arbiter) {
 	    opts.size = 1;
 	  }
-
-	  // Do not create a new server instance
-	  if(self.s.replState.state == DESTROYED) return;
 
 	  // Create a new server instance
 	  var server = new Server(opts);
@@ -41361,28 +38958,10 @@
 	  server.once('timeout', errorHandlerTemp(self, state, 'timeout'));
 	  server.once('connect', connectHandler(self, state));
 
-	  // SDAM Monitoring events
-	  server.on('serverOpening', function(e) { self.emit('serverOpening', e); });
-	  server.on('serverDescriptionChanged', function(e) { self.emit('serverDescriptionChanged', e); });
-	  server.on('serverHeartbeatStarted', function(e) { self.emit('serverHeartbeatStarted', e); });
-	  server.on('serverHeartbeatSucceeded', function(e) { self.emit('serverHeartbeatSucceeded', e); });
-	  server.on('serverHearbeatFailed', function(e) { self.emit('serverHearbeatFailed', e); });
-	  server.on('serverClosed', function(e) { self.emit('serverClosed', e); });
-
-	  // Ensure we schedule the opening of new socket
-	  // on separate ticks of the event loop
-	  var execute = function(_server) {
-	    // Attempt to connect
-	    process.nextTick(function() {
-	      if(self.s.replState.state == DESTROYED) return;
-	      _server.connect();
-	    });
-	  }
-
-	  // Add server as connecting
-	  state.replState.addConnectingServer(server.name, host);
-	  // Attempt connection of server
-	  execute(server);
+	  // Attempt to connect
+	  process.nextTick(function() {
+	    server.connect();
+	  });
 	}
 
 	//
@@ -41393,9 +38972,7 @@
 	  if(server == null) return found;
 
 	  // Remove any non used handlers
-	  ['error', 'close', 'timeout', 'connect',
-	    'serverOpening', 'serverDescriptionChanged', 'serverHeartbeatStarted',
-	    'serverHeartbeatSucceeded', 'serverHearbeatFailed', 'serverClosed'].forEach(function(e) {
+	  ['error', 'close', 'timeout', 'connect'].forEach(function(e) {
 	    server.removeAllListeners(e);
 	  })
 
@@ -41413,46 +38990,46 @@
 
 	var errorHandler = function(self, state) {
 	  return function(err, server) {
-	    // Destroy the server
-	    server.destroy();
-	    // Remove from list of connected servers
-	    state.replState.removeConnectingServer(server.name);
-	    // Check if destroyed the topology
 	    if(state.replState.state == DESTROYED) return;
 	    if(state.logger.isInfo()) state.logger.info(f('[%s] server %s errored out with %s', state.id, server.lastIsMaster() ? server.lastIsMaster().me : server.name, JSON.stringify(err)));
 	    var found = addToListIfNotExist(state.disconnectedServers, server);
 	    if(!found) self.emit('left', state.replState.remove(server), server);
 	    if(found && state.emitError && self.listeners('error').length > 0) self.emit('error', err, server);
+
+	    // Fire off a detection of missing server using minHeartbeatFrequencyMS
+	    setTimeout(function() {
+	      replicasetInquirer(self, self.s, true)();
+	    }, self.s.minHeartbeatFrequencyMS);
 	  }
 	}
 
 	var timeoutHandler = function(self, state) {
 	  return function(err, server) {
-	    // Destroy the server
-	    server.destroy();
-	    // Remove from list of connected servers
-	    state.replState.removeConnectingServer(server.name);
-	    // Check if destroyed the topology
 	    if(state.replState.state == DESTROYED) return;
 	    if(state.logger.isInfo()) state.logger.info(f('[%s] server %s timed out', state.id, server.lastIsMaster() ? server.lastIsMaster().me : server.name));
 	    var found = addToListIfNotExist(state.disconnectedServers, server);
 	    if(!found) self.emit('left', state.replState.remove(server), server);
+
+	    // Fire off a detection of missing server using minHeartbeatFrequencyMS
+	    setTimeout(function() {
+	      replicasetInquirer(self, self.s, true)();
+	    }, self.s.minHeartbeatFrequencyMS);
 	  }
 	}
 
 	var closeHandler = function(self, state) {
 	  return function(err, server) {
-	    // Destroy the server
-	    server.destroy();
-	    // Remove from list of connected servers
-	    state.replState.removeConnectingServer(server.name);
-	    // Check if destroyed the topology
 	    if(state.replState.state == DESTROYED) return;
 	    if(state.logger.isInfo()) state.logger.info(f('[%s] server %s closed', state.id, server.lastIsMaster() ? server.lastIsMaster().me : server.name));
 	    var found = addToListIfNotExist(state.disconnectedServers, server);
 	    if(!found) {
 	      self.emit('left', state.replState.remove(server), server);
 	    }
+
+	    // Fire off a detection of missing server using minHeartbeatFrequencyMS
+	    setTimeout(function() {
+	      replicasetInquirer(self, self.s, true)();
+	    }, self.s.minHeartbeatFrequencyMS);
 	  }
 	}
 
@@ -41477,7 +39054,7 @@
 
 
 /***/ },
-/* 149 */
+/* 138 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -41758,7 +39335,7 @@
 	module.exports = Ping;
 
 /***/ },
-/* 150 */
+/* 139 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -41797,115 +39374,8 @@
 	  // Unpacked options
 	  this.id = options.id;
 	  this.setName = options.setName;
-	  this.connectingServers = {};
+	  this.connectingServers = options.connectingServers;
 	  this.secondaryOnlyConnectionAllowed = options.secondaryOnlyConnectionAllowed;
-	  // Description of the Replicaset
-	  this.replicasetDescription = null;
-	}
-
-	/**
-	 * Is there a secondary connected
-	 * @method
-	 * @return {boolean}
-	 */
-	State.prototype.resetDescription = function() {
-	  this.replicasetDescription = {
-	    "topologyType": "Unknown",
-	    "servers": []
-	  }
-	}
-
-	function diff(previous, current) {
-	  // Difference document
-	  var diff = {
-	    servers: []
-	  }
-
-	  // Got through all the servers
-	  for(var i = 0; i < previous.servers.length; i++) {
-	    var prevServer = previous.servers[i];
-
-	    // Go through all current servers
-	    for(var j = 0; j < current.servers.length; j++) {
-	      var currServer = current.servers[j];
-
-	      // Matching server
-	      if(prevServer.address === currServer.address) {
-	        // We had a change in state
-	        if(prevServer.type != currServer.type) {
-	          diff.servers.push({
-	            address: prevServer.address,
-	            from: prevServer.type,
-	            to: currServer.type
-	          });
-	        }
-	      }
-	    }
-	  }
-
-	  // Return difference
-	  return diff;
-	}
-
-	function emitTopologyDescriptionChanged(self) {
-	  if(self.replSet.listeners('topologyDescriptionChanged').length > 0) {
-	    var topology = 'Unknown';
-	    var setName = self.setName;
-
-	    if(self.isPrimaryConnected() && self.isSecondaryConnected()) {
-	      topology = 'ReplicaSetWithPrimary';
-	    } else if(!self.isPrimaryConnected() && self.isSecondaryConnected()) {
-	      topology = 'ReplicaSetNoPrimary';
-	    }
-
-	    // Generate description
-	    var description = {
-	      topologyType: topology,
-	      setName: setName,
-	      servers: []
-	    }
-
-	    // Add the primary to the list
-	    if(self.isPrimaryConnected()) {
-	      var desc = self.primary.getDescription();
-	      desc.type = 'RSPrimary';
-	      description.servers.push(desc);
-	    }
-
-	    // Add all the secondaries
-	    description.servers = description.servers.concat(self.secondaries.map(function(x) {
-	      var description = x.getDescription();
-	      description.type = 'RSSecondary';
-	      return description;
-	    }));
-
-	    // Add all the arbiters
-	    description.servers = description.servers.concat(self.arbiters.map(function(x) {
-	      var description = x.getDescription();
-	      return description;
-	    }));
-
-	    // Add all the passives
-	    description.servers = description.servers.concat(self.passives.map(function(x) {
-	      var description = x.getDescription();
-	      description.type = 'RSSecondary';
-	      return description;
-	    }));
-
-	    // Create the result
-	    var result = {
-	      topologyId: self.id,
-	      previousDescription: self.replicasetDescription,
-	      newDescription: description,
-	      diff: diff(self.replicasetDescription, description)
-	    };
-
-	    // Emit the topologyDescription change
-	    self.replSet.emit('topologyDescriptionChanged', result);
-
-	    // Set the new description
-	    self.replicasetDescription = description;
-	  }
 	}
 
 	/**
@@ -41975,38 +39445,6 @@
 	  return false;
 	}
 
-	State.prototype.clearConnectingServers = function() {
-	  for(var name in this.connectingServers) {
-	    if(typeof this.connectingServers[name].destroy == 'function') {
-	      this.connectingServers[name].destroy();
-	    }
-	  }
-
-	  this.connectingServers = {};
-	}
-
-	State.prototype.removeConnectingServer = function(address) {
-	  if(this.connectingServers[address]) {
-	    if(this.connectingServers[address].destroy) {
-	      this.connectingServers[address].destroy();
-	    }
-	  }
-
-	  delete this.connectingServers[address];
-	}
-
-	State.prototype.addConnectingServer = function(host, object) {
-	  this.connectingServers[host] = object;
-	}
-
-	State.prototype.isConnectingServer = function(host) {
-	  return this.connectingServers[host] != null;
-	}
-
-	State.prototype.connectingServersCount = function() {
-	  return Object.keys(this.connectingServers).length;
-	}
-
 	/**
 	 * Does the replicaset contain this server
 	 * @method
@@ -42031,78 +39469,22 @@
 	}
 
 	/**
-	 * Return all the valid and non passive secondaries
-	 * @method
-	 * @return {Array[Server]}
-	 */
-	State.prototype.getSecondaries = function() {
-	  // Filter out any non connected servers
-	  this.secondaries = this.secondaries.filter(function(server) {
-	    return server.isConnected();
-	  });
-
-	  // Filter out any hidden secondaries
-	  return this.secondaries.filter(function(server) {
-	    return server.lastIsMaster().hidden ? false : true;
-	  });
-	}
-
-	/**
 	 * Clean out all dead connections
 	 * @method
 	 */
 	State.prototype.clean = function() {
-	  var self = this;
-	  var disconnectedServers = [];
-
 	  if(this.primary != null && !this.primary.isConnected()) {
-	    disconnectedServers.push(this.primary);
 	    this.primary = null;
 	  }
 
 	  // Filter out disconnected servers
 	  this.secondaries = this.secondaries.filter(function(s) {
-	    if(!s.isConnected()) disconnectedServers.push(s);
 	    return s.isConnected();
 	  });
 
 	  // Filter out disconnected servers
 	  this.arbiters = this.arbiters.filter(function(s) {
-	    if(!s.isConnected()) disconnectedServers.push(s);
 	    return s.isConnected();
-	  });
-
-	  // Filter out disconnected servers
-	  this.passives = this.passives.filter(function(s) {
-	    if(!s.isConnected()) disconnectedServers.push(s);
-	    return s.isConnected();
-	  });
-
-	  return disconnectedServers;
-	}
-
-	/**
-	 * Unref state
-	 * @method
-	 */
-	State.prototype.unref = function() {
-	  if(this.primary) this.primary.unref();
-	  this.secondaries.forEach(function(s) {
-	    s.unref();
-	  });
-	  this.arbiters.forEach(function(s) {
-	    s.unref();
-	  });
-	}
-
-	// Remove listeners
-	var events = ['timeout', 'error', 'close', 'joined', 'left',
-	  'serverOpening', 'serverDescriptionChanged', 'serverHeartbeatStarted',
-	  'serverHeartbeatSucceeded', 'serverHearbeatFailed', 'serverClosed'];
-
-	var removeEvents = function(s) {
-	  events.forEach(function(e) {
-	    s.removeAllListeners(e);
 	  });
 	}
 
@@ -42112,20 +39494,12 @@
 	 */
 	State.prototype.destroy = function() {
 	  this.state = DESTROYED;
-
-	  if(this.primary) {
-	    this.primary.destroy();
-	    removeEvents(this.primary);
-	  }
-
+	  if(this.primary) this.primary.destroy();
 	  this.secondaries.forEach(function(s) {
 	    s.destroy();
-	    removeEvents(s);
 	  });
-
 	  this.arbiters.forEach(function(s) {
 	    s.destroy();
-	    removeEvents(s);
 	  });
 	}
 
@@ -42169,8 +39543,7 @@
 	  // Get the isMaster
 	  var isMaster = server.lastIsMaster();
 	  // Return primary if the server was primary
-	  if(isMaster.ismaster && isMaster.hosts) return 'primary';
-	  if(isMaster.ismaster) return 'secondary';
+	  if(isMaster.ismaster) return 'primary';
 	  if(isMaster.secondary) return 'secondary';
 	  if(isMaster.passive) return 'passive';
 	  return 'arbiter';
@@ -42212,6 +39585,7 @@
 	    servers = servers.concat(this.arbiters);
 	  }
 
+	  // return ;
 	  return servers;
 	}
 
@@ -42284,16 +39658,13 @@
 	  this.primary = currentServer;
 	}
 
-	var add = function(self, list, server) {
-	  // Check if the server is contained in the list
+	var add = function(list, server) {
+	  // Check if the server is a secondary at the moment
 	  for(var i = 0; i < list.length; i++) {
 	    if(list[i].equals(server)) return false;
 	  }
 
-	  // Add serer to list
 	  list.push(server);
-
-	  // Return true
 	  return true;
 	}
 
@@ -42303,7 +39674,7 @@
 	 * @param {Server} server Server we wish to add
 	 */
 	State.prototype.addSecondary = function(server) {
-	  return add(this, this.secondaries, server);
+	  return add(this.secondaries, server);
 	}
 
 	/**
@@ -42312,7 +39683,7 @@
 	 * @param {Server} server Server we wish to add
 	 */
 	State.prototype.addArbiter = function(server) {
-	  return add(this, this.arbiters, server);
+	  return add(this.arbiters, server);
 	}
 
 	/**
@@ -42321,7 +39692,7 @@
 	 * @param {Server} server Server we wish to add
 	 */
 	State.prototype.addPassive = function(server) {
-	  return add(this, this.passives, server);
+	  return add(this.passives, server);
 	}
 
 	var compareObjectIds = function(id1, id2) {
@@ -42362,20 +39733,15 @@
 	 */
 	State.prototype.update = function(ismaster, server) {
 	  var self = this;
-
-	  // Perform a cleanup before performing the update
-	  this.clean();
-
 	  // Not in a known connection valid state
 	  if((!ismaster.ismaster && !ismaster.secondary && !ismaster.arbiterOnly) || !Array.isArray(ismaster.hosts)) {
 	    // Remove the state
 	    var result = self.remove(server);
 	    if(self.state == CONNECTED)  {
 	      if(self.logger.isInfo()) self.logger.info(f('[%s] removing %s from set', self.id, ismaster.me));
-	      self.replSet.emit('left', result, server);
+	      self.replSet.emit('left', self.remove(server), server);
 	    }
 
-	    emitTopologyDescriptionChanged(this);
 	    return false;
 	  }
 
@@ -42390,7 +39756,6 @@
 	    if(self.logger.isError()) self.logger.error(f('[%s] server in replset %s is not part of the specified setName %s', self.id, ismaster.setName, self.setName));
 	    self.remove(server);
 	    self.replSet.emit('error', new MongoError("provided setName for Replicaset Connection does not match setName found in server seedlist"));
-	    emitTopologyDescriptionChanged(this);
 	    return false;
 	  }
 
@@ -42422,9 +39787,6 @@
 	    // Emit primary
 	    self.replSet.emit('joined', 'primary', this.primary);
 
-	    // Emit the description change
-	    emitTopologyDescriptionChanged(this);
-
 	    // We are connected
 	    if(self.state == CONNECTING) {
 	      self.state = CONNECTED;
@@ -42438,7 +39800,6 @@
 	      if(self.addArbiter(server)) {
 	        if(self.logger.isInfo()) self.logger.info(f('[%s] promoting %s to arbiter', self.id, ismaster.me));
 	        self.replSet.emit('joined', 'arbiter', server);
-	        emitTopologyDescriptionChanged(this);
 	        return true;
 	      };
 
@@ -42456,7 +39817,6 @@
 	          self.replSet.emit('connect', self.replSet);
 	        }
 
-	        emitTopologyDescriptionChanged(this);
 	        return true;
 	      };
 
@@ -42467,17 +39827,11 @@
 	        if(self.logger.isInfo()) self.logger.info(f('[%s] promoting %s to secondary', self.id, ismaster.me));
 	        self.replSet.emit('joined', 'secondary', server);
 
-	        // Is this the primary right now
-	        if(self.primary && self.primary.name == server.name) {
-	          self.primary = null;
-	        }
-
 	        if(self.secondaryOnlyConnectionAllowed && self.state == CONNECTING) {
 	          self.state = CONNECTED;
 	          self.replSet.emit('connect', self.replSet);
 	        }
 
-	        emitTopologyDescriptionChanged(this);
 	        return true;
 	      };
 
@@ -42492,7 +39846,7 @@
 
 
 /***/ },
-/* 151 */
+/* 140 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -42506,15 +39860,9 @@
 	  , BSON = __webpack_require__(102).native().BSON
 	  , BasicCursor = __webpack_require__(124)
 	  , Server = __webpack_require__(96)
-	  , MongoCR = __webpack_require__(132)
-	  , X509 = __webpack_require__(133)
-	  , Plain = __webpack_require__(134)
-	  , GSSAPI = __webpack_require__(135)
-	  , SSPI = __webpack_require__(146)
-	  , ScramSHA1 = __webpack_require__(147)
 	  , Logger = __webpack_require__(122)
 	  , ReadPreference = __webpack_require__(123)
-	  , Session = __webpack_require__(131)
+	  , Session = __webpack_require__(130)
 	  , MongoError = __webpack_require__(95);
 
 	/**
@@ -42568,66 +39916,6 @@
 	    , lowerBoundLatency: Number.MAX_VALUE
 	    , localThresholdMS: localThresholdMS
 	    , index: 0
-	    , topologyDescription: null
-	  }
-	}
-
-	/**
-	 * Emit event if it exists
-	 * @method
-	 */
-	function emitSDAMEvent(self, event, description) {
-	  if(self.listeners(event).length > 0) {
-	    self.emit(event, description);
-	  }
-	}
-
-	/**
-	 * Is there a secondary connected
-	 * @method
-	 * @return {boolean}
-	 */
-	State.prototype.resetDescription = function() {
-	  this.s.topologyDescription = {
-	    "topologyType": "Sharded",
-	    "servers": []
-	  }
-	}
-
-	function emitTopologyDescriptionChanged(self, state) {
-	  if(self.listeners('topologyDescriptionChanged').length > 0 && state) {
-	    var state = state.s;
-	    // Generate description
-	    var description = {
-	      topologyType: 'Sharded',
-	      servers: []
-	    }
-
-	    // Add all the secondaries
-	    description.servers = description.servers.concat(state.connectedServers.map(function(x) {
-	      var description = x.getDescription();
-	      description.type = 'Mongos';
-	      return description;
-	    }));
-
-	    description.servers = description.servers.concat(state.disconnectedServers.map(function(x) {
-	      var description = x.getDescription();
-	      description.type = 'Unknown';
-	      return description;
-	    }));
-
-	    // Create the result
-	    var result = {
-	      topologyId: self.id,
-	      previousDescription: state.topologyDescription,
-	      newDescription: description
-	    };
-
-	    // Emit the topologyDescription change
-	    self.emit('topologyDescriptionChanged', result);
-
-	    // Set the new description
-	    state.topologyDescription = description;
 	  }
 	}
 
@@ -42702,22 +39990,6 @@
 	}
 
 	//
-	// Unref the state
-	State.prototype.unref = function() {
-	  // Unref all the servers
-	  for(var i = 0; i < this.s.connectedServers.length; i++) {
-	    // Get each of the servers
-	    var server = this.s.connectedServers[i];
-	    // Remove any non used handlers
-	    ['error', 'close', 'timeout', 'connect'].forEach(function(e) {
-	      server.removeAllListeners(e);
-	    })
-	    // Unreference the server
-	    server.unref();
-	  }
-	}
-
-	//
 	// Destroy the state
 	State.prototype.destroy = function() {
 	  // Destroy any connected servers
@@ -42736,60 +40008,37 @@
 	  }
 	}
 
-	var pickProxies = function(self, options) {
-	  options = options || {};
-	  var readPreference = options.readPreference || ReadPreference.primary;
+	//
+	// Are we connected
+	State.prototype.isConnected = function() {
+	  return this.s.connectedServers.length > 0;
+	}
 
-	  // All connected servers
-	  var servers = self.s.connectedServers.slice(0);
-
-	  // Do we have a custom readPreference strategy, use it
-	  if(self.s.readPreferenceStrategies != null && self.s.readPreferenceStrategies[readPreference] != null) {
-	    var server = self.s.readPreferenceStrategies[readPreference].pickServer(servers, readPreference);
-	    // Return the server if one is found
-	    return !server ? [] : [server];
-	  }
+	//
+	// Pick a server
+	State.prototype.pickServer = function(readPreference) {
+	  var self = this;
+	  readPreference = readPreference || ReadPreference.primary;
 
 	  // Filter out the possible servers
-	  servers = self.s.connectedServers.filter(function(server) {
+	  var servers = this.s.connectedServers.filter(function(server) {
 	    if((server.s.isMasterLatencyMS <= (self.s.lowerBoundLatency + self.s.localThresholdMS))
 	      && server.isConnected()) {
 	      return true;
 	    }
 	  });
 
-	  // If no servers found return the lowest latency proxy
-	  if(servers.length == 0 && self.s.connectedServers.length > 0) {
-	    servers = self.s.connectedServers.sort(function(server1, server2) {
-	      return server1.s.isMasterLatencyMS - server2.s.isMasterLatencyMS;
-	    });
-
-	    // Return the lowest latency server if none is found
-	    return [servers[0]];
+	  // Do we have a custom readPreference strategy, use it
+	  if(this.s.readPreferenceStrategies != null && this.s.readPreferenceStrategies[readPreference] != null) {
+	    return this.s.readPreferenceStrategies[readPreference].pickServer(servers, readPreference);
 	  }
 
-	  // Return all the servers found
-	  return servers;
-	}
-
-	//
-	// Are we connected
-	State.prototype.isConnected = function(options) {
-	  // Get all the servers
-	  var servers = pickProxies(this, options);
-	  // Return if the server is connected
-	  return servers.length > 0 ? true : false;
-	}
-
-	//
-	// Pick a server
-	State.prototype.pickServer = function(readPreference) {
-	  // Get all the servers
-	  var servers = pickProxies(this, {readPreference:readPreference});
 	  // No valid connections
 	  if(servers.length == 0) throw new MongoError("no mongos proxy available");
+
 	  // Update index
 	  this.s.index = (this.s.index + 1) % servers.length;
+
 	  // Pick first one
 	  return servers[this.s.index];
 	}
@@ -42898,14 +40147,6 @@
 	  // Create a new state for the mongos
 	  this.s.mongosState = new State(this.s.readPreferenceStrategies, this.s.localThresholdMS);
 
-	  // Add the authentication mechanisms
-	  this.addAuthProvider('mongocr', new MongoCR());
-	  this.addAuthProvider('x509', new X509());
-	  this.addAuthProvider('plain', new Plain());
-	  this.addAuthProvider('gssapi', new GSSAPI());
-	  this.addAuthProvider('sspi', new SSPI());
-	  this.addAuthProvider('scram-sha-1', new ScramSHA1());
-
 	  // BSON property (find a server and pass it along)
 	  Object.defineProperty(this, 'bson', {
 	    enumerable: true, get: function() {
@@ -42997,19 +40238,9 @@
 	    opts.authProviders = self.s.authProviders;
 	    // Don't emit errors
 	    opts.emitError = true;
-	    // Set that server is in a topology
-	    opts.inTopology = true;
-	    opts.topologyId = self.s.id;
-	    opts.monitoring = true;
 	    // Create a new Server
 	    self.s.mongosState.disconnected(new Server(opts));
 	  });
-
-	  // Reset the replState
-	  this.s.mongosState.resetDescription();
-
-	  // Emit the topology opening event
-	  emitSDAMEvent(this, 'topologyOpening', { topologyId: this.s.id });
 
 	  // Get the disconnected servers
 	  var servers = self.s.mongosState.disconnectedServers();
@@ -43023,9 +40254,7 @@
 	    var server = servers.shift();
 
 	    // Remove any non used handlers
-	    ['error', 'close', 'timeout', 'connect', 'message', 'parseError',
-	      'serverOpening', 'serverDescriptionChanged', 'serverHeartbeatStarted',
-	      'serverHeartbeatSucceeded', 'serverHearbeatFailed', 'serverClosed'].forEach(function(e) {
+	    ['error', 'close', 'timeout', 'connect', 'message', 'parseError'].forEach(function(e) {
 	      server.removeAllListeners(e);
 	    });
 
@@ -43036,38 +40265,10 @@
 	    server.once('parseError', errorHandlerTemp(self, self.s, server));
 	    server.once('connect', connectHandler(self, self.s, 'connect'));
 
-	    // SDAM Monitoring events
-	    server.on('serverOpening', function(e) { self.emit('serverOpening', e); });
-	    server.on('serverDescriptionChanged', function(e) { self.emit('serverDescriptionChanged', e); });
-	    server.on('serverHeartbeatStarted', function(e) { self.emit('serverHeartbeatStarted', e); });
-	    server.on('serverHeartbeatSucceeded', function(e) { self.emit('serverHeartbeatSucceeded', e); });
-	    server.on('serverHearbeatFailed', function(e) { self.emit('serverHearbeatFailed', e); });
-	    server.on('serverClosed', function(e) { self.emit('serverClosed', e); });
-
 	    if(self.s.logger.isInfo()) self.s.logger.info(f('connecting to server %s', server.name));
-
-	    // Execute the connect
-	    var execute = function(_server) {
-	      process.nextTick(function() {
-	        _server.connect();
-	      });
-	    }
-
-	    // Connect
-	    execute(server);
+	    // Attempt to connect
+	    server.connect();
 	  }
-	}
-
-	/**
-	 * Unref all connections belong to this server
-	 * @method
-	 */
-	Mongos.prototype.unref = function(emitClose) {
-	  if(this.s.logger.isInfo()) this.s.logger.info(f('[%s] unreferenced', this.s.id));
-	  // Emit close
-	  if(emitClose && this.listeners('close').length > 0) this.emit('close', this);
-	  // Unref sockets
-	  this.s.mongosState.unref();
 	}
 
 	/**
@@ -43076,8 +40277,6 @@
 	 */
 	Mongos.prototype.destroy = function(emitClose) {
 	  this.s.state = DESTROYED;
-	  // Emit toplogy closing event
-	  emitSDAMEvent(this, 'topologyClosed', { topologyId: this.s.id });
 	  // Emit close
 	  if(emitClose && self.listeners('close').length > 0) self.emit('close', self);
 	  // Destroy the state
@@ -43089,8 +40288,8 @@
 	 * @method
 	 * @return {boolean}
 	 */
-	Mongos.prototype.isConnected = function(options) {
-	  return this.s.mongosState.isConnected(options);
+	Mongos.prototype.isConnected = function() {
+	  return this.s.mongosState.isConnected();
 	}
 
 	/**
@@ -43379,22 +40578,6 @@
 	}
 
 	/**
-	 * Get correct server for a given connection
-	 * @method
-	 * @param {Connection} [connection] A Connection showing a current server
-	 * @return {Server}
-	 */
-	Mongos.prototype.getServerFrom = function(connection) {
-	  var servers = this.s.mongosState.getAll();
-	  // Go through all the server
-	  for(var i = 0; i < servers.length; i++) {
-	    if(servers[i].equals(connection.name)) return servers[i];
-	  }
-
-	  return null;
-	}
-
-	/**
 	 * All raw connections
 	 * @method
 	 * @return {Connection[]}
@@ -43415,7 +40598,7 @@
 	    if(state.state == DISCONNECTED && state.retriesLeft == 0) {
 	      self.destroy();
 	      return self.emit('error', new MongoError(f('failed to reconnect after %s', state.reconnectTries)));
-	    } else if(state.state == DISCONNECTED) {
+	    } else if(state == DISCONNECTED) {
 	      state.retriesLeft = state.retriesLeft - 1;
 	    }
 
@@ -43441,10 +40624,9 @@
 	      // Connect to proxy
 	      var connectToProxy = function(_server) {
 	        setTimeout(function() {
-	          // Remove any non used handlers
-	          ['error', 'close', 'timeout', 'connect', 'message', 'parseError',
-	            'serverOpening', 'serverDescriptionChanged', 'serverHeartbeatStarted',
-	            'serverHeartbeatSucceeded', 'serverHearbeatFailed', 'serverClosed'].forEach(function(e) {
+	          var events = ['error', 'close', 'timeout', 'connect', 'message', 'parseError'];
+	          // Remove any listeners
+	          events.forEach(function(e) {
 	            _server.removeAllListeners(e);
 	          });
 
@@ -43453,15 +40635,6 @@
 	          _server.once('close', errorHandlerTemp(self, state, server));
 	          _server.once('timeout', errorHandlerTemp(self, state, server));
 	          _server.once('connect', connectHandler(self, state, 'ha'));
-
-	          // SDAM Monitoring events
-	          _server.on('serverOpening', function(e) { self.emit('serverOpening', e); });
-	          _server.on('serverDescriptionChanged', function(e) { self.emit('serverDescriptionChanged', e); });
-	          _server.on('serverHeartbeatStarted', function(e) { self.emit('serverHeartbeatStarted', e); });
-	          _server.on('serverHeartbeatSucceeded', function(e) { self.emit('serverHeartbeatSucceeded', e); });
-	          _server.on('serverHearbeatFailed', function(e) { self.emit('serverHearbeatFailed', e); });
-	          _server.on('serverClosed', function(e) { self.emit('serverClosed', e); });
-
 	          // Start connect
 	          _server.connect();
 	        }, 1);
@@ -43506,9 +40679,6 @@
 	      state.state = DISCONNECTED;
 	    }
 
-	    // Emit topology changed event
-	    emitTopologyDescriptionChanged(self, state.mongosState);
-
 	    // Signal server left
 	    self.emit('left', 'mongos', server);
 	    if(state.emitError) self.emit('error', err, server);
@@ -43525,9 +40695,6 @@
 	      state.state = DISCONNECTED;
 	    }
 
-	    // Emit topology changed event
-	    emitTopologyDescriptionChanged(self, state.mongosState);
-
 	    // Signal server left
 	    self.emit('left', 'mongos', server);
 	  }
@@ -43542,9 +40709,6 @@
 	    if(state.mongosState.connectedServers().length == 0) {
 	      state.state = DISCONNECTED;
 	    }
-
-	    // Emit topology changed event
-	    emitTopologyDescriptionChanged(self, state.mongosState);
 
 	    // Signal server left
 	    self.emit('left', 'mongos', server);
@@ -43587,7 +40751,7 @@
 	        state.mongosState.connectedServers().length > 0 &&
 	        !state.fullsetup) {
 	        state.fullsetup = true;
-	        self.emit('fullsetup', self);
+	        self.emit('fullsetup');
 	      }
 
 	      // all connected
@@ -43595,11 +40759,8 @@
 	        state.mongosState.connectedServers().length == state.seedlist.length &&
 	        !state.all) {
 	        state.all = true;
-	        self.emit('all', self);
+	        self.emit('all');
 	      }
-
-	      // Emit topology changed event
-	      emitTopologyDescriptionChanged(self, state.mongosState);
 
 	      // Set connected
 	      if(state.state == DISCONNECTED) {
@@ -43733,25 +40894,25 @@
 
 
 /***/ },
-/* 152 */
+/* 141 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var EventEmitter = __webpack_require__(4).EventEmitter,
 	  inherits = __webpack_require__(10).inherits;
 
 	// Get prototypes
-	var AggregationCursor = __webpack_require__(153),
-	  CommandCursor = __webpack_require__(169),
-	  OrderedBulkOperation = __webpack_require__(170).OrderedBulkOperation,
-	  UnorderedBulkOperation = __webpack_require__(172).UnorderedBulkOperation,
-	  GridStore = __webpack_require__(173),
-	  Server = __webpack_require__(177),
-	  ReplSet = __webpack_require__(179),
-	  Mongos = __webpack_require__(180),
-	  Cursor = __webpack_require__(166),
-	  Collection = __webpack_require__(175),
-	  Db = __webpack_require__(181),
-	  Admin = __webpack_require__(182);
+	var AggregationCursor = __webpack_require__(142),
+	  CommandCursor = __webpack_require__(158),
+	  OrderedBulkOperation = __webpack_require__(159).OrderedBulkOperation,
+	  UnorderedBulkOperation = __webpack_require__(161).UnorderedBulkOperation,
+	  GridStore = __webpack_require__(162),
+	  Server = __webpack_require__(166),
+	  ReplSet = __webpack_require__(168),
+	  Mongos = __webpack_require__(169),
+	  Cursor = __webpack_require__(155),
+	  Collection = __webpack_require__(164),
+	  Db = __webpack_require__(170),
+	  Admin = __webpack_require__(171);
 
 	var basicOperationIdGenerator = {
 	  operationId: 1,
@@ -43765,7 +40926,7 @@
 	  current: function() {
 	    return new Date().getTime();
 	  },
-
+	  
 	  duration: function(start, end) {
 	    return end - start;
 	  }
@@ -43797,7 +40958,7 @@
 	    var instrumentations = []
 
 	    // Classes to support
-	    var classes = [GridStore, OrderedBulkOperation, UnorderedBulkOperation,
+	    var classes = [GridStore, OrderedBulkOperation, UnorderedBulkOperation, 
 	      CommandCursor, AggregationCursor, Cursor, Collection, Db];
 
 	    // Add instrumentations to the available list
@@ -43903,7 +41064,7 @@
 	        commandObj.ordered = options.ordered != undefined ? options.ordered : true;
 	      } else if(x == 'insert' || x == 'update' || x == 'remove' && this.lastIsMaster().maxWireVersion >= 2) {
 	        // Skip the insert/update/remove commands as they are executed as actual write commands in 2.6 or higher
-	        return func.apply(this, args);
+	        return func.apply(this, args);        
 	      }
 
 	      // Get the callback
@@ -43914,7 +41075,7 @@
 
 	      // Get a connection reference for this server instance
 	      var connection = this.s.pool.get()
-
+	      
 	      // Emit the start event for the command
 	      var command = {
 	        // Returns the command.
@@ -43967,7 +41128,7 @@
 	          }
 
 	          self.emit('failed', command);
-	        } else if(commandObj && commandObj.writeConcern
+	        } else if(commandObj && commandObj.writeConcern 
 	          && commandObj.writeConcern.w == 0) {
 	          // If we have write concern 0
 	          command.reply = {ok:1};
@@ -44001,8 +41162,8 @@
 	  // Inject ourselves into the Bulk methods
 	  var methods = ['execute'];
 	  var prototypes = [
-	    __webpack_require__(170).Bulk.prototype,
-	    __webpack_require__(172).Bulk.prototype
+	    __webpack_require__(159).Bulk.prototype,
+	    __webpack_require__(161).Bulk.prototype
 	  ]
 
 	  prototypes.forEach(function(proto) {
@@ -44048,9 +41209,9 @@
 	  // Inject ourselves into the Cursor methods
 	  var methods = ['_find', '_getmore', '_killcursor'];
 	  var prototypes = [
-	    __webpack_require__(166).prototype,
-	    __webpack_require__(169).prototype,
-	    __webpack_require__(153).prototype
+	    __webpack_require__(155).prototype,
+	    __webpack_require__(158).prototype,
+	    __webpack_require__(142).prototype
 	  ]
 
 	  // Command name translation
@@ -44163,7 +41324,7 @@
 
 	        // Set up the connection
 	        var connectionId = null;
-
+	        
 	        // Set local connection
 	        if(this.connection) connectionId = this.connection;
 	        if(!connectionId && this.server && this.server.getConnection) connectionId = this.server.getConnection();
@@ -44203,8 +41364,8 @@
 	          self.emit('started', command)
 
 	          // Emit succeeded event with killcursor if we have a legacy protocol
-	          if(command.commandName == 'killCursors'
-	            && this.server.lastIsMaster()
+	          if(command.commandName == 'killCursors' 
+	            && this.server.lastIsMaster() 
 	            && this.server.lastIsMaster().maxWireVersion < 4) {
 	            // Emit the succeeded command
 	            var command = {
@@ -44235,6 +41396,7 @@
 	              // Emit the command
 	              self.emit('failed', command)
 	            } else {
+
 	              // Do we have a getMore
 	              if(commandName.toLowerCase() == 'getmore' && r == null) {
 	                r = {
@@ -44254,7 +41416,7 @@
 	                }
 	              } else if(commandName.toLowerCase() == 'killcursors' && r == null) {
 	                r = {
-	                  cursorsUnknown:[cursor.cursorState.lastCursorId],
+	                  cursorsUnknown:[cursor.cursorState.lastCursorId], 
 	                  ok:1
 	                }
 	              }
@@ -44275,7 +41437,7 @@
 
 	            // Return
 	            if(!callback) return;
-
+	            
 	            // Return to caller
 	            callback(err, r);
 	          });
@@ -44344,26 +41506,25 @@
 
 	module.exports = Instrumentation;
 
-
 /***/ },
-/* 153 */
+/* 142 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var inherits = __webpack_require__(10).inherits
 	  , f = __webpack_require__(10).format
-	  , toError = __webpack_require__(154).toError
-	  , getSingleProperty = __webpack_require__(154).getSingleProperty
-	  , formattedOrderClause = __webpack_require__(154).formattedOrderClause
-	  , handleCallback = __webpack_require__(154).handleCallback
+	  , toError = __webpack_require__(143).toError
+	  , getSingleProperty = __webpack_require__(143).getSingleProperty
+	  , formattedOrderClause = __webpack_require__(143).formattedOrderClause
+	  , handleCallback = __webpack_require__(143).handleCallback
 	  , Logger = __webpack_require__(94).Logger
 	  , EventEmitter = __webpack_require__(4).EventEmitter
-	  , ReadPreference = __webpack_require__(155)
+	  , ReadPreference = __webpack_require__(144)
 	  , MongoError = __webpack_require__(94).MongoError
-	  , Readable = __webpack_require__(53).Readable || __webpack_require__(156).Readable
-	  , Define = __webpack_require__(165)
-	  , CoreCursor = __webpack_require__(166)
+	  , Readable = __webpack_require__(53).Readable || __webpack_require__(145).Readable
+	  , Define = __webpack_require__(154)
+	  , CoreCursor = __webpack_require__(155)
 	  , Query = __webpack_require__(94).Query
 	  , CoreReadPreference = __webpack_require__(94).ReadPreference;
 
@@ -44428,7 +41589,7 @@
 	  // No promise library selected fall back
 	  if(!promiseLibrary) {
 	    promiseLibrary = typeof global.Promise == 'function' ?
-	      global.Promise : __webpack_require__(167).Promise;
+	      global.Promise : __webpack_require__(156).Promise;
 	  }
 
 	  // Set up
@@ -44613,19 +41774,6 @@
 	define.classMethod('project', {callback: false, promise:false, returns: [AggregationCursor]});
 
 	/**
-	 * Add a lookup stage to the aggregation pipeline
-	 * @method
-	 * @param {object} document The lookup stage document.
-	 * @return {AggregationCursor}
-	 */
-	AggregationCursor.prototype.lookup = function(document) {
-	  this.s.cmd.pipeline.push({$lookup: document});
-	  return this;
-	}
-
-	define.classMethod('lookup', {callback: false, promise:false, returns: [AggregationCursor]});
-
-	/**
 	 * Add a redact stage to the aggregation pipeline
 	 * @method
 	 * @param {object} document The redact stage document.
@@ -44797,7 +41945,7 @@
 
 
 /***/ },
-/* 154 */
+/* 143 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -44921,11 +42069,7 @@
 	    : [];
 
 	  for(var i = 0; i < keys.length; i++) {
-	    try {
-	      e[keys[i]] = error[keys[i]];
-	    } catch(err) {
-	      // continue
-	    }
+	    e[keys[i]] = error[keys[i]];
 	  }
 
 	  return e;
@@ -45038,11 +42182,10 @@
 	exports.decorateCommand = decorateCommand;
 	exports.isObject = isObject;
 	exports.debugOptions = debugOptions;
-	exports.MAX_JS_INT = 0x20000000000000;
 
 
 /***/ },
-/* 155 */
+/* 144 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -45151,19 +42294,19 @@
 	module.exports = ReadPreference;
 
 /***/ },
-/* 156 */
+/* 145 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(157);
+	exports = module.exports = __webpack_require__(146);
 	exports.Readable = exports;
-	exports.Writable = __webpack_require__(161);
-	exports.Duplex = __webpack_require__(162);
-	exports.Transform = __webpack_require__(163);
-	exports.PassThrough = __webpack_require__(164);
+	exports.Writable = __webpack_require__(150);
+	exports.Duplex = __webpack_require__(151);
+	exports.Transform = __webpack_require__(152);
+	exports.PassThrough = __webpack_require__(153);
 
 
 /***/ },
-/* 157 */
+/* 146 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -45190,7 +42333,7 @@
 	module.exports = Readable;
 
 	/*<replacement>*/
-	var isArray = __webpack_require__(158);
+	var isArray = __webpack_require__(147);
 	/*</replacement>*/
 
 
@@ -45211,7 +42354,7 @@
 	var Stream = __webpack_require__(53);
 
 	/*<replacement>*/
-	var util = __webpack_require__(159);
+	var util = __webpack_require__(148);
 	util.inherits = __webpack_require__(51);
 	/*</replacement>*/
 
@@ -45281,7 +42424,7 @@
 	  this.encoding = null;
 	  if (options.encoding) {
 	    if (!StringDecoder)
-	      StringDecoder = __webpack_require__(160).StringDecoder;
+	      StringDecoder = __webpack_require__(149).StringDecoder;
 	    this.decoder = new StringDecoder(options.encoding);
 	    this.encoding = options.encoding;
 	  }
@@ -45382,7 +42525,7 @@
 	// backwards compatibility.
 	Readable.prototype.setEncoding = function(enc) {
 	  if (!StringDecoder)
-	    StringDecoder = __webpack_require__(160).StringDecoder;
+	    StringDecoder = __webpack_require__(149).StringDecoder;
 	  this._readableState.decoder = new StringDecoder(enc);
 	  this._readableState.encoding = enc;
 	};
@@ -46151,7 +43294,7 @@
 
 
 /***/ },
-/* 158 */
+/* 147 */
 /***/ function(module, exports) {
 
 	module.exports = Array.isArray || function (arr) {
@@ -46160,7 +43303,7 @@
 
 
 /***/ },
-/* 159 */
+/* 148 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -46273,7 +43416,7 @@
 
 
 /***/ },
-/* 160 */
+/* 149 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -46500,7 +43643,7 @@
 
 
 /***/ },
-/* 161 */
+/* 150 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -46538,7 +43681,7 @@
 
 
 	/*<replacement>*/
-	var util = __webpack_require__(159);
+	var util = __webpack_require__(148);
 	util.inherits = __webpack_require__(51);
 	/*</replacement>*/
 
@@ -46624,7 +43767,7 @@
 	}
 
 	function Writable(options) {
-	  var Duplex = __webpack_require__(162);
+	  var Duplex = __webpack_require__(151);
 
 	  // Writable ctor is applied to Duplexes, though they're not
 	  // instanceof Writable, they're instanceof Readable.
@@ -46892,7 +44035,7 @@
 
 
 /***/ },
-/* 162 */
+/* 151 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -46933,12 +44076,12 @@
 
 
 	/*<replacement>*/
-	var util = __webpack_require__(159);
+	var util = __webpack_require__(148);
 	util.inherits = __webpack_require__(51);
 	/*</replacement>*/
 
-	var Readable = __webpack_require__(157);
-	var Writable = __webpack_require__(161);
+	var Readable = __webpack_require__(146);
+	var Writable = __webpack_require__(150);
 
 	util.inherits(Duplex, Readable);
 
@@ -46987,7 +44130,7 @@
 
 
 /***/ },
-/* 163 */
+/* 152 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -47056,10 +44199,10 @@
 
 	module.exports = Transform;
 
-	var Duplex = __webpack_require__(162);
+	var Duplex = __webpack_require__(151);
 
 	/*<replacement>*/
-	var util = __webpack_require__(159);
+	var util = __webpack_require__(148);
 	util.inherits = __webpack_require__(51);
 	/*</replacement>*/
 
@@ -47203,7 +44346,7 @@
 
 
 /***/ },
-/* 164 */
+/* 153 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -47233,10 +44376,10 @@
 
 	module.exports = PassThrough;
 
-	var Transform = __webpack_require__(163);
+	var Transform = __webpack_require__(152);
 
 	/*<replacement>*/
-	var util = __webpack_require__(159);
+	var util = __webpack_require__(148);
 	util.inherits = __webpack_require__(51);
 	/*</replacement>*/
 
@@ -47255,7 +44398,7 @@
 
 
 /***/ },
-/* 165 */
+/* 154 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var f = __webpack_require__(10).format;
@@ -47324,19 +44467,23 @@
 	module.exports = Define;
 
 /***/ },
-/* 166 */
+/* 155 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var inherits = __webpack_require__(10).inherits
 	  , f = __webpack_require__(10).format
-	  , formattedOrderClause = __webpack_require__(154).formattedOrderClause
-	  , handleCallback = __webpack_require__(154).handleCallback
-	  , ReadPreference = __webpack_require__(155)
+	  , toError = __webpack_require__(143).toError
+	  , getSingleProperty = __webpack_require__(143).getSingleProperty
+	  , formattedOrderClause = __webpack_require__(143).formattedOrderClause
+	  , handleCallback = __webpack_require__(143).handleCallback
+	  , Logger = __webpack_require__(94).Logger
+	  , EventEmitter = __webpack_require__(4).EventEmitter
+	  , ReadPreference = __webpack_require__(144)
 	  , MongoError = __webpack_require__(94).MongoError
-	  , Readable = __webpack_require__(53).Readable || __webpack_require__(156).Readable
-	  , Define = __webpack_require__(165)
+	  , Readable = __webpack_require__(53).Readable || __webpack_require__(145).Readable
+	  , Define = __webpack_require__(154)
 	  , CoreCursor = __webpack_require__(94).Cursor
 	  , Map = __webpack_require__(94).BSON.Map
 	  , Query = __webpack_require__(94).Query
@@ -47383,7 +44530,6 @@
 	// Flags allowed for cursor
 	var flags = ['tailable', 'oplogReplay', 'noCursorTimeout', 'awaitData', 'exhaust', 'partial'];
 	var fields = ['numberOfRetries', 'tailableRetryInterval'];
-	var push = Array.prototype.push;
 
 	/**
 	 * Creates a new Cursor instance (INTERNAL TYPE, do not instantiate directly)
@@ -47410,6 +44556,7 @@
 	 * collection.find({}).addCursorFlag('oplogReplay', true)         // Set cursor as oplogReplay
 	 * collection.find({}).addCursorFlag('noCursorTimeout', true)     // Set cursor as noCursorTimeout
 	 * collection.find({}).addCursorFlag('awaitData', true)           // Set cursor as awaitData
+	 * collection.find({}).addCursorFlag('exhaust', true)             // Set cursor as exhaust
 	 * collection.find({}).addCursorFlag('partial', true)             // Set cursor as partial
 	 * collection.find({}).addQueryModifier('$orderby', {a:1})        // Set $orderby {a:1}
 	 * collection.find({}).max(10)                                    // Set the cursor maxScan
@@ -47444,7 +44591,7 @@
 	  // No promise library selected fall back
 	  if(!promiseLibrary) {
 	    promiseLibrary = typeof global.Promise == 'function' ?
-	      global.Promise : __webpack_require__(167).Promise;
+	      global.Promise : __webpack_require__(156).Promise;
 	  }
 
 	  // Set up
@@ -47478,12 +44625,8 @@
 	    , currentDoc: null
 	  }
 
-	  // Translate correctly
-	  if(self.s.options.noCursorTimeout == true) {
-	    self.addCursorFlag('noCursorTimeout', true);
-	  }
-
-	  // Set the sort value
+	  // Legacy fields
+	  this.timeout = self.s.options.noCursorTimeout == true;
 	  this.sortValue = self.s.cmd.sort;
 	}
 
@@ -47743,7 +44886,7 @@
 	/**
 	 * Add a cursor flag to the cursor
 	 * @method
-	 * @param {string} flag The flag to set, must be one of following ['tailable', 'oplogReplay', 'noCursorTimeout', 'awaitData', 'partial'].
+	 * @param {string} flag The flag to set, must be one of following ['tailable', 'oplogReplay', 'noCursorTimeout', 'awaitData', 'exhaust', 'partial'].
 	 * @param {boolean} value The flag boolean value.
 	 * @throws {MongoError}
 	 * @return {Cursor}
@@ -47985,6 +45128,18 @@
 
 	  // Get the next object
 	  self._next(function(err, doc) {
+	    if(err && err.tailable && self.s.currentNumberOfRetries == 0) return callback(err);
+	    if(err && err.tailable && self.s.currentNumberOfRetries > 0) {
+	      self.s.currentNumberOfRetries = self.s.currentNumberOfRetries - 1;
+
+	      return setTimeout(function() {
+	        // Rewind the cursor only when it has not actually read any documents yet
+	        if(self.cursorState.currentLimit == 0) self.rewind();
+	        // Read the next document, forcing a re-issue of query if no cursorId exists
+	        self.nextObject(callback);
+	      }, self.s.tailableRetryInterval);
+	    }
+
 	    self.s.state = Cursor.OPEN;
 	    if(err) return handleCallback(callback, err);
 	    handleCallback(callback, null, doc);
@@ -48180,7 +45335,7 @@
 	          docs = docs.map(self.s.transforms.doc);
 	        }
 
-	        push.apply(items, docs);
+	        items = items.concat(docs);
 	      }
 
 	      // Attempt a fetch
@@ -48255,16 +45410,38 @@
 	    command.maxTimeMS = self.s.cmd.maxTimeMS;
 	  }
 
+	  // Get a server
+	  var server = self.s.topology.getServer(opts);
+	  // Get a connection
+	  var connection = self.s.topology.getConnection(opts);
+	  // Get the callbacks
+	  var callbacks = server.getCallbacks();
+
 	  // Merge in any options
 	  if(opts.skip) command.skip = opts.skip;
 	  if(opts.limit) command.limit = opts.limit;
 	  if(self.s.options.hint) command.hint = self.s.options.hint;
 
-	  // Execute the command
-	  self.topology.command(f("%s.$cmd", self.s.ns.substr(0, delimiter))
-	    , command, function(err, result) {
-	      callback(err, result ? result.result.n : null)
-	    });
+	  // Build Query object
+	  var query = new Query(self.s.bson, f("%s.$cmd", self.s.ns.substr(0, delimiter)), command, {
+	      numberToSkip: 0, numberToReturn: -1
+	    , checkKeys: false
+	  });
+
+	  // Set up callback
+	  callbacks.register(query.requestId, function(err, result) {
+	    if(err) return handleCallback(callback, err);
+	    if(result.documents.length == 1
+	      && (result.documents[0].errmsg
+	      || result.documents[0].err
+	      || result.documents[0]['$err'])) {
+	      return handleCallback(callback, MongoError.create(result.documents[0]));
+	    }
+	    handleCallback(callback, null, result.documents[0].n);
+	  });
+
+	  // Write the initial command out
+	  connection.write(query.toBin());
 	}
 
 	define.classMethod('count', {callback: true, promise:true});
@@ -48316,9 +45493,9 @@
 	define.classMethod('isClosed', {callback: false, promise:false, returns: [Boolean]});
 
 	Cursor.prototype.destroy = function(err) {
-	  if(err) this.emit('error', err);
 	  this.pause();
 	  this.close();
+	  if(err) this.emit('error', err);
 	}
 
 	define.classMethod('destroy', {callback: false, promise:false});
@@ -48375,10 +45552,10 @@
 	  // Get the next item
 	  self.nextObject(function(err, result) {
 	    if(err) {
+	      if(!self.isDead()) self.close();
 	      if(self.listeners('error') && self.listeners('error').length > 0) {
 	        self.emit('error', err);
 	      }
-	      if(!self.isDead()) self.close();
 
 	      // Emit end event
 	      self.emit('end');
@@ -48498,7 +45675,7 @@
 
 
 /***/ },
-/* 167 */
+/* 156 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var require;var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module) {/*!
@@ -49457,7 +46634,7 @@
 	    };
 
 	    /* global define:true module:true window: true */
-	    if ("function" === 'function' && __webpack_require__(168)['amd']) {
+	    if ("function" === 'function' && __webpack_require__(157)['amd']) {
 	      !(__WEBPACK_AMD_DEFINE_RESULT__ = function() { return lib$es6$promise$umd$$ES6Promise; }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	    } else if (typeof module !== 'undefined' && module['exports']) {
 	      module['exports'] = lib$es6$promise$umd$$ES6Promise;
@@ -49472,31 +46649,31 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)(module)))
 
 /***/ },
-/* 168 */
+/* 157 */
 /***/ function(module, exports) {
 
 	module.exports = function() { throw new Error("define cannot be used indirect"); };
 
 
 /***/ },
-/* 169 */
+/* 158 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var inherits = __webpack_require__(10).inherits
 	  , f = __webpack_require__(10).format
-	  , toError = __webpack_require__(154).toError
-	  , getSingleProperty = __webpack_require__(154).getSingleProperty
-	  , formattedOrderClause = __webpack_require__(154).formattedOrderClause
-	  , handleCallback = __webpack_require__(154).handleCallback
+	  , toError = __webpack_require__(143).toError
+	  , getSingleProperty = __webpack_require__(143).getSingleProperty
+	  , formattedOrderClause = __webpack_require__(143).formattedOrderClause
+	  , handleCallback = __webpack_require__(143).handleCallback
 	  , Logger = __webpack_require__(94).Logger
 	  , EventEmitter = __webpack_require__(4).EventEmitter
-	  , ReadPreference = __webpack_require__(155)
+	  , ReadPreference = __webpack_require__(144)
 	  , MongoError = __webpack_require__(94).MongoError
-	  , Readable = __webpack_require__(53).Readable || __webpack_require__(156).Readable
-	  , Define = __webpack_require__(165)
-	  , CoreCursor = __webpack_require__(166)
+	  , Readable = __webpack_require__(53).Readable || __webpack_require__(145).Readable
+	  , Define = __webpack_require__(154)
+	  , CoreCursor = __webpack_require__(155)
 	  , Query = __webpack_require__(94).Query
 	  , CoreReadPreference = __webpack_require__(94).ReadPreference;
 
@@ -49561,7 +46738,7 @@
 	  // No promise library selected fall back
 	  if(!promiseLibrary) {
 	    promiseLibrary = typeof global.Promise == 'function' ?
-	      global.Promise : __webpack_require__(167).Promise;
+	      global.Promise : __webpack_require__(156).Promise;
 	  }
 
 	  // Set up
@@ -49805,27 +46982,24 @@
 
 
 /***/ },
-/* 170 */
+/* 159 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var common = __webpack_require__(171)
-		, utils = __webpack_require__(154)
-	  , toError = __webpack_require__(154).toError
+	var common = __webpack_require__(160)
+		, utils = __webpack_require__(143)
+	  , toError = __webpack_require__(143).toError
 		, f = __webpack_require__(10).format
-		, handleCallback = __webpack_require__(154).handleCallback
+		, handleCallback = __webpack_require__(143).handleCallback
 		, shallowClone = utils.shallowClone
 	  , WriteError = common.WriteError
 	  , BulkWriteResult = common.BulkWriteResult
 	  , LegacyOp = common.LegacyOp
 	  , ObjectID = __webpack_require__(94).BSON.ObjectID
-	  , Define = __webpack_require__(165)
-		, BSON = __webpack_require__(94).BSON
+	  , Define = __webpack_require__(154)
 	  , Batch = common.Batch
 	  , mergeBatchResults = common.mergeBatchResults;
-
-	var bson = new BSON.BSONPure();
 
 	/**
 	 * Create a FindOperatorsOrdered instance (INTERNAL TYPE, do not instantiate directly)
@@ -49961,13 +47135,10 @@
 	// Add to internal list of documents
 	var addToOperationsList = function(_self, docType, document) {
 	  // Get the bsonSize
-	  var bsonSize = bson.calculateObjectSize(document, false);
+	  var bsonSize = _self.s.bson.calculateObjectSize(document, false);
 
 	  // Throw error if the doc is bigger than the max BSON size
-	  if(bsonSize >= _self.s.maxBatchSizeBytes) {
-			throw toError("document is larger than the maximum size " + _self.s.maxBatchSizeBytes);
-		}
-
+	  if(bsonSize >= _self.s.maxBatchSizeBytes) throw toError("document is larger than the maximum size " + _self.s.maxBatchSizeBytes);
 	  // Create a new batch object if we don't have a current one
 	  if(_self.s.currentBatch == null) _self.s.currentBatch = new Batch(docType, _self.s.currentIndex);
 
@@ -50000,7 +47171,6 @@
 	  } else {
 	    _self.s.currentBatch.originalIndexes.push(_self.s.currentIndex);
 	    _self.s.currentBatch.operations.push(document)
-			_self.s.currentBatchSizeBytes = _self.s.currentBatchSizeBytes + bsonSize;
 	    _self.s.currentIndex = _self.s.currentIndex + 1;
 	  }
 
@@ -50044,7 +47214,7 @@
 	  // No promise library selected fall back
 	  if(!promiseLibrary) {
 	    promiseLibrary = typeof global.Promise == 'function' ?
-	      global.Promise : __webpack_require__(167).Promise;
+	      global.Promise : __webpack_require__(156).Promise;
 	  }
 
 	  // Current batch
@@ -50311,7 +47481,7 @@
 	  }
 
 	  // If we have current batch
-	  if(this.s.currentBatch) this.s.batches.push(this.s.currentBatch)
+	  if(this.s.currentBatch) this.s.batches.push(this.s.currentBatch);
 
 	  // If we have no operations in the bulk raise an error
 	  if(this.s.batches.length == 0) {
@@ -50348,14 +47518,12 @@
 
 
 /***/ },
-/* 171 */
+/* 160 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var utils = __webpack_require__(154),
-	  Long = __webpack_require__(94).BSON.Long,
-	  Timestamp = __webpack_require__(94).BSON.Timestamp;
+	var utils = __webpack_require__(143);
 
 	// Error codes
 	var UNKNOWN_ERROR = 8;
@@ -50636,7 +47804,7 @@
 	  // Do we have a top level error stop processing and return
 	  if(result.ok == 0 && bulkResult.ok == 1) {
 	    bulkResult.ok = 0;
-
+	    // bulkResult.error = utils.toError(result);
 	    var writeError = {
 	        index: 0
 	      , code: result.code || 0
@@ -50650,45 +47818,9 @@
 	    return;
 	  }
 
-	  // Deal with opTime if available
-	  if(result.opTime || result.lastOp) {
-	    var opTime = result.lastOp || result.opTime;
-	    var lastOpTS = null;
-	    var lastOpT = null;
-
-	    // We have a time stamp
-	    if(opTime instanceof Timestamp) {
-	      if(bulkResult.lastOp == null) {
-	        bulkResult.lastOp = opTime;
-	      } else if(opTime.greaterThan(bulkResult.lastOp)) {
-	        bulkResult.lastOp = opTime;
-	      }
-	    } else {
-	      // Existing TS
-	      if(bulkResult.lastOp) {
-	        lastOpTS = typeof bulkResult.lastOp.ts == 'number'
-	          ? Long.fromNumber(bulkResult.lastOp.ts) : bulkResult.lastOp.ts;
-	        lastOpT = typeof bulkResult.lastOp.t == 'number'
-	          ? Long.fromNumber(bulkResult.lastOp.t) : bulkResult.lastOp.t;
-	      }
-
-	      // Current OpTime TS
-	      var opTimeTS = typeof opTime.ts == 'number'
-	        ? Long.fromNumber(opTime.ts) : opTime.ts;
-	      var opTimeT = typeof opTime.t == 'number'
-	        ? Long.fromNumber(opTime.t) : opTime.t;
-
-	      // Compare the opTime's
-	      if(bulkResult.lastOp == null) {
-	        bulkResult.lastOp = opTime;
-	      } else if(opTimeTS.greaterThan(lastOpTS)) {
-	        bulkResult.lastOp = opTime;
-	      } else if(opTimeTS.equals(lastOpTS)) {
-	        if(opTimeT.greaterThan(lastOpT)) {
-	          bulkResult.lastOp = opTime;
-	        }
-	      }
-	    }
+	  // Add lastop if available
+	  if(result.lastOp) {
+	    bulkResult.lastOp = result.lastOp;
 	  }
 
 	  // If we have an insert Batch type
@@ -50785,27 +47917,24 @@
 
 
 /***/ },
-/* 172 */
+/* 161 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var common = __webpack_require__(171)
-		, utils = __webpack_require__(154)
-	  , toError = __webpack_require__(154).toError
+	var common = __webpack_require__(160)
+		, utils = __webpack_require__(143)
+	  , toError = __webpack_require__(143).toError
 	  , f = __webpack_require__(10).format
-		, handleCallback = __webpack_require__(154).handleCallback
+		, handleCallback = __webpack_require__(143).handleCallback
 	  , shallowClone = utils.shallowClone
 	  , WriteError = common.WriteError
 	  , BulkWriteResult = common.BulkWriteResult
 	  , LegacyOp = common.LegacyOp
 	  , ObjectID = __webpack_require__(94).BSON.ObjectID
-		, BSON = __webpack_require__(94).BSON
-	  , Define = __webpack_require__(165)
+	  , Define = __webpack_require__(154)
 	  , Batch = common.Batch
 	  , mergeBatchResults = common.mergeBatchResults;
-
-	var bson = new BSON.BSONPure();
 
 	/**
 	 * Create a FindOperatorsUnordered instance (INTERNAL TYPE, do not instantiate directly)
@@ -50938,7 +48067,7 @@
 	//
 	var addToOperationsList = function(_self, docType, document) {
 	  // Get the bsonSize
-	  var bsonSize = bson.calculateObjectSize(document, false);
+	  var bsonSize = _self.s.bson.calculateObjectSize(document, false);
 	  // Throw error if the doc is bigger than the max BSON size
 	  if(bsonSize >= _self.s.maxBatchSizeBytes) throw toError("document is larger than the maximum size " + _self.s.maxBatchSizeBytes);
 	  // Holds the current batch
@@ -51037,7 +48166,7 @@
 	  // No promise library selected fall back
 	  if(!promiseLibrary) {
 	    promiseLibrary = typeof global.Promise == 'function' ?
-	      global.Promise : __webpack_require__(167).Promise;
+	      global.Promise : __webpack_require__(156).Promise;
 	  }
 
 	  // Final results
@@ -51333,7 +48462,7 @@
 
 
 /***/ },
-/* 173 */
+/* 162 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -51372,20 +48501,20 @@
 	 *   });
 	 * });
 	 */
-	var Chunk = __webpack_require__(174),
+	var Chunk = __webpack_require__(163),
 	  ObjectID = __webpack_require__(94).BSON.ObjectID,
-	  ReadPreference = __webpack_require__(155),
+	  ReadPreference = __webpack_require__(144),
 	  Buffer = __webpack_require__(31).Buffer,
-	  Collection = __webpack_require__(175),
+	  Collection = __webpack_require__(164),
 	  fs = __webpack_require__(13),
-	  timers = __webpack_require__(176),
+	  timers = __webpack_require__(165),
 	  f = __webpack_require__(10).format,
 	  util = __webpack_require__(10),
-	  Define = __webpack_require__(165),
+	  Define = __webpack_require__(154),
 	  MongoError = __webpack_require__(94).MongoError,
 	  inherits = util.inherits,
-	  Duplex = __webpack_require__(53).Duplex || __webpack_require__(156).Duplex,
-	  shallowClone = __webpack_require__(154).shallowClone;
+	  Duplex = __webpack_require__(53).Duplex || __webpack_require__(145).Duplex,
+	  shallowClone = __webpack_require__(143).shallowClone;
 
 	var REFERENCE_BY_FILENAME = 0,
 	  REFERENCE_BY_ID = 1;
@@ -51478,7 +48607,7 @@
 	  // No promise library selected fall back
 	  if(!promiseLibrary) {
 	    promiseLibrary = typeof global.Promise == 'function' ?
-	      global.Promise : __webpack_require__(167).Promise;
+	      global.Promise : __webpack_require__(156).Promise;
 	  }
 
 	  // Set the promiseLibrary
@@ -52634,7 +49763,7 @@
 	  // No promise library selected fall back
 	  if(!promiseLibrary) {
 	    promiseLibrary = typeof global.Promise == 'function' ?
-	      global.Promise : __webpack_require__(167).Promise;
+	      global.Promise : __webpack_require__(156).Promise;
 	  }
 
 	  // We provided a callback leg
@@ -52706,7 +49835,7 @@
 	  // No promise library selected fall back
 	  if(!promiseLibrary) {
 	    promiseLibrary = typeof global.Promise == 'function' ?
-	      global.Promise : __webpack_require__(167).Promise;
+	      global.Promise : __webpack_require__(156).Promise;
 	  }
 
 	  // We provided a callback leg
@@ -52791,7 +49920,7 @@
 	  // No promise library selected fall back
 	  if(!promiseLibrary) {
 	    promiseLibrary = typeof global.Promise == 'function' ?
-	      global.Promise : __webpack_require__(167).Promise;
+	      global.Promise : __webpack_require__(156).Promise;
 	  }
 
 	  // We provided a callback leg
@@ -52855,7 +49984,7 @@
 	  // No promise library selected fall back
 	  if(!promiseLibrary) {
 	    promiseLibrary = typeof global.Promise == 'function' ?
-	      global.Promise : __webpack_require__(167).Promise;
+	      global.Promise : __webpack_require__(156).Promise;
 	  }
 
 	  // We provided a callback leg
@@ -52906,7 +50035,7 @@
 	  // No promise library selected fall back
 	  if(!promiseLibrary) {
 	    promiseLibrary = typeof global.Promise == 'function' ?
-	      global.Promise : __webpack_require__(167).Promise;
+	      global.Promise : __webpack_require__(156).Promise;
 	  }
 
 	  // We provided a callback leg
@@ -53295,7 +50424,7 @@
 
 
 /***/ },
-/* 174 */
+/* 163 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -53534,32 +50663,32 @@
 
 
 /***/ },
-/* 175 */
+/* 164 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var checkCollectionName = __webpack_require__(154).checkCollectionName
+	var checkCollectionName = __webpack_require__(143).checkCollectionName
 	  , ObjectID = __webpack_require__(94).BSON.ObjectID
 	  , Long = __webpack_require__(94).BSON.Long
 	  , Code = __webpack_require__(94).BSON.Code
 	  , f = __webpack_require__(10).format
-	  , AggregationCursor = __webpack_require__(153)
+	  , AggregationCursor = __webpack_require__(142)
 	  , MongoError = __webpack_require__(94).MongoError
-	  , shallowClone = __webpack_require__(154).shallowClone
-	  , isObject = __webpack_require__(154).isObject
-	  , toError = __webpack_require__(154).toError
-	  , normalizeHintField = __webpack_require__(154).normalizeHintField
-	  , handleCallback = __webpack_require__(154).handleCallback
-	  , decorateCommand = __webpack_require__(154).decorateCommand
-	  , formattedOrderClause = __webpack_require__(154).formattedOrderClause
-	  , ReadPreference = __webpack_require__(155)
+	  , shallowClone = __webpack_require__(143).shallowClone
+	  , isObject = __webpack_require__(143).isObject
+	  , toError = __webpack_require__(143).toError
+	  , normalizeHintField = __webpack_require__(143).normalizeHintField
+	  , handleCallback = __webpack_require__(143).handleCallback
+	  , decorateCommand = __webpack_require__(143).decorateCommand
+	  , formattedOrderClause = __webpack_require__(143).formattedOrderClause
+	  , ReadPreference = __webpack_require__(144)
 	  , CoreReadPreference = __webpack_require__(94).ReadPreference
-	  , CommandCursor = __webpack_require__(169)
-	  , Define = __webpack_require__(165)
-	  , Cursor = __webpack_require__(166)
-	  , unordered = __webpack_require__(172)
-	  , ordered = __webpack_require__(170);
+	  , CommandCursor = __webpack_require__(158)
+	  , Define = __webpack_require__(154)
+	  , Cursor = __webpack_require__(155)
+	  , unordered = __webpack_require__(161)
+	  , ordered = __webpack_require__(159);
 
 	/**
 	 * @fileOverview The **Collection** class is an internal class that embodies a MongoDB collection
@@ -53613,7 +50742,7 @@
 	  // No promise library selected fall back
 	  if(!promiseLibrary) {
 	    promiseLibrary = typeof global.Promise == 'function' ?
-	      global.Promise : __webpack_require__(167).Promise;
+	      global.Promise : __webpack_require__(156).Promise;
 	  }
 
 	  // Assign the right collection level readPreference
@@ -53917,13 +51046,7 @@
 	  var self = this;
 	  if(typeof options == 'function') callback = options, options = {};
 	  options = options || {};
-	  if(Array.isArray(doc) && typeof callback == 'function') {
-	    return callback(MongoError.create({message: 'doc parameter must be an object', driver:true }));
-	  } else if(Array.isArray(doc)) {
-	    return new this.s.promiseLibrary(function(resolve, reject) {
-	      reject(MongoError.create({message: 'doc parameter must be an object', driver:true }));
-	    });
-	  }
+	  if(Array.isArray(doc)) return callback(MongoError.create({message: 'doc parameter must be an object', driver:true }));
 
 	  // Add ignoreUndfined
 	  if(this.s.options.ignoreUndefined) {
@@ -53959,7 +51082,7 @@
 	var mapInserManyResults = function(docs, r) {
 	  var ids = r.getInsertedIds();
 	  var keys = Object.keys(ids);
-	  var finalIds = new Array(keys.length);
+	  var finalIds = new Array(keys);
 
 	  for(var i = 0; i < keys.length; i++) {
 	    if(ids[keys[i]]._id) {
@@ -53967,18 +51090,12 @@
 	    }
 	  }
 
-	  var finalResult = {
+	  return {
 	    result: {ok: 1, n: r.insertedCount},
 	    ops: docs,
 	    insertedCount: r.insertedCount,
 	    insertedIds: finalIds
-	  };
-
-	  if(r.getLastOp()) {
-	    finalResult.result.opTime = r.getLastOp();
 	  }
-
-	  return finalResult;
 	}
 
 	define.classMethod('insertOne', {callback: true, promise:true});
@@ -53996,7 +51113,6 @@
 	 * @param {boolean} [options.j=false] Specify a journal write concern.
 	 * @param {boolean} [options.serializeFunctions=false] Serialize functions on any object.
 	 * @param {boolean} [options.forceServerObjectId=false] Force server to assign _id values instead of driver.
-	 * @param {boolean} [options.bypassDocumentValidation=false] Allow driver to bypass schema validation in MongoDB 3.2 or higher.
 	 * @param {Collection~insertWriteOpCallback} [callback] The command result callback
 	 * @return {Promise} returns Promise if no callback passed
 	 */
@@ -54004,13 +51120,7 @@
 	  var self = this;
 	  if(typeof options == 'function') callback = options, options = {};
 	  options = options || {ordered:true};
-	  if(!Array.isArray(docs) && typeof callback == 'function') {
-	    return callback(MongoError.create({message: 'docs parameter must be an array of documents', driver:true }));
-	  } else if(!Array.isArray(docs)) {
-	    return new this.s.promiseLibrary(function(resolve, reject) {
-	      reject(MongoError.create({message: 'docs parameter must be an array of documents', driver:true }));
-	    });
-	  }
+	  if(!Array.isArray(docs)) return callback(MongoError.create({message: 'docs parameter must be an array of documents', driver:true }));
 
 	  // Get the write concern options
 	  if(typeof options.checkKeys != 'boolean') {
@@ -54121,7 +51231,7 @@
 	  // Return a Promise
 	  return new this.s.promiseLibrary(function(resolve, reject) {
 	    bulkWrite(self, operations, options, function(err, r) {
-	      if(err && r == null) return reject(err);
+	      if(err) return reject(err);
 	      resolve(r);
 	    });
 	  });
@@ -54138,12 +51248,8 @@
 	  var bulk = options.ordered == true || options.ordered == null ? self.initializeOrderedBulkOp(options) : self.initializeUnorderedBulkOp(options);
 
 	  // for each op go through and add to the bulk
-	  try {
-	    for(var i = 0; i < operations.length; i++) {
-	      bulk.raw(operations[i]);
-	    }
-	  } catch(err) {
-	    return callback(err, null);
+	  for(var i = 0; i < operations.length; i++) {
+	    bulk.raw(operations[i]);
 	  }
 
 	  // Final options for write concern
@@ -54614,6 +51720,7 @@
 	 * @param {(number|string)} [options.w=null] The write concern.
 	 * @param {number} [options.wtimeout=null] The write concern timeout.
 	 * @param {boolean} [options.j=false] Specify a journal write concern.
+	 * @param {boolean} [options.bypassDocumentValidation=false] Allow driver to bypass schema validation in MongoDB 3.2 or higher.
 	 * @param {Collection~deleteWriteOpCallback} [callback] The command result callback
 	 * @return {Promise} returns Promise if no callback passed
 	 */
@@ -55135,7 +52242,7 @@
 	  // Execute the index
 	  self.s.db.command({
 	    createIndexes: self.s.name, indexes: indexSpecs
-	  }, { readPreference: ReadPreference.PRIMARY }, callback);
+	  }, callback);
 	}
 
 	define.classMethod('createIndexes', {callback: true, promise:true});
@@ -55278,8 +52385,6 @@
 	  options = options || {};
 	  // Clone the options
 	  options = shallowClone(options);
-	  // Determine the read preference in the options.
-	  options = getReadPreference(this, options, this.s.db, this);
 	  // Set the CommandCursor constructor
 	  options.cursorFactory = CommandCursor;
 	  // Set the promiseLibrary
@@ -55496,7 +52601,6 @@
 	  if(typeof limit == 'number') cmd.limit = limit;
 	  if(hint) options.hint = hint;
 
-	  options = shallowClone(options);
 	  // Ensure we have the right read preference inheritance
 	  options = getReadPreference(self, options, self.s.db, self);
 
@@ -55557,7 +52661,6 @@
 	    'distinct': self.s.name, 'key': key, 'query': query
 	  };
 
-	  options = shallowClone(options);
 	  // Ensure we have the right read preference inheritance
 	  options = getReadPreference(self, options, self.s.db, self);
 
@@ -55639,7 +52742,6 @@
 	  // Check if we have the scale value
 	  if(options['scale'] != null) commandObject['scale'] = options['scale'];
 
-	  options = shallowClone(options);
 	  // Ensure we have the right read preference inheritance
 	  options = getReadPreference(self, options, self.s.db, self);
 
@@ -55679,9 +52781,6 @@
 	  var self = this;
 	  if(typeof options == 'function') callback = options, options = {};
 	  options = options || {};
-
-	  // Basic validation
-	  if(filter == null || typeof filter != 'object') throw toError('filter parameter must be an object');
 
 	  // Execute using callback
 	  if(typeof callback == 'function') return findOneAndDelete(self, filter, options, callback);
@@ -55733,10 +52832,6 @@
 	  var self = this;
 	  if(typeof options == 'function') callback = options, options = {};
 	  options = options || {};
-
-	  // Basic validation
-	  if(filter == null || typeof filter != 'object') throw toError('filter parameter must be an object');
-	  if(replacement == null || typeof replacement != 'object') throw toError('replacement parameter must be an object');
 
 	  // Execute using callback
 	  if(typeof callback == 'function') return findOneAndReplace(self, filter, replacement, options, callback);
@@ -55792,10 +52887,6 @@
 	  if(typeof options == 'function') callback = options, options = {};
 	  options = options || {};
 
-	  // Basic validation
-	  if(filter == null || typeof filter != 'object') throw toError('filter parameter must be an object');
-	  if(update == null || typeof update != 'object') throw toError('update parameter must be an object');
-
 	  // Execute using callback
 	  if(typeof callback == 'function') return findOneAndUpdate(self, filter, update, options, callback);
 
@@ -55844,7 +52935,7 @@
 	 * @param {boolean} [options.upsert=false] Perform an upsert operation.
 	 * @param {boolean} [options.new=false] Set to true if you want to return the modified object rather than the original. Ignored for remove.
 	 * @param {object} [options.fields=null] Object containing the field projection for the result returned from the operation.
-	 * @param {Collection~findAndModifyCallback} [callback] The command result callback
+	 * @param {Collection~resultCallback} [callback] The command result callback
 	 * @return {Promise} returns Promise if no callback passed
 	 * @deprecated use findOneAndUpdate, findOneAndReplace or findOneAndDelete instead
 	 */
@@ -56048,7 +53139,6 @@
 	  if(options.allowDiskUse) command.allowDiskUse = options.allowDiskUse;
 	  if(typeof options.maxTimeMS == 'number') command.maxTimeMS = options.maxTimeMS;
 
-	  options = shallowClone(options);
 	  // Ensure we have the right read preference inheritance
 	  options = getReadPreference(this, options, this.s.db, this);
 
@@ -56133,7 +53223,6 @@
 	  options.numCursors = options.numCursors || 1;
 	  options.batchSize = options.batchSize || 1000;
 
-	  options = shallowClone(options);
 	  // Ensure we have the right read preference inheritance
 	  options = getReadPreference(this, options, this.s.db, this);
 
@@ -56164,18 +53253,12 @@
 	    commandObject.readConcern = self.s.readConcern;
 	  }
 
-	  // Store the raw value
-	  var raw = options.raw;
-	  delete options['raw'];
-
 	  // Execute the command
 	  self.s.db.command(commandObject, options, function(err, result) {
 	    if(err) return handleCallback(callback, err, null);
 	    if(result == null) return handleCallback(callback, new Error("no result returned for parallelCollectionScan"), null);
 
 	    var cursors = [];
-	    // Add the raw back to the option
-	    if(raw) options.raw = raw;
 	    // Create command cursors for each item
 	    for(var i = 0; i < result.cursors.length; i++) {
 	      var rawId = result.cursors[i].cursor.id
@@ -56247,7 +53330,6 @@
 	    near: point || [x, y]
 	  }
 
-	  options = shallowClone(options);
 	  // Ensure we have the right read preference inheritance
 	  options = getReadPreference(self, options, self.s.db, self);
 
@@ -56323,7 +53405,6 @@
 	  // Remove read preference from hash if it exists
 	  commandObject = decorateCommand(commandObject, options, {readPreference: true});
 
-	  options = shallowClone(options);
 	  // Ensure we have the right read preference inheritance
 	  options = getReadPreference(self, options, self.s.db, self);
 
@@ -56348,34 +53429,33 @@
 	 * Group function helper
 	 * @ignore
 	 */
-	// var groupFunction = function () {
-	//   var c = db[ns].find(condition);
-	//   var map = new Map();
-	//   var reduce_function = reduce;
-	//
-	//   while (c.hasNext()) {
-	//     var obj = c.next();
-	//     var key = {};
-	//
-	//     for (var i = 0, len = keys.length; i < len; ++i) {
-	//       var k = keys[i];
-	//       key[k] = obj[k];
-	//     }
-	//
-	//     var aggObj = map.get(key);
-	//
-	//     if (aggObj == null) {
-	//       var newObj = Object.extend({}, key);
-	//       aggObj = Object.extend(newObj, initial);
-	//       map.put(key, aggObj);
-	//     }
-	//
-	//     reduce_function(obj, aggObj);
-	//   }
-	//
-	//   return { "result": map.values() };
-	// }.toString();
-	var groupFunction = 'function () {\nvar c = db[ns].find(condition);\nvar map = new Map();\nvar reduce_function = reduce;\n\nwhile (c.hasNext()) {\nvar obj = c.next();\nvar key = {};\n\nfor (var i = 0, len = keys.length; i < len; ++i) {\nvar k = keys[i];\nkey[k] = obj[k];\n}\n\nvar aggObj = map.get(key);\n\nif (aggObj == null) {\nvar newObj = Object.extend({}, key);\naggObj = Object.extend(newObj, initial);\nmap.put(key, aggObj);\n}\n\nreduce_function(obj, aggObj);\n}\n\nreturn { "result": map.values() };\n}';
+	var groupFunction = function () {
+	  var c = db[ns].find(condition);
+	  var map = new Map();
+	  var reduce_function = reduce;
+
+	  while (c.hasNext()) {
+	    var obj = c.next();
+	    var key = {};
+
+	    for (var i = 0, len = keys.length; i < len; ++i) {
+	      var k = keys[i];
+	      key[k] = obj[k];
+	    }
+
+	    var aggObj = map.get(key);
+
+	    if (aggObj == null) {
+	      var newObj = Object.extend({}, key);
+	      aggObj = Object.extend(newObj, initial);
+	      map.put(key, aggObj);
+	    }
+
+	    reduce_function(obj, aggObj);
+	  }
+
+	  return { "result": map.values() };
+	}.toString();
 
 	/**
 	 * Run a group command across a collection
@@ -56426,6 +53506,7 @@
 
 	  // Execute using callback
 	  if(typeof callback == 'function') return group(self, keys, condition, initial, reduce, finalize, command, options, callback);
+
 	  // Return a Promise
 	  return new this.s.promiseLibrary(function(resolve, reject) {
 	    group(self, keys, condition, initial, reduce, finalize, command, options, function(err, r) {
@@ -56467,7 +53548,6 @@
 	      selector.group.key = hash;
 	    }
 
-	    options = shallowClone(options);
 	    // Ensure we have the right read preference inheritance
 	    options = getReadPreference(self, options, self.s.db, self);
 
@@ -56580,7 +53660,7 @@
 	  return new this.s.promiseLibrary(function(resolve, reject) {
 	    mapReduce(self, map, reduce, options, function(err, r, r1) {
 	      if(err) return reject(err);
-	      if(!r1) return resolve(r);
+	      if(r instanceof Collection) return resolve(r);
 	      resolve({results: r, stats: r1});
 	    });
 	  });
@@ -56602,7 +53682,6 @@
 	    }
 	  }
 
-	  options = shallowClone(options);
 	  // Ensure we have the right read preference inheritance
 	  options = getReadPreference(self, options, self.s.db, self);
 
@@ -56757,13 +53836,13 @@
 
 
 /***/ },
-/* 176 */
+/* 165 */
 /***/ function(module, exports) {
 
 	module.exports = require("timers");
 
 /***/ },
-/* 177 */
+/* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -56771,16 +53850,15 @@
 	var EventEmitter = __webpack_require__(4).EventEmitter
 	  , inherits = __webpack_require__(10).inherits
 	  , CServer = __webpack_require__(94).Server
-	  , Cursor = __webpack_require__(166)
-	  , AggregationCursor = __webpack_require__(153)
-	  , CommandCursor = __webpack_require__(169)
+	  , Cursor = __webpack_require__(155)
+	  , AggregationCursor = __webpack_require__(142)
+	  , CommandCursor = __webpack_require__(158)
 	  , f = __webpack_require__(10).format
-	  , ServerCapabilities = __webpack_require__(178).ServerCapabilities
-	  , Store = __webpack_require__(178).Store
-	  , Define = __webpack_require__(165)
+	  , ServerCapabilities = __webpack_require__(167).ServerCapabilities
+	  , Store = __webpack_require__(167).Store
+	  , Define = __webpack_require__(154)
 	  , MongoError = __webpack_require__(94).MongoError
-	  , shallowClone = __webpack_require__(154).shallowClone
-	  , MAX_JS_INT = __webpack_require__(154).MAX_JS_INT;
+	  , shallowClone = __webpack_require__(143).shallowClone;
 
 	/**
 	 * @fileOverview The **Server** class is a class that represents a single server topology and is
@@ -56815,7 +53893,7 @@
 	 * @param {(Buffer|string)} [options.sslKey=null] String or buffer containing the certificate private key we wish to present (needs to have a mongod server with ssl support, 2.4 or higher)
 	 * @param {(Buffer|string)} [options.sslPass=null] String or buffer containing the certificate password (needs to have a mongod server with ssl support, 2.4 or higher)
 	 * @param {object} [options.socketOptions=null] Socket options
-	 * @param {boolean} [options.socketOptions.autoReconnect=true] Reconnect on error.
+	 * @param {boolean} [options.socketOptions.autoReconnect=false] Reconnect on error.
 	 * @param {boolean} [options.socketOptions.noDelay=true] TCP Socket NoDelay option.
 	 * @param {number} [options.socketOptions.keepAlive=0] TCP KeepAlive on the socket with a X ms delay before start.
 	 * @param {number} [options.socketOptions.connectTimeoutMS=0] TCP Connection timeout setting
@@ -56840,11 +53918,6 @@
 	  var storeOptions = {
 	      force: false
 	    , bufferMaxEntries: -1
-	  }
-
-	  // If we have "unlimited" set to max Number
-	  if(storeOptions.bufferMaxEntries == -1) {
-	    storeOptions.bufferMaxEntries = MAX_JS_INT;
 	  }
 
 	  // Shared global store
@@ -57035,9 +54108,7 @@
 	  // Connect handler
 	  var connectHandler = function() {
 	    // Clear out all the current handlers left over
-	    ["timeout", "error", "close", 'serverOpening', 'serverDescriptionChanged', 'serverHeartbeatStarted',
-	      'serverHeartbeatSucceeded', 'serverHearbeatFailed', 'serverClosed', 'topologyOpening',
-	      'topologyClosed', 'topologyDescriptionChanged'].forEach(function(e) {
+	    ["timeout", "error", "close"].forEach(function(e) {
 	      self.s.server.removeAllListeners(e);
 	    });
 
@@ -57047,24 +54118,6 @@
 	    self.s.server.on('close', errorHandler('close'));
 	    // Only called on destroy
 	    self.s.server.once('destroy', destroyHandler);
-
-	    // relay the event
-	    var relay = function(event) {
-	      return function(t, server) {
-	        self.emit(event, t, server);
-	      }
-	    }
-
-	    // Set up SDAM listeners
-	    self.s.server.on('serverDescriptionChanged', relay('serverDescriptionChanged'));
-	    self.s.server.on('serverHeartbeatStarted', relay('serverHeartbeatStarted'));
-	    self.s.server.on('serverHeartbeatSucceeded', relay('serverHeartbeatSucceeded'));
-	    self.s.server.on('serverHearbeatFailed', relay('serverHearbeatFailed'));
-	    self.s.server.on('serverOpening', relay('serverOpening'));
-	    self.s.server.on('serverClosed', relay('serverClosed'));
-	    self.s.server.on('topologyOpening', relay('topologyOpening'));
-	    self.s.server.on('topologyClosed', relay('topologyClosed'));
-	    self.s.server.on('topologyDescriptionChanged', relay('topologyDescriptionChanged'));
 
 	    // Emit open event
 	    self.emit('open', null, self);
@@ -57141,7 +54194,7 @@
 	}
 
 	Server.prototype.isDestroyed = function() {
-	  return this.s.server.isDestroyed();
+	  return this.s.server.isDestroyed(); 
 	}
 
 	define.classMethod('isConnected', {callback: false, promise:false, returns: [Boolean]});
@@ -57237,7 +54290,7 @@
 
 
 /***/ },
-/* 178 */
+/* 167 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -57395,7 +54448,7 @@
 
 
 /***/ },
-/* 179 */
+/* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -57403,22 +54456,21 @@
 	var EventEmitter = __webpack_require__(4).EventEmitter
 	  , inherits = __webpack_require__(10).inherits
 	  , f = __webpack_require__(10).format
-	  , Server = __webpack_require__(177)
-	  , Mongos = __webpack_require__(180)
-	  , Cursor = __webpack_require__(166)
-	  , AggregationCursor = __webpack_require__(153)
-	  , CommandCursor = __webpack_require__(169)
-	  , ReadPreference = __webpack_require__(155)
+	  , Server = __webpack_require__(166)
+	  , Mongos = __webpack_require__(169)
+	  , Cursor = __webpack_require__(155)
+	  , AggregationCursor = __webpack_require__(142)
+	  , CommandCursor = __webpack_require__(158)
+	  , ReadPreference = __webpack_require__(144)
 	  , MongoCR = __webpack_require__(94).MongoCR
 	  , MongoError = __webpack_require__(94).MongoError
-	  , ServerCapabilities = __webpack_require__(178).ServerCapabilities
-	  , Store = __webpack_require__(178).Store
-	  , Define = __webpack_require__(165)
+	  , ServerCapabilities = __webpack_require__(167).ServerCapabilities
+	  , Store = __webpack_require__(167).Store
+	  , Define = __webpack_require__(154)
 	  , CServer = __webpack_require__(94).Server
 	  , CReplSet = __webpack_require__(94).ReplSet
 	  , CoreReadPreference = __webpack_require__(94).ReadPreference
-	  , shallowClone = __webpack_require__(154).shallowClone
-	  , MAX_JS_INT = __webpack_require__(154).MAX_JS_INT;
+	  , shallowClone = __webpack_require__(143).shallowClone;
 
 	/**
 	 * @fileOverview The **ReplSet** class is a class that represents a Replicaset topology and is
@@ -57446,7 +54498,7 @@
 	 * @param {Server[]} servers A seedlist of servers participating in the replicaset.
 	 * @param {object} [options=null] Optional settings.
 	 * @param {booelan} [options.ha=true] Turn on high availability monitoring.
-	 * @param {number} [options.haInterval=10000] Time between each replicaset status check.
+	 * @param {number} [options.haInterval=5000] Time between each replicaset status check.
 	 * @param {string} options.replicaSet The name of the replicaset to connect to.
 	 * @param {number} [options.secondaryAcceptableLatencyMS=15] Sets the range of servers to pick when using NEAREST (lowest ping ms + the latency fence, ex: range of 1 to (1 + 15) ms)
 	 * @param {boolean} [options.connectWithNoPrimary=false] Sets if the driver should connect even if no primary is available
@@ -57491,11 +54543,6 @@
 	  var storeOptions = {
 	      force: false
 	    , bufferMaxEntries: -1
-	  }
-
-	  // If we have "unlimited" set to max Number
-	  if(storeOptions.bufferMaxEntries == -1) {
-	    storeOptions.bufferMaxEntries = MAX_JS_INT;
 	  }
 
 	  // Shared global store
@@ -57594,6 +54641,8 @@
 	  var replset = new CReplSet(seedlist, finalOptions)
 	  // Server capabilities
 	  var sCapabilities = null;
+	  // Add auth prbufferMaxEntriesoviders
+	  replset.addAuthProvider('mongocr', new MongoCR());
 
 	  // Listen to reconnect event
 	  replset.on('reconnect', function() {
@@ -57692,9 +54741,7 @@
 	  // Connect handler
 	  var connectHandler = function() {
 	    // Clear out all the current handlers left over
-	    ["timeout", "error", "close", 'serverOpening', 'serverDescriptionChanged', 'serverHeartbeatStarted',
-	      'serverHeartbeatSucceeded', 'serverHearbeatFailed', 'serverClosed', 'topologyOpening',
-	      'topologyClosed', 'topologyDescriptionChanged'].forEach(function(e) {
+	    ["timeout", "error", "close"].forEach(function(e) {
 	      self.s.replset.removeAllListeners(e);
 	    });
 
@@ -57733,17 +54780,6 @@
 	    self.s.replset.on('left', relay('left'));
 	    self.s.replset.on('ping', relay('ping'));
 	    self.s.replset.on('ha', relayHa);
-
-	    // Set up SDAM listeners
-	    self.s.replset.on('serverDescriptionChanged', relay('serverDescriptionChanged'));
-	    self.s.replset.on('serverHeartbeatStarted', relay('serverHeartbeatStarted'));
-	    self.s.replset.on('serverHeartbeatSucceeded', relay('serverHeartbeatSucceeded'));
-	    self.s.replset.on('serverHearbeatFailed', relay('serverHearbeatFailed'));
-	    self.s.replset.on('serverOpening', relay('serverOpening'));
-	    self.s.replset.on('serverClosed', relay('serverClosed'));
-	    self.s.replset.on('topologyOpening', relay('topologyOpening'));
-	    self.s.replset.on('topologyClosed', relay('topologyClosed'));
-	    self.s.replset.on('topologyDescriptionChanged', relay('topologyDescriptionChanged'));
 
 	    self.s.replset.on('fullsetup', function(topology) {
 	      self.emit('fullsetup', null, self);
@@ -57980,7 +55016,7 @@
 
 
 /***/ },
-/* 180 */
+/* 169 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -57988,18 +55024,17 @@
 	var EventEmitter = __webpack_require__(4).EventEmitter
 	  , inherits = __webpack_require__(10).inherits
 	  , f = __webpack_require__(10).format
-	  , ServerCapabilities = __webpack_require__(178).ServerCapabilities
+	  , ServerCapabilities = __webpack_require__(167).ServerCapabilities
 	  , MongoCR = __webpack_require__(94).MongoCR
 	  , MongoError = __webpack_require__(94).MongoError
 	  , CMongos = __webpack_require__(94).Mongos
-	  , Cursor = __webpack_require__(166)
-	  , AggregationCursor = __webpack_require__(153)
-	  , CommandCursor = __webpack_require__(169)
-	  , Define = __webpack_require__(165)
-	  , Server = __webpack_require__(177)
-	  , Store = __webpack_require__(178).Store
-	  , shallowClone = __webpack_require__(154).shallowClone
-	  , MAX_JS_INT = __webpack_require__(154).MAX_JS_INT;
+	  , Cursor = __webpack_require__(155)
+	  , AggregationCursor = __webpack_require__(142)
+	  , CommandCursor = __webpack_require__(158)
+	  , Define = __webpack_require__(154)
+	  , Server = __webpack_require__(166)
+	  , Store = __webpack_require__(167).Store
+	  , shallowClone = __webpack_require__(143).shallowClone;
 
 	/**
 	 * @fileOverview The **Mongos** class is a class that represents a Mongos Proxy topology and is
@@ -58029,7 +55064,6 @@
 	 * @param {booelan} [options.ha=true] Turn on high availability monitoring.
 	 * @param {number} [options.haInterval=5000] Time between each replicaset status check.
 	 * @param {number} [options.poolSize=5] Number of connections in the connection pool for each server instance, set to 5 as default for legacy reasons.
-	 * @param {number} [options.acceptableLatencyMS=15] Cutoff latency point in MS for MongoS proxy selection
 	 * @param {boolean} [options.ssl=false] Use ssl connection (needs to have a mongod server with ssl support)
 	 * @param {boolean|function} [options.checkServerIdentity=true] Ensure we check server identify during SSL, set to false to disable checking. Only works for Node 0.12.x or higher. You can pass in a boolean or your own checkServerIdentity override function.
 	 * @param {object} [options.sslValidate=true] Validate mongod server certificate against ca (needs to have a mongod server with ssl support, 2.4 or higher)
@@ -58070,11 +55104,6 @@
 	  var storeOptions = {
 	      force: false
 	    , bufferMaxEntries: -1
-	  }
-
-	  // If we have "unlimited" set to max Number
-	  if(storeOptions.bufferMaxEntries == -1) {
-	    storeOptions.bufferMaxEntries = MAX_JS_INT;
 	  }
 
 	  // Shared global store
@@ -58150,8 +55179,8 @@
 	    finalOptions.noDelay = options.socketOptions.noDelay;
 	  }
 
-	  if(typeof options.acceptableLatencyMS == 'number') {
-	    finalOptions.localThresholdMS = options.acceptableLatencyMS || 15;
+	  if(typeof options.secondaryAcceptableLatencyMS == 'number') {
+	    finalOptions.acceptableLatency = options.secondaryAcceptableLatencyMS;
 	  }
 
 	  // Add the non connection store
@@ -58263,9 +55292,7 @@
 	  // Connect handler
 	  var connectHandler = function() {
 	    // Clear out all the current handlers left over
-	    ["timeout", "error", "close", 'serverOpening', 'serverDescriptionChanged', 'serverHeartbeatStarted',
-	      'serverHeartbeatSucceeded', 'serverHearbeatFailed', 'serverClosed', 'topologyOpening',
-	      'topologyClosed', 'topologyDescriptionChanged'].forEach(function(e) {
+	    ["timeout", "error", "close"].forEach(function(e) {
 	      self.s.mongos.removeAllListeners(e);
 	    });
 
@@ -58280,17 +55307,6 @@
 	        self.emit(event, t, server);
 	      }
 	    }
-
-	    // Set up SDAM listeners
-	    self.s.mongos.on('serverDescriptionChanged', relay('serverDescriptionChanged'));
-	    self.s.mongos.on('serverHeartbeatStarted', relay('serverHeartbeatStarted'));
-	    self.s.mongos.on('serverHeartbeatSucceeded', relay('serverHeartbeatSucceeded'));
-	    self.s.mongos.on('serverHearbeatFailed', relay('serverHearbeatFailed'));
-	    self.s.mongos.on('serverOpening', relay('serverOpening'));
-	    self.s.mongos.on('serverClosed', relay('serverClosed'));
-	    self.s.mongos.on('topologyOpening', relay('topologyOpening'));
-	    self.s.mongos.on('topologyClosed', relay('topologyClosed'));
-	    self.s.mongos.on('topologyDescriptionChanged', relay('topologyDescriptionChanged'));
 
 	    // Set up serverConfig listeners
 	    self.s.mongos.on('joined', relay('joined'));
@@ -58505,30 +55521,30 @@
 
 
 /***/ },
-/* 181 */
+/* 170 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var EventEmitter = __webpack_require__(4).EventEmitter
 	  , inherits = __webpack_require__(10).inherits
-	  , getSingleProperty = __webpack_require__(154).getSingleProperty
-	  , shallowClone = __webpack_require__(154).shallowClone
-	  , parseIndexOptions = __webpack_require__(154).parseIndexOptions
-	  , debugOptions = __webpack_require__(154).debugOptions
-	  , CommandCursor = __webpack_require__(169)
-	  , handleCallback = __webpack_require__(154).handleCallback
-	  , toError = __webpack_require__(154).toError
-	  , ReadPreference = __webpack_require__(155)
+	  , getSingleProperty = __webpack_require__(143).getSingleProperty
+	  , shallowClone = __webpack_require__(143).shallowClone
+	  , parseIndexOptions = __webpack_require__(143).parseIndexOptions
+	  , debugOptions = __webpack_require__(143).debugOptions
+	  , CommandCursor = __webpack_require__(158)
+	  , handleCallback = __webpack_require__(143).handleCallback
+	  , toError = __webpack_require__(143).toError
+	  , ReadPreference = __webpack_require__(144)
 	  , f = __webpack_require__(10).format
-	  , Admin = __webpack_require__(182)
+	  , Admin = __webpack_require__(171)
 	  , Code = __webpack_require__(94).BSON.Code
 	  , CoreReadPreference = __webpack_require__(94).ReadPreference
 	  , MongoError = __webpack_require__(94).MongoError
 	  , ObjectID = __webpack_require__(94).ObjectID
-	  , Define = __webpack_require__(165)
+	  , Define = __webpack_require__(154)
 	  , Logger = __webpack_require__(94).Logger
-	  , Collection = __webpack_require__(175)
+	  , Collection = __webpack_require__(164)
 	  , crypto = __webpack_require__(56);
 
 	var debugFields = ['authSource', 'w', 'wtimeout', 'j', 'native_parser', 'forceServerObjectId'
@@ -58561,6 +55577,7 @@
 	 * @param {(number|string)} [options.w=null] The write concern.
 	 * @param {number} [options.wtimeout=null] The write concern timeout.
 	 * @param {boolean} [options.j=false] Specify a journal write concern.
+	 * @param {boolean} [options.native_parser=true] Select C++ bson parser instead of JavaScript parser.
 	 * @param {boolean} [options.forceServerObjectId=false] Force server to assign _id values instead of driver.
 	 * @param {boolean} [options.serializeFunctions=false] Serialize functions on any object.
 	 * @param {Boolean} [options.ignoreUndefined=false] Specify if the BSON serializer should ignore undefined fields.
@@ -58579,7 +55596,6 @@
 	 * @property {boolean} native_parser The current value of the parameter native_parser.
 	 * @property {boolean} slaveOk The current slaveOk value for the db instance.
 	 * @property {object} writeConcern The current write concern values.
-	 * @property {object} topology Access the topology object (single server, replicaset or mongos).
 	 * @fires Db#close
 	 * @fires Db#authenticated
 	 * @fires Db#reconnect
@@ -58601,7 +55617,7 @@
 	  // No promise library selected fall back
 	  if(!promiseLibrary) {
 	    promiseLibrary = typeof global.Promise == 'function' ?
-	      global.Promise : __webpack_require__(167).Promise;
+	      global.Promise : __webpack_require__(156).Promise;
 	  }
 
 	  // Ensure we put the promiseLib in the options
@@ -58660,6 +55676,42 @@
 	  getSingleProperty(this, 'bufferMaxEntries', self.s.bufferMaxEntries);
 	  getSingleProperty(this, 'databaseName', self.s.databaseName);
 
+	  // Last ismaster
+	  Object.defineProperty(this, 'options', {
+	    enumerable:true,
+	    get: function() { return self.s.options; }
+	  });
+
+	  // Last ismaster
+	  Object.defineProperty(this, 'native_parser', {
+	    enumerable:true,
+	    get: function() { return self.s.topology.parserType() == 'c++'; }
+	  });
+
+	  // Last ismaster
+	  Object.defineProperty(this, 'slaveOk', {
+	    enumerable:true,
+	    get: function() {
+	      if(self.s.options.readPreference != null
+	        && (self.s.options.readPreference != 'primary' || self.s.options.readPreference.mode != 'primary')) {
+	        return true;
+	      }
+	      return false;
+	    }
+	  });
+
+	  Object.defineProperty(this, 'writeConcern', {
+	    enumerable:true,
+	    get: function() {
+	      var ops = {};
+	      if(self.s.options.w != null) ops.w = self.s.options.w;
+	      if(self.s.options.j != null) ops.j = self.s.options.j;
+	      if(self.s.options.fsync != null) ops.fsync = self.s.options.fsync;
+	      if(self.s.options.wtimeout != null) ops.wtimeout = self.s.options.wtimeout;
+	      return ops;
+	    }
+	  });
+
 	  // This is a child db, do not register any listeners
 	  if(options.parentDb) return;
 	  if(this.s.noListener) return;
@@ -58678,49 +55730,6 @@
 	inherits(Db, EventEmitter);
 
 	var define = Db.define = new Define('Db', Db, false);
-
-	// Topology
-	Object.defineProperty(Db.prototype, 'topology', {
-	  enumerable:true,
-	  get: function() { return this.s.topology; }
-	});
-
-	// Options
-	Object.defineProperty(Db.prototype, 'options', {
-	  enumerable:true,
-	  get: function() { return this.s.options; }
-	});
-
-	// Running native parser
-	Object.defineProperty(Db.prototype, 'native_parser', {
-	  enumerable:true,
-	  get: function() { return this.s.topology.parserType() == 'c++'; }
-	});
-
-	// slaveOk specified
-	Object.defineProperty(Db.prototype, 'slaveOk', {
-	  enumerable:true,
-	  get: function() {
-	    if(this.s.options.readPreference != null
-	      && (this.s.options.readPreference != 'primary' || this.s.options.readPreference.mode != 'primary')) {
-	      return true;
-	    }
-	    return false;
-	  }
-	});
-
-	// get the write Concern
-	Object.defineProperty(Db.prototype, 'writeConcern', {
-	  enumerable:true,
-	  get: function() {
-	    var ops = {};
-	    if(this.s.options.w != null) ops.w = this.s.options.w;
-	    if(this.s.options.j != null) ops.j = this.s.options.j;
-	    if(this.s.options.fsync != null) ops.fsync = this.s.options.fsync;
-	    if(this.s.options.wtimeout != null) ops.wtimeout = this.s.options.wtimeout;
-	    return ops;
-	  }
-	});
 
 	/**
 	 * The callback format for the Db.open method
@@ -58856,7 +55865,7 @@
 	 */
 
 	/**
-	 * Close the db and its underlying connections
+	 * Close the db and it's underlying connections
 	 * @method
 	 * @param {boolean} force Force close, emitting no events
 	 * @param {Db~noResultCallback} [callback] The result callback
@@ -58918,7 +55927,7 @@
 
 	/**
 	 * Fetch a specific collection (containing the actual collection information). If the application does not use strict mode you can
-	 * can use it without a callback in the following way: `var collection = db.collection('mycollection');`
+	 * can use it without a callback in the following way. var collection = db.collection('mycollection');
 	 *
 	 * @method
 	 * @param {string} name the collection name we wish to access.
@@ -59023,7 +56032,7 @@
 	}
 
 	/**
-	 * Create a new collection on a server with the specified options. Use this to create capped collections.
+	 * Creates a collection on a server pre-allocating space, need to create f.ex capped collections.
 	 *
 	 * @method
 	 * @param {string} name the collection name we wish to access.
@@ -59140,6 +56149,8 @@
 	    var command = { listCollections : true, filter: filter, cursor: cursor };
 	    // Set the AggregationCursor constructor
 	    options.cursorFactory = CommandCursor;
+	    // Filter out the correct field values
+	    options.transforms = listCollectionsTranforms(this.s.databaseName);
 	    // Create the cursor
 	    var cursor = this.s.topology.cursor(f('%s.$cmd', this.s.databaseName), command, options);
 	    // Do we have a readPreference, apply it
@@ -59326,7 +56337,7 @@
 	define.classMethod('dropCollection', {callback: true, promise:true});
 
 	/**
-	 * Drop a database, removing it permanently from the server.
+	 * Drop a database.
 	 *
 	 * @method
 	 * @param {Db~resultCallback} [callback] The results callback
@@ -59470,7 +56481,6 @@
 	 * @param {number} [options.v=null] Specify the format version of the indexes.
 	 * @param {number} [options.expireAfterSeconds=null] Allows you to expire data on indexes applied to a data (MongoDB 2.2 or higher)
 	 * @param {number} [options.name=null] Override the autogenerated index name (useful if the resulting name is larger than 128 bytes)
-	 * @param {object} [options.partialFilterExpression=null] Creates a partial index based on the given filter object (MongoDB 3.2 or higher)
 	 * @param {Db~resultCallback} [callback] The command result callback
 	 * @return {Promise} returns Promise if no callback passed
 	 */
@@ -59512,14 +56522,6 @@
 	  // Attempt to run using createIndexes command
 	  createIndexUsingCreateIndexes(self, name, fieldOrSpec, options, function(err, result) {
 	    if(err == null) return handleCallback(callback, err, result);
-
-	    // 67 = 'CannotCreateIndex', means that the server recognized
-	    // `createIndex` as a command and so we don't need to fallback to
-	    // an insert.
-	    if(err.code === 67 || err.code == 11000) {
-	      return handleCallback(callback, err, result);
-	    }
-
 	    // Create command
 	    var doc = createCreateIndexCommand(self, name, fieldOrSpec, options);
 	    // Set no key checking
@@ -59913,7 +56915,6 @@
 	var authenticate = function(self, username, password, options, callback) {
 	  // Did the user destroy the topology
 	  if(self.serverConfig && self.serverConfig.isDestroyed()) return callback(new MongoError('topology was destroyed'));
-
 	  // the default db to authenticate against is 'self'
 	  // if authententicate is called from a retry context, it may be another one, like admin
 	  var authdb = options.authdb ? options.authdb : options.dbName;
@@ -59997,12 +56998,11 @@
 	  if(!options.authMechanism) {
 	    options.authMechanism = 'DEFAULT';
 	  } else if(options.authMechanism != 'GSSAPI'
-	    && options.authMechanism != 'DEFAULT'
 	    && options.authMechanism != 'MONGODB-CR'
 	    && options.authMechanism != 'MONGODB-X509'
 	    && options.authMechanism != 'SCRAM-SHA-1'
 	    && options.authMechanism != 'PLAIN') {
-	      return handleCallback(callback, MongoError.create({message: "only DEFAULT, GSSAPI, PLAIN, MONGODB-X509, SCRAM-SHA-1 or MONGODB-CR is supported by authMechanism", driver:true}));
+	      return handleCallback(callback, MongoError.create({message: "only GSSAPI, PLAIN, MONGODB-X509, SCRAM-SHA-1 or MONGODB-CR is supported by authMechanism", driver:true}));
 	  }
 
 	  // If we have a callback fallback
@@ -60199,8 +57199,11 @@
 	    }
 	  }
 
-	  // Create command, apply write concern to command
-	  var cmd = writeConcern({createIndexes: name, indexes: indexes}, self, options);
+	  // Create command
+	  var cmd = {createIndexes: name, indexes: indexes};
+
+	  // Apply write concern to command
+	  cmd = writeConcern(cmd, self, options);
 
 	  // Build the command
 	  self.command(cmd, options, function(err, result) {
@@ -60242,7 +57245,7 @@
 	// Add listeners to topology
 	var createListener = function(self, e, object) {
 	  var listener = function(err) {
-	    if(object.listeners(e).length > 0) {
+	    if(e != 'error') {
 	      object.emit(e, err, self);
 
 	      // Emit on all associated db's if available
@@ -60252,15 +57255,6 @@
 	    }
 	  }
 	  return listener;
-	}
-
-
-	/**
-	 * Unref all sockets
-	 * @method
-	 */
-	Db.prototype.unref = function(options, callback) {
-	  this.s.topology.unref();
 	}
 
 	/**
@@ -60342,14 +57336,14 @@
 
 
 /***/ },
-/* 182 */
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var toError = __webpack_require__(154).toError,
-	  Define = __webpack_require__(165),
-	  shallowClone = __webpack_require__(154).shallowClone;
+	var toError = __webpack_require__(143).toError,
+	  Define = __webpack_require__(154),
+	  shallowClone = __webpack_require__(143).shallowClone;
 
 	/**
 	 * @fileOverview The **Admin** class is an internal class that allows convenient access to
@@ -60929,18 +57923,18 @@
 
 
 /***/ },
-/* 183 */
+/* 172 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var parse = __webpack_require__(184)
-	  , Server = __webpack_require__(177)
-	  , Mongos = __webpack_require__(180)
-	  , ReplSet = __webpack_require__(179)
-	  , Define = __webpack_require__(165)
-	  , ReadPreference = __webpack_require__(155)
-	  , Db = __webpack_require__(181);
+	var parse = __webpack_require__(173)
+	  , Server = __webpack_require__(166)
+	  , Mongos = __webpack_require__(169)
+	  , ReplSet = __webpack_require__(168)
+	  , Define = __webpack_require__(154)
+	  , ReadPreference = __webpack_require__(144)
+	  , Db = __webpack_require__(170);
 
 	/**
 	 * @fileOverview The **MongoClient** class is a class that allows for making Connections to MongoDB.
@@ -61026,7 +58020,7 @@
 	  // No promise library selected fall back
 	  if(!promiseLibrary) {
 	    promiseLibrary = typeof global.Promise == 'function' ?
-	      global.Promise : __webpack_require__(167).Promise;
+	      global.Promise : __webpack_require__(156).Promise;
 	  }
 
 	  // Return a promise
@@ -61045,57 +58039,6 @@
 
 	define.staticMethod('connect', {callback: true, promise:true});
 
-	var serverOptions = ['poolSize', 'ssl', 'sslValidate', 'checkServerIdentity',
-	  'sslCA', 'sslCert', 'sslKey', 'sslPass', 'autoReconnect', 'noDelay',
-	  'keepAlive', 'connectionTimeoutMS', 'socketTimeoutMS', 'reconnectTries',
-	  'reconnectInterval'];
-
-	var replsetOptions = ['ha', 'haInterval', 'replicaSet', 'secondaryAcceptableLatencyMS',
-	  'connectWithNoPrimary', 'poolSize', 'ssl', 'checkServerIdentity', 'sslValidate',
-	  'sslCA', 'sslCert', 'sslKey', 'sslPass', 'noDelay', 'keepAlive', 'connectTimeoutMS',
-	  'socketTimeoutMS'];
-
-	var mongosOptions = ['ha', 'haInterval', 'poolSize', 'ssl', 'checkServerIdentity', 'sslValidate',
-	  'sslCA', 'sslCert', 'sslKey', 'sslPass', 'noDelay', 'keepAlive', 'connectTimeoutMS',
-	  'socketTimeoutMS', 'acceptableLatencyMS'];
-
-	var dbOptions = ['authSource', 'w', 'wtimeout', 'j', 'native_parser', 'forceServerObjectId',
-	  'serializeFunctions', 'ignoreUndefined', 'raw', 'promoteLongs', 'bufferMaxEntries', 'readPreference',
-	  'pkFactory', 'promiseLibrary', 'readConcern']
-
-	/*
-	 * Merge top level options into final options object
-	 */
-	var mergeTopLevel = function(object, options) {
-	  if(!object.server_options) object.server_options = {};
-	  if(!object.db_options) object.db_options = {};
-	  if(!object.rs_options) object.rs_options = {};
-	  if(!object.mongos_options) object.mongos_options = {};
-
-	  for(var name in options) {
-	    if(serverOptions.indexOf(name) != -1) {
-	      object.server_options[name] = options[name];
-	    }
-
-	    if(replsetOptions.indexOf(name) != -1) {
-	      object.rs_options[name] = options[name];
-	    }
-
-	    if(mongosOptions.indexOf(name) != -1) {
-	      object.mongos_options[name] = options[name];
-	    }
-
-	    if(dbOptions.indexOf(name) != -1) {
-	      object.db_options[name] = options[name];
-	    }
-	  }
-
-	  return object;
-	}
-
-	/*
-	 * Connect using MongoClient
-	 */
 	var connect = function(url, options, callback) {
 	  var serverOptions = options.server || {};
 	  var mongosOptions = options.mongos || {};
@@ -61189,9 +58132,6 @@
 	  if(typeof object.server_options.auto_reconnect != 'boolean') {
 	    object.server_options.auto_reconnect = true;
 	  }
-
-	  // Merge in the top level options if any specified
-	  object = mergeTopLevel(object, options);
 
 	  // If we have more than a server, it could be replicaset or mongos list
 	  // need to verify that it's one or the other and fail if it's a mix
@@ -61418,11 +58358,8 @@
 
 	      // Build options object
 	      var options = {};
-	      // Ensure we pass in the correct authentication options
 	      if(object.db_options.authMechanism) options.authMechanism = object.db_options.authMechanism;
 	      if(object.db_options.gssapiServiceName) options.gssapiServiceName = object.db_options.gssapiServiceName;
-	      if(object.db_options.gssapiServiceRealm) options.gssapiServiceRealm = object.db_options.gssapiServiceRealm;
-	      if(object.db_options.gssapiCanonicalizeHostName) options.gssapiCanonicalizeHostName = object.db_options.gssapiCanonicalizeHostName;
 
 	      // Authenticate
 	      authentication_db.authenticate(object.auth.user, object.auth.password, options, function(err, success){
@@ -61464,12 +58401,12 @@
 
 
 /***/ },
-/* 184 */
+/* 173 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var ReadPreference = __webpack_require__(155),
+	var ReadPreference = __webpack_require__(144),
 	  parser = __webpack_require__(37),
 	  f = __webpack_require__(10).format;
 
@@ -61510,7 +58447,7 @@
 
 	  if(result.query) {
 	    for(var name in result.query) {
-	      if(name.indexOf('::') != -1) {
+	      if(name.indexOf(':') != -1) {
 	        throw new Error('double colon in host identifier');
 	      }
 
@@ -61623,12 +58560,11 @@
 	  var serverOptions = {socketOptions: {}};
 	  var dbOptions = {read_preference_tags: []};
 	  var replSetServersOptions = {socketOptions: {}};
-	  var mongosOptions = {socketOptions: {}};
 	  // Add server options to final object
 	  object.server_options = serverOptions;
 	  object.db_options = dbOptions;
 	  object.rs_options = replSetServersOptions;
-	  object.mongos_options = mongosOptions;
+	  object.mongos_options = {};
 
 	  // Let's check if we are using a domain socket
 	  if(url.match(/\.sock/)) {
@@ -61710,17 +58646,14 @@
 	        if(value == 'prefer') {
 	          serverOptions.ssl = value;
 	          replSetServersOptions.ssl = value;
-	          mongosOptions.ssl = value;
 	          break;
 	        }
 	        serverOptions.ssl = (value == 'true');
 	        replSetServersOptions.ssl = (value == 'true');
-	        mongosOptions.ssl = (value == 'true');
 	        break;
 	      case 'sslValidate':
 	        serverOptions.sslValidate = (value == 'true');
-	        replSetServersOptions.sslValidate = (value == 'true');
-	        mongosOptions.sslValidate = (value == 'true');
+	        replSetServerOptions.sslValidate = (value == 'true');
 	        break;
 	      case 'replicaSet':
 	      case 'rs_name':
@@ -61755,12 +58688,10 @@
 	      case 'connectTimeoutMS':
 	        serverOptions.socketOptions.connectTimeoutMS = parseInt(value, 10);
 	        replSetServersOptions.socketOptions.connectTimeoutMS = parseInt(value, 10);
-	        mongosOptions.socketOptions.connectTimeoutMS = parseInt(value, 10);
 	        break;
 	      case 'socketTimeoutMS':
 	        serverOptions.socketOptions.socketTimeoutMS = parseInt(value, 10);
 	        replSetServersOptions.socketOptions.socketTimeoutMS = parseInt(value, 10);
-	        mongosOptions.socketOptions.socketTimeoutMS = parseInt(value, 10);
 	        break;
 	      case 'w':
 	        dbOptions.w = parseInt(value, 10);
@@ -61812,8 +58743,6 @@
 	        dbOptions.authMechanismProperties = o;
 	        // Set the service name value
 	        if(typeof o.SERVICE_NAME == 'string') dbOptions.gssapiServiceName = o.SERVICE_NAME;
-	        if(typeof o.SERVICE_REALM == 'string') dbOptions.gssapiServiceRealm = o.SERVICE_REALM;
-	        if(typeof o.CANONICALIZE_HOST_NAME == 'string') dbOptions.gssapiCanonicalizeHostName = o.CANONICALIZE_HOST_NAME == 'true' ? true : false;
 	        break;
 	      case 'wtimeoutMS':
 	        dbOptions.wtimeout = parseInt(value, 10);
@@ -61871,14 +58800,14 @@
 
 
 /***/ },
-/* 185 */
+/* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Emitter = __webpack_require__(4).EventEmitter;
-	var GridFSBucketReadStream = __webpack_require__(186);
-	var GridFSBucketWriteStream = __webpack_require__(187);
-	var shallowClone = __webpack_require__(154).shallowClone;
-	var toError = __webpack_require__(154).toError;
+	var GridFSBucketReadStream = __webpack_require__(175);
+	var GridFSBucketWriteStream = __webpack_require__(176);
+	var shallowClone = __webpack_require__(143).shallowClone;
+	var toError = __webpack_require__(143).toError;
 	var util = __webpack_require__(10);
 
 	var DEFAULT_GRIDFS_BUCKET_OPTIONS = {
@@ -61925,7 +58854,7 @@
 	    checkedIndexes: false,
 	    calledOpenUploadStream: false,
 	    promiseLibrary: db.s.promiseLibrary ||
-	      (typeof global.Promise == 'function' ? global.Promise : __webpack_require__(167).Promise)
+	      (typeof global.Promise == 'function' ? global.Promise : __webpack_require__(156).Promise)
 	  };
 	};
 
@@ -61993,7 +58922,7 @@
 	 * Deletes a file with the given id
 	 * @method
 	 * @param {ObjectId} id The id of the file doc
-	 * @param {GridFSBucket~errorCallback} [callback]
+	 * @param {Function} callback
 	 */
 
 	GridFSBucket.prototype.delete = function(id, callback) {
@@ -62085,7 +59014,7 @@
 	 * Returns a readable stream (GridFSBucketReadStream) for streaming the
 	 * file with the given name from GridFS. If there are multiple files with
 	 * the same name, this will stream the most recent file with the given name
-	 * (as determined by the `uploadDate` field). You can set the `revision`
+	 * (as determined by the `uploadedDate` field). You can set the `revision`
 	 * option to change this behavior.
 	 * @method
 	 * @param {String} filename The name of the file to stream
@@ -62097,11 +59026,11 @@
 	 */
 
 	GridFSBucket.prototype.openDownloadStreamByName = function(filename, options) {
-	  var sort = { uploadDate: -1 };
+	  var sort = { uploadedDate: -1 };
 	  var skip = null;
 	  if (options && options.revision != null) {
 	    if (options.revision >= 0) {
-	      sort = { uploadDate: 1 };
+	      sort = { uploadedDate: 1 };
 	      skip = options.revision;
 	    } else {
 	      skip = -options.revision - 1;
@@ -62212,10 +59141,10 @@
 
 
 /***/ },
-/* 186 */
+/* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var shallowClone = __webpack_require__(154).shallowClone;
+	var shallowClone = __webpack_require__(143).shallowClone;
 	var stream = __webpack_require__(53);
 	var util = __webpack_require__(10);
 
@@ -62278,36 +59207,12 @@
 	 */
 
 	/**
-	 * Emitted when a chunk of data is available to be consumed.
-	 *
-	 * @event GridFSBucketReadStream#data
-	 * @type {object}
-	 */
-
-	/**
-	 * Fired when the stream is exhausted (no more data events).
-	 *
-	 * @event GridFSBucketReadStream#end
-	 * @type {object}
-	 */
-
-	/**
-	 * Fired when the stream is exhausted and the underlying cursor is killed
-	 *
-	 * @event GridFSBucketReadStream#close
-	 * @type {object}
-	 */
-
-	/**
 	 * Reads from the cursor and pushes to the stream.
 	 * @method
 	 */
 
 	GridFSBucketReadStream.prototype._read = function() {
 	  var _this = this;
-	  if (this.destroyed) {
-	    return;
-	  }
 	  waitForFile(_this, function() {
 	    doRead(_this);
 	  });
@@ -62344,36 +59249,6 @@
 	};
 
 	/**
-	 * Marks this stream as aborted (will never push another `data` event)
-	 * and kills the underlying cursor. Will emit the 'end' event, and then
-	 * the 'close' event once the cursor is successfully killed.
-	 *
-	 * @method
-	 * @param {GridFSBucket~errorCallback} [callback] called when the cursor is successfully closed or an error occurred.
-	 * @fires GridFSBucketWriteStream#close
-	 * @fires GridFSBucketWriteStream#end
-	 */
-
-	GridFSBucketReadStream.prototype.abort = function(callback) {
-	  var _this = this;
-	  this.push(null);
-	  this.destroyed = true;
-	  if (this.s.cursor) {
-	    this.s.cursor.close(function(error) {
-	      _this.emit('close');
-	      callback && callback(error);
-	    });
-	  } else {
-	    if (!this.s.init) {
-	      // If not initialized, fire close event because we will never
-	      // get a cursor
-	      _this.emit('close');
-	    }
-	    callback && callback();
-	  }
-	};
-
-	/**
 	 * @ignore
 	 */
 
@@ -62389,25 +59264,12 @@
 	 */
 
 	function doRead(_this) {
-	  if (_this.destroyed) {
-	    return;
-	  }
-
 	  _this.s.cursor.next(function(error, doc) {
-	    if (_this.destroyed) {
-	      return;
-	    }
 	    if (error) {
 	      return __handleError(_this, error);
 	    }
 	    if (!doc) {
-	      _this.push(null);
-	      return _this.s.cursor.close(function(error) {
-	        if (error) {
-	          return __handleError(_this, error);
-	        }
-	        _this.emit('close');
-	      });
+	      return _this.push(null);
 	    }
 
 	    var bytesRemaining = _this.s.file.length - _this.s.bytesRead;
@@ -62484,23 +59346,13 @@
 	      var identifier = self.s.filter._id ?
 	        self.s.filter._id.toString() : self.s.filter.filename;
 	      var errmsg = 'FileNotFound: file ' + identifier + ' was not found';
-	      var err = new Error(errmsg);
-	      err.code = 'ENOENT';
-	      return __handleError(self, err);
+	      return __handleError(self, new Error(errmsg));
 	    }
 
 	    // If document is empty, kill the stream immediately and don't
 	    // execute any reads
 	    if (doc.length <= 0) {
 	      self.push(null);
-	      return;
-	    }
-
-	    if (self.destroyed) {
-	      // If user destroys the stream before we have a cursor, wait
-	      // until the query is done to say we're 'closed' because we can't
-	      // cancel a query.
-	      self.emit('close');
 	      return;
 	    }
 
@@ -62605,12 +59457,12 @@
 
 
 /***/ },
-/* 187 */
+/* 176 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var core = __webpack_require__(94);
 	var crypto = __webpack_require__(56);
-	var shallowClone = __webpack_require__(154).shallowClone;
+	var shallowClone = __webpack_require__(143).shallowClone;
 	var stream = __webpack_require__(53);
 	var util = __webpack_require__(10);
 
@@ -62653,9 +59505,7 @@
 	  this.state = {
 	    streamEnd: false,
 	    outstandingRequests: 0,
-	    errored: false,
-	    aborted: false,
-	    promiseLibrary: this.bucket.s.promiseLibrary
+	    errored: false
 	  };
 
 	  if (!this.bucket.s.calledOpenUploadStream) {
@@ -62679,8 +59529,8 @@
 	 */
 
 	/**
-	 * `end()` was called and the write stream successfully wrote the file
-	 * metadata and all the chunks to MongoDB.
+	 * end() was called and the write stream successfully wrote all chunks to
+	 * MongoDB.
 	 *
 	 * @event GridFSBucketWriteStream#finish
 	 * @type {object}
@@ -62704,36 +59554,6 @@
 	};
 
 	/**
-	 * Places this write stream into an aborted state (all future writes fail)
-	 * and deletes all chunks that have already been written.
-	 *
-	 * @method
-	 * @param {GridFSBucket~errorCallback} callback called when chunks are successfully removed or error occurred
-	 * @return {Promise} if no callback specified
-	 */
-
-	GridFSBucketWriteStream.prototype.abort = function(callback) {
-	  if (this.state.streamEnd) {
-	    var error = new Error('Cannot abort a stream that has already completed');
-	    if (typeof callback == 'function') {
-	      return callback(error);
-	    }
-	    return this.state.promiseLibrary.reject(error);
-	  }
-	  if (this.state.aborted) {
-	    var error = new Error('Cannot call abort() on a stream twice');
-	    if (typeof callback == 'function') {
-	      return callback(error);
-	    }
-	    return this.state.promiseLibrary.reject(error);
-	  }
-	  this.state.aborted = true;
-	  this.chunks.deleteMany({ files_id: this.id }, function(error) {
-	    if(typeof callback == 'function') callback(error);
-	  });
-	};
-
-	/**
 	 * Tells the stream that no more data will be coming in. The stream will
 	 * persist the remaining data to MongoDB, write the files document, and
 	 * then emit a 'finish' event.
@@ -62745,9 +59565,6 @@
 	 */
 
 	GridFSBucketWriteStream.prototype.end = function(chunk, encoding, callback) {
-	  if (checkAborted(this, callback)) {
-	    return;
-	  }
 	  var _this = this;
 	  this.state.streamEnd = true;
 
@@ -62864,10 +59681,6 @@
 	      _this.md5.digest('hex'), _this.filename, _this.options.contentType,
 	      _this.options.aliases, _this.options.metadata);
 
-	    if (checkAborted(_this, callback)) {
-	      return false;
-	    }
-
 	    _this.files.insert(filesDoc, getWriteOptions(_this), function(error) {
 	      if (error) {
 	        return __handleError(_this, error, callback);
@@ -62976,9 +59789,6 @@
 	 */
 
 	function doWrite(_this, chunk, encoding, callback) {
-	  if (checkAborted(_this, callback)) {
-	    return false;
-	  }
 
 	  var inputBuf = (Buffer.isBuffer(chunk)) ?
 	    chunk : new Buffer(chunk, encoding);
@@ -63015,10 +59825,6 @@
 	      var doc = createChunkDoc(_this.id, _this.n, _this.bufToStore);
 	      ++_this.state.outstandingRequests;
 	      ++outstandingRequests;
-
-	      if (checkAborted(_this, callback)) {
-	        return false;
-	      }
 
 	      _this.chunks.insert(doc, getWriteOptions(_this), function(error) {
 	        if (error) {
@@ -63067,7 +59873,7 @@
 
 	function waitForIndexes(_this, callback) {
 	  if (_this.bucket.s.checkedIndexes) {
-	    return callback(false);
+	    callback(false);
 	  }
 
 	  _this.bucket.once('index', function() {
@@ -63096,11 +59902,6 @@
 	  _this.md5.update(remnant);
 	  var doc = createChunkDoc(_this.id, _this.n, remnant);
 
-	  // If the stream was aborted, do not write remnant
-	  if (checkAborted(_this, callback)) {
-	    return false;
-	  }
-
 	  _this.chunks.insert(doc, getWriteOptions(_this), function(error) {
 	    if (error) {
 	      return __handleError(_this, error);
@@ -63110,23 +59911,9 @@
 	  });
 	}
 
-	/**
-	 * @ignore
-	 */
-
-	function checkAborted(_this, callback) {
-	  if (_this.state.aborted) {
-	    if(typeof callback == 'function') {
-	      callback(new Error('this stream has been aborted'));
-	    }
-	    return true;
-	  }
-	  return false;
-	}
-
 
 /***/ },
-/* 188 */
+/* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// vim:ts=4:sts=4:sw=4:
@@ -65180,7 +61967,7 @@
 
 
 /***/ },
-/* 189 */
+/* 178 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -65324,16 +62111,16 @@
 	  // this uses a switch for static require analysis
 	  switch (parserName) {
 	    case 'json':
-	      parser = __webpack_require__(190)
+	      parser = __webpack_require__(179)
 	      break
 	    case 'raw':
-	      parser = __webpack_require__(218)
+	      parser = __webpack_require__(207)
 	      break
 	    case 'text':
-	      parser = __webpack_require__(219)
+	      parser = __webpack_require__(208)
 	      break
 	    case 'urlencoded':
-	      parser = __webpack_require__(220)
+	      parser = __webpack_require__(209)
 	      break
 	  }
 
@@ -65343,7 +62130,7 @@
 
 
 /***/ },
-/* 190 */
+/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -65360,11 +62147,11 @@
 	 * @private
 	 */
 
-	var bytes = __webpack_require__(191)
+	var bytes = __webpack_require__(180)
 	var contentType = __webpack_require__(47)
 	var createError = __webpack_require__(49)
 	var debug = __webpack_require__(8)('body-parser:json')
-	var read = __webpack_require__(192)
+	var read = __webpack_require__(181)
 	var typeis = __webpack_require__(77)
 
 	/**
@@ -65524,7 +62311,7 @@
 
 
 /***/ },
-/* 191 */
+/* 180 */
 /***/ function(module, exports) {
 
 	/*!
@@ -65687,7 +62474,7 @@
 
 
 /***/ },
-/* 192 */
+/* 181 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -65704,10 +62491,10 @@
 	 */
 
 	var createError = __webpack_require__(49)
-	var getBody = __webpack_require__(193)
-	var iconv = __webpack_require__(195)
+	var getBody = __webpack_require__(182)
+	var iconv = __webpack_require__(184)
 	var onFinished = __webpack_require__(16)
-	var zlib = __webpack_require__(217)
+	var zlib = __webpack_require__(206)
 
 	/**
 	 * Module exports.
@@ -65881,7 +62668,7 @@
 
 
 /***/ },
-/* 193 */
+/* 182 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -65898,8 +62685,8 @@
 	 * @private
 	 */
 
-	var bytes = __webpack_require__(194)
-	var iconv = __webpack_require__(195)
+	var bytes = __webpack_require__(183)
+	var iconv = __webpack_require__(184)
 	var unpipe = __webpack_require__(20)
 
 	/**
@@ -66207,7 +62994,7 @@
 
 
 /***/ },
-/* 194 */
+/* 183 */
 /***/ function(module, exports) {
 
 	/*!
@@ -66370,12 +63157,12 @@
 
 
 /***/ },
-/* 195 */
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
 
-	var bomHandling = __webpack_require__(196),
+	var bomHandling = __webpack_require__(185),
 	    iconv = module.exports;
 
 	// All codecs and aliases are kept here, keyed by encoding name/alias.
@@ -66433,7 +63220,7 @@
 	iconv._codecDataCache = {};
 	iconv.getCodec = function getCodec(encoding) {
 	    if (!iconv.encodings)
-	        iconv.encodings = __webpack_require__(197); // Lazy load all encoding definitions.
+	        iconv.encodings = __webpack_require__(186); // Lazy load all encoding definitions.
 	    
 	    // Canonicalize encoding name: strip all non-alphanumeric chars and appended year.
 	    var enc = (''+encoding).toLowerCase().replace(/[^0-9a-z]|:\d{4}$/g, "");
@@ -66507,17 +63294,17 @@
 	    // Load streaming support in Node v0.10+
 	    var nodeVerArr = nodeVer.split(".").map(Number);
 	    if (nodeVerArr[0] > 0 || nodeVerArr[1] >= 10) {
-	        __webpack_require__(215)(iconv);
+	        __webpack_require__(204)(iconv);
 	    }
 
 	    // Load Node primitive extensions.
-	    __webpack_require__(216)(iconv);
+	    __webpack_require__(205)(iconv);
 	}
 
 
 
 /***/ },
-/* 196 */
+/* 185 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -66575,7 +63362,7 @@
 
 
 /***/ },
-/* 197 */
+/* 186 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -66583,14 +63370,14 @@
 	// Update this array if you add/rename/remove files in this directory.
 	// We support Browserify by skipping automatic module discovery and requiring modules directly.
 	var modules = [
-	    __webpack_require__(198),
-	    __webpack_require__(200),
-	    __webpack_require__(201),
-	    __webpack_require__(202),
-	    __webpack_require__(203),
-	    __webpack_require__(204),
-	    __webpack_require__(205),
-	    __webpack_require__(206),
+	    __webpack_require__(187),
+	    __webpack_require__(189),
+	    __webpack_require__(190),
+	    __webpack_require__(191),
+	    __webpack_require__(192),
+	    __webpack_require__(193),
+	    __webpack_require__(194),
+	    __webpack_require__(195),
 	];
 
 	// Put all encoding/alias/codec definitions to single object and export it. 
@@ -66603,7 +63390,7 @@
 
 
 /***/ },
-/* 198 */
+/* 187 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -66653,7 +63440,7 @@
 	//------------------------------------------------------------------------------
 
 	// We use node.js internal decoder. Its signature is the same as ours.
-	var StringDecoder = __webpack_require__(199).StringDecoder;
+	var StringDecoder = __webpack_require__(188).StringDecoder;
 
 	if (!StringDecoder.prototype.end) // Node v0.8 doesn't have this method.
 	    StringDecoder.prototype.end = function() {};
@@ -66796,13 +63583,13 @@
 
 
 /***/ },
-/* 199 */
+/* 188 */
 /***/ function(module, exports) {
 
 	module.exports = require("string_decoder");
 
 /***/ },
-/* 200 */
+/* 189 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -66982,7 +63769,7 @@
 
 
 /***/ },
-/* 201 */
+/* 190 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -67277,7 +64064,7 @@
 
 
 /***/ },
-/* 202 */
+/* 191 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -67355,7 +64142,7 @@
 
 
 /***/ },
-/* 203 */
+/* 192 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -67530,7 +64317,7 @@
 
 
 /***/ },
-/* 204 */
+/* 193 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -67986,7 +64773,7 @@
 	}
 
 /***/ },
-/* 205 */
+/* 194 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -68546,7 +65333,7 @@
 
 
 /***/ },
-/* 206 */
+/* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -68592,7 +65379,7 @@
 
 	    'shiftjis': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(207) },
+	        table: function() { return __webpack_require__(196) },
 	        encodeAdd: {'\u00a5': 0x5C, '\u203E': 0x7E},
 	        encodeSkipVals: [{from: 0xED40, to: 0xF940}],
 	    },
@@ -68607,7 +65394,7 @@
 
 	    'eucjp': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(208) },
+	        table: function() { return __webpack_require__(197) },
 	        encodeAdd: {'\u00a5': 0x5C, '\u203E': 0x7E},
 	    },
 
@@ -68633,21 +65420,21 @@
 	    '936': 'cp936',
 	    'cp936': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(209) },
+	        table: function() { return __webpack_require__(198) },
 	    },
 
 	    // GBK (~22000 chars) is an extension of CP936 that added user-mapped chars and some other.
 	    'gbk': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(209).concat(__webpack_require__(210)) },
+	        table: function() { return __webpack_require__(198).concat(__webpack_require__(199)) },
 	    },
 	    'xgbk': 'gbk',
 
 	    // GB18030 is an algorithmic extension of GBK.
 	    'gb18030': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(209).concat(__webpack_require__(210)) },
-	        gb18030: function() { return __webpack_require__(211) },
+	        table: function() { return __webpack_require__(198).concat(__webpack_require__(199)) },
+	        gb18030: function() { return __webpack_require__(200) },
 	    },
 
 	    'chinese': 'gb18030',
@@ -68663,7 +65450,7 @@
 	    '949': 'cp949',
 	    'cp949': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(212) },
+	        table: function() { return __webpack_require__(201) },
 	    },
 
 	    'cseuckr': 'cp949',
@@ -68703,14 +65490,14 @@
 	    '950': 'cp950',
 	    'cp950': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(213) },
+	        table: function() { return __webpack_require__(202) },
 	    },
 
 	    // Big5 has many variations and is an extension of cp950. We use Encoding Standard's as a consensus.
 	    'big5': 'big5hkscs',
 	    'big5hkscs': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(213).concat(__webpack_require__(214)) },
+	        table: function() { return __webpack_require__(202).concat(__webpack_require__(203)) },
 	        encodeSkipVals: [0xa2cc],
 	    },
 
@@ -68722,7 +65509,7 @@
 
 
 /***/ },
-/* 207 */
+/* 196 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -69273,7 +66060,7 @@
 	];
 
 /***/ },
-/* 208 */
+/* 197 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -70098,7 +66885,7 @@
 	];
 
 /***/ },
-/* 209 */
+/* 198 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -72722,7 +69509,7 @@
 	];
 
 /***/ },
-/* 210 */
+/* 199 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -72985,7 +69772,7 @@
 	];
 
 /***/ },
-/* 211 */
+/* 200 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -73410,7 +70197,7 @@
 	};
 
 /***/ },
-/* 212 */
+/* 201 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -75793,7 +72580,7 @@
 	];
 
 /***/ },
-/* 213 */
+/* 202 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -76525,7 +73312,7 @@
 	];
 
 /***/ },
-/* 214 */
+/* 203 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -77034,7 +73821,7 @@
 	];
 
 /***/ },
-/* 215 */
+/* 204 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -77160,7 +73947,7 @@
 
 
 /***/ },
-/* 216 */
+/* 205 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -77380,13 +74167,13 @@
 
 
 /***/ },
-/* 217 */
+/* 206 */
 /***/ function(module, exports) {
 
 	module.exports = require("zlib");
 
 /***/ },
-/* 218 */
+/* 207 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -77401,9 +74188,9 @@
 	 * Module dependencies.
 	 */
 
-	var bytes = __webpack_require__(191)
+	var bytes = __webpack_require__(180)
 	var debug = __webpack_require__(8)('body-parser:raw')
-	var read = __webpack_require__(192)
+	var read = __webpack_require__(181)
 	var typeis = __webpack_require__(77)
 
 	/**
@@ -77493,7 +74280,7 @@
 
 
 /***/ },
-/* 219 */
+/* 208 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -77508,10 +74295,10 @@
 	 * Module dependencies.
 	 */
 
-	var bytes = __webpack_require__(191)
+	var bytes = __webpack_require__(180)
 	var contentType = __webpack_require__(47)
 	var debug = __webpack_require__(8)('body-parser:text')
-	var read = __webpack_require__(192)
+	var read = __webpack_require__(181)
 	var typeis = __webpack_require__(77)
 
 	/**
@@ -77620,7 +74407,7 @@
 
 
 /***/ },
-/* 220 */
+/* 209 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -77637,12 +74424,12 @@
 	 * @private
 	 */
 
-	var bytes = __webpack_require__(191)
+	var bytes = __webpack_require__(180)
 	var contentType = __webpack_require__(47)
 	var createError = __webpack_require__(49)
 	var debug = __webpack_require__(8)('body-parser:urlencoded')
 	var deprecate = __webpack_require__(29)('body-parser')
-	var read = __webpack_require__(192)
+	var read = __webpack_require__(181)
 	var typeis = __webpack_require__(77)
 
 	/**

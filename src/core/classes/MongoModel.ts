@@ -2,9 +2,13 @@
 // Imports
 	import {config} from '../../config.ts';
 	import {MongoClient} from 'mongodb';
+	import * as mongoose from 'mongoose';
 	import * as Q from 'q';
+	// import * as promisedMongo from 'promised-mongo';
+	// import promisedMongo = require('promised-mongo');
 
 // Setup
+	// console.log(mongoose);
 	let db: any;
 	setTimeout(function () {
 		MongoClient.connect(config.servers.database.url, function (err, _db) {
@@ -53,9 +57,14 @@
 						deferred.reject(err);
 						return;
 					}
-					resp.result = resp.result || {};
-					resp.result.upserted = resp.result.upserted || [];
-					deferred.resolve(resp.result.upserted[0]);
+					// resp.result.upserted = resp.result.upserted || [];
+					var r: any = {};
+					if (
+						resp.result.upserted &&
+						resp.result.upserted[0] &&
+						resp.result.upserted[0]._id
+					) r._id = resp.result.upserted[0]._id.toString();
+					deferred.resolve(r);
 				});
 				return deferred.promise;
 			}
