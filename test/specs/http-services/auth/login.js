@@ -10,7 +10,7 @@ module.exports = function (test) {
 		var service = new test.services.HTTPService('auth', 'login');
 
 	// Tests
-		describe('Login', function () {
+		describe('Login '+service.description, function () {
 
 			it('Login with missing fields', function () {});
 			it('Login with invalid credentials', function () {});

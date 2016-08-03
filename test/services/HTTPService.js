@@ -10,20 +10,23 @@ module.exports = function (data, serverConfig) {
 		// Attributes
 			this.routerName;
 			this.serviceName;
+			this.description;
+			this.service;
 
 		// Methods
 			this.constructor = function (routerName, serviceName) {
 				this.routerName = routerName;
 				this.serviceName = serviceName;
+				this.service = serverConfig.httpRoutes[this.routerName].services[this.serviceName];
+				this.description = '('+this.service.method+' => '+this.service.url+')';
 			}
 
 			this.try = function (tryData, callbackHandler) {
-				var service = serverConfig.httpRoutes[this.routerName].services[this.serviceName];
 				request({
 					json: true,
 					body: tryData,
-					method: service.method,
-					url: domain+service.url
+					method: this.service.method,
+					url: domain+this.service.url
 				}, function (error, response, body) {
 					if (error) throw error;
 					if (response.statusCode == 500) throw body;
