@@ -4,8 +4,10 @@
 	var open = require('open');
 	var runSequence = require('run-sequence');
 	var typedoc = require('gulp-typedoc');
+	var ts = require('gulp-typescript');
 	var package = require('./package.json');
 	var tsconfig = require('./tsconfig.json');
+	var fs = require('fs-extra');
 
 // Tasks
 
@@ -69,8 +71,8 @@
 
 	// Serve app
 		gulp.task('serve', function () {
-			shell.exec('node_modules/.bin/webpack');
 			runSequence([
+				'webpack:build',
 				'start:database',
 				'start:proxy',
 				'start:api',
@@ -80,6 +82,15 @@
 		});
 
 	// Build webpack
+		gulp.task('tests:build', function () {
+			// Copy settings
+			fs.ensureDirSync('test/project-src');
+			fs.copy('src/settings', 'test/project-src/settings');
+			var tsProject = ts.createProject('tsconfig.json');
+			return tsProject.src('src/config.ts')
+				.pipe(ts(tsProject)).js
+				.pipe(gulp.dest('test/project-src'));
+		});
 		gulp.task('webpack:build', function () {
 			return shell.exec('node_modules/.bin/webpack');
 		});
@@ -87,12 +98,13 @@
 	// Build all
 		gulp.task('build', function () {
 			runSequence([
+				'tests:build',
 				'doc:build',
 				'webpack:build'
 			]);
 		});
 
 	// Tests
-		gulp.task('test', function () {
+		gulp.task('test', ['tests:build'], function () {
 			shell.exec('node_modules/.bin/mocha --reporter spec test/**/*.spec.js');
-		})
+		});
