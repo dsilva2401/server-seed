@@ -3,18 +3,18 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>server-seed</title>
+	<title>&quot;setup/auth/setup/index&quot; | server-seed</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="assets/css/main.css">
-	<script src="assets/js/modernizr.js"></script>
+	<link rel="stylesheet" href="../assets/css/main.css">
+	<script src="../assets/js/modernizr.js"></script>
 </head>
 <body>
 <header>
 	<div class="tsd-page-toolbar">
 		<div class="container">
 			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.js" data-base="..">
 					<div class="field">
 						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
 						<input id="tsd-search-field" type="text" />
@@ -23,7 +23,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="index.html" class="title">server-seed</a>
+					<a href="../index.html" class="title">server-seed</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -54,177 +54,75 @@
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="globals.html">Globals</a>
+					<a href="../globals.html">Globals</a>
+				</li>
+				<li>
+					<a href="_setup_auth_setup_index_.html">&quot;setup/auth/setup/index&quot;</a>
 				</li>
 			</ul>
-			<h1> server-seed</h1>
+			<h1>External module &quot;setup/auth/setup/index&quot;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<div class="tsd-panel tsd-typography">
-				<h1 id="server-seed">Server Seed</h1>
-				<p>A NodeJS based server seed.</p>
-				<h2 id="classes-diagram">Classes diagram</h2>
-				<p><img src="media/app-classes-diagram.png" alt="Classes diagram"></p>
-				<h2 id="architecture">Architecture</h2>
-				<p><img src="media/architecture.png" alt="Architecture"></p>
-				<ul>
-					<li><p>Proxy Server: Intercepts all requests between client and App Server, this is to prevent attacks and improve performance.</p>
-					</li>
-					<li><p>App Server: Contains all business logic.</p>
-					</li>
-					<li><p>DB Server: Database Server.</p>
-					</li>
-				</ul>
-				<h2 id="file-structure">File Structure</h2>
-				<pre><code class="lang-bash">./
-    package.json
-    gulpfile.js
-    src/
-        core/
-            classes/..
-            interfaces/..
-            services/..
-        setup/
-            config.ts
-            proxy/..
-            api/..
-            auth/..
-            ..
-        ..
-</code></pre>
-				<h2 id="requirements">Requirements</h2>
-				<h4 id="development">Development</h4>
-				<ul>
-					<li>gulp</li>
-					<li>npm</li>
-					<li><a href="https://docs.mongodb.com/manual/installation/">mongodb</a></li>
-				</ul>
-				<h4 id="production">Production</h4>
-				<ul>
-					<li>pm2</li>
-					<li>npm</li>
-					<li><a href="https://docs.mongodb.com/manual/installation/">mongodb</a></li>
-				</ul>
-				<h2 id="first-setup">First setup</h2>
-				<pre><code class="lang-bash"><span class="hljs-comment"># Node dependencies</span>
-npm install
-
-<span class="hljs-comment"># Typescript definitions</span>
-gulp typings:install
-</code></pre>
-				<h2 id="build-app">Build app</h2>
-				<pre><code class="lang-bash">gulp build
-</code></pre>
-				<h2 id="start-servers">Start Servers</h2>
-				<h4 id="development">Development</h4>
-				<pre><code class="lang-bash">gulp serve
-</code></pre>
-				<h4 id="production">Production</h4>
-				<pre><code class="lang-bash">npm run proxy
-npm run api
-npm run database
-..
-</code></pre>
-				<h2 id="run-tests">Run Tests</h2>
-				<pre><code class="lang-bash">gulp <span class="hljs-built_in">test</span>
-</code></pre>
-			</div>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Functions</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_setup_auth_setup_index_.html#setupauth" class="tsd-kind-icon">setup<wbr>Auth</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
+					<a name="setupauth" class="tsd-anchor"></a>
+					<h3>setup<wbr>Auth</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
+						<li class="tsd-signature tsd-kind-icon">setup<wbr>Auth<span class="tsd-signature-symbol">(</span>server<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/dsilva2401/server-seed/blob/0db246f/src/setup/auth/setup/index.ts#L11">setup/auth/setup/index.ts:11</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>server: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 			<nav class="tsd-navigation primary">
 				<ul>
 					<li class="globals  ">
-						<a href="globals.html"><em>Globals</em></a>
+						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_config_.html">"config"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_core_classes_credential_.html">"core/classes/<wbr>Credential"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_core_classes_expressrouter_.html">"core/classes/<wbr>Express<wbr>Router"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_core_classes_mongomodel_.html">"core/classes/<wbr>Mongo<wbr>Model"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_core_classes_person_.html">"core/classes/<wbr>Person"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_core_classes_personbe_.html">"core/classes/<wbr>PersonBE"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_core_classes_personfe_.html">"core/classes/<wbr>PersonFE"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_core_classes_servicerouter_.html">"core/classes/<wbr>Service<wbr>Router"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_core_classes_session_.html">"core/classes/<wbr>Session"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_core_interfaces_iperson_.html">"core/interfaces/IPerson"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_setup_api_server_.html">"setup/api/server"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_setup_api_setup_index_.html">"setup/api/setup/index"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_setup_api_start_.html">"setup/api/start"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_setup_auth_server_.html">"setup/auth/server"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_setup_auth_setup_index_.html">"setup/auth/setup/index"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_setup_auth_setup_register_.html">"setup/auth/setup/register"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_setup_auth_start_.html">"setup/auth/start"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_setup_database_index_.html">"setup/database/index"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_setup_proxy_routers_api_.html">"setup/proxy/routers/api"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_setup_proxy_routers_auth_.html">"setup/proxy/routers/auth"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_setup_proxy_routers_index_.html">"setup/proxy/routers/index"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_setup_proxy_routers_statics_.html">"setup/proxy/routers/statics"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_setup_proxy_routers_views_.html">"setup/proxy/routers/views"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_setup_proxy_server_.html">"setup/proxy/server"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_setup_proxy_start_.html">"setup/proxy/start"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_setup_statics_server_.html">"setup/statics/server"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_setup_statics_start_.html">"setup/statics/start"</a>
+					<li class="current tsd-kind-external-module">
+						<a href="_setup_auth_setup_index_.html">"setup/auth/setup/index"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
+						<a href="_setup_auth_setup_index_.html#setupauth" class="tsd-kind-icon">setup<wbr>Auth</a>
+					</li>
 				</ul>
 			</nav>
 		</div>
@@ -293,7 +191,7 @@ npm run database
 	<p>Generated using <a href="http://typedoc.io" target="_blank">TypeDoc</a></p>
 </div>
 <div class="overlay"></div>
-<script src="assets/js/main.js"></script>
-<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
+<script src="../assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
 </body>
 </html>

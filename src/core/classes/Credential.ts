@@ -54,9 +54,12 @@
 			}
 			public getOwner () {
 				let deferred = Q.defer();
-				this.personModel.findOne({ email: this.email })
+				let q: any = {};
+				q.email = this.email;
+				if (this.password) q.password = this.password;
+				this.credentialModel.findOne(q)
 				// Success
-				.then(function (owner?: PersonBE) {
+				.then(function (owner?: any) {
 					owner = (owner ? (new PersonBE(owner)) : null);
 					deferred.resolve(owner);
 				})

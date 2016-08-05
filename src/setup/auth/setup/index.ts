@@ -5,6 +5,7 @@
 	import {ServiceRouter} from '../../../core/classes/ServiceRouter.ts';
 	import {Credential} from '../../../core/classes/Credential.ts';
 	import {controller as registerController} from './register.ts';
+	import {controller as loginController} from './login.ts';
 	import {config} from '../../../config.ts';
 
 // Export router setup function
@@ -20,6 +21,8 @@
 			// Register
 			sRouter.addService('register', registerController);
 		
+			// Login
+			sRouter.addService('login', loginController);
 
 		// Add router to server
 		server.use(sRouter.path, sRouter.router);
