@@ -4,8 +4,8 @@
 	import {PersonBE} from '../../../core/classes/PersonBE.ts';
 	import {ServiceRouter} from '../../../core/classes/ServiceRouter.ts';
 	import {Credential} from '../../../core/classes/Credential.ts';
-	import {controller as registerController} from './register.ts';
-	import {controller as loginController} from './login.ts';
+	import {RegisterController} from './RegisterController.ts';
+	import {LoginController} from './LoginController.ts';
 	import {config} from '../../../config.ts';
 
 // Export router setup function
@@ -19,10 +19,10 @@
 			=== Routes ===
 		*/
 			// Register
-			sRouter.addService('register', registerController);
+			sRouter.addServiceController('register', RegisterController);
 		
 			// Login
-			sRouter.addService('login', loginController);
+			sRouter.addServiceController('login', LoginController);
 
 		// Add router to server
 		server.use(sRouter.path, sRouter.router);

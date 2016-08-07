@@ -24539,7 +24539,7 @@
 	var express = __webpack_require__(2);
 	var index_ts_1 = __webpack_require__(88);
 	var config_ts_1 = __webpack_require__(85);
-	var bodyParser = __webpack_require__(183);
+	var bodyParser = __webpack_require__(184);
 	// Server setup
 	var serverConfig = config_ts_1.config.servers.auth;
 	exports.server = express();
@@ -24563,7 +24563,7 @@
 	"use strict";
 	var ServiceRouter_ts_1 = __webpack_require__(89);
 	var register_ts_1 = __webpack_require__(91);
-	var login_ts_1 = __webpack_require__(182);
+	var login_ts_1 = __webpack_require__(183);
 	// Export router setup function
 	function setupAuth(server) {
 	    // Init router
@@ -24572,9 +24572,9 @@
 	        === Routes ===
 	    */
 	    // Register
-	    sRouter.addService('register', register_ts_1.controller);
+	    sRouter.addServiceController('register', register_ts_1.RegisterController);
 	    // Login
-	    sRouter.addService('login', login_ts_1.controller);
+	    sRouter.addServiceController('login', login_ts_1.LoginController);
 	    // Add router to server
 	    server.use(sRouter.path, sRouter.router);
 	}
@@ -24606,6 +24606,12 @@
 	    ServiceRouter.prototype.addService = function (name, handler) {
 	        var serviceConfig = config_ts_1.config.httpRoutes[this.name].services[name];
 	        this.addRoute(serviceConfig.method, serviceConfig.path, handler);
+	    };
+	    ServiceRouter.prototype.addServiceController = function (name, ServiceController) {
+	        var serviceConfig = config_ts_1.config.httpRoutes[this.name].services[name];
+	        this.addRoute(serviceConfig.method, serviceConfig.path, function (req, res, next) {
+	            var controller = new ServiceController(req, res, next);
+	        });
 	    };
 	    return ServiceRouter;
 	}(ExpressRouter_ts_1.ExpressRouter));
@@ -24639,62 +24645,79 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	// Imports
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var PersonBE_ts_1 = __webpack_require__(92);
 	var Credential_ts_1 = __webpack_require__(94);
+	var ExpressController_ts_1 = __webpack_require__(182);
+	var Q = __webpack_require__(180);
 	// Exports
-	function controller(req, res, next) {
-	    var currentPerson = new PersonBE_ts_1.PersonBE(req.body);
-	    // Data validation
-	    var errors = currentPerson.validate();
-	    if (errors || !req.body.password) {
-	        res.status(400);
-	        res.json(errors);
-	        res.end();
-	        return;
-	    }
-	    // Verify if not exists
-	    var credential = new Credential_ts_1.Credential(currentPerson.email);
-	    credential.getOwner()
-	        .then(function (owner) {
-	        if (owner) {
-	            res.status(409);
-	            res.json({
-	                details: 'Already registered'
-	            });
-	            res.end();
+	var RegisterController = (function (_super) {
+	    __extends(RegisterController, _super);
+	    // Attributes
+	    // Methods
+	    function RegisterController(req, res, next) {
+	        _super.call(this, req, res, next);
+	        var self = this;
+	        // Validation
+	        var errors = this.validateData(req.body);
+	        if (errors) {
+	            this.sendResponse(400, errors);
 	            return;
 	        }
-	        // Save current person data
-	        currentPerson.save()
-	            .then(function () {
-	            currentPerson.credential.updatePassword(req.body.password)
-	                .then(function () {
-	                res.status(200);
-	                res.json(currentPerson.basicData());
-	                res.end();
-	            })
-	                .catch(function (err) {
-	                currentPerson.destroy();
-	                res.status(500);
-	                res.json(err);
-	                res.end();
+	        // Verify if user already exists
+	        this.searchPerson(req.body.email).then(function (person) {
+	            if (person) {
+	                self.sendResponse(409, {
+	                    details: 'Already registered'
+	                });
+	                return;
+	            }
+	            // Register person
+	            self.registerPerson(req.body).then(function (person) {
+	                // Update person password
+	                self.setPersonPassword(person, req.body.password).then(function (person) {
+	                    self.sendResponse(200, person.basicData());
+	                });
 	            });
-	        })
-	            .catch(function (err) {
-	            res.status(500);
-	            res.json(err);
-	            res.end();
 	        });
-	    })
-	        .catch(function (err) {
-	        res.status(500);
-	        res.json(err);
-	        res.end();
-	    });
-	}
-	exports.controller = controller;
-	;
+	    }
+	    RegisterController.prototype.validateData = function (data) {
+	        if (!data.password) {
+	            return { missingFields: 'password' };
+	        }
+	        var tempPerson = new PersonBE_ts_1.PersonBE(data);
+	        return tempPerson.validate();
+	    };
+	    RegisterController.prototype.searchPerson = function (email) {
+	        var deferred = Q.defer();
+	        var tempCredential = new Credential_ts_1.Credential(email);
+	        tempCredential.getOwner().then(function (owner) {
+	            return deferred.resolve(owner);
+	        }).catch(this.sendError);
+	        return deferred.promise;
+	    };
+	    RegisterController.prototype.registerPerson = function (personData) {
+	        var deferred = Q.defer();
+	        var person = new PersonBE_ts_1.PersonBE(personData);
+	        person.save().then(function () {
+	            deferred.resolve(person);
+	        }).catch(this.sendError);
+	        return deferred.promise;
+	    };
+	    RegisterController.prototype.setPersonPassword = function (person, password) {
+	        var deferred = Q.defer();
+	        person.credential.updatePassword(password).then(function () {
+	            deferred.resolve(person);
+	        }).catch(this.sendError);
+	        return deferred.promise;
+	    };
+	    return RegisterController;
+	}(ExpressController_ts_1.ExpressController));
+	exports.RegisterController = RegisterController;
 
 
 /***/ },
@@ -62129,12 +62152,114 @@
 
 /***/ },
 /* 182 */
+/***/ function(module, exports) {
+
+	"use strict";
+	// Exports
+	var ExpressController = (function () {
+	    // Constructor
+	    function ExpressController(req, res, next) {
+	        this.request = req;
+	        this.response = res;
+	        this.next = next;
+	    }
+	    ExpressController.prototype.sendResponse = function (status, data) {
+	        this.response.status(status);
+	        this.response.json(data);
+	        this.response.end();
+	    };
+	    ExpressController.prototype.sendError = function (error) {
+	        this.response.status(500);
+	        this.response.json(error);
+	        this.response.end();
+	    };
+	    ExpressController.prototype.validateData = function (data, schema) {
+	        var results = { missingFields: [], corruptedFields: [] };
+	        Object.keys(schema).forEach(function (key) {
+	            // Default options
+	            schema[key].required = (typeof schema[key].required == 'undefined') ? true : schema[key].required;
+	            // Test schema
+	            // Required fields
+	            if (!data[key] && schema[key].required)
+	                results.missingFields.push(key);
+	            // Corrupted fields
+	            if (!data[key])
+	                return;
+	            if (
+	            // Invalid type
+	            (schema[key].type && (typeof data[key] != schema[key].type)) ||
+	                // Doesn't match regexp
+	                (schema[key].regexp && !schema[key].regexp.test(data[key]))) {
+	                results.corruptedFields.push(key);
+	            }
+	        });
+	        if (!results.missingFields.length && !results.corruptedFields.length)
+	            return;
+	        return results;
+	    };
+	    return ExpressController;
+	}());
+	exports.ExpressController = ExpressController;
+	;
+
+
+/***/ },
+/* 183 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var Credential_ts_1 = __webpack_require__(94);
+	var ExpressController_ts_1 = __webpack_require__(182);
+	var Q = __webpack_require__(180);
 	// Exports
-	function controller(req, res, next) {
+	var LoginController = (function (_super) {
+	    __extends(LoginController, _super);
+	    // Attributes
+	    // Methods
+	    function LoginController(req, res, next) {
+	        _super.call(this, req, res, next);
+	        var self = this;
+	        // Validation
+	        var errors = this.validateData(req.body, {
+	            email: { type: 'string', test: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ },
+	            password: { type: 'string' }
+	        });
+	        if (errors) {
+	            this.sendResponse(400, errors);
+	            return;
+	        }
+	        // Verify if valid credentials
+	        this.searchPerson(req.body.email, req.body.password).then(function (person) {
+	            // Invalid credentials
+	            if (!person) {
+	                self.sendResponse(401, {
+	                    details: 'Invalid credentials'
+	                });
+	                return;
+	            }
+	            // Valid credentials
+	            person.addSession(30);
+	            self.sendResponse(200, person.basicData());
+	        });
+	    }
+	    LoginController.prototype.searchPerson = function (email, password) {
+	        var deferred = Q.defer();
+	        var credential = new Credential_ts_1.Credential(email, password);
+	        credential.getOwner().then(function (owner) {
+	            deferred.resolve(owner);
+	        }).catch(this.sendError);
+	        return deferred.promise;
+	    };
+	    return LoginController;
+	}(ExpressController_ts_1.ExpressController));
+	exports.LoginController = LoginController;
+	/*export function controller (req, res, next) {
+
 	    // Validate required fields
 	    if (!req.body.email || !req.body.password) {
 	        res.status(400);
@@ -62145,8 +62270,8 @@
 	        res.end();
 	        return;
 	    }
-	    var credential = new Credential_ts_1.Credential(req.body.email, req.body.password);
-	    credential.getOwner().then(function (owner) {
+	    let credential = new Credential(req.body.email, req.body.password);
+	    credential.getOwner().then(function (owner?: PersonBE) {
 	        if (!owner) {
 	            res.status(401);
 	            res.json({
@@ -62160,13 +62285,12 @@
 	        res.json(owner.basicData());
 	        res.end();
 	    });
-	}
-	exports.controller = controller;
-	;
+
+	};*/ 
 
 
 /***/ },
-/* 183 */
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -62310,16 +62434,16 @@
 	  // this uses a switch for static require analysis
 	  switch (parserName) {
 	    case 'json':
-	      parser = __webpack_require__(184)
+	      parser = __webpack_require__(185)
 	      break
 	    case 'raw':
-	      parser = __webpack_require__(212)
-	      break
-	    case 'text':
 	      parser = __webpack_require__(213)
 	      break
-	    case 'urlencoded':
+	    case 'text':
 	      parser = __webpack_require__(214)
+	      break
+	    case 'urlencoded':
+	      parser = __webpack_require__(215)
 	      break
 	  }
 
@@ -62329,7 +62453,7 @@
 
 
 /***/ },
-/* 184 */
+/* 185 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -62346,11 +62470,11 @@
 	 * @private
 	 */
 
-	var bytes = __webpack_require__(185)
+	var bytes = __webpack_require__(186)
 	var contentType = __webpack_require__(47)
 	var createError = __webpack_require__(49)
 	var debug = __webpack_require__(8)('body-parser:json')
-	var read = __webpack_require__(186)
+	var read = __webpack_require__(187)
 	var typeis = __webpack_require__(77)
 
 	/**
@@ -62510,7 +62634,7 @@
 
 
 /***/ },
-/* 185 */
+/* 186 */
 /***/ function(module, exports) {
 
 	/*!
@@ -62673,7 +62797,7 @@
 
 
 /***/ },
-/* 186 */
+/* 187 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -62690,10 +62814,10 @@
 	 */
 
 	var createError = __webpack_require__(49)
-	var getBody = __webpack_require__(187)
-	var iconv = __webpack_require__(189)
+	var getBody = __webpack_require__(188)
+	var iconv = __webpack_require__(190)
 	var onFinished = __webpack_require__(16)
-	var zlib = __webpack_require__(211)
+	var zlib = __webpack_require__(212)
 
 	/**
 	 * Module exports.
@@ -62867,7 +62991,7 @@
 
 
 /***/ },
-/* 187 */
+/* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -62884,8 +63008,8 @@
 	 * @private
 	 */
 
-	var bytes = __webpack_require__(188)
-	var iconv = __webpack_require__(189)
+	var bytes = __webpack_require__(189)
+	var iconv = __webpack_require__(190)
 	var unpipe = __webpack_require__(20)
 
 	/**
@@ -63193,7 +63317,7 @@
 
 
 /***/ },
-/* 188 */
+/* 189 */
 /***/ function(module, exports) {
 
 	/*!
@@ -63356,12 +63480,12 @@
 
 
 /***/ },
-/* 189 */
+/* 190 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
 
-	var bomHandling = __webpack_require__(190),
+	var bomHandling = __webpack_require__(191),
 	    iconv = module.exports;
 
 	// All codecs and aliases are kept here, keyed by encoding name/alias.
@@ -63419,7 +63543,7 @@
 	iconv._codecDataCache = {};
 	iconv.getCodec = function getCodec(encoding) {
 	    if (!iconv.encodings)
-	        iconv.encodings = __webpack_require__(191); // Lazy load all encoding definitions.
+	        iconv.encodings = __webpack_require__(192); // Lazy load all encoding definitions.
 	    
 	    // Canonicalize encoding name: strip all non-alphanumeric chars and appended year.
 	    var enc = (''+encoding).toLowerCase().replace(/[^0-9a-z]|:\d{4}$/g, "");
@@ -63493,17 +63617,17 @@
 	    // Load streaming support in Node v0.10+
 	    var nodeVerArr = nodeVer.split(".").map(Number);
 	    if (nodeVerArr[0] > 0 || nodeVerArr[1] >= 10) {
-	        __webpack_require__(209)(iconv);
+	        __webpack_require__(210)(iconv);
 	    }
 
 	    // Load Node primitive extensions.
-	    __webpack_require__(210)(iconv);
+	    __webpack_require__(211)(iconv);
 	}
 
 
 
 /***/ },
-/* 190 */
+/* 191 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -63561,7 +63685,7 @@
 
 
 /***/ },
-/* 191 */
+/* 192 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -63569,14 +63693,14 @@
 	// Update this array if you add/rename/remove files in this directory.
 	// We support Browserify by skipping automatic module discovery and requiring modules directly.
 	var modules = [
-	    __webpack_require__(192),
-	    __webpack_require__(194),
+	    __webpack_require__(193),
 	    __webpack_require__(195),
 	    __webpack_require__(196),
 	    __webpack_require__(197),
 	    __webpack_require__(198),
 	    __webpack_require__(199),
 	    __webpack_require__(200),
+	    __webpack_require__(201),
 	];
 
 	// Put all encoding/alias/codec definitions to single object and export it. 
@@ -63589,7 +63713,7 @@
 
 
 /***/ },
-/* 192 */
+/* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -63639,7 +63763,7 @@
 	//------------------------------------------------------------------------------
 
 	// We use node.js internal decoder. Its signature is the same as ours.
-	var StringDecoder = __webpack_require__(193).StringDecoder;
+	var StringDecoder = __webpack_require__(194).StringDecoder;
 
 	if (!StringDecoder.prototype.end) // Node v0.8 doesn't have this method.
 	    StringDecoder.prototype.end = function() {};
@@ -63782,13 +63906,13 @@
 
 
 /***/ },
-/* 193 */
+/* 194 */
 /***/ function(module, exports) {
 
 	module.exports = require("string_decoder");
 
 /***/ },
-/* 194 */
+/* 195 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -63968,7 +64092,7 @@
 
 
 /***/ },
-/* 195 */
+/* 196 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -64263,7 +64387,7 @@
 
 
 /***/ },
-/* 196 */
+/* 197 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -64341,7 +64465,7 @@
 
 
 /***/ },
-/* 197 */
+/* 198 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -64516,7 +64640,7 @@
 
 
 /***/ },
-/* 198 */
+/* 199 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -64972,7 +65096,7 @@
 	}
 
 /***/ },
-/* 199 */
+/* 200 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -65532,7 +65656,7 @@
 
 
 /***/ },
-/* 200 */
+/* 201 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -65578,7 +65702,7 @@
 
 	    'shiftjis': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(201) },
+	        table: function() { return __webpack_require__(202) },
 	        encodeAdd: {'\u00a5': 0x5C, '\u203E': 0x7E},
 	        encodeSkipVals: [{from: 0xED40, to: 0xF940}],
 	    },
@@ -65593,7 +65717,7 @@
 
 	    'eucjp': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(202) },
+	        table: function() { return __webpack_require__(203) },
 	        encodeAdd: {'\u00a5': 0x5C, '\u203E': 0x7E},
 	    },
 
@@ -65619,21 +65743,21 @@
 	    '936': 'cp936',
 	    'cp936': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(203) },
+	        table: function() { return __webpack_require__(204) },
 	    },
 
 	    // GBK (~22000 chars) is an extension of CP936 that added user-mapped chars and some other.
 	    'gbk': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(203).concat(__webpack_require__(204)) },
+	        table: function() { return __webpack_require__(204).concat(__webpack_require__(205)) },
 	    },
 	    'xgbk': 'gbk',
 
 	    // GB18030 is an algorithmic extension of GBK.
 	    'gb18030': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(203).concat(__webpack_require__(204)) },
-	        gb18030: function() { return __webpack_require__(205) },
+	        table: function() { return __webpack_require__(204).concat(__webpack_require__(205)) },
+	        gb18030: function() { return __webpack_require__(206) },
 	    },
 
 	    'chinese': 'gb18030',
@@ -65649,7 +65773,7 @@
 	    '949': 'cp949',
 	    'cp949': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(206) },
+	        table: function() { return __webpack_require__(207) },
 	    },
 
 	    'cseuckr': 'cp949',
@@ -65689,14 +65813,14 @@
 	    '950': 'cp950',
 	    'cp950': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(207) },
+	        table: function() { return __webpack_require__(208) },
 	    },
 
 	    // Big5 has many variations and is an extension of cp950. We use Encoding Standard's as a consensus.
 	    'big5': 'big5hkscs',
 	    'big5hkscs': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(207).concat(__webpack_require__(208)) },
+	        table: function() { return __webpack_require__(208).concat(__webpack_require__(209)) },
 	        encodeSkipVals: [0xa2cc],
 	    },
 
@@ -65708,7 +65832,7 @@
 
 
 /***/ },
-/* 201 */
+/* 202 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -66259,7 +66383,7 @@
 	];
 
 /***/ },
-/* 202 */
+/* 203 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -67084,7 +67208,7 @@
 	];
 
 /***/ },
-/* 203 */
+/* 204 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -69708,7 +69832,7 @@
 	];
 
 /***/ },
-/* 204 */
+/* 205 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -69971,7 +70095,7 @@
 	];
 
 /***/ },
-/* 205 */
+/* 206 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -70396,7 +70520,7 @@
 	};
 
 /***/ },
-/* 206 */
+/* 207 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -72779,7 +72903,7 @@
 	];
 
 /***/ },
-/* 207 */
+/* 208 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -73511,7 +73635,7 @@
 	];
 
 /***/ },
-/* 208 */
+/* 209 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -74020,7 +74144,7 @@
 	];
 
 /***/ },
-/* 209 */
+/* 210 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -74146,7 +74270,7 @@
 
 
 /***/ },
-/* 210 */
+/* 211 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -74366,13 +74490,13 @@
 
 
 /***/ },
-/* 211 */
+/* 212 */
 /***/ function(module, exports) {
 
 	module.exports = require("zlib");
 
 /***/ },
-/* 212 */
+/* 213 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -74387,9 +74511,9 @@
 	 * Module dependencies.
 	 */
 
-	var bytes = __webpack_require__(185)
+	var bytes = __webpack_require__(186)
 	var debug = __webpack_require__(8)('body-parser:raw')
-	var read = __webpack_require__(186)
+	var read = __webpack_require__(187)
 	var typeis = __webpack_require__(77)
 
 	/**
@@ -74479,7 +74603,7 @@
 
 
 /***/ },
-/* 213 */
+/* 214 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -74494,10 +74618,10 @@
 	 * Module dependencies.
 	 */
 
-	var bytes = __webpack_require__(185)
+	var bytes = __webpack_require__(186)
 	var contentType = __webpack_require__(47)
 	var debug = __webpack_require__(8)('body-parser:text')
-	var read = __webpack_require__(186)
+	var read = __webpack_require__(187)
 	var typeis = __webpack_require__(77)
 
 	/**
@@ -74606,7 +74730,7 @@
 
 
 /***/ },
-/* 214 */
+/* 215 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -74623,12 +74747,12 @@
 	 * @private
 	 */
 
-	var bytes = __webpack_require__(185)
+	var bytes = __webpack_require__(186)
 	var contentType = __webpack_require__(47)
 	var createError = __webpack_require__(49)
 	var debug = __webpack_require__(8)('body-parser:urlencoded')
 	var deprecate = __webpack_require__(29)('body-parser')
-	var read = __webpack_require__(186)
+	var read = __webpack_require__(187)
 	var typeis = __webpack_require__(77)
 
 	/**
