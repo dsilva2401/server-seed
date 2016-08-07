@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Credential | server-seed</title>
+	<title>ExpressController | server-seed</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -57,13 +57,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_core_classes_credential_.html">&quot;core/classes/Credential&quot;</a>
+					<a href="../modules/_core_classes_expresscontroller_.html">&quot;core/classes/ExpressController&quot;</a>
 				</li>
 				<li>
-					<a href="_core_classes_credential_.credential.html">Credential</a>
+					<a href="_core_classes_expresscontroller_.expresscontroller.html">ExpressController</a>
 				</li>
 			</ul>
-			<h1>Class Credential</h1>
+			<h1>Class ExpressController</h1>
 		</div>
 	</div>
 </header>
@@ -74,14 +74,16 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">Credential</span>
+						<span class="target">ExpressController</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<a href="_setup_auth_setup_registercontroller_.registercontroller.html" class="tsd-signature-type">RegisterController</a>
+							</li>
+							<li>
+								<a href="_setup_auth_setup_logincontroller_.logincontroller.html" class="tsd-signature-type">LoginController</a>
+							</li>
+						</ul>
 					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel">
-				<h3>Implements</h3>
-				<ul class="tsd-hierarchy">
-					<li><a href="../interfaces/_core_interfaces_ibemodel_.ibemodel.html" class="tsd-signature-type">IBEModel</a></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -91,25 +93,23 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="_core_classes_credential_.credential.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="_core_classes_expresscontroller_.expresscontroller.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_core_classes_credential_.credential.html#email" class="tsd-kind-icon">email</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_core_classes_credential_.credential.html#model" class="tsd-kind-icon">model</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_core_classes_credential_.credential.html#password" class="tsd-kind-icon">password</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_core_classes_credential_.credential.html#personmodel" class="tsd-kind-icon">person<wbr>Model</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_core_classes_expresscontroller_.expresscontroller.html#next" class="tsd-kind-icon">next</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_core_classes_expresscontroller_.expresscontroller.html#request" class="tsd-kind-icon">request</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_core_classes_expresscontroller_.expresscontroller.html#response" class="tsd-kind-icon">response</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_core_classes_credential_.credential.html#getowner" class="tsd-kind-icon">get<wbr>Owner</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_core_classes_credential_.credential.html#load" class="tsd-kind-icon">load</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_core_classes_credential_.credential.html#save" class="tsd-kind-icon">save</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_core_classes_credential_.credential.html#updatepassword" class="tsd-kind-icon">update<wbr>Password</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_core_classes_expresscontroller_.expresscontroller.html#senderror" class="tsd-kind-icon">send<wbr>Error</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_core_classes_expresscontroller_.expresscontroller.html#sendresponse" class="tsd-kind-icon">send<wbr>Response</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_core_classes_expresscontroller_.expresscontroller.html#validatedata" class="tsd-kind-icon">validate<wbr>Data</a></li>
 							</ul>
 						</section>
 					</div>
@@ -121,25 +121,28 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Credential<span class="tsd-signature-symbol">(</span>email<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, password<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_core_classes_credential_.credential.html" class="tsd-signature-type">Credential</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Express<wbr>Controller<span class="tsd-signature-symbol">(</span>req<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, res<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, next<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_core_classes_expresscontroller_.expresscontroller.html" class="tsd-signature-type">ExpressController</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/dsilva2401/server-seed/blob/0d820d4/src/core/classes/Credential.ts#L16">core/classes/Credential.ts:16</a></li>
+									<li>Defined in <a href="https://github.com/dsilva2401/server-seed/blob/0d820d4/src/core/classes/ExpressController.ts#L10">core/classes/ExpressController.ts:10</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>email: <span class="tsd-signature-type">string</span></h5>
+									<h5>req: <span class="tsd-signature-type">any</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> password: <span class="tsd-signature-type">string</span></h5>
+									<h5>res: <span class="tsd-signature-type">any</span></h5>
+								</li>
+								<li>
+									<h5>next: <span class="tsd-signature-type">Function</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_core_classes_credential_.credential.html" class="tsd-signature-type">Credential</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="_core_classes_expresscontroller_.expresscontroller.html" class="tsd-signature-type">ExpressController</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -147,43 +150,32 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="email" class="tsd-anchor"></a>
-					<h3>email</h3>
-					<div class="tsd-signature tsd-kind-icon">email<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<a name="next" class="tsd-anchor"></a>
+					<h3>next</h3>
+					<div class="tsd-signature tsd-kind-icon">next<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/dsilva2401/server-seed/blob/0d820d4/src/core/classes/Credential.ts#L13">core/classes/Credential.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/dsilva2401/server-seed/blob/0d820d4/src/core/classes/ExpressController.ts#L10">core/classes/ExpressController.ts:10</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="model" class="tsd-anchor"></a>
-					<h3>model</h3>
-					<div class="tsd-signature tsd-kind-icon">model<span class="tsd-signature-symbol">:</span> <a href="_core_classes_mongomodel_.mongomodel.html" class="tsd-signature-type">MongoModel</a></div>
+					<a name="request" class="tsd-anchor"></a>
+					<h3>request</h3>
+					<div class="tsd-signature tsd-kind-icon">request<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Request</span></div>
 					<aside class="tsd-sources">
-						<p>Implementation of <a href="../interfaces/_core_interfaces_ibemodel_.ibemodel.html">IBEModel</a>.<a href="../interfaces/_core_interfaces_ibemodel_.ibemodel.html#model">model</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/dsilva2401/server-seed/blob/0d820d4/src/core/classes/Credential.ts#L16">core/classes/Credential.ts:16</a></li>
+							<li>Defined in <a href="https://github.com/dsilva2401/server-seed/blob/0d820d4/src/core/classes/ExpressController.ts#L8">core/classes/ExpressController.ts:8</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="password" class="tsd-anchor"></a>
-					<h3>password</h3>
-					<div class="tsd-signature tsd-kind-icon">password<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<a name="response" class="tsd-anchor"></a>
+					<h3>response</h3>
+					<div class="tsd-signature tsd-kind-icon">response<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Response</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/dsilva2401/server-seed/blob/0d820d4/src/core/classes/Credential.ts#L14">core/classes/Credential.ts:14</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="personmodel" class="tsd-anchor"></a>
-					<h3>person<wbr>Model</h3>
-					<div class="tsd-signature tsd-kind-icon">person<wbr>Model<span class="tsd-signature-symbol">:</span> <a href="_core_classes_mongomodel_.mongomodel.html" class="tsd-signature-type">MongoModel</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/dsilva2401/server-seed/blob/0d820d4/src/core/classes/Credential.ts#L15">core/classes/Credential.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/dsilva2401/server-seed/blob/0d820d4/src/core/classes/ExpressController.ts#L9">core/classes/ExpressController.ts:9</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -191,78 +183,85 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getowner" class="tsd-anchor"></a>
-					<h3>get<wbr>Owner</h3>
+					<a name="senderror" class="tsd-anchor"></a>
+					<h3>send<wbr>Error</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Owner<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Object</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">send<wbr>Error<span class="tsd-signature-symbol">(</span>error<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/dsilva2401/server-seed/blob/0d820d4/src/core/classes/Credential.ts#L64">core/classes/Credential.ts:64</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Object</span><span class="tsd-signature-symbol">&gt;</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="load" class="tsd-anchor"></a>
-					<h3>load</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">load<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Object</span><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Implementation of <a href="../interfaces/_core_interfaces_ibemodel_.ibemodel.html">IBEModel</a>.<a href="../interfaces/_core_interfaces_ibemodel_.ibemodel.html#load">load</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/dsilva2401/server-seed/blob/0d820d4/src/core/classes/Credential.ts#L27">core/classes/Credential.ts:27</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Object</span><span class="tsd-signature-symbol">&gt;</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="save" class="tsd-anchor"></a>
-					<h3>save</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">save<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Object</span><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Implementation of <a href="../interfaces/_core_interfaces_ibemodel_.ibemodel.html">IBEModel</a>.<a href="../interfaces/_core_interfaces_ibemodel_.ibemodel.html#save">save</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/dsilva2401/server-seed/blob/0d820d4/src/core/classes/Credential.ts#L50">core/classes/Credential.ts:50</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Object</span><span class="tsd-signature-symbol">&gt;</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="updatepassword" class="tsd-anchor"></a>
-					<h3>update<wbr>Password</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">update<wbr>Password<span class="tsd-signature-symbol">(</span>password<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Object</span><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/dsilva2401/server-seed/blob/0d820d4/src/core/classes/Credential.ts#L46">core/classes/Credential.ts:46</a></li>
+									<li>Defined in <a href="https://github.com/dsilva2401/server-seed/blob/0d820d4/src/core/classes/ExpressController.ts#L23">core/classes/ExpressController.ts:23</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>password: <span class="tsd-signature-type">string</span></h5>
+									<h5>error: <span class="tsd-signature-type">any</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Object</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="sendresponse" class="tsd-anchor"></a>
+					<h3>send<wbr>Response</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">send<wbr>Response<span class="tsd-signature-symbol">(</span>status<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/dsilva2401/server-seed/blob/0d820d4/src/core/classes/ExpressController.ts#L18">core/classes/ExpressController.ts:18</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>status: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>data: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="validatedata" class="tsd-anchor"></a>
+					<h3>validate<wbr>Data</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">validate<wbr>Data<span class="tsd-signature-symbol">(</span>data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, schema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/dsilva2401/server-seed/blob/0d820d4/src/core/classes/ExpressController.ts#L29">core/classes/ExpressController.ts:29</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>data: <span class="tsd-signature-type">any</span></h5>
+								</li>
+								<li>
+									<h5>schema: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">object</span></h4>
+							<ul class="tsd-parameters">
+								<li class="tsd-parameter">
+									<h5>corrupted<wbr>Fields<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>missing<wbr>Fields<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+							</ul>
 						</li>
 					</ul>
 				</section>
@@ -275,7 +274,7 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="../modules/_core_classes_credential_.html">"core/classes/<wbr>Credential"</a>
+						<a href="../modules/_core_classes_expresscontroller_.html">"core/classes/<wbr>Express<wbr>Controller"</a>
 					</li>
 				</ul>
 			</nav>
@@ -284,34 +283,28 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-external-module">
-						<a href="_core_classes_credential_.credential.html" class="tsd-kind-icon">Credential</a>
+						<a href="_core_classes_expresscontroller_.expresscontroller.html" class="tsd-kind-icon">Express<wbr>Controller</a>
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
-								<a href="_core_classes_credential_.credential.html#constructor" class="tsd-kind-icon">constructor</a>
+								<a href="_core_classes_expresscontroller_.expresscontroller.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="_core_classes_credential_.credential.html#email" class="tsd-kind-icon">email</a>
+								<a href="_core_classes_expresscontroller_.expresscontroller.html#next" class="tsd-kind-icon">next</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="_core_classes_credential_.credential.html#model" class="tsd-kind-icon">model</a>
+								<a href="_core_classes_expresscontroller_.expresscontroller.html#request" class="tsd-kind-icon">request</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="_core_classes_credential_.credential.html#password" class="tsd-kind-icon">password</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="_core_classes_credential_.credential.html#personmodel" class="tsd-kind-icon">person<wbr>Model</a>
+								<a href="_core_classes_expresscontroller_.expresscontroller.html#response" class="tsd-kind-icon">response</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_core_classes_credential_.credential.html#getowner" class="tsd-kind-icon">get<wbr>Owner</a>
+								<a href="_core_classes_expresscontroller_.expresscontroller.html#senderror" class="tsd-kind-icon">send<wbr>Error</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_core_classes_credential_.credential.html#load" class="tsd-kind-icon">load</a>
+								<a href="_core_classes_expresscontroller_.expresscontroller.html#sendresponse" class="tsd-kind-icon">send<wbr>Response</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_core_classes_credential_.credential.html#save" class="tsd-kind-icon">save</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_core_classes_credential_.credential.html#updatepassword" class="tsd-kind-icon">update<wbr>Password</a>
+								<a href="_core_classes_expresscontroller_.expresscontroller.html#validatedata" class="tsd-kind-icon">validate<wbr>Data</a>
 							</li>
 						</ul>
 					</li>

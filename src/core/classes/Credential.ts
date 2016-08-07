@@ -10,6 +10,7 @@
 	export class Credential implements IBEModel {
 
 		// Attributes
+			public id: string;
 			public email: string;
 			public password: string;
 			public personModel: MongoModel;

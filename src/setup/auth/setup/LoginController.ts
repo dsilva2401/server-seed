@@ -1,6 +1,7 @@
 
 // Imports
 	import {PersonBE} from '../../../core/classes/PersonBE.ts';
+	import {Session} from '../../../core/classes/Session.ts';
 	import {Credential} from '../../../core/classes/Credential.ts';
 	import {ExpressController} from '../../../core/classes/ExpressController.ts';
 	import * as Q from 'q';
@@ -37,8 +38,9 @@
 					}
 
 					// Valid credentials
-					person.addSession(30);
-					self.sendResponse(200, person.basicData());
+					self.createSession(person, 30).then(function () {
+						self.sendResponse(200, {});
+					});
 				});
 
 			}
@@ -52,6 +54,12 @@
 				return deferred.promise;
 			}
 
-
+			createSession (person: PersonBE, keySize: number) {
+				let deferred = Q.defer();
+				person.addSession(30).then(function (session: Session) {
+					deferred.resolve();
+				}).catch(this.sendError);
+				return deferred.promise;
+			}
 
 	}

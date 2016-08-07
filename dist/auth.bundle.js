@@ -24562,8 +24562,8 @@
 
 	"use strict";
 	var ServiceRouter_ts_1 = __webpack_require__(89);
-	var register_ts_1 = __webpack_require__(91);
-	var login_ts_1 = __webpack_require__(183);
+	var RegisterController_ts_1 = __webpack_require__(91);
+	var LoginController_ts_1 = __webpack_require__(183);
 	// Export router setup function
 	function setupAuth(server) {
 	    // Init router
@@ -24572,9 +24572,9 @@
 	        === Routes ===
 	    */
 	    // Register
-	    sRouter.addServiceController('register', register_ts_1.RegisterController);
+	    sRouter.addServiceController('register', RegisterController_ts_1.RegisterController);
 	    // Login
-	    sRouter.addServiceController('login', login_ts_1.LoginController);
+	    sRouter.addServiceController('login', LoginController_ts_1.LoginController);
 	    // Add router to server
 	    server.use(sRouter.path, sRouter.router);
 	}
@@ -24803,7 +24803,11 @@
 	    PersonBE.prototype.addSession = function (keySize) {
 	        var deferred = Q.defer();
 	        var session = new Session_ts_1.Session(this.id, keySize);
-	        // console.log(session);
+	        session.save().then(function () {
+	            deferred.resolve(session);
+	        }).catch(function (err) {
+	            deferred.reject(err);
+	        });
 	        return deferred.promise;
 	    };
 	    return PersonBE;
@@ -62126,9 +62130,11 @@
 
 /***/ },
 /* 181 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
+	var MongoModel_ts_1 = __webpack_require__(95);
+	var Q = __webpack_require__(180);
 	// Exports
 	var Session = (function () {
 	    function Session(ownerId, keyOrSize) {
@@ -62143,7 +62149,24 @@
 	                this.key += abc[Math.floor(Math.random() * abc.length)];
 	            }
 	        }
+	        this.model = new MongoModel_ts_1.MongoModel('session');
 	    }
+	    Session.prototype.save = function () {
+	        var deferred = Q.defer();
+	        var self = this;
+	        this.model.updateOrCreate({
+	            ownserId: this.ownerId,
+	            key: this.key
+	        }, {
+	            ownserId: this.ownerId,
+	            key: this.key
+	        }).then(function () {
+	            deferred.resolve();
+	        }).catch(function (err) {
+	            deferred.reject(err);
+	        });
+	        return deferred.promise;
+	    };
 	    return Session;
 	}());
 	exports.Session = Session;
@@ -62243,8 +62266,9 @@
 	                return;
 	            }
 	            // Valid credentials
-	            person.addSession(30);
-	            self.sendResponse(200, person.basicData());
+	            self.createSession(person, 30).then(function () {
+	                self.sendResponse(200, {});
+	            });
 	        });
 	    }
 	    LoginController.prototype.searchPerson = function (email, password) {
@@ -62255,38 +62279,16 @@
 	        }).catch(this.sendError);
 	        return deferred.promise;
 	    };
+	    LoginController.prototype.createSession = function (person, keySize) {
+	        var deferred = Q.defer();
+	        person.addSession(30).then(function (session) {
+	            deferred.resolve();
+	        }).catch(this.sendError);
+	        return deferred.promise;
+	    };
 	    return LoginController;
 	}(ExpressController_ts_1.ExpressController));
 	exports.LoginController = LoginController;
-	/*export function controller (req, res, next) {
-
-	    // Validate required fields
-	    if (!req.body.email || !req.body.password) {
-	        res.status(400);
-	        var missingField = (req.body.email ? 'password' : 'email');
-	        res.json({
-	            missingFields: [missingField]
-	        });
-	        res.end();
-	        return;
-	    }
-	    let credential = new Credential(req.body.email, req.body.password);
-	    credential.getOwner().then(function (owner?: PersonBE) {
-	        if (!owner) {
-	            res.status(401);
-	            res.json({
-	                details: 'Invalid credentials'
-	            });
-	            res.end();
-	            return;
-	        }
-	        owner.addSession(30);
-	        res.status(200);
-	        res.json(owner.basicData());
-	        res.end();
-	    });
-
-	};*/ 
 
 
 /***/ },

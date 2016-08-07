@@ -6,11 +6,12 @@
 	export interface IBEModel {
 
 		// Attributes
+			id: string;
 			model: MongoModel;
 
 		// Methods
-			load(): Promise<any>;
 			save(): Promise<any>;
+			load?: () => Promise<any>;
 			destroy?: () => Promise<any>;
 
 	};

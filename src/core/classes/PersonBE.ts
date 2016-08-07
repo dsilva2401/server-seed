@@ -83,7 +83,11 @@
 			public addSession (keySize: number): Promise<Session> {
 				let deferred = Q.defer();
 				let session = new Session(this.id, keySize);
-				// console.log(session);
+				session.save().then(function () {
+					deferred.resolve(session);
+				}).catch(function (err) {
+					deferred.reject(err);
+				});
 				return deferred.promise;
 			}
 	};
