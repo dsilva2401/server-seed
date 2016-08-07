@@ -5,15 +5,16 @@
 	import {Credential} from './Credential.ts';
 	import {Session} from './Session.ts';
 	import {MongoModel} from './MongoModel.ts';
+	import {IBEModel} from '../interfaces/IBEModel.ts';
 	import * as Q from 'q';
 
 // Exports
-	export class PersonBE extends Person {
+	export class PersonBE extends Person implements IBEModel {
 
 		// Attributes
 			public credential: Credential;
 			public sessions: Session[];
-			private personModel: MongoModel;
+			public model: MongoModel;
 
 		// Constructor
 			constructor (id: string);
@@ -23,19 +24,19 @@
 				if (typeof dataOrId == 'string') {
 					super();
 					this.id = <string>dataOrId;
-					this.load();
 				} 
 				// Person Data
 				else {
 					super(<IPerson>dataOrId);
 					this.credential = new Credential(this.email);
 				}
-				this.personModel = new MongoModel('person');
-				this.personModel.createIndex({email: 1}, {unique: true});
+				this.model = new MongoModel('person');
+				this.model.createIndex({email: 1}, {unique: true});
 			}
-			private load () {
+			public load () {
+				let deferred = Q.defer();
 				let self = this;
-				this.personModel.findOne({
+				this.model.findOne({
 					_id: this.id
 				}).then(function (data?: IPerson) {
 					if (data) {
@@ -45,8 +46,15 @@
 						self.sex = data.sex;
 						self.birthday = data.birthday;
 						self.credential = new Credential(self.email);
+						deferred.resolve(self.basicData());
 					}
+					deferred.reject({
+						details: 'Id '+self.id+' not registered'
+					});
+				}).catch(function (err) {
+					deferred.reject(err);
 				});
+				return deferred.promise;
 			}
 			public save () {
 				let deferred = Q.defer();
@@ -58,18 +66,24 @@
 					email: this.email,
 					birthday: this.birthday
 				};
-				this.personModel.updateOrCreate({email: this.email}, data)
+				this.model.updateOrCreate({email: this.email}, data)
 				.then(function (personData: any) {
 					if (personData && personData._id) self.id = personData._id;
-					deferred.resolve();
+					deferred.resolve(self.basicData());
 				}).catch(function (err) {
 					deferred.reject(err);
 				})
 				return deferred.promise;
 			}
 			public destroy () {
-				return this.personModel.remove({
+				return this.model.remove({
 					email: this.email
 				});
+			}
+			public addSession (keySize: number): Promise<Session> {
+				let deferred = Q.defer();
+				let session = new Session(this.id, keySize);
+				// console.log(session);
+				return deferred.promise;
 			}
 	};

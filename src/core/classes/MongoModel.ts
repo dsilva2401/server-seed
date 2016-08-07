@@ -75,6 +75,7 @@
 						deferred.reject(err);
 						return;
 					}
+					if (resp) resp._id = resp._id.toString();
 					deferred.resolve(resp);
 				});
 				return deferred.promise;

@@ -3,12 +3,14 @@
 	export class Session {
 
 		// Attributes
+			ownerId: string;
 			key: string;
 
 		// Constructor
-			constructor (key: string);
-			constructor (size: number);
-			constructor (keyOrSize: string | number) {
+			constructor (ownerId: string, key: string);
+			constructor (ownerId: string, size: number);
+			constructor (ownerId: string, keyOrSize: string | number) {
+				this.ownerId = ownerId;
 				if (typeof keyOrSize == 'string') {
 					this.key = <string>keyOrSize;
 				} else {

@@ -24539,7 +24539,7 @@
 	var express = __webpack_require__(2);
 	var index_ts_1 = __webpack_require__(88);
 	var config_ts_1 = __webpack_require__(85);
-	var bodyParser = __webpack_require__(182);
+	var bodyParser = __webpack_require__(183);
 	// Server setup
 	var serverConfig = config_ts_1.config.servers.auth;
 	exports.server = express();
@@ -24563,7 +24563,7 @@
 	"use strict";
 	var ServiceRouter_ts_1 = __webpack_require__(89);
 	var register_ts_1 = __webpack_require__(91);
-	var login_ts_1 = __webpack_require__(181);
+	var login_ts_1 = __webpack_require__(182);
 	// Export router setup function
 	function setupAuth(server) {
 	    // Init router
@@ -24710,6 +24710,7 @@
 	// Imports
 	var Person_ts_1 = __webpack_require__(93);
 	var Credential_ts_1 = __webpack_require__(94);
+	var Session_ts_1 = __webpack_require__(181);
 	var MongoModel_ts_1 = __webpack_require__(95);
 	var Q = __webpack_require__(180);
 	// Exports
@@ -24720,18 +24721,18 @@
 	        if (typeof dataOrId == 'string') {
 	            _super.call(this);
 	            this.id = dataOrId;
-	            this.load();
 	        }
 	        else {
 	            _super.call(this, dataOrId);
 	            this.credential = new Credential_ts_1.Credential(this.email);
 	        }
-	        this.personModel = new MongoModel_ts_1.MongoModel('person');
-	        this.personModel.createIndex({ email: 1 }, { unique: true });
+	        this.model = new MongoModel_ts_1.MongoModel('person');
+	        this.model.createIndex({ email: 1 }, { unique: true });
 	    }
 	    PersonBE.prototype.load = function () {
+	        var deferred = Q.defer();
 	        var self = this;
-	        this.personModel.findOne({
+	        this.model.findOne({
 	            _id: this.id
 	        }).then(function (data) {
 	            if (data) {
@@ -24741,8 +24742,15 @@
 	                self.sex = data.sex;
 	                self.birthday = data.birthday;
 	                self.credential = new Credential_ts_1.Credential(self.email);
+	                deferred.resolve(self.basicData());
 	            }
+	            deferred.reject({
+	                details: 'Id ' + self.id + ' not registered'
+	            });
+	        }).catch(function (err) {
+	            deferred.reject(err);
 	        });
+	        return deferred.promise;
 	    };
 	    PersonBE.prototype.save = function () {
 	        var deferred = Q.defer();
@@ -24754,20 +24762,26 @@
 	            email: this.email,
 	            birthday: this.birthday
 	        };
-	        this.personModel.updateOrCreate({ email: this.email }, data)
+	        this.model.updateOrCreate({ email: this.email }, data)
 	            .then(function (personData) {
 	            if (personData && personData._id)
 	                self.id = personData._id;
-	            deferred.resolve();
+	            deferred.resolve(self.basicData());
 	        }).catch(function (err) {
 	            deferred.reject(err);
 	        });
 	        return deferred.promise;
 	    };
 	    PersonBE.prototype.destroy = function () {
-	        return this.personModel.remove({
+	        return this.model.remove({
 	            email: this.email
 	        });
+	    };
+	    PersonBE.prototype.addSession = function (keySize) {
+	        var deferred = Q.defer();
+	        var session = new Session_ts_1.Session(this.id, keySize);
+	        // console.log(session);
+	        return deferred.promise;
 	    };
 	    return PersonBE;
 	}(Person_ts_1.Person));
@@ -24845,19 +24859,26 @@
 	        if (password)
 	            this.password = password;
 	        this.personModel = new MongoModel_ts_1.MongoModel('person');
-	        this.credentialModel = new MongoModel_ts_1.MongoModel('credential');
-	        this.credentialModel.createIndex({ email: 1 }, { unique: true });
-	        if (!password)
-	            this.load();
+	        this.model = new MongoModel_ts_1.MongoModel('credential');
+	        this.model.createIndex({ email: 1 }, { unique: true });
 	    }
 	    Credential.prototype.load = function () {
+	        var deferred = Q.defer();
 	        var self = this;
-	        this.credentialModel.findOne({ email: this.email })
+	        this.model.findOne({ email: this.email })
 	            .then(function (credentialData) {
 	            if (credentialData) {
 	                self.password = credentialData.password;
+	                deferred.resolve();
 	            }
+	            deferred.reject({
+	                data: { email: self.email, password: self.password },
+	                details: 'Credential not registered'
+	            });
+	        }).catch(function (err) {
+	            deferred.reject(err);
 	        });
+	        return deferred.promise;
 	    };
 	    Credential.prototype.updatePassword = function (password) {
 	        this.password = password;
@@ -24866,7 +24887,7 @@
 	    Credential.prototype.save = function () {
 	        var deferred = Q.defer();
 	        var self = this;
-	        this.credentialModel.updateOrCreate({ email: this.email }, {
+	        this.model.updateOrCreate({ email: this.email }, {
 	            email: this.email,
 	            password: this.password
 	        })
@@ -24883,9 +24904,11 @@
 	        q.email = this.email;
 	        if (this.password)
 	            q.password = this.password;
-	        this.credentialModel.findOne(q)
-	            .then(function (owner) {
-	            owner = (owner ? (new PersonBE_ts_1.PersonBE(owner)) : null);
+	        this.model.findOne(q)
+	            .then(function (credentialData) {
+	            var owner = null;
+	            if (credentialData)
+	                owner = new PersonBE_ts_1.PersonBE(credentialData._id);
 	            deferred.resolve(owner);
 	        })
 	            .catch(function (err) {
@@ -24967,6 +24990,8 @@
 	                deferred.reject(err);
 	                return;
 	            }
+	            if (resp)
+	                resp._id = resp._id.toString();
 	            deferred.resolve(resp);
 	        });
 	        return deferred.promise;
@@ -62078,6 +62103,32 @@
 
 /***/ },
 /* 181 */
+/***/ function(module, exports) {
+
+	"use strict";
+	// Exports
+	var Session = (function () {
+	    function Session(ownerId, keyOrSize) {
+	        this.ownerId = ownerId;
+	        if (typeof keyOrSize == 'string') {
+	            this.key = keyOrSize;
+	        }
+	        else {
+	            var abc = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxys1234567890';
+	            this.key = '';
+	            for (var n = 0; n < keyOrSize; n++) {
+	                this.key += abc[Math.floor(Math.random() * abc.length)];
+	            }
+	        }
+	    }
+	    return Session;
+	}());
+	exports.Session = Session;
+	;
+
+
+/***/ },
+/* 182 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -62104,6 +62155,7 @@
 	            res.end();
 	            return;
 	        }
+	        owner.addSession(30);
 	        res.status(200);
 	        res.json(owner.basicData());
 	        res.end();
@@ -62114,7 +62166,7 @@
 
 
 /***/ },
-/* 182 */
+/* 183 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -62258,16 +62310,16 @@
 	  // this uses a switch for static require analysis
 	  switch (parserName) {
 	    case 'json':
-	      parser = __webpack_require__(183)
+	      parser = __webpack_require__(184)
 	      break
 	    case 'raw':
-	      parser = __webpack_require__(211)
-	      break
-	    case 'text':
 	      parser = __webpack_require__(212)
 	      break
-	    case 'urlencoded':
+	    case 'text':
 	      parser = __webpack_require__(213)
+	      break
+	    case 'urlencoded':
+	      parser = __webpack_require__(214)
 	      break
 	  }
 
@@ -62277,7 +62329,7 @@
 
 
 /***/ },
-/* 183 */
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -62294,11 +62346,11 @@
 	 * @private
 	 */
 
-	var bytes = __webpack_require__(184)
+	var bytes = __webpack_require__(185)
 	var contentType = __webpack_require__(47)
 	var createError = __webpack_require__(49)
 	var debug = __webpack_require__(8)('body-parser:json')
-	var read = __webpack_require__(185)
+	var read = __webpack_require__(186)
 	var typeis = __webpack_require__(77)
 
 	/**
@@ -62458,7 +62510,7 @@
 
 
 /***/ },
-/* 184 */
+/* 185 */
 /***/ function(module, exports) {
 
 	/*!
@@ -62621,7 +62673,7 @@
 
 
 /***/ },
-/* 185 */
+/* 186 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -62638,10 +62690,10 @@
 	 */
 
 	var createError = __webpack_require__(49)
-	var getBody = __webpack_require__(186)
-	var iconv = __webpack_require__(188)
+	var getBody = __webpack_require__(187)
+	var iconv = __webpack_require__(189)
 	var onFinished = __webpack_require__(16)
-	var zlib = __webpack_require__(210)
+	var zlib = __webpack_require__(211)
 
 	/**
 	 * Module exports.
@@ -62815,7 +62867,7 @@
 
 
 /***/ },
-/* 186 */
+/* 187 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -62832,8 +62884,8 @@
 	 * @private
 	 */
 
-	var bytes = __webpack_require__(187)
-	var iconv = __webpack_require__(188)
+	var bytes = __webpack_require__(188)
+	var iconv = __webpack_require__(189)
 	var unpipe = __webpack_require__(20)
 
 	/**
@@ -63141,7 +63193,7 @@
 
 
 /***/ },
-/* 187 */
+/* 188 */
 /***/ function(module, exports) {
 
 	/*!
@@ -63304,12 +63356,12 @@
 
 
 /***/ },
-/* 188 */
+/* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
 
-	var bomHandling = __webpack_require__(189),
+	var bomHandling = __webpack_require__(190),
 	    iconv = module.exports;
 
 	// All codecs and aliases are kept here, keyed by encoding name/alias.
@@ -63367,7 +63419,7 @@
 	iconv._codecDataCache = {};
 	iconv.getCodec = function getCodec(encoding) {
 	    if (!iconv.encodings)
-	        iconv.encodings = __webpack_require__(190); // Lazy load all encoding definitions.
+	        iconv.encodings = __webpack_require__(191); // Lazy load all encoding definitions.
 	    
 	    // Canonicalize encoding name: strip all non-alphanumeric chars and appended year.
 	    var enc = (''+encoding).toLowerCase().replace(/[^0-9a-z]|:\d{4}$/g, "");
@@ -63441,17 +63493,17 @@
 	    // Load streaming support in Node v0.10+
 	    var nodeVerArr = nodeVer.split(".").map(Number);
 	    if (nodeVerArr[0] > 0 || nodeVerArr[1] >= 10) {
-	        __webpack_require__(208)(iconv);
+	        __webpack_require__(209)(iconv);
 	    }
 
 	    // Load Node primitive extensions.
-	    __webpack_require__(209)(iconv);
+	    __webpack_require__(210)(iconv);
 	}
 
 
 
 /***/ },
-/* 189 */
+/* 190 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -63509,7 +63561,7 @@
 
 
 /***/ },
-/* 190 */
+/* 191 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -63517,14 +63569,14 @@
 	// Update this array if you add/rename/remove files in this directory.
 	// We support Browserify by skipping automatic module discovery and requiring modules directly.
 	var modules = [
-	    __webpack_require__(191),
-	    __webpack_require__(193),
+	    __webpack_require__(192),
 	    __webpack_require__(194),
 	    __webpack_require__(195),
 	    __webpack_require__(196),
 	    __webpack_require__(197),
 	    __webpack_require__(198),
 	    __webpack_require__(199),
+	    __webpack_require__(200),
 	];
 
 	// Put all encoding/alias/codec definitions to single object and export it. 
@@ -63537,7 +63589,7 @@
 
 
 /***/ },
-/* 191 */
+/* 192 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -63587,7 +63639,7 @@
 	//------------------------------------------------------------------------------
 
 	// We use node.js internal decoder. Its signature is the same as ours.
-	var StringDecoder = __webpack_require__(192).StringDecoder;
+	var StringDecoder = __webpack_require__(193).StringDecoder;
 
 	if (!StringDecoder.prototype.end) // Node v0.8 doesn't have this method.
 	    StringDecoder.prototype.end = function() {};
@@ -63730,13 +63782,13 @@
 
 
 /***/ },
-/* 192 */
+/* 193 */
 /***/ function(module, exports) {
 
 	module.exports = require("string_decoder");
 
 /***/ },
-/* 193 */
+/* 194 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -63916,7 +63968,7 @@
 
 
 /***/ },
-/* 194 */
+/* 195 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -64211,7 +64263,7 @@
 
 
 /***/ },
-/* 195 */
+/* 196 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -64289,7 +64341,7 @@
 
 
 /***/ },
-/* 196 */
+/* 197 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -64464,7 +64516,7 @@
 
 
 /***/ },
-/* 197 */
+/* 198 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -64920,7 +64972,7 @@
 	}
 
 /***/ },
-/* 198 */
+/* 199 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -65480,7 +65532,7 @@
 
 
 /***/ },
-/* 199 */
+/* 200 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -65526,7 +65578,7 @@
 
 	    'shiftjis': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(200) },
+	        table: function() { return __webpack_require__(201) },
 	        encodeAdd: {'\u00a5': 0x5C, '\u203E': 0x7E},
 	        encodeSkipVals: [{from: 0xED40, to: 0xF940}],
 	    },
@@ -65541,7 +65593,7 @@
 
 	    'eucjp': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(201) },
+	        table: function() { return __webpack_require__(202) },
 	        encodeAdd: {'\u00a5': 0x5C, '\u203E': 0x7E},
 	    },
 
@@ -65567,21 +65619,21 @@
 	    '936': 'cp936',
 	    'cp936': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(202) },
+	        table: function() { return __webpack_require__(203) },
 	    },
 
 	    // GBK (~22000 chars) is an extension of CP936 that added user-mapped chars and some other.
 	    'gbk': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(202).concat(__webpack_require__(203)) },
+	        table: function() { return __webpack_require__(203).concat(__webpack_require__(204)) },
 	    },
 	    'xgbk': 'gbk',
 
 	    // GB18030 is an algorithmic extension of GBK.
 	    'gb18030': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(202).concat(__webpack_require__(203)) },
-	        gb18030: function() { return __webpack_require__(204) },
+	        table: function() { return __webpack_require__(203).concat(__webpack_require__(204)) },
+	        gb18030: function() { return __webpack_require__(205) },
 	    },
 
 	    'chinese': 'gb18030',
@@ -65597,7 +65649,7 @@
 	    '949': 'cp949',
 	    'cp949': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(205) },
+	        table: function() { return __webpack_require__(206) },
 	    },
 
 	    'cseuckr': 'cp949',
@@ -65637,14 +65689,14 @@
 	    '950': 'cp950',
 	    'cp950': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(206) },
+	        table: function() { return __webpack_require__(207) },
 	    },
 
 	    // Big5 has many variations and is an extension of cp950. We use Encoding Standard's as a consensus.
 	    'big5': 'big5hkscs',
 	    'big5hkscs': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(206).concat(__webpack_require__(207)) },
+	        table: function() { return __webpack_require__(207).concat(__webpack_require__(208)) },
 	        encodeSkipVals: [0xa2cc],
 	    },
 
@@ -65656,7 +65708,7 @@
 
 
 /***/ },
-/* 200 */
+/* 201 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -66207,7 +66259,7 @@
 	];
 
 /***/ },
-/* 201 */
+/* 202 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -67032,7 +67084,7 @@
 	];
 
 /***/ },
-/* 202 */
+/* 203 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -69656,7 +69708,7 @@
 	];
 
 /***/ },
-/* 203 */
+/* 204 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -69919,7 +69971,7 @@
 	];
 
 /***/ },
-/* 204 */
+/* 205 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -70344,7 +70396,7 @@
 	};
 
 /***/ },
-/* 205 */
+/* 206 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -72727,7 +72779,7 @@
 	];
 
 /***/ },
-/* 206 */
+/* 207 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -73459,7 +73511,7 @@
 	];
 
 /***/ },
-/* 207 */
+/* 208 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -73968,7 +74020,7 @@
 	];
 
 /***/ },
-/* 208 */
+/* 209 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -74094,7 +74146,7 @@
 
 
 /***/ },
-/* 209 */
+/* 210 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -74314,13 +74366,13 @@
 
 
 /***/ },
-/* 210 */
+/* 211 */
 /***/ function(module, exports) {
 
 	module.exports = require("zlib");
 
 /***/ },
-/* 211 */
+/* 212 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -74335,9 +74387,9 @@
 	 * Module dependencies.
 	 */
 
-	var bytes = __webpack_require__(184)
+	var bytes = __webpack_require__(185)
 	var debug = __webpack_require__(8)('body-parser:raw')
-	var read = __webpack_require__(185)
+	var read = __webpack_require__(186)
 	var typeis = __webpack_require__(77)
 
 	/**
@@ -74427,7 +74479,7 @@
 
 
 /***/ },
-/* 212 */
+/* 213 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -74442,10 +74494,10 @@
 	 * Module dependencies.
 	 */
 
-	var bytes = __webpack_require__(184)
+	var bytes = __webpack_require__(185)
 	var contentType = __webpack_require__(47)
 	var debug = __webpack_require__(8)('body-parser:text')
-	var read = __webpack_require__(185)
+	var read = __webpack_require__(186)
 	var typeis = __webpack_require__(77)
 
 	/**
@@ -74554,7 +74606,7 @@
 
 
 /***/ },
-/* 213 */
+/* 214 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -74571,12 +74623,12 @@
 	 * @private
 	 */
 
-	var bytes = __webpack_require__(184)
+	var bytes = __webpack_require__(185)
 	var contentType = __webpack_require__(47)
 	var createError = __webpack_require__(49)
 	var debug = __webpack_require__(8)('body-parser:urlencoded')
 	var deprecate = __webpack_require__(29)('body-parser')
-	var read = __webpack_require__(185)
+	var read = __webpack_require__(186)
 	var typeis = __webpack_require__(77)
 
 	/**

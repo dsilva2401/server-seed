@@ -26,6 +26,7 @@
 				res.end();
 				return;
 			}
+			owner.addSession(30);
 			res.status(200);
 			res.json(owner.basicData());
 			res.end();
