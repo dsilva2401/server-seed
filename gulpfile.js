@@ -1,6 +1,7 @@
 // Imports
 	var gulp = require('gulp-param')(require('gulp'), process.argv);
 	var shell = require('shelljs');
+	var path = require('path');
 	var open = require('open');
 	var runSequence = require('run-sequence');
 	var typedoc = require('gulp-typedoc');
@@ -8,6 +9,9 @@
 	var package = require('./package.json');
 	var tsconfig = require('./tsconfig.json');
 	var fs = require('fs-extra');
+	var webpack = require('gulp-webpack');
+	var httpRoutes = require('./src/settings/http-routes.json');
+	var webapps = httpRoutes.statics.webapps;
 
 // Tasks
 
@@ -19,7 +23,6 @@
 				module: (tsconfig.module || 'commonjs'),
 				target: (tsconfig.target || 'es5'),
 				out: './wiki',
-				// theme: 'minimal',
 				name: package.name,
 				media: './media'
 			}));
@@ -72,6 +75,7 @@
 	// Serve app
 		gulp.task('serve', function () {
 			runSequence([
+				'webapps:build',
 				'webpack:build',
 				'start:database',
 				'start:proxy',
@@ -95,12 +99,37 @@
 			return shell.exec('node_modules/.bin/webpack');
 		});
 
+	// Build webapps
+		var webappsEntries = fs.readdirSync(path.join(__dirname, webapps.dir));
+		webappsEntries = webappsEntries.filter(function (entry) {
+			if (entry == '.DS_Store') return;
+			return entry;
+		})
+		webappsEntries.forEach(function (entryName) {
+			var entryPath = path.join(__dirname, webapps.dir, entryName);
+			gulp.task('webapp['+entryName+']:build', function () {
+				var webpackData = require( path.join(entryPath, 'webpack.config.js') );
+				var webappMainEntry = path.join(entryPath, webpackData.entry);
+				var webappOutputPath = path.join(webapps.dir, entryName);
+				return gulp.src(webappMainEntry)
+					.pipe( webpack(webpackData) )
+					.pipe(gulp.dest(webappOutputPath));
+			});
+		});
+		gulp.task('webapps:build', function () {
+			runSequence(webappsEntries.map(function (entryName) {
+				return 'webapp['+entryName+']:build';
+			}));
+		});
+
+
 	// Build all
 		gulp.task('build', function () {
 			runSequence([
 				'tests:build',
 				'doc:build',
-				'webpack:build'
+				'webpack:build',
+				'webapps:build'
 			]);
 		});
 

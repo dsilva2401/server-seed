@@ -24522,7 +24522,11 @@
 		},
 		"statics": {
 			"path": "/statics",
-			"services": {}
+			"services": {},
+			"webapps": {
+				"path": "/webapps",
+				"dir": "src/setup/statics/webapps"
+			}
 		},
 		"views": {
 			"path": "/",

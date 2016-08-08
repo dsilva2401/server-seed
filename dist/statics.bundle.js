@@ -24605,7 +24605,11 @@
 		},
 		"statics": {
 			"path": "/statics",
-			"services": {}
+			"services": {},
+			"webapps": {
+				"path": "/webapps",
+				"dir": "src/setup/statics/webapps"
+			}
 		},
 		"views": {
 			"path": "/",
@@ -24627,8 +24631,8 @@
 	var serverConfig = config_ts_1.config.servers.statics;
 	exports.server = express();
 	// Setup statics
-	var staticsPath = path.join(process.cwd(), 'src/setup/statics/files');
-	exports.server.use(config_ts_1.config.httpRoutes.statics.path, express.static(staticsPath));
+	var webappsPath = path.join(process.cwd(), config_ts_1.config.httpRoutes.statics.webapps.dir);
+	exports.server.use(config_ts_1.config.httpRoutes.statics.path + config_ts_1.config.httpRoutes.statics.webapps.path, express.static(webappsPath));
 	// Start function
 	function startServer() {
 	    exports.server.listen(serverConfig.port, function () {
