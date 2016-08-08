@@ -16,7 +16,7 @@
 // Tasks
 
 	// Generate typescript documentation
-		gulp.task('doc:build', function () {
+		gulp.task('docs:build', function () {
 			return gulp
         	.src(['src/**/*.ts', 'typings/**/*.ts'])
         	.pipe(typedoc({
@@ -76,7 +76,7 @@
 		gulp.task('serve', function () {
 			runSequence([
 				'webapps:build',
-				'webpack:build',
+				'server:build',
 				'start:database',
 				'start:proxy',
 				'start:api',
@@ -95,7 +95,7 @@
 				.pipe(ts(tsProject)).js
 				.pipe(gulp.dest('test/project-src'));
 		});
-		gulp.task('webpack:build', function () {
+		gulp.task('server:build', function () {
 			return shell.exec('node_modules/.bin/webpack');
 		});
 
@@ -127,8 +127,8 @@
 		gulp.task('build', function () {
 			runSequence([
 				'tests:build',
-				'doc:build',
-				'webpack:build',
+				'docs:build',
+				'server:build',
 				'webapps:build'
 			]);
 		});
@@ -136,4 +136,8 @@
 	// Tests
 		gulp.task('test', ['tests:build'], function () {
 			shell.exec('node_modules/.bin/mocha --reporter spec test/**/*.spec.js');
+		});
+
+		gulp.task('docs:show', function () {
+			open( path.join(__dirname, 'wiki/index.html') );
 		});

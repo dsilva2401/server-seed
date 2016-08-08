@@ -59,6 +59,10 @@ npm install
 gulp typings:install
 ```
 
+## Show Wiki
+```bash
+gulp docs:show
+```
 
 ## Build app
 ```bash
