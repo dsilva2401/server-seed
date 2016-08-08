@@ -30,8 +30,19 @@ module.exports = function (data, serverConfig) {
 				}, function (error, response, body) {
 					if (error) throw error;
 					if (response.statusCode == 500) throw body;
-					callbackHandler(response, body);
+					var cookies = {};
+			        (response.headers['set-cookie'] || []).forEach(function (cookieData) {
+			            cookieData = cookieData.substring(0, cookieData.indexOf(';'));
+			            cookieData = cookieData.split('=');
+			            cookies[cookieData[0]] = cookieData[1];
+			        });
+					callbackHandler({
+						body: response.body,
+						statusCode: response.statusCode,
+						cookies: cookies
+					}, body);
 				});
+
 			}
 		
 		// Construct

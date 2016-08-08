@@ -53,4 +53,11 @@ import {Request, Response} from 'express';
 				return results;
 			}
 
+			public addCookies (cookies: any) {
+				let self = this;
+				Object.keys(cookies).forEach(function (cookieKey) {
+					self.response.cookie(cookieKey, cookies[cookieKey]);
+				});
+			}
+
 	};

@@ -35,6 +35,10 @@ module.exports = function (test) {
 					password: test.data.person.password
 				},function (response, body) {
 					expect(response.statusCode).to.equal(200);
+					expect(response.cookies.uid).to.exist;
+					expect(response.cookies.skey).to.exist;
+					test.data.person.session.ownerId = response.cookies.uid;
+					test.data.person.session.key = response.cookies.skey;
 					done();
 				});
 			});

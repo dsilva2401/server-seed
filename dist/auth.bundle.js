@@ -24540,12 +24540,14 @@
 	var index_ts_1 = __webpack_require__(88);
 	var config_ts_1 = __webpack_require__(85);
 	var bodyParser = __webpack_require__(184);
+	var cookieParser = __webpack_require__(216);
 	// Server setup
 	var serverConfig = config_ts_1.config.servers.auth;
 	exports.server = express();
 	// Setup routers
 	exports.server.use(bodyParser.urlencoded({ extended: false }));
 	exports.server.use(bodyParser.json());
+	exports.server.use(cookieParser());
 	index_ts_1.setupAuth(exports.server);
 	// Start function
 	function startServer() {
@@ -62220,6 +62222,12 @@
 	            return;
 	        return results;
 	    };
+	    ExpressController.prototype.addCookies = function (cookies) {
+	        var self = this;
+	        Object.keys(cookies).forEach(function (cookieKey) {
+	            self.response.cookie(cookieKey, cookies[cookieKey]);
+	        });
+	    };
 	    return ExpressController;
 	}());
 	exports.ExpressController = ExpressController;
@@ -62281,7 +62289,12 @@
 	    };
 	    LoginController.prototype.createSession = function (person, keySize) {
 	        var deferred = Q.defer();
+	        var self = this;
 	        person.addSession(30).then(function (session) {
+	            self.addCookies({
+	                uid: session.ownerId,
+	                skey: session.key
+	            });
 	            deferred.resolve();
 	        }).catch(this.sendError);
 	        return deferred.promise;
@@ -75013,6 +75026,193 @@
 	  return function checkType (req) {
 	    return Boolean(typeis(req, type))
 	  }
+	}
+
+
+/***/ },
+/* 216 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*!
+	 * cookie-parser
+	 * Copyright(c) 2014 TJ Holowaychuk
+	 * Copyright(c) 2015 Douglas Christopher Wilson
+	 * MIT Licensed
+	 */
+
+	'use strict';
+
+	/**
+	 * Module dependencies.
+	 * @private
+	 */
+
+	var cookie = __webpack_require__(81);
+	var signature = __webpack_require__(80);
+
+	/**
+	 * Module exports.
+	 * @public
+	 */
+
+	module.exports = cookieParser;
+	module.exports.JSONCookie = JSONCookie;
+	module.exports.JSONCookies = JSONCookies;
+	module.exports.signedCookie = signedCookie;
+	module.exports.signedCookies = signedCookies;
+
+	/**
+	 * Parse Cookie header and populate `req.cookies`
+	 * with an object keyed by the cookie names.
+	 *
+	 * @param {string|array} [secret] A string (or array of strings) representing cookie signing secret(s).
+	 * @param {Object} [options]
+	 * @return {Function}
+	 * @public
+	 */
+
+	function cookieParser(secret, options) {
+	  return function cookieParser(req, res, next) {
+	    if (req.cookies) {
+	      return next();
+	    }
+
+	    var cookies = req.headers.cookie;
+	    var secrets = !secret || Array.isArray(secret)
+	      ? (secret || [])
+	      : [secret];
+
+	    req.secret = secrets[0];
+	    req.cookies = Object.create(null);
+	    req.signedCookies = Object.create(null);
+
+	    // no cookies
+	    if (!cookies) {
+	      return next();
+	    }
+
+	    req.cookies = cookie.parse(cookies, options);
+
+	    // parse signed cookies
+	    if (secrets.length !== 0) {
+	      req.signedCookies = signedCookies(req.cookies, secrets);
+	      req.signedCookies = JSONCookies(req.signedCookies);
+	    }
+
+	    // parse JSON cookies
+	    req.cookies = JSONCookies(req.cookies);
+
+	    next();
+	  };
+	}
+
+	/**
+	 * Parse JSON cookie string.
+	 *
+	 * @param {String} str
+	 * @return {Object} Parsed object or undefined if not json cookie
+	 * @public
+	 */
+
+	function JSONCookie(str) {
+	  if (typeof str !== 'string' || str.substr(0, 2) !== 'j:') {
+	    return undefined;
+	  }
+
+	  try {
+	    return JSON.parse(str.slice(2));
+	  } catch (err) {
+	    return undefined;
+	  }
+	}
+
+	/**
+	 * Parse JSON cookies.
+	 *
+	 * @param {Object} obj
+	 * @return {Object}
+	 * @public
+	 */
+
+	function JSONCookies(obj) {
+	  var cookies = Object.keys(obj);
+	  var key;
+	  var val;
+
+	  for (var i = 0; i < cookies.length; i++) {
+	    key = cookies[i];
+	    val = JSONCookie(obj[key]);
+
+	    if (val) {
+	      obj[key] = val;
+	    }
+	  }
+
+	  return obj;
+	}
+
+	/**
+	 * Parse a signed cookie string, return the decoded value.
+	 *
+	 * @param {String} str signed cookie string
+	 * @param {string|array} secret
+	 * @return {String} decoded value
+	 * @public
+	 */
+
+	function signedCookie(str, secret) {
+	  if (typeof str !== 'string') {
+	    return undefined;
+	  }
+
+	  if (str.substr(0, 2) !== 's:') {
+	    return str;
+	  }
+
+	  var secrets = !secret || Array.isArray(secret)
+	    ? (secret || [])
+	    : [secret];
+
+	  for (var i = 0; i < secrets.length; i++) {
+	    var val = signature.unsign(str.slice(2), secrets[i]);
+
+	    if (val !== false) {
+	      return val;
+	    }
+	  }
+
+	  return false;
+	}
+
+	/**
+	 * Parse signed cookies, returning an object containing the decoded key/value
+	 * pairs, while removing the signed key from obj.
+	 *
+	 * @param {Object} obj
+	 * @param {string|array} secret
+	 * @return {Object}
+	 * @public
+	 */
+
+	function signedCookies(obj, secret) {
+	  var cookies = Object.keys(obj);
+	  var dec;
+	  var key;
+	  var ret = Object.create(null);
+	  var val;
+
+	  for (var i = 0; i < cookies.length; i++) {
+	    key = cookies[i];
+	    val = obj[key];
+	    dec = signedCookie(val, secret);
+
+	    if (val !== dec) {
+	      ret[key] = dec;
+	      delete obj[key];
+	    }
+	  }
+
+	  return ret;
 	}
 
 

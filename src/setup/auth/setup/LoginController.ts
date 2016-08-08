@@ -56,7 +56,12 @@
 
 			createSession (person: PersonBE, keySize: number) {
 				let deferred = Q.defer();
+				let self = this;
 				person.addSession(30).then(function (session: Session) {
+					self.addCookies({
+						uid: session.ownerId,
+						skey: session.key
+					})
 					deferred.resolve();
 				}).catch(this.sendError);
 				return deferred.promise;

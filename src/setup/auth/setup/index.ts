@@ -24,6 +24,8 @@
 			// Login
 			sRouter.addServiceController('login', LoginController);
 
+
+
 		// Add router to server
 		server.use(sRouter.path, sRouter.router);
 

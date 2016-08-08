@@ -12,6 +12,7 @@
 		data.person.birthday = new Date();
 		data.person.email = 'user@domain.com';
 		data.person.password = 'password123';
+		data.person.session = { ownerId: null, key: null };
 
 // Exports
 	module.exports = data;
