@@ -111,6 +111,7 @@
 				var webpackData = require( path.join(entryPath, 'webpack.config.js') );
 				var webappMainEntry = path.join(entryPath, webpackData.entry);
 				var webappOutputPath = path.join(webapps.dir, entryName);
+				if (webpackData.output.dir) webappOutputPath = path.join(webappOutputPath, webpackData.output.dir);
 				return gulp.src(webappMainEntry)
 					.pipe( webpack(webpackData) )
 					.pipe(gulp.dest(webappOutputPath));
