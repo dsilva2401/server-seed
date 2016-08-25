@@ -46,3 +46,4 @@ mongodata
 test/project-src
 
 **/node_modules
+**/typings
