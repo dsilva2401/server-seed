@@ -6,11 +6,12 @@
 	interface Configuration {
 		servers: any;
 		httpRoutes: any;
+		webapps: any;
 	}
 
 // Exports
 	export let config: Configuration;
-	config = { servers: null, httpRoutes: null };
+	config = { servers: null, httpRoutes: null, webapps: null };
 
 /**
 	=== Servers configuration ===
@@ -43,6 +44,12 @@
 	config.servers.auth.port = 5000;
 	config.servers.auth.url = 'http://'+config.servers.auth.domain+':'+config.servers.auth.port;
 
+	// Webapps Server
+	config.servers.webapps = {};
+	config.servers.webapps.domain = 'localhost';
+	config.servers.webapps.port = 8081;
+	config.servers.webapps.url = 'http://'+config.servers.webapps.domain+':'+config.servers.webapps.port;
+
 	// Statics Server
 	config.servers.statics = {};
 	config.servers.statics.domain = 'localhost';
@@ -63,3 +70,8 @@
 		});
 	});
 
+/**
+	=== Webapp ===
+*/
+	// Import configutation
+	config.webapps = require('./settings/webapps.json');

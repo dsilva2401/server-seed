@@ -46,7 +46,7 @@
 
 	"use strict";
 	// Imports
-	var server_ts_1 = __webpack_require__(263);
+	var server_ts_1 = __webpack_require__(264);
 	// Start server
 	server_ts_1.startServer();
 
@@ -24447,7 +24447,7 @@
 	"use strict";
 	// Imports
 	var path = __webpack_require__(35);
-	exports.config = { servers: null, httpRoutes: null };
+	exports.config = { servers: null, httpRoutes: null, webapps: null };
 	/**
 	    === Servers configuration ===
 	*/
@@ -24474,6 +24474,11 @@
 	exports.config.servers.auth.domain = 'localhost';
 	exports.config.servers.auth.port = 5000;
 	exports.config.servers.auth.url = 'http://' + exports.config.servers.auth.domain + ':' + exports.config.servers.auth.port;
+	// Webapps Server
+	exports.config.servers.webapps = {};
+	exports.config.servers.webapps.domain = 'localhost';
+	exports.config.servers.webapps.port = 8081;
+	exports.config.servers.webapps.url = 'http://' + exports.config.servers.webapps.domain + ':' + exports.config.servers.webapps.port;
 	// Statics Server
 	exports.config.servers.statics = {};
 	exports.config.servers.statics.domain = 'localhost';
@@ -24492,6 +24497,11 @@
 	        exports.config.httpRoutes[routerKey].services[serviceKey].url = buffRouter.path + buffService.path;
 	    });
 	});
+	/**
+	    === Webapp ===
+	*/
+	// Import configutation
+	exports.config.webapps = __webpack_require__(87);
 
 
 /***/ },
@@ -24522,11 +24532,11 @@
 		},
 		"statics": {
 			"path": "/statics",
-			"services": {},
-			"webapps": {
-				"path": "/webapps",
-				"dir": "src/setup/statics/webapps"
-			}
+			"services": {}
+		},
+		"webapps": {
+			"path": "/webapps",
+			"services": {}
 		},
 		"views": {
 			"path": "/",
@@ -24535,7 +24545,12 @@
 	};
 
 /***/ },
-/* 87 */,
+/* 87 */
+/***/ function(module, exports) {
+
+	module.exports = {};
+
+/***/ },
 /* 88 */,
 /* 89 */,
 /* 90 */,
@@ -24551,13 +24566,13 @@
 /* 100 */,
 /* 101 */,
 /* 102 */,
-/* 103 */
+/* 103 */,
+/* 104 */
 /***/ function(module, exports) {
 
 	module.exports = require("tls");
 
 /***/ },
-/* 104 */,
 /* 105 */,
 /* 106 */,
 /* 107 */,
@@ -24604,7 +24619,8 @@
 /* 148 */,
 /* 149 */,
 /* 150 */,
-/* 151 */
+/* 151 */,
+/* 152 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -24717,7 +24733,7 @@
 
 
 /***/ },
-/* 152 */
+/* 153 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -24944,7 +24960,6 @@
 
 
 /***/ },
-/* 153 */,
 /* 154 */,
 /* 155 */,
 /* 156 */,
@@ -24971,7 +24986,8 @@
 /* 177 */,
 /* 178 */,
 /* 179 */,
-/* 180 */
+/* 180 */,
+/* 181 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// vim:ts=4:sts=4:sw=4:
@@ -27025,10 +27041,10 @@
 
 
 /***/ },
-/* 181 */,
 /* 182 */,
 /* 183 */,
-/* 184 */
+/* 184 */,
+/* 185 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -27172,16 +27188,16 @@
 	  // this uses a switch for static require analysis
 	  switch (parserName) {
 	    case 'json':
-	      parser = __webpack_require__(185)
+	      parser = __webpack_require__(186)
 	      break
 	    case 'raw':
-	      parser = __webpack_require__(213)
-	      break
-	    case 'text':
 	      parser = __webpack_require__(214)
 	      break
-	    case 'urlencoded':
+	    case 'text':
 	      parser = __webpack_require__(215)
+	      break
+	    case 'urlencoded':
+	      parser = __webpack_require__(216)
 	      break
 	  }
 
@@ -27191,7 +27207,7 @@
 
 
 /***/ },
-/* 185 */
+/* 186 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -27208,11 +27224,11 @@
 	 * @private
 	 */
 
-	var bytes = __webpack_require__(186)
+	var bytes = __webpack_require__(187)
 	var contentType = __webpack_require__(47)
 	var createError = __webpack_require__(49)
 	var debug = __webpack_require__(8)('body-parser:json')
-	var read = __webpack_require__(187)
+	var read = __webpack_require__(188)
 	var typeis = __webpack_require__(77)
 
 	/**
@@ -27372,7 +27388,7 @@
 
 
 /***/ },
-/* 186 */
+/* 187 */
 /***/ function(module, exports) {
 
 	/*!
@@ -27535,7 +27551,7 @@
 
 
 /***/ },
-/* 187 */
+/* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -27552,10 +27568,10 @@
 	 */
 
 	var createError = __webpack_require__(49)
-	var getBody = __webpack_require__(188)
-	var iconv = __webpack_require__(190)
+	var getBody = __webpack_require__(189)
+	var iconv = __webpack_require__(191)
 	var onFinished = __webpack_require__(16)
-	var zlib = __webpack_require__(212)
+	var zlib = __webpack_require__(213)
 
 	/**
 	 * Module exports.
@@ -27729,7 +27745,7 @@
 
 
 /***/ },
-/* 188 */
+/* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -27746,8 +27762,8 @@
 	 * @private
 	 */
 
-	var bytes = __webpack_require__(189)
-	var iconv = __webpack_require__(190)
+	var bytes = __webpack_require__(190)
+	var iconv = __webpack_require__(191)
 	var unpipe = __webpack_require__(20)
 
 	/**
@@ -28055,7 +28071,7 @@
 
 
 /***/ },
-/* 189 */
+/* 190 */
 /***/ function(module, exports) {
 
 	/*!
@@ -28218,12 +28234,12 @@
 
 
 /***/ },
-/* 190 */
+/* 191 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
 
-	var bomHandling = __webpack_require__(191),
+	var bomHandling = __webpack_require__(192),
 	    iconv = module.exports;
 
 	// All codecs and aliases are kept here, keyed by encoding name/alias.
@@ -28281,7 +28297,7 @@
 	iconv._codecDataCache = {};
 	iconv.getCodec = function getCodec(encoding) {
 	    if (!iconv.encodings)
-	        iconv.encodings = __webpack_require__(192); // Lazy load all encoding definitions.
+	        iconv.encodings = __webpack_require__(193); // Lazy load all encoding definitions.
 	    
 	    // Canonicalize encoding name: strip all non-alphanumeric chars and appended year.
 	    var enc = (''+encoding).toLowerCase().replace(/[^0-9a-z]|:\d{4}$/g, "");
@@ -28355,17 +28371,17 @@
 	    // Load streaming support in Node v0.10+
 	    var nodeVerArr = nodeVer.split(".").map(Number);
 	    if (nodeVerArr[0] > 0 || nodeVerArr[1] >= 10) {
-	        __webpack_require__(210)(iconv);
+	        __webpack_require__(211)(iconv);
 	    }
 
 	    // Load Node primitive extensions.
-	    __webpack_require__(211)(iconv);
+	    __webpack_require__(212)(iconv);
 	}
 
 
 
 /***/ },
-/* 191 */
+/* 192 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -28423,7 +28439,7 @@
 
 
 /***/ },
-/* 192 */
+/* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -28431,14 +28447,14 @@
 	// Update this array if you add/rename/remove files in this directory.
 	// We support Browserify by skipping automatic module discovery and requiring modules directly.
 	var modules = [
-	    __webpack_require__(193),
-	    __webpack_require__(195),
+	    __webpack_require__(194),
 	    __webpack_require__(196),
 	    __webpack_require__(197),
 	    __webpack_require__(198),
 	    __webpack_require__(199),
 	    __webpack_require__(200),
 	    __webpack_require__(201),
+	    __webpack_require__(202),
 	];
 
 	// Put all encoding/alias/codec definitions to single object and export it. 
@@ -28451,7 +28467,7 @@
 
 
 /***/ },
-/* 193 */
+/* 194 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -28501,7 +28517,7 @@
 	//------------------------------------------------------------------------------
 
 	// We use node.js internal decoder. Its signature is the same as ours.
-	var StringDecoder = __webpack_require__(194).StringDecoder;
+	var StringDecoder = __webpack_require__(195).StringDecoder;
 
 	if (!StringDecoder.prototype.end) // Node v0.8 doesn't have this method.
 	    StringDecoder.prototype.end = function() {};
@@ -28644,13 +28660,13 @@
 
 
 /***/ },
-/* 194 */
+/* 195 */
 /***/ function(module, exports) {
 
 	module.exports = require("string_decoder");
 
 /***/ },
-/* 195 */
+/* 196 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -28830,7 +28846,7 @@
 
 
 /***/ },
-/* 196 */
+/* 197 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -29125,7 +29141,7 @@
 
 
 /***/ },
-/* 197 */
+/* 198 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -29203,7 +29219,7 @@
 
 
 /***/ },
-/* 198 */
+/* 199 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -29378,7 +29394,7 @@
 
 
 /***/ },
-/* 199 */
+/* 200 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -29834,7 +29850,7 @@
 	}
 
 /***/ },
-/* 200 */
+/* 201 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -30394,7 +30410,7 @@
 
 
 /***/ },
-/* 201 */
+/* 202 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -30440,7 +30456,7 @@
 
 	    'shiftjis': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(202) },
+	        table: function() { return __webpack_require__(203) },
 	        encodeAdd: {'\u00a5': 0x5C, '\u203E': 0x7E},
 	        encodeSkipVals: [{from: 0xED40, to: 0xF940}],
 	    },
@@ -30455,7 +30471,7 @@
 
 	    'eucjp': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(203) },
+	        table: function() { return __webpack_require__(204) },
 	        encodeAdd: {'\u00a5': 0x5C, '\u203E': 0x7E},
 	    },
 
@@ -30481,21 +30497,21 @@
 	    '936': 'cp936',
 	    'cp936': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(204) },
+	        table: function() { return __webpack_require__(205) },
 	    },
 
 	    // GBK (~22000 chars) is an extension of CP936 that added user-mapped chars and some other.
 	    'gbk': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(204).concat(__webpack_require__(205)) },
+	        table: function() { return __webpack_require__(205).concat(__webpack_require__(206)) },
 	    },
 	    'xgbk': 'gbk',
 
 	    // GB18030 is an algorithmic extension of GBK.
 	    'gb18030': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(204).concat(__webpack_require__(205)) },
-	        gb18030: function() { return __webpack_require__(206) },
+	        table: function() { return __webpack_require__(205).concat(__webpack_require__(206)) },
+	        gb18030: function() { return __webpack_require__(207) },
 	    },
 
 	    'chinese': 'gb18030',
@@ -30511,7 +30527,7 @@
 	    '949': 'cp949',
 	    'cp949': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(207) },
+	        table: function() { return __webpack_require__(208) },
 	    },
 
 	    'cseuckr': 'cp949',
@@ -30551,14 +30567,14 @@
 	    '950': 'cp950',
 	    'cp950': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(208) },
+	        table: function() { return __webpack_require__(209) },
 	    },
 
 	    // Big5 has many variations and is an extension of cp950. We use Encoding Standard's as a consensus.
 	    'big5': 'big5hkscs',
 	    'big5hkscs': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(208).concat(__webpack_require__(209)) },
+	        table: function() { return __webpack_require__(209).concat(__webpack_require__(210)) },
 	        encodeSkipVals: [0xa2cc],
 	    },
 
@@ -30570,7 +30586,7 @@
 
 
 /***/ },
-/* 202 */
+/* 203 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -31121,7 +31137,7 @@
 	];
 
 /***/ },
-/* 203 */
+/* 204 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -31946,7 +31962,7 @@
 	];
 
 /***/ },
-/* 204 */
+/* 205 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -34570,7 +34586,7 @@
 	];
 
 /***/ },
-/* 205 */
+/* 206 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -34833,7 +34849,7 @@
 	];
 
 /***/ },
-/* 206 */
+/* 207 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -35258,7 +35274,7 @@
 	};
 
 /***/ },
-/* 207 */
+/* 208 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -37641,7 +37657,7 @@
 	];
 
 /***/ },
-/* 208 */
+/* 209 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -38373,7 +38389,7 @@
 	];
 
 /***/ },
-/* 209 */
+/* 210 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -38882,7 +38898,7 @@
 	];
 
 /***/ },
-/* 210 */
+/* 211 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -39008,7 +39024,7 @@
 
 
 /***/ },
-/* 211 */
+/* 212 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -39228,13 +39244,13 @@
 
 
 /***/ },
-/* 212 */
+/* 213 */
 /***/ function(module, exports) {
 
 	module.exports = require("zlib");
 
 /***/ },
-/* 213 */
+/* 214 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -39249,9 +39265,9 @@
 	 * Module dependencies.
 	 */
 
-	var bytes = __webpack_require__(186)
+	var bytes = __webpack_require__(187)
 	var debug = __webpack_require__(8)('body-parser:raw')
-	var read = __webpack_require__(187)
+	var read = __webpack_require__(188)
 	var typeis = __webpack_require__(77)
 
 	/**
@@ -39341,7 +39357,7 @@
 
 
 /***/ },
-/* 214 */
+/* 215 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -39356,10 +39372,10 @@
 	 * Module dependencies.
 	 */
 
-	var bytes = __webpack_require__(186)
+	var bytes = __webpack_require__(187)
 	var contentType = __webpack_require__(47)
 	var debug = __webpack_require__(8)('body-parser:text')
-	var read = __webpack_require__(187)
+	var read = __webpack_require__(188)
 	var typeis = __webpack_require__(77)
 
 	/**
@@ -39468,7 +39484,7 @@
 
 
 /***/ },
-/* 215 */
+/* 216 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -39485,12 +39501,12 @@
 	 * @private
 	 */
 
-	var bytes = __webpack_require__(186)
+	var bytes = __webpack_require__(187)
 	var contentType = __webpack_require__(47)
 	var createError = __webpack_require__(49)
 	var debug = __webpack_require__(8)('body-parser:urlencoded')
 	var deprecate = __webpack_require__(29)('body-parser')
-	var read = __webpack_require__(187)
+	var read = __webpack_require__(188)
 	var typeis = __webpack_require__(77)
 
 	/**
@@ -39753,7 +39769,7 @@
 
 
 /***/ },
-/* 216 */
+/* 217 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -39940,7 +39956,6 @@
 
 
 /***/ },
-/* 217 */,
 /* 218 */,
 /* 219 */,
 /* 220 */,
@@ -39950,13 +39965,13 @@
 /* 224 */,
 /* 225 */,
 /* 226 */,
-/* 227 */
+/* 227 */,
+/* 228 */
 /***/ function(module, exports) {
 
 	module.exports = require("assert");
 
 /***/ },
-/* 228 */,
 /* 229 */,
 /* 230 */,
 /* 231 */,
@@ -39991,16 +40006,17 @@
 /* 260 */,
 /* 261 */,
 /* 262 */,
-/* 263 */
+/* 263 */,
+/* 264 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	// Imports
 	var express = __webpack_require__(2);
-	var index_ts_1 = __webpack_require__(264);
+	var index_ts_1 = __webpack_require__(265);
 	var config_ts_1 = __webpack_require__(85);
-	var bodyParser = __webpack_require__(184);
-	var cookieParser = __webpack_require__(216);
+	var bodyParser = __webpack_require__(185);
+	var cookieParser = __webpack_require__(217);
 	// Server setup
 	var serverConfig = config_ts_1.config.servers.proxy;
 	exports.server = express();
@@ -40019,35 +40035,37 @@
 
 
 /***/ },
-/* 264 */
+/* 265 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	// Imports
-	var auth_ts_1 = __webpack_require__(265);
-	var api_ts_1 = __webpack_require__(372);
-	var views_ts_1 = __webpack_require__(373);
-	var statics_ts_1 = __webpack_require__(374);
+	var auth_ts_1 = __webpack_require__(266);
+	var api_ts_1 = __webpack_require__(373);
+	var views_ts_1 = __webpack_require__(374);
+	var statics_ts_1 = __webpack_require__(375);
+	var webapps_ts_1 = __webpack_require__(376);
 	var config_ts_1 = __webpack_require__(85);
 	// Export setup routers function
 	function setupRouters(server) {
 	    server.use(config_ts_1.config.httpRoutes.api.path, api_ts_1.router);
 	    server.use(config_ts_1.config.httpRoutes.auth.path, auth_ts_1.router);
 	    server.use(config_ts_1.config.httpRoutes.statics.path, statics_ts_1.router);
+	    server.use(config_ts_1.config.httpRoutes.webapps.path, webapps_ts_1.router);
 	    server.use(config_ts_1.config.httpRoutes.views.path, views_ts_1.router);
 	}
 	exports.setupRouters = setupRouters;
 
 
 /***/ },
-/* 265 */
+/* 266 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	// Imports
 	var express = __webpack_require__(2);
 	var config_ts_1 = __webpack_require__(85);
-	var httpRequest_ts_1 = __webpack_require__(266);
+	var httpRequest_ts_1 = __webpack_require__(267);
 	// Define router
 	exports.router = express.Router();
 	// Setup routes
@@ -40076,13 +40094,13 @@
 
 
 /***/ },
-/* 266 */
+/* 267 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	// Imports
-	var request = __webpack_require__(267);
-	var Q = __webpack_require__(180);
+	var request = __webpack_require__(268);
+	var Q = __webpack_require__(181);
 	// Exports
 	function httpRequest(method, url, options) {
 	    // Init
@@ -40128,7 +40146,7 @@
 
 
 /***/ },
-/* 267 */
+/* 268 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2010-2012 Mikeal Rogers
@@ -40147,9 +40165,9 @@
 
 	'use strict'
 
-	var extend                = __webpack_require__(268)
-	  , cookies               = __webpack_require__(269)
-	  , helpers               = __webpack_require__(278)
+	var extend                = __webpack_require__(269)
+	  , cookies               = __webpack_require__(270)
+	  , helpers               = __webpack_require__(279)
 
 	var isFunction            = helpers.isFunction
 	  , paramsHaveRequestBody = helpers.paramsHaveRequestBody
@@ -40274,7 +40292,7 @@
 	// Exports
 
 	module.exports = request
-	request.Request = __webpack_require__(280)
+	request.Request = __webpack_require__(281)
 	request.initParams = initParams
 
 	// Backwards compatibility for request.debug
@@ -40290,7 +40308,7 @@
 
 
 /***/ },
-/* 268 */
+/* 269 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -40382,12 +40400,12 @@
 
 
 /***/ },
-/* 269 */
+/* 270 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict'
 
-	var tough = __webpack_require__(270)
+	var tough = __webpack_require__(271)
 
 	var Cookie = tough.Cookie
 	  , CookieJar = tough.CookieJar
@@ -40427,7 +40445,7 @@
 
 
 /***/ },
-/* 270 */
+/* 271 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -40463,15 +40481,15 @@
 	'use strict';
 	var net = __webpack_require__(14);
 	var urlParse = __webpack_require__(37).parse;
-	var pubsuffix = __webpack_require__(271);
-	var Store = __webpack_require__(273).Store;
-	var MemoryCookieStore = __webpack_require__(274).MemoryCookieStore;
-	var pathMatch = __webpack_require__(276).pathMatch;
-	var VERSION = __webpack_require__(277).version;
+	var pubsuffix = __webpack_require__(272);
+	var Store = __webpack_require__(274).Store;
+	var MemoryCookieStore = __webpack_require__(275).MemoryCookieStore;
+	var pathMatch = __webpack_require__(277).pathMatch;
+	var VERSION = __webpack_require__(278).version;
 
 	var punycode;
 	try {
-	  punycode = __webpack_require__(272);
+	  punycode = __webpack_require__(273);
 	} catch(e) {
 	  console.warn("cookie: can't load punycode; won't use punycode for domain normalization");
 	}
@@ -41768,14 +41786,14 @@
 	  pathMatch: pathMatch,
 	  getPublicSuffix: pubsuffix.getPublicSuffix,
 	  cookieCompare: cookieCompare,
-	  permuteDomain: __webpack_require__(275).permuteDomain,
+	  permuteDomain: __webpack_require__(276).permuteDomain,
 	  permutePath: permutePath,
 	  canonicalDomain: canonicalDomain
 	};
 
 
 /***/ },
-/* 271 */
+/* 272 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/****************************************************
@@ -41785,7 +41803,7 @@
 
 	"use strict";
 
-	var punycode = __webpack_require__(272);
+	var punycode = __webpack_require__(273);
 
 	module.exports.getPublicSuffix = function getPublicSuffix(domain) {
 	  /*!
@@ -41879,13 +41897,13 @@
 
 
 /***/ },
-/* 272 */
+/* 273 */
 /***/ function(module, exports) {
 
 	module.exports = require("punycode");
 
 /***/ },
-/* 273 */
+/* 274 */
 /***/ function(module, exports) {
 
 	/*!
@@ -41962,7 +41980,7 @@
 
 
 /***/ },
-/* 274 */
+/* 275 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -41996,9 +42014,9 @@
 	 * POSSIBILITY OF SUCH DAMAGE.
 	 */
 	'use strict';
-	var Store = __webpack_require__(273).Store;
-	var permuteDomain = __webpack_require__(275).permuteDomain;
-	var pathMatch = __webpack_require__(276).pathMatch;
+	var Store = __webpack_require__(274).Store;
+	var permuteDomain = __webpack_require__(276).permuteDomain;
+	var pathMatch = __webpack_require__(277).pathMatch;
 	var util = __webpack_require__(10);
 
 	function MemoryCookieStore() {
@@ -42138,7 +42156,7 @@
 
 
 /***/ },
-/* 275 */
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -42172,7 +42190,7 @@
 	 * POSSIBILITY OF SUCH DAMAGE.
 	 */
 	"use strict";
-	var pubsuffix = __webpack_require__(271);
+	var pubsuffix = __webpack_require__(272);
 
 	// Gives the permutation of all possible domainMatch()es of a given domain. The
 	// array is in shortest-to-longest order.  Handy for indexing.
@@ -42200,7 +42218,7 @@
 
 
 /***/ },
-/* 276 */
+/* 277 */
 /***/ function(module, exports) {
 
 	/*!
@@ -42267,7 +42285,7 @@
 
 
 /***/ },
-/* 277 */
+/* 278 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -42400,12 +42418,12 @@
 	};
 
 /***/ },
-/* 278 */
+/* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict'
 
-	var jsonSafeStringify = __webpack_require__(279)
+	var jsonSafeStringify = __webpack_require__(280)
 	  , crypto = __webpack_require__(56)
 
 	function deferMethod() {
@@ -42480,7 +42498,7 @@
 
 
 /***/ },
-/* 279 */
+/* 280 */
 /***/ function(module, exports) {
 
 	exports = module.exports = stringify
@@ -42513,36 +42531,36 @@
 
 
 /***/ },
-/* 280 */
+/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict'
 
 	var http = __webpack_require__(27)
-	  , https = __webpack_require__(281)
+	  , https = __webpack_require__(282)
 	  , url = __webpack_require__(37)
 	  , util = __webpack_require__(10)
 	  , stream = __webpack_require__(53)
-	  , zlib = __webpack_require__(212)
-	  , bl = __webpack_require__(282)
-	  , hawk = __webpack_require__(290)
-	  , aws = __webpack_require__(304)
-	  , httpSignature = __webpack_require__(305)
+	  , zlib = __webpack_require__(213)
+	  , bl = __webpack_require__(283)
+	  , hawk = __webpack_require__(291)
+	  , aws = __webpack_require__(305)
+	  , httpSignature = __webpack_require__(306)
 	  , mime = __webpack_require__(74)
-	  , stringstream = __webpack_require__(320)
-	  , caseless = __webpack_require__(321)
-	  , ForeverAgent = __webpack_require__(322)
-	  , FormData = __webpack_require__(323)
-	  , helpers = __webpack_require__(278)
-	  , cookies = __webpack_require__(269)
-	  , getProxyFromURI = __webpack_require__(328)
-	  , Querystring = __webpack_require__(329).Querystring
-	  , Har = __webpack_require__(334).Har
-	  , Auth = __webpack_require__(363).Auth
-	  , OAuth = __webpack_require__(365).OAuth
-	  , Multipart = __webpack_require__(367).Multipart
-	  , Redirect = __webpack_require__(369).Redirect
-	  , Tunnel = __webpack_require__(370).Tunnel
+	  , stringstream = __webpack_require__(321)
+	  , caseless = __webpack_require__(322)
+	  , ForeverAgent = __webpack_require__(323)
+	  , FormData = __webpack_require__(324)
+	  , helpers = __webpack_require__(279)
+	  , cookies = __webpack_require__(270)
+	  , getProxyFromURI = __webpack_require__(329)
+	  , Querystring = __webpack_require__(330).Querystring
+	  , Har = __webpack_require__(335).Har
+	  , Auth = __webpack_require__(364).Auth
+	  , OAuth = __webpack_require__(366).OAuth
+	  , Multipart = __webpack_require__(368).Multipart
+	  , Redirect = __webpack_require__(370).Redirect
+	  , Tunnel = __webpack_require__(371).Tunnel
 
 	var safeStringify = helpers.safeStringify
 	  , isReadStream = helpers.isReadStream
@@ -43957,16 +43975,16 @@
 
 
 /***/ },
-/* 281 */
+/* 282 */
 /***/ function(module, exports) {
 
 	module.exports = require("https");
 
 /***/ },
-/* 282 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var DuplexStream = __webpack_require__(283)
+	var DuplexStream = __webpack_require__(284)
 	  , util         = __webpack_require__(10)
 
 	function BufferList (callback) {
@@ -44196,14 +44214,14 @@
 
 
 /***/ },
-/* 283 */
+/* 284 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(284)
+	module.exports = __webpack_require__(285)
 
 
 /***/ },
-/* 284 */
+/* 285 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// a duplex stream is just a stream that is both readable and writable.
@@ -44226,16 +44244,16 @@
 	module.exports = Duplex;
 
 	/*<replacement>*/
-	var processNextTick = __webpack_require__(285);
+	var processNextTick = __webpack_require__(286);
 	/*</replacement>*/
 
 	/*<replacement>*/
-	var util = __webpack_require__(151);
+	var util = __webpack_require__(152);
 	util.inherits = __webpack_require__(51);
 	/*</replacement>*/
 
-	var Readable = __webpack_require__(286);
-	var Writable = __webpack_require__(288);
+	var Readable = __webpack_require__(287);
+	var Writable = __webpack_require__(289);
 
 	util.inherits(Duplex, Readable);
 
@@ -44283,7 +44301,7 @@
 	}
 
 /***/ },
-/* 285 */
+/* 286 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -44332,7 +44350,7 @@
 
 
 /***/ },
-/* 286 */
+/* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -44340,11 +44358,11 @@
 	module.exports = Readable;
 
 	/*<replacement>*/
-	var processNextTick = __webpack_require__(285);
+	var processNextTick = __webpack_require__(286);
 	/*</replacement>*/
 
 	/*<replacement>*/
-	var isArray = __webpack_require__(287);
+	var isArray = __webpack_require__(288);
 	/*</replacement>*/
 
 	/*<replacement>*/
@@ -44375,7 +44393,7 @@
 	var Buffer = __webpack_require__(31).Buffer;
 
 	/*<replacement>*/
-	var util = __webpack_require__(151);
+	var util = __webpack_require__(152);
 	util.inherits = __webpack_require__(51);
 	/*</replacement>*/
 
@@ -44395,7 +44413,7 @@
 
 	var Duplex;
 	function ReadableState(options, stream) {
-	  Duplex = Duplex || __webpack_require__(284);
+	  Duplex = Duplex || __webpack_require__(285);
 
 	  options = options || {};
 
@@ -44454,7 +44472,7 @@
 	  this.decoder = null;
 	  this.encoding = null;
 	  if (options.encoding) {
-	    if (!StringDecoder) StringDecoder = __webpack_require__(152).StringDecoder;
+	    if (!StringDecoder) StringDecoder = __webpack_require__(153).StringDecoder;
 	    this.decoder = new StringDecoder(options.encoding);
 	    this.encoding = options.encoding;
 	  }
@@ -44462,7 +44480,7 @@
 
 	var Duplex;
 	function Readable(options) {
-	  Duplex = Duplex || __webpack_require__(284);
+	  Duplex = Duplex || __webpack_require__(285);
 
 	  if (!(this instanceof Readable)) return new Readable(options);
 
@@ -44565,7 +44583,7 @@
 
 	// backwards compatibility.
 	Readable.prototype.setEncoding = function (enc) {
-	  if (!StringDecoder) StringDecoder = __webpack_require__(152).StringDecoder;
+	  if (!StringDecoder) StringDecoder = __webpack_require__(153).StringDecoder;
 	  this._readableState.decoder = new StringDecoder(enc);
 	  this._readableState.encoding = enc;
 	  return this;
@@ -45217,7 +45235,7 @@
 	}
 
 /***/ },
-/* 287 */
+/* 288 */
 /***/ function(module, exports) {
 
 	var toString = {}.toString;
@@ -45228,7 +45246,7 @@
 
 
 /***/ },
-/* 288 */
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// A bit simpler than readable streams.
@@ -45240,7 +45258,7 @@
 	module.exports = Writable;
 
 	/*<replacement>*/
-	var processNextTick = __webpack_require__(285);
+	var processNextTick = __webpack_require__(286);
 	/*</replacement>*/
 
 	/*<replacement>*/
@@ -45254,13 +45272,13 @@
 	Writable.WritableState = WritableState;
 
 	/*<replacement>*/
-	var util = __webpack_require__(151);
+	var util = __webpack_require__(152);
 	util.inherits = __webpack_require__(51);
 	/*</replacement>*/
 
 	/*<replacement>*/
 	var internalUtil = {
-	  deprecate: __webpack_require__(289)
+	  deprecate: __webpack_require__(290)
 	};
 	/*</replacement>*/
 
@@ -45290,7 +45308,7 @@
 
 	var Duplex;
 	function WritableState(options, stream) {
-	  Duplex = Duplex || __webpack_require__(284);
+	  Duplex = Duplex || __webpack_require__(285);
 
 	  options = options || {};
 
@@ -45407,7 +45425,7 @@
 
 	var Duplex;
 	function Writable(options) {
-	  Duplex = Duplex || __webpack_require__(284);
+	  Duplex = Duplex || __webpack_require__(285);
 
 	  // Writable ctor is applied to Duplexes, though they're not
 	  // instanceof Writable, they're instanceof Readable.
@@ -45749,7 +45767,7 @@
 	}
 
 /***/ },
-/* 289 */
+/* 290 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -45761,18 +45779,18 @@
 
 
 /***/ },
-/* 290 */
+/* 291 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Export sub-modules
 
-	exports.error = exports.Error = __webpack_require__(291);
-	exports.sntp = __webpack_require__(294);
+	exports.error = exports.Error = __webpack_require__(292);
+	exports.sntp = __webpack_require__(295);
 
-	exports.server = __webpack_require__(298);
-	exports.client = __webpack_require__(303);
-	exports.crypto = __webpack_require__(300);
-	exports.utils = __webpack_require__(301);
+	exports.server = __webpack_require__(299);
+	exports.client = __webpack_require__(304);
+	exports.crypto = __webpack_require__(301);
+	exports.utils = __webpack_require__(302);
 
 	exports.uri = {
 	    authenticate: exports.server.authenticateBewit,
@@ -45782,13 +45800,13 @@
 
 
 /***/ },
-/* 291 */
+/* 292 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Load modules
 
 	var Http = __webpack_require__(27);
-	var Hoek = __webpack_require__(292);
+	var Hoek = __webpack_require__(293);
 
 
 	// Declare internals
@@ -46106,7 +46124,7 @@
 
 
 /***/ },
-/* 292 */
+/* 293 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Load modules
@@ -46114,7 +46132,7 @@
 	var Crypto = __webpack_require__(56);
 	var Path = __webpack_require__(35);
 	var Util = __webpack_require__(10);
-	var Escape = __webpack_require__(293);
+	var Escape = __webpack_require__(294);
 
 
 	// Declare internals
@@ -47105,7 +47123,7 @@
 
 
 /***/ },
-/* 293 */
+/* 294 */
 /***/ function(module, exports) {
 
 	// Declare internals
@@ -47243,20 +47261,20 @@
 
 
 /***/ },
-/* 294 */
+/* 295 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(295);
+	module.exports = __webpack_require__(296);
 
 /***/ },
-/* 295 */
+/* 296 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Load modules
 
-	var Dgram = __webpack_require__(296);
-	var Dns = __webpack_require__(297);
-	var Hoek = __webpack_require__(292);
+	var Dgram = __webpack_require__(297);
+	var Dns = __webpack_require__(298);
+	var Hoek = __webpack_require__(293);
 
 
 	// Declare internals
@@ -47667,28 +47685,28 @@
 
 
 /***/ },
-/* 296 */
+/* 297 */
 /***/ function(module, exports) {
 
 	module.exports = require("dgram");
 
 /***/ },
-/* 297 */
+/* 298 */
 /***/ function(module, exports) {
 
 	module.exports = require("dns");
 
 /***/ },
-/* 298 */
+/* 299 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Load modules
 
-	var Boom = __webpack_require__(291);
-	var Hoek = __webpack_require__(292);
-	var Cryptiles = __webpack_require__(299);
-	var Crypto = __webpack_require__(300);
-	var Utils = __webpack_require__(301);
+	var Boom = __webpack_require__(292);
+	var Hoek = __webpack_require__(293);
+	var Cryptiles = __webpack_require__(300);
+	var Crypto = __webpack_require__(301);
+	var Utils = __webpack_require__(302);
 
 
 	// Declare internals
@@ -48233,13 +48251,13 @@
 
 
 /***/ },
-/* 299 */
+/* 300 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Load modules
 
 	var Crypto = __webpack_require__(56);
-	var Boom = __webpack_require__(291);
+	var Boom = __webpack_require__(292);
 
 
 	// Declare internals
@@ -48307,14 +48325,14 @@
 
 
 /***/ },
-/* 300 */
+/* 301 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Load modules
 
 	var Crypto = __webpack_require__(56);
 	var Url = __webpack_require__(37);
-	var Utils = __webpack_require__(301);
+	var Utils = __webpack_require__(302);
 
 
 	// Declare internals
@@ -48439,13 +48457,13 @@
 
 
 /***/ },
-/* 301 */
+/* 302 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Load modules
 
-	var Sntp = __webpack_require__(294);
-	var Boom = __webpack_require__(291);
+	var Sntp = __webpack_require__(295);
+	var Boom = __webpack_require__(292);
 
 
 	// Declare internals
@@ -48455,7 +48473,7 @@
 
 	exports.version = function () {
 
-	    return __webpack_require__(302).version;
+	    return __webpack_require__(303).version;
 	};
 
 
@@ -48629,7 +48647,7 @@
 
 
 /***/ },
-/* 302 */
+/* 303 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -48734,16 +48752,16 @@
 	};
 
 /***/ },
-/* 303 */
+/* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Load modules
 
 	var Url = __webpack_require__(37);
-	var Hoek = __webpack_require__(292);
-	var Cryptiles = __webpack_require__(299);
-	var Crypto = __webpack_require__(300);
-	var Utils = __webpack_require__(301);
+	var Hoek = __webpack_require__(293);
+	var Cryptiles = __webpack_require__(300);
+	var Crypto = __webpack_require__(301);
+	var Utils = __webpack_require__(302);
 
 
 	// Declare internals
@@ -49109,7 +49127,7 @@
 
 
 /***/ },
-/* 304 */
+/* 305 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -49327,15 +49345,15 @@
 
 
 /***/ },
-/* 305 */
+/* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2015 Joyent, Inc.
 
-	var parser = __webpack_require__(306);
-	var signer = __webpack_require__(308);
-	var verify = __webpack_require__(309);
-	var util = __webpack_require__(310);
+	var parser = __webpack_require__(307);
+	var signer = __webpack_require__(309);
+	var verify = __webpack_require__(310);
+	var util = __webpack_require__(311);
 
 
 
@@ -49360,12 +49378,12 @@
 
 
 /***/ },
-/* 306 */
+/* 307 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2012 Joyent, Inc.  All rights reserved.
 
-	var assert = __webpack_require__(307);
+	var assert = __webpack_require__(308);
 	var util = __webpack_require__(10);
 
 
@@ -49670,12 +49688,12 @@
 
 
 /***/ },
-/* 307 */
+/* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright (c) 2012, Mark Cavage. All rights reserved.
 
-	var assert = __webpack_require__(227);
+	var assert = __webpack_require__(228);
 	var Stream = __webpack_require__(53).Stream;
 	var util = __webpack_require__(10);
 
@@ -49921,12 +49939,12 @@
 
 
 /***/ },
-/* 308 */
+/* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2012 Joyent, Inc.  All rights reserved.
 
-	var assert = __webpack_require__(307);
+	var assert = __webpack_require__(308);
 	var crypto = __webpack_require__(56);
 	var http = __webpack_require__(27);
 
@@ -50105,12 +50123,12 @@
 
 
 /***/ },
-/* 309 */
+/* 310 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2015 Joyent, Inc.
 
-	var assert = __webpack_require__(307);
+	var assert = __webpack_require__(308);
 	var crypto = __webpack_require__(56);
 
 
@@ -50167,16 +50185,16 @@
 
 
 /***/ },
-/* 310 */
+/* 311 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2012 Joyent, Inc.  All rights reserved.
 
-	var assert = __webpack_require__(307);
+	var assert = __webpack_require__(308);
 	var crypto = __webpack_require__(56);
 
-	var asn1 = __webpack_require__(311);
-	var ctype = __webpack_require__(317);
+	var asn1 = __webpack_require__(312);
+	var ctype = __webpack_require__(318);
 
 
 
@@ -50479,7 +50497,7 @@
 
 
 /***/ },
-/* 311 */
+/* 312 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
@@ -50487,7 +50505,7 @@
 	// If you have no idea what ASN.1 or BER is, see this:
 	// ftp://ftp.rsa.com/pub/pkcs/ascii/layman.asc
 
-	var Ber = __webpack_require__(312);
+	var Ber = __webpack_require__(313);
 
 
 
@@ -50505,16 +50523,16 @@
 
 
 /***/ },
-/* 312 */
+/* 313 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
 
-	var errors = __webpack_require__(313);
-	var types = __webpack_require__(314);
+	var errors = __webpack_require__(314);
+	var types = __webpack_require__(315);
 
-	var Reader = __webpack_require__(315);
-	var Writer = __webpack_require__(316);
+	var Reader = __webpack_require__(316);
+	var Writer = __webpack_require__(317);
 
 
 	///--- Exports
@@ -50538,7 +50556,7 @@
 
 
 /***/ },
-/* 313 */
+/* 314 */
 /***/ function(module, exports) {
 
 	// Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
@@ -50557,7 +50575,7 @@
 
 
 /***/ },
-/* 314 */
+/* 315 */
 /***/ function(module, exports) {
 
 	// Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
@@ -50599,15 +50617,15 @@
 
 
 /***/ },
-/* 315 */
+/* 316 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
 
-	var assert = __webpack_require__(227);
+	var assert = __webpack_require__(228);
 
-	var ASN1 = __webpack_require__(314);
-	var errors = __webpack_require__(313);
+	var ASN1 = __webpack_require__(315);
+	var errors = __webpack_require__(314);
 
 
 	///--- Globals
@@ -50872,14 +50890,14 @@
 
 
 /***/ },
-/* 316 */
+/* 317 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
 
-	var assert = __webpack_require__(227);
-	var ASN1 = __webpack_require__(314);
-	var errors = __webpack_require__(313);
+	var assert = __webpack_require__(228);
+	var ASN1 = __webpack_require__(315);
+	var errors = __webpack_require__(314);
 
 
 	///--- Globals
@@ -51195,7 +51213,7 @@
 
 
 /***/ },
-/* 317 */
+/* 318 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -51235,9 +51253,9 @@
 	 *
 	 */
 
-	var mod_ctf = __webpack_require__(318);
-	var mod_ctio = __webpack_require__(319);
-	var mod_assert = __webpack_require__(227);
+	var mod_ctf = __webpack_require__(319);
+	var mod_ctio = __webpack_require__(320);
+	var mod_assert = __webpack_require__(228);
 
 	/*
 	 * This is the set of basic types that we support.
@@ -52145,7 +52163,7 @@
 
 
 /***/ },
-/* 318 */
+/* 319 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -52158,7 +52176,7 @@
 	 * We have to be careful here that we don't end up using a name that is already
 	 * a built in type.
 	 */
-	var mod_assert = __webpack_require__(227);
+	var mod_assert = __webpack_require__(228);
 	var ASSERT = mod_assert.ok;
 
 	var ctf_versions = [ '1.0' ];
@@ -52396,7 +52414,7 @@
 
 
 /***/ },
-/* 319 */
+/* 320 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -52441,7 +52459,7 @@
 	 * Big Endian: MSB -> First byte
 	 * Little Endian: MSB->Last byte
 	 */
-	var mod_assert = __webpack_require__(227);
+	var mod_assert = __webpack_require__(228);
 
 	/*
 	 * An 8 bit unsigned integer involves doing no significant work.
@@ -53887,12 +53905,12 @@
 
 
 /***/ },
-/* 320 */
+/* 321 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var util = __webpack_require__(10)
 	var Stream = __webpack_require__(53)
-	var StringDecoder = __webpack_require__(194).StringDecoder
+	var StringDecoder = __webpack_require__(195).StringDecoder
 
 	module.exports = StringStream
 	module.exports.AlignedStringDecoder = AlignedStringDecoder
@@ -53995,7 +54013,7 @@
 
 
 /***/ },
-/* 321 */
+/* 322 */
 /***/ function(module, exports) {
 
 	function Caseless (dict) {
@@ -54067,7 +54085,7 @@
 
 
 /***/ },
-/* 322 */
+/* 323 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = ForeverAgent
@@ -54076,8 +54094,8 @@
 	var util = __webpack_require__(10)
 	  , Agent = __webpack_require__(27).Agent
 	  , net = __webpack_require__(14)
-	  , tls = __webpack_require__(103)
-	  , AgentSSL = __webpack_require__(281).Agent
+	  , tls = __webpack_require__(104)
+	  , AgentSSL = __webpack_require__(282).Agent
 	  
 	function getConnectionName(host, port) {  
 	  var name = ''
@@ -54211,19 +54229,19 @@
 
 
 /***/ },
-/* 323 */
+/* 324 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var CombinedStream = __webpack_require__(324);
+	var CombinedStream = __webpack_require__(325);
 	var util = __webpack_require__(10);
 	var path = __webpack_require__(35);
 	var http = __webpack_require__(27);
-	var https = __webpack_require__(281);
+	var https = __webpack_require__(282);
 	var parseUrl = __webpack_require__(37).parse;
 	var fs = __webpack_require__(13);
 	var mime = __webpack_require__(74);
-	var async = __webpack_require__(326);
-	var populate = __webpack_require__(327);
+	var async = __webpack_require__(327);
+	var populate = __webpack_require__(328);
 
 	// Public API
 	module.exports = FormData;
@@ -54628,12 +54646,12 @@
 
 
 /***/ },
-/* 324 */
+/* 325 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var util = __webpack_require__(10);
 	var Stream = __webpack_require__(53).Stream;
-	var DelayedStream = __webpack_require__(325);
+	var DelayedStream = __webpack_require__(326);
 
 	module.exports = CombinedStream;
 	function CombinedStream() {
@@ -54822,7 +54840,7 @@
 
 
 /***/ },
-/* 325 */
+/* 326 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Stream = __webpack_require__(53).Stream;
@@ -54935,7 +54953,7 @@
 
 
 /***/ },
-/* 326 */
+/* 327 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -56206,7 +56224,7 @@
 
 
 /***/ },
-/* 327 */
+/* 328 */
 /***/ function(module, exports) {
 
 	// populates missing values
@@ -56221,7 +56239,7 @@
 
 
 /***/ },
-/* 328 */
+/* 329 */
 /***/ function(module, exports) {
 
 	'use strict'
@@ -56306,12 +56324,12 @@
 
 
 /***/ },
-/* 329 */
+/* 330 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict'
 
-	var qs = __webpack_require__(330)
+	var qs = __webpack_require__(331)
 	  , querystring = __webpack_require__(65)
 
 
@@ -56363,13 +56381,13 @@
 
 
 /***/ },
-/* 330 */
+/* 331 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Load modules
 
-	var Stringify = __webpack_require__(331);
-	var Parse = __webpack_require__(333);
+	var Stringify = __webpack_require__(332);
+	var Parse = __webpack_require__(334);
 
 
 	// Declare internals
@@ -56384,12 +56402,12 @@
 
 
 /***/ },
-/* 331 */
+/* 332 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Load modules
 
-	var Utils = __webpack_require__(332);
+	var Utils = __webpack_require__(333);
 
 
 	// Declare internals
@@ -56544,7 +56562,7 @@
 
 
 /***/ },
-/* 332 */
+/* 333 */
 /***/ function(module, exports) {
 
 	// Load modules
@@ -56740,12 +56758,12 @@
 
 
 /***/ },
-/* 333 */
+/* 334 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Load modules
 
-	var Utils = __webpack_require__(332);
+	var Utils = __webpack_require__(333);
 
 
 	// Declare internals
@@ -56928,14 +56946,14 @@
 
 
 /***/ },
-/* 334 */
+/* 335 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict'
 
 	var fs = __webpack_require__(13)
 	var qs = __webpack_require__(65)
-	var validate = __webpack_require__(335)
+	var validate = __webpack_require__(336)
 	var util = __webpack_require__(10)
 
 	function Har (request) {
@@ -57139,14 +57157,14 @@
 
 
 /***/ },
-/* 335 */
+/* 336 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict'
 
-	var Promise = __webpack_require__(336)
-	var runner = __webpack_require__(338)
-	var schemas = __webpack_require__(339)
+	var Promise = __webpack_require__(337)
+	var runner = __webpack_require__(339)
+	var schemas = __webpack_require__(340)
 
 	var promisify = function (schema) {
 	  return function (data) {
@@ -57167,16 +57185,16 @@
 
 
 /***/ },
-/* 336 */
+/* 337 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = typeof Promise === 'function' ? Promise : __webpack_require__(337);
+	module.exports = typeof Promise === 'function' ? Promise : __webpack_require__(338);
 
 
 /***/ },
-/* 337 */
+/* 338 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -57474,14 +57492,14 @@
 
 
 /***/ },
-/* 338 */
+/* 339 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict'
 
-	var schemas = __webpack_require__(339)
-	var ValidationError = __webpack_require__(355)
-	var validator = __webpack_require__(356)
+	var schemas = __webpack_require__(340)
+	var ValidationError = __webpack_require__(356)
+	var validator = __webpack_require__(357)
 
 	module.exports = function (schema, data, cb) {
 	  // default value
@@ -57509,27 +57527,27 @@
 
 
 /***/ },
-/* 339 */
+/* 340 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict'
 
 	var schemas = {
-	  cache: __webpack_require__(340),
-	  cacheEntry: __webpack_require__(341),
-	  content: __webpack_require__(342),
-	  cookie: __webpack_require__(343),
-	  creator: __webpack_require__(344),
-	  entry: __webpack_require__(345),
-	  har: __webpack_require__(346),
-	  log: __webpack_require__(347),
-	  page: __webpack_require__(348),
-	  pageTimings: __webpack_require__(349),
-	  postData: __webpack_require__(350),
-	  record: __webpack_require__(351),
-	  request: __webpack_require__(352),
-	  response: __webpack_require__(353),
-	  timings: __webpack_require__(354)
+	  cache: __webpack_require__(341),
+	  cacheEntry: __webpack_require__(342),
+	  content: __webpack_require__(343),
+	  cookie: __webpack_require__(344),
+	  creator: __webpack_require__(345),
+	  entry: __webpack_require__(346),
+	  har: __webpack_require__(347),
+	  log: __webpack_require__(348),
+	  page: __webpack_require__(349),
+	  pageTimings: __webpack_require__(350),
+	  postData: __webpack_require__(351),
+	  record: __webpack_require__(352),
+	  request: __webpack_require__(353),
+	  response: __webpack_require__(354),
+	  timings: __webpack_require__(355)
 	}
 
 	// is-my-json-valid does not provide meaningful error messages for external schemas
@@ -57564,7 +57582,7 @@
 
 
 /***/ },
-/* 340 */
+/* 341 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -57582,7 +57600,7 @@
 	};
 
 /***/ },
-/* 341 */
+/* 342 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -57621,7 +57639,7 @@
 	};
 
 /***/ },
-/* 342 */
+/* 343 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -57653,7 +57671,7 @@
 	};
 
 /***/ },
-/* 343 */
+/* 344 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -57695,7 +57713,7 @@
 	};
 
 /***/ },
-/* 344 */
+/* 345 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -57718,7 +57736,7 @@
 	};
 
 /***/ },
-/* 345 */
+/* 346 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -57778,7 +57796,7 @@
 	};
 
 /***/ },
-/* 346 */
+/* 347 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -57794,7 +57812,7 @@
 	};
 
 /***/ },
-/* 347 */
+/* 348 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -57833,7 +57851,7 @@
 	};
 
 /***/ },
-/* 348 */
+/* 349 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -57868,7 +57886,7 @@
 	};
 
 /***/ },
-/* 349 */
+/* 350 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -57889,7 +57907,7 @@
 	};
 
 /***/ },
-/* 350 */
+/* 351 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -57935,7 +57953,7 @@
 	};
 
 /***/ },
-/* 351 */
+/* 352 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -57958,7 +57976,7 @@
 	};
 
 /***/ },
-/* 352 */
+/* 353 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -58018,7 +58036,7 @@
 	};
 
 /***/ },
-/* 353 */
+/* 354 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -58075,7 +58093,7 @@
 	};
 
 /***/ },
-/* 354 */
+/* 355 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -58120,7 +58138,7 @@
 	};
 
 /***/ },
-/* 355 */
+/* 356 */
 /***/ function(module, exports) {
 
 	'use strict'
@@ -58136,14 +58154,14 @@
 
 
 /***/ },
-/* 356 */
+/* 357 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var genobj = __webpack_require__(357)
-	var genfun = __webpack_require__(359)
-	var jsonpointer = __webpack_require__(360)
-	var xtend = __webpack_require__(361)
-	var formats = __webpack_require__(362)
+	var genobj = __webpack_require__(358)
+	var genfun = __webpack_require__(360)
+	var jsonpointer = __webpack_require__(361)
+	var xtend = __webpack_require__(362)
+	var formats = __webpack_require__(363)
 
 	var get = function(obj, additionalSchemas, ptr) {
 
@@ -58726,10 +58744,10 @@
 
 
 /***/ },
-/* 357 */
+/* 358 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isProperty = __webpack_require__(358)
+	var isProperty = __webpack_require__(359)
 
 	var gen = function(obj, prop) {
 	  return isProperty(prop) ? obj+'.'+prop : obj+'['+JSON.stringify(prop)+']'
@@ -58744,7 +58762,7 @@
 
 
 /***/ },
-/* 358 */
+/* 359 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -58754,7 +58772,7 @@
 	module.exports = isProperty
 
 /***/ },
-/* 359 */
+/* 360 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var util = __webpack_require__(10)
@@ -58821,7 +58839,7 @@
 
 
 /***/ },
-/* 360 */
+/* 361 */
 /***/ function(module, exports) {
 
 	var untilde = function(str) {
@@ -58903,7 +58921,7 @@
 
 
 /***/ },
-/* 361 */
+/* 362 */
 /***/ function(module, exports) {
 
 	module.exports = extend
@@ -58928,7 +58946,7 @@
 
 
 /***/ },
-/* 362 */
+/* 363 */
 /***/ function(module, exports) {
 
 	exports['date-time'] = /^\d{4}-(?:0[0-9]{1}|1[0-2]{1})-[0-9]{2}[tT ]\d{2}:\d{2}:\d{2}(\.\d+)?([zZ]|[+-]\d{2}:\d{2})$/
@@ -58948,14 +58966,14 @@
 
 
 /***/ },
-/* 363 */
+/* 364 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict'
 
-	var caseless = __webpack_require__(321)
-	  , uuid = __webpack_require__(364)
-	  , helpers = __webpack_require__(278)
+	var caseless = __webpack_require__(322)
+	  , uuid = __webpack_require__(365)
+	  , helpers = __webpack_require__(279)
 
 	var md5 = helpers.md5
 	  , toBase64 = helpers.toBase64
@@ -59122,7 +59140,7 @@
 
 
 /***/ },
-/* 364 */
+/* 365 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;//     uuid.js
@@ -59400,16 +59418,16 @@
 
 
 /***/ },
-/* 365 */
+/* 366 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict'
 
 	var url = __webpack_require__(37)
-	  , qs = __webpack_require__(330)
-	  , caseless = __webpack_require__(321)
-	  , uuid = __webpack_require__(364)
-	  , oauth = __webpack_require__(366)
+	  , qs = __webpack_require__(331)
+	  , caseless = __webpack_require__(322)
+	  , uuid = __webpack_require__(365)
+	  , oauth = __webpack_require__(367)
 	  , crypto = __webpack_require__(56)
 
 
@@ -59553,7 +59571,7 @@
 
 
 /***/ },
-/* 366 */
+/* 367 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var crypto = __webpack_require__(56)
@@ -59695,14 +59713,14 @@
 
 
 /***/ },
-/* 367 */
+/* 368 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict'
 
-	var uuid = __webpack_require__(364)
-	  , CombinedStream = __webpack_require__(324)
-	  , isstream = __webpack_require__(368)
+	var uuid = __webpack_require__(365)
+	  , CombinedStream = __webpack_require__(325)
+	  , isstream = __webpack_require__(369)
 
 
 	function Multipart (request) {
@@ -59810,7 +59828,7 @@
 
 
 /***/ },
-/* 368 */
+/* 369 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var stream = __webpack_require__(53)
@@ -59843,7 +59861,7 @@
 
 
 /***/ },
-/* 369 */
+/* 370 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict'
@@ -60003,13 +60021,13 @@
 
 
 /***/ },
-/* 370 */
+/* 371 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict'
 
 	var url = __webpack_require__(37)
-	  , tunnel = __webpack_require__(371)
+	  , tunnel = __webpack_require__(372)
 
 	var defaultProxyHeaderWhiteList = [
 	  'accept',
@@ -60192,17 +60210,17 @@
 
 
 /***/ },
-/* 371 */
+/* 372 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict'
 
 	var net = __webpack_require__(14)
-	  , tls = __webpack_require__(103)
+	  , tls = __webpack_require__(104)
 	  , http = __webpack_require__(27)
-	  , https = __webpack_require__(281)
+	  , https = __webpack_require__(282)
 	  , events = __webpack_require__(4)
-	  , assert = __webpack_require__(227)
+	  , assert = __webpack_require__(228)
 	  , util = __webpack_require__(10)
 	  ;
 
@@ -60441,13 +60459,13 @@
 
 
 /***/ },
-/* 372 */
+/* 373 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	// Imports
 	var express = __webpack_require__(2);
-	var request = __webpack_require__(267);
+	var request = __webpack_require__(268);
 	var config_ts_1 = __webpack_require__(85);
 	// Define router
 	exports.router = express.Router();
@@ -60472,7 +60490,7 @@
 
 
 /***/ },
-/* 373 */
+/* 374 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -60492,7 +60510,7 @@
 
 
 /***/ },
-/* 374 */
+/* 375 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -60509,6 +60527,27 @@
 	        3. Response request
 	    */
 	    res.redirect(config_ts_1.config.servers.statics.url + req.originalUrl);
+	});
+
+
+/***/ },
+/* 376 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	// Imports
+	var express = __webpack_require__(2);
+	var config_ts_1 = __webpack_require__(85);
+	// Define router
+	exports.router = express.Router();
+	// Setup routes
+	exports.router.all('*', function (req, res, next) {
+	    /**
+	        1. Process api request
+	        2. Request api
+	        3. Response request
+	    */
+	    res.redirect(config_ts_1.config.servers.webapps.url + req.originalUrl);
 	});
 
 

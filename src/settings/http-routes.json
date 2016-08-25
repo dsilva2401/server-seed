@@ -1,6 +1,5 @@
 {
 
-
 	"auth": {
 		"path": "/auth",
 		"services": {
@@ -12,7 +11,6 @@
 		}
 	},
 
-
 	"api": {
 		"path": "/api",
 		"services": {}
@@ -21,18 +19,17 @@
 
 	"statics": {
 		"path": "/statics",
-		"services": {},
-		"webapps": {
-			"path": "/webapps",
-			"dir": "src/setup/statics/webapps"
-		}
+		"services": {}
 	},
 
+	"webapps": {
+		"path": "/webapps",
+		"services": {}
+	},
 
 	"views": {
 		"path": "/",
 		"services": {}
 	}
-
 
 }

@@ -47,7 +47,7 @@
 
 	"use strict";
 	// Imports
-	var server_ts_1 = __webpack_require__(375);
+	var server_ts_1 = __webpack_require__(377);
 	// Start server
 	server_ts_1.startServer();
 
@@ -24529,7 +24529,7 @@
 	"use strict";
 	// Imports
 	var path = __webpack_require__(35);
-	exports.config = { servers: null, httpRoutes: null };
+	exports.config = { servers: null, httpRoutes: null, webapps: null };
 	/**
 	    === Servers configuration ===
 	*/
@@ -24556,6 +24556,11 @@
 	exports.config.servers.auth.domain = 'localhost';
 	exports.config.servers.auth.port = 5000;
 	exports.config.servers.auth.url = 'http://' + exports.config.servers.auth.domain + ':' + exports.config.servers.auth.port;
+	// Webapps Server
+	exports.config.servers.webapps = {};
+	exports.config.servers.webapps.domain = 'localhost';
+	exports.config.servers.webapps.port = 8081;
+	exports.config.servers.webapps.url = 'http://' + exports.config.servers.webapps.domain + ':' + exports.config.servers.webapps.port;
 	// Statics Server
 	exports.config.servers.statics = {};
 	exports.config.servers.statics.domain = 'localhost';
@@ -24574,6 +24579,11 @@
 	        exports.config.httpRoutes[routerKey].services[serviceKey].url = buffRouter.path + buffService.path;
 	    });
 	});
+	/**
+	    === Webapp ===
+	*/
+	// Import configutation
+	exports.config.webapps = __webpack_require__(87);
 
 
 /***/ },
@@ -24605,11 +24615,11 @@
 		},
 		"statics": {
 			"path": "/statics",
-			"services": {},
-			"webapps": {
-				"path": "/webapps",
-				"dir": "src/setup/statics/webapps"
-			}
+			"services": {}
+		},
+		"webapps": {
+			"path": "/webapps",
+			"services": {}
 		},
 		"views": {
 			"path": "/",
@@ -24619,7 +24629,14 @@
 
 /***/ },
 
-/***/ 375:
+/***/ 87:
+/***/ function(module, exports) {
+
+	module.exports = {};
+
+/***/ },
+
+/***/ 377:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -24631,8 +24648,8 @@
 	var serverConfig = config_ts_1.config.servers.statics;
 	exports.server = express();
 	// Setup statics
-	var webappsPath = path.join(process.cwd(), config_ts_1.config.httpRoutes.statics.webapps.dir);
-	exports.server.use(config_ts_1.config.httpRoutes.statics.path + config_ts_1.config.httpRoutes.statics.webapps.path, express.static(webappsPath));
+	var filesPath = path.join(process.cwd(), 'src/setup/statics/files');
+	exports.server.use(config_ts_1.config.httpRoutes.statics.path, express.static(filesPath));
 	// Start function
 	function startServer() {
 	    exports.server.listen(serverConfig.port, function () {

@@ -44,3 +44,5 @@ mongodata
 
 # Tests project source copy
 test/project-src
+
+**/node_modules

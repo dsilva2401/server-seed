@@ -9,8 +9,8 @@
 	export let server = express();
 
 // Setup statics
-	let webappsPath = path.join(process.cwd(), config.httpRoutes.statics.webapps.dir);
-	server.use(config.httpRoutes.statics.path+config.httpRoutes.statics.webapps.path, express.static(webappsPath));
+	let filesPath = path.join(process.cwd(), 'src/setup/statics/files');
+	server.use(config.httpRoutes.statics.path, express.static(filesPath));
 
 // Start function
 	export function startServer () {

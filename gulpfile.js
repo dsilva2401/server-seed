@@ -11,7 +11,7 @@
 	var fs = require('fs-extra');
 	var webpack = require('gulp-webpack');
 	var httpRoutes = require('./src/settings/http-routes.json');
-	var webapps = httpRoutes.statics.webapps;
+	var webapps = require('./src/settings/webapps.json');
 
 // Tasks
 
@@ -71,17 +71,21 @@
 		gulp.task('start:statics', function () {
 			require('./dist/statics.bundle.js');
 		});
+		gulp.task('start:webapps', function () {
+			require('./dist/webapps.bundle.js');
+		});
 
 	// Serve app
 		gulp.task('serve', function () {
 			runSequence([
-				'webapps:build',
+				// 'webapps:build',
 				'server:build',
 				'start:database',
 				'start:proxy',
 				'start:api',
 				'start:auth',
-				'start:statics'
+				'start:statics',
+				'start:webapps'
 			]);
 		});
 
@@ -100,18 +104,25 @@
 		});
 
 	// Build webapps
-		var webappsEntries = fs.readdirSync(path.join(__dirname, webapps.dir));
+		var webappsDir = 'src/setup/webapps/src';
+		var webappsEntries = fs.readdirSync(path.join(__dirname, webappsDir));
 		webappsEntries = webappsEntries.filter(function (entry) {
-			if (entry == '.DS_Store') return;
+			let ignore = [
+				'.DS_Store',
+				'ang'
+			];
+			for (var i=0; i<ignore.length; i++) {
+				if (ignore[i] == entry) return;
+			}
 			return entry;
 		})
 		webappsEntries.forEach(function (entryName) {
-			var entryPath = path.join(__dirname, webapps.dir, entryName);
+			var entryPath = path.join(__dirname, webappsDir, entryName);
 			gulp.task('webapp['+entryName+']:build', function () {
 				var webpackData = require( path.join(entryPath, 'webpack.config.js') );
 				var webappMainEntry = path.join(entryPath, webpackData.entry);
-				var webappOutputPath = path.join(webapps.dir, entryName);
-				if (webpackData.output.dir) webappOutputPath = path.join(webappOutputPath, webpackData.output.dir);
+				var webappOutputPath = path.join(webappsDir, entryName);
+				// if (webpackData.output.dir) webappOutputPath = path.join(webappOutputPath, webpackData.output.dir);
 				return gulp.src(webappMainEntry)
 					.pipe( webpack(webpackData) )
 					.pipe(gulp.dest(webappOutputPath));
@@ -130,7 +141,7 @@
 				'tests:build',
 				'docs:build',
 				'server:build',
-				'webapps:build'
+				// 'webapps:build'
 			]);
 		});
 
@@ -141,4 +152,14 @@
 
 		gulp.task('docs:show', function () {
 			open( path.join(__dirname, 'wiki/index.html') );
+		});
+	
+	// New webapp
+		gulp.task('webapps:new', function (name) {
+			if (!name) return;
+			fs.copy(
+				path.join(__dirname, 'src/setup/webapps/src/.seed'),
+				path.join(__dirname, 'src/setup/webapps/src/'+name)	
+			);
+			console.log('Webapp created..');
 		});
