@@ -66,7 +66,7 @@
 			require('./dist/auth.bundle.js');
 		});
 		gulp.task('start:database', function () {
-			require('./dist/database.bundle.js');
+			//require('./dist/database.bundle.js');
 		});
 		gulp.task('start:statics', function () {
 			require('./dist/statics.bundle.js');

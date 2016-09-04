@@ -40017,6 +40017,7 @@
 	var config_ts_1 = __webpack_require__(85);
 	var bodyParser = __webpack_require__(185);
 	var cookieParser = __webpack_require__(217);
+	var morgan = __webpack_require__(377);
 	// Server setup
 	var serverConfig = config_ts_1.config.servers.proxy;
 	exports.server = express();
@@ -40024,6 +40025,7 @@
 	exports.server.use(bodyParser.urlencoded({ extended: false }));
 	exports.server.use(bodyParser.json());
 	exports.server.use(cookieParser());
+	exports.server.use(morgan('dev'));
 	index_ts_1.setupRouters(exports.server);
 	// Start function
 	function startServer() {
@@ -60549,6 +60551,726 @@
 	    */
 	    res.redirect(config_ts_1.config.servers.webapps.url + req.originalUrl);
 	});
+
+
+/***/ },
+/* 377 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*!
+	 * morgan
+	 * Copyright(c) 2010 Sencha Inc.
+	 * Copyright(c) 2011 TJ Holowaychuk
+	 * Copyright(c) 2014 Jonathan Ong
+	 * Copyright(c) 2014-2015 Douglas Christopher Wilson
+	 * MIT Licensed
+	 */
+
+	'use strict'
+
+	/**
+	 * Module exports.
+	 * @public
+	 */
+
+	module.exports = morgan
+	module.exports.compile = compile
+	module.exports.format = format
+	module.exports.token = token
+
+	/**
+	 * Module dependencies.
+	 * @private
+	 */
+
+	var auth = __webpack_require__(378)
+	var debug = __webpack_require__(8)('morgan')
+	var deprecate = __webpack_require__(29)('morgan')
+	var onFinished = __webpack_require__(16)
+	var onHeaders = __webpack_require__(379)
+
+	/**
+	 * Array of CLF month names.
+	 * @private
+	 */
+
+	var clfmonth = [
+	  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+	  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+	]
+
+	/**
+	 * Default log buffer duration.
+	 * @private
+	 */
+
+	var defaultBufferDuration = 1000;
+
+	/**
+	 * Create a logger middleware.
+	 *
+	 * @public
+	 * @param {String|Function} format
+	 * @param {Object} [options]
+	 * @return {Function} middleware
+	 */
+
+	function morgan(format, options) {
+	  var fmt = format
+	  var opts = options || {}
+
+	  if (format && typeof format === 'object') {
+	    opts = format
+	    fmt = opts.format || 'default'
+
+	    // smart deprecation message
+	    deprecate('morgan(options): use morgan(' + (typeof fmt === 'string' ? JSON.stringify(fmt) : 'format') + ', options) instead')
+	  }
+
+	  if (fmt === undefined) {
+	    deprecate('undefined format: specify a format')
+	  }
+
+	  // output on request instead of response
+	  var immediate = opts.immediate
+
+	  // check if log entry should be skipped
+	  var skip = opts.skip || false
+
+	  // format function
+	  var formatLine = typeof fmt !== 'function'
+	    ? getFormatFunction(fmt)
+	    : fmt
+
+	  // stream
+	  var buffer = opts.buffer
+	  var stream = opts.stream || process.stdout
+
+	  // buffering support
+	  if (buffer) {
+	    deprecate('buffer option')
+
+	    // flush interval
+	    var interval = typeof buffer !== 'number'
+	      ? defaultBufferDuration
+	      : buffer
+
+	    // swap the stream
+	    stream = createBufferStream(stream, interval)
+	  }
+
+	  return function logger(req, res, next) {
+	    // request data
+	    req._startAt = undefined
+	    req._startTime = undefined
+	    req._remoteAddress = getip(req)
+
+	    // response data
+	    res._startAt = undefined
+	    res._startTime = undefined
+
+	    // record request start
+	    recordStartTime.call(req)
+
+	    function logRequest() {
+	      if (skip !== false && skip(req, res)) {
+	        debug('skip request')
+	        return
+	      }
+
+	      var line = formatLine(morgan, req, res)
+
+	      if (null == line) {
+	        debug('skip line')
+	        return
+	      }
+
+	      debug('log request')
+	      stream.write(line + '\n')
+	    };
+
+	    if (immediate) {
+	      // immediate log
+	      logRequest()
+	    } else {
+	      // record response start
+	      onHeaders(res, recordStartTime)
+
+	      // log when response finished
+	      onFinished(res, logRequest)
+	    }
+
+	    next();
+	  };
+	}
+
+	/**
+	 * Apache combined log format.
+	 */
+
+	morgan.format('combined', ':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"')
+
+	/**
+	 * Apache common log format.
+	 */
+
+	morgan.format('common', ':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length]')
+
+	/**
+	 * Default format.
+	 */
+
+	morgan.format('default', ':remote-addr - :remote-user [:date] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"')
+	deprecate.property(morgan, 'default', 'default format: use combined format')
+
+	/**
+	 * Short format.
+	 */
+
+	morgan.format('short', ':remote-addr :remote-user :method :url HTTP/:http-version :status :res[content-length] - :response-time ms')
+
+	/**
+	 * Tiny format.
+	 */
+
+	morgan.format('tiny', ':method :url :status :res[content-length] - :response-time ms')
+
+	/**
+	 * dev (colored)
+	 */
+
+	morgan.format('dev', function developmentFormatLine(tokens, req, res) {
+	  // get the status code if response written
+	  var status = res._header
+	    ? res.statusCode
+	    : undefined
+
+	  // get status color
+	  var color = status >= 500 ? 31 // red
+	    : status >= 400 ? 33 // yellow
+	    : status >= 300 ? 36 // cyan
+	    : status >= 200 ? 32 // green
+	    : 0 // no color
+
+	  // get colored function
+	  var fn = developmentFormatLine[color]
+
+	  if (!fn) {
+	    // compile
+	    fn = developmentFormatLine[color] = compile('\x1b[0m:method :url \x1b['
+	      + color + 'm:status \x1b[0m:response-time ms - :res[content-length]\x1b[0m')
+	  }
+
+	  return fn(tokens, req, res)
+	})
+
+	/**
+	 * request url
+	 */
+
+	morgan.token('url', function getUrlToken(req) {
+	  return req.originalUrl || req.url
+	})
+
+	/**
+	 * request method
+	 */
+
+	morgan.token('method', function getMethodToken(req) {
+	  return req.method;
+	});
+
+	/**
+	 * response time in milliseconds
+	 */
+
+	morgan.token('response-time', function getResponseTimeToken(req, res, digits) {
+	  if (!req._startAt || !res._startAt) {
+	    // missing request and/or response start time
+	    return
+	  }
+
+	  // calculate diff
+	  var ms = (res._startAt[0] - req._startAt[0]) * 1e3
+	    + (res._startAt[1] - req._startAt[1]) * 1e-6
+
+	  // return truncated value
+	  return ms.toFixed(digits === undefined ? 3 : digits)
+	})
+
+	/**
+	 * current date
+	 */
+
+	morgan.token('date', function getDateToken(req, res, format) {
+	  var date = new Date()
+
+	  switch (format || 'web') {
+	    case 'clf':
+	      return clfdate(date)
+	    case 'iso':
+	      return date.toISOString()
+	    case 'web':
+	      return date.toUTCString()
+	  }
+	});
+
+	/**
+	 * response status code
+	 */
+
+	morgan.token('status', function getStatusToken(req, res) {
+	  return res._header
+	    ? String(res.statusCode)
+	    : undefined
+	})
+
+	/**
+	 * normalized referrer
+	 */
+
+	morgan.token('referrer', function getReferrerToken(req) {
+	  return req.headers['referer'] || req.headers['referrer'];
+	});
+
+	/**
+	 * remote address
+	 */
+
+	morgan.token('remote-addr', getip)
+
+	/**
+	 * remote user
+	 */
+
+	morgan.token('remote-user', function getRemoteUserToken(req) {
+	  // parse basic credentials
+	  var credentials = auth(req)
+
+	  // return username
+	  return credentials
+	    ? credentials.name
+	    : undefined
+	})
+
+	/**
+	 * HTTP version
+	 */
+
+	morgan.token('http-version', function getHttpVersionToken(req) {
+	  return req.httpVersionMajor + '.' + req.httpVersionMinor
+	})
+
+	/**
+	 * UA string
+	 */
+
+	morgan.token('user-agent', function getUserAgentToken(req) {
+	  return req.headers['user-agent'];
+	});
+
+	/**
+	 * request header
+	 */
+
+	morgan.token('req', function getRequestToken(req, res, field) {
+	  // get header
+	  var header = req.headers[field.toLowerCase()]
+
+	  return Array.isArray(header)
+	    ? header.join(', ')
+	    : header
+	})
+
+	/**
+	 * response header
+	 */
+
+	morgan.token('res', function getResponseTime(req, res, field) {
+	  if (!res._header) {
+	    return undefined
+	  }
+
+	  // get header
+	  var header = res.getHeader(field)
+
+	  return Array.isArray(header)
+	    ? header.join(', ')
+	    : header
+	})
+
+	/**
+	 * Format a Date in the common log format.
+	 *
+	 * @private
+	 * @param {Date} dateTime
+	 * @return {string}
+	 */
+
+	function clfdate(dateTime) {
+	  var date = dateTime.getUTCDate()
+	  var hour = dateTime.getUTCHours()
+	  var mins = dateTime.getUTCMinutes()
+	  var secs = dateTime.getUTCSeconds()
+	  var year = dateTime.getUTCFullYear()
+
+	  var month = clfmonth[dateTime.getUTCMonth()]
+
+	  return pad2(date) + '/' + month + '/' + year
+	    + ':' + pad2(hour) + ':' + pad2(mins) + ':' + pad2(secs)
+	    + ' +0000'
+	}
+
+	/**
+	 * Compile a format string into a function.
+	 *
+	 * @param {string} format
+	 * @return {function}
+	 * @public
+	 */
+
+	function compile(format) {
+	  if (typeof format !== 'string') {
+	    throw new TypeError('argument format must be a string')
+	  }
+
+	  var fmt = format.replace(/"/g, '\\"')
+	  var js = '  return "' + fmt.replace(/:([-\w]{2,})(?:\[([^\]]+)\])?/g, function(_, name, arg) {
+	    return '"\n    + (tokens["' + name + '"](req, res, ' + String(JSON.stringify(arg)) + ') || "-") + "'
+	  }) + '";'
+
+	  return new Function('tokens, req, res', js)
+	}
+
+	/**
+	 * Create a basic buffering stream.
+	 *
+	 * @param {object} stream
+	 * @param {number} interval
+	 * @public
+	 */
+
+	function createBufferStream(stream, interval) {
+	  var buf = []
+	  var timer = null
+
+	  // flush function
+	  function flush() {
+	    timer = null
+	    stream.write(buf.join(''))
+	    buf.length = 0
+	  }
+
+	  // write function
+	  function write(str) {
+	    if (timer === null) {
+	      timer = setTimeout(flush, interval)
+	    }
+
+	    buf.push(str)
+	  }
+
+	  // return a minimal "stream"
+	  return { write: write }
+	}
+
+	/**
+	 * Define a format with the given name.
+	 *
+	 * @param {string} name
+	 * @param {string|function} fmt
+	 * @public
+	 */
+
+	function format(name, fmt) {
+	  morgan[name] = fmt
+	  return this
+	}
+
+	/**
+	 * Lookup and compile a named format function.
+	 *
+	 * @param {string} name
+	 * @return {function}
+	 * @public
+	 */
+
+	function getFormatFunction(name) {
+	  // lookup format
+	  var fmt = morgan[name] || name || morgan.default
+
+	  // return compiled format
+	  return typeof fmt !== 'function'
+	    ? compile(fmt)
+	    : fmt
+	}
+
+	/**
+	 * Get request IP address.
+	 *
+	 * @private
+	 * @param {IncomingMessage} req
+	 * @return {string}
+	 */
+
+	function getip(req) {
+	  return req.ip
+	    || req._remoteAddress
+	    || (req.connection && req.connection.remoteAddress)
+	    || undefined;
+	}
+
+	/**
+	 * Pad number to two digits.
+	 *
+	 * @private
+	 * @param {number} num
+	 * @return {string}
+	 */
+
+	function pad2(num) {
+	  var str = String(num)
+
+	  return (str.length === 1 ? '0' : '')
+	    + str
+	}
+
+	/**
+	 * Record the start time.
+	 * @private
+	 */
+
+	function recordStartTime() {
+	  this._startAt = process.hrtime()
+	  this._startTime = new Date()
+	}
+
+	/**
+	 * Define a token function with the given name,
+	 * and callback fn(req, res).
+	 *
+	 * @param {string} name
+	 * @param {function} fn
+	 * @public
+	 */
+
+	function token(name, fn) {
+	  morgan[name] = fn
+	  return this
+	}
+
+
+/***/ },
+/* 378 */
+/***/ function(module, exports) {
+
+	/*!
+	 * basic-auth
+	 * Copyright(c) 2013 TJ Holowaychuk
+	 * Copyright(c) 2014 Jonathan Ong
+	 * Copyright(c) 2015 Douglas Christopher Wilson
+	 * MIT Licensed
+	 */
+
+	'use strict'
+
+	/**
+	 * Module exports.
+	 * @public
+	 */
+
+	module.exports = auth
+
+	/**
+	 * RegExp for basic auth credentials
+	 *
+	 * credentials = auth-scheme 1*SP token68
+	 * auth-scheme = "Basic" ; case insensitive
+	 * token68     = 1*( ALPHA / DIGIT / "-" / "." / "_" / "~" / "+" / "/" ) *"="
+	 * @private
+	 */
+
+	var credentialsRegExp = /^ *(?:[Bb][Aa][Ss][Ii][Cc]) +([A-Za-z0-9\-\._~\+\/]+=*) *$/
+
+	/**
+	 * RegExp for basic auth user/pass
+	 *
+	 * user-pass   = userid ":" password
+	 * userid      = *<TEXT excluding ":">
+	 * password    = *TEXT
+	 * @private
+	 */
+
+	var userPassRegExp = /^([^:]*):(.*)$/
+
+	/**
+	 * Parse the Authorization header field of a request.
+	 *
+	 * @param {object} req
+	 * @return {object} with .name and .pass
+	 * @public
+	 */
+
+	function auth(req) {
+	  if (!req) {
+	    throw new TypeError('argument req is required')
+	  }
+
+	  if (typeof req !== 'object') {
+	    throw new TypeError('argument req is required to be an object')
+	  }
+
+	  // get header
+	  var header = getAuthorization(req.req || req)
+
+	  // parse header
+	  var match = credentialsRegExp.exec(header || '')
+
+	  if (!match) {
+	    return
+	  }
+
+	  // decode user pass
+	  var userPass = userPassRegExp.exec(decodeBase64(match[1]))
+
+	  if (!userPass) {
+	    return
+	  }
+
+	  // return credentials object
+	  return new Credentials(userPass[1], userPass[2])
+	}
+
+	/**
+	 * Decode base64 string.
+	 * @private
+	 */
+
+	function decodeBase64(str) {
+	  return new Buffer(str, 'base64').toString()
+	}
+
+	/**
+	 * Get the Authorization header from request object.
+	 * @private
+	 */
+
+	function getAuthorization(req) {
+	  if (!req.headers || typeof req.headers !== 'object') {
+	    throw new TypeError('argument req is required to have headers property')
+	  }
+
+	  return req.headers.authorization
+	}
+
+	/**
+	 * Object to represent user credentials.
+	 * @private
+	 */
+
+	function Credentials(name, pass) {
+	  this.name = name
+	  this.pass = pass
+	}
+
+
+/***/ },
+/* 379 */
+/***/ function(module, exports) {
+
+	/*!
+	 * on-headers
+	 * Copyright(c) 2014 Douglas Christopher Wilson
+	 * MIT Licensed
+	 */
+
+	'use strict'
+
+	/**
+	 * Reference to Array slice.
+	 */
+
+	var slice = Array.prototype.slice
+
+	/**
+	 * Execute a listener when a response is about to write headers.
+	 *
+	 * @param {Object} res
+	 * @return {Function} listener
+	 * @api public
+	 */
+
+	module.exports = function onHeaders(res, listener) {
+	  if (!res) {
+	    throw new TypeError('argument res is required')
+	  }
+
+	  if (typeof listener !== 'function') {
+	    throw new TypeError('argument listener must be a function')
+	  }
+
+	  res.writeHead = createWriteHead(res.writeHead, listener)
+	}
+
+	function createWriteHead(prevWriteHead, listener) {
+	  var fired = false;
+
+	  // return function with core name and argument list
+	  return function writeHead(statusCode) {
+	    // set headers from arguments
+	    var args = setWriteHeadHeaders.apply(this, arguments);
+
+	    // fire listener
+	    if (!fired) {
+	      fired = true
+	      listener.call(this)
+
+	      // pass-along an updated status code
+	      if (typeof args[0] === 'number' && this.statusCode !== args[0]) {
+	        args[0] = this.statusCode
+	        args.length = 1
+	      }
+	    }
+
+	    prevWriteHead.apply(this, args);
+	  }
+	}
+
+	function setWriteHeadHeaders(statusCode) {
+	  var length = arguments.length
+	  var headerIndex = length > 1 && typeof arguments[1] === 'string'
+	    ? 2
+	    : 1
+
+	  var headers = length >= headerIndex + 1
+	    ? arguments[headerIndex]
+	    : undefined
+
+	  this.statusCode = statusCode
+
+	  // the following block is from node.js core
+	  if (Array.isArray(headers)) {
+	    // handle array case
+	    for (var i = 0, len = headers.length; i < len; ++i) {
+	      this.setHeader(headers[i][0], headers[i][1])
+	    }
+	  } else if (headers) {
+	    // handle object case
+	    var keys = Object.keys(headers)
+	    for (var i = 0; i < keys.length; i++) {
+	      var k = keys[i]
+	      if (k) this.setHeader(k, headers[k])
+	    }
+	  }
+
+	  // copy leading arguments
+	  var args = new Array(Math.min(length, headerIndex))
+	  for (var i = 0; i < args.length; i++) {
+	    args[i] = arguments[i]
+	  }
+
+	  return args
+	}
 
 
 /***/ }

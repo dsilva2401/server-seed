@@ -5,6 +5,7 @@
 	import {config} from '../../config.ts';
 	import * as bodyParser from 'body-parser';
 	import * as cookieParser from 'cookie-parser';
+	import * as morgan from 'morgan';
 
 // Server setup
 	let serverConfig = config.servers.proxy;
@@ -14,6 +15,7 @@
 	server.use(bodyParser.urlencoded({ extended: false }));
 	server.use(bodyParser.json());
 	server.use(cookieParser());
+	server.use(morgan('dev'));
 	setupRouters(server);
 
 // Start function
@@ -21,4 +23,5 @@
 		server.listen(serverConfig.port, function () {
 			console.log('Serving proxy at '+serverConfig.domain+':'+serverConfig.port);
 		});
+
 	}
