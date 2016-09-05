@@ -158,7 +158,7 @@
 		gulp.task('webapps:new', function (name) {
 			if (!name) return;
 			fs.copy(
-				path.join(__dirname, 'src/setup/webapps/src/.seed'),
+				path.join(__dirname, 'src/setup/webapps/src/.seed-webapp'),
 				path.join(__dirname, 'src/setup/webapps/src/'+name)	
 			);
 			console.log('Webapp created..');
