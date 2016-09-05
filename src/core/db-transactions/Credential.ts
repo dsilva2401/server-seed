@@ -5,6 +5,7 @@ import {IPerson} from '../interfaces/IPerson.ts';
 import {Credential as CredentialModel} from '../db-models/Credential.ts';
 import {getPersonDataFromEmail} from './Person.ts';
 import * as Q from 'q';
+import {returnServerError} from '../services/returnServerError.ts';
 
 /**
  * Create Indexes for Credential model
@@ -26,7 +27,7 @@ import * as Q from 'q';
         };
         model.updateOrCreate({email: email}, credentialData).then(function () {
             deferred.resolve();
-        }).catch(deferred.reject);
+        }).catch(returnServerError(deferred));
         return deferred.promise; 
     }
 
@@ -44,7 +45,7 @@ import * as Q from 'q';
             if (!respCredentialData) deferred.resolve();
             else getPersonDataFromEmail(respCredentialData.email).then(function (personData: PersonModel) {
                 deferred.resolve(personData);
-            }).catch(deferred.reject);
-        }).catch(deferred.reject);
+            }).catch(returnServerError(deferred));
+        }).catch(returnServerError(deferred));
         return deferred.promise;
     }

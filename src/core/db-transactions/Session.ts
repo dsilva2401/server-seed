@@ -3,6 +3,7 @@ import {MongoModel} from '../classes/MongoModel.ts';
 import {Session} from '../classes/Session.ts';
 import {Session as SessionModel} from '../db-models/Session.ts';
 import * as Q from 'q';
+import {returnServerError} from '../services/returnServerError.ts';
 
 /**
  * Create Session
@@ -16,6 +17,6 @@ import * as Q from 'q';
         } 
         model.insert(sessionData).then(function (respData: SessionModel) {
             deferred.resolve(sessionData);
-        }).catch(deferred.reject);
+        }).catch(returnServerError(deferred));
         return deferred.promise;
     }

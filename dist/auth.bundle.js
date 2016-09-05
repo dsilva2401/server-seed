@@ -24762,8 +24762,8 @@
 	var MongoModel_ts_1 = __webpack_require__(95);
 	var Credential_ts_1 = __webpack_require__(181);
 	var Q = __webpack_require__(180);
-	var validate_ts_1 = __webpack_require__(182);
-	var returnServerError_ts_1 = __webpack_require__(187);
+	var validate_ts_1 = __webpack_require__(183);
+	var returnServerError_ts_1 = __webpack_require__(182);
 	/**
 	 * Create Indexes for Person model
 	 */
@@ -62043,6 +62043,7 @@
 	var MongoModel_ts_1 = __webpack_require__(95);
 	var Person_ts_1 = __webpack_require__(94);
 	var Q = __webpack_require__(180);
+	var returnServerError_ts_1 = __webpack_require__(182);
 	/**
 	 * Create Indexes for Credential model
 	 */
@@ -62063,7 +62064,7 @@
 	    };
 	    model.updateOrCreate({ email: email }, credentialData).then(function () {
 	        deferred.resolve();
-	    }).catch(deferred.reject);
+	    }).catch(returnServerError_ts_1.returnServerError(deferred));
 	    return deferred.promise;
 	}
 	exports.updateOrCreateCredential = updateOrCreateCredential;
@@ -62083,8 +62084,8 @@
 	        else
 	            Person_ts_1.getPersonDataFromEmail(respCredentialData.email).then(function (personData) {
 	                deferred.resolve(personData);
-	            }).catch(deferred.reject);
-	    }).catch(deferred.reject);
+	            }).catch(returnServerError_ts_1.returnServerError(deferred));
+	    }).catch(returnServerError_ts_1.returnServerError(deferred));
 	    return deferred.promise;
 	}
 	exports.getOwnerDataFromCredentials = getOwnerDataFromCredentials;
@@ -62092,11 +62093,30 @@
 
 /***/ },
 /* 182 */
+/***/ function(module, exports) {
+
+	"use strict";
+	// Exports
+	function returnServerError(deferred) {
+	    return function (serverError) {
+	        var error = {
+	            httpStatus: 500,
+	            description: 'Internal error',
+	            error: serverError
+	        };
+	        deferred.reject(error);
+	    };
+	}
+	exports.returnServerError = returnServerError;
+
+
+/***/ },
+/* 183 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	// Imports
-	var jsonschema_1 = __webpack_require__(183);
+	var jsonschema_1 = __webpack_require__(184);
 	// Exports
 	function validate(element, schema) {
 	    var v = new jsonschema_1.Validator();
@@ -62106,16 +62126,16 @@
 
 
 /***/ },
-/* 183 */
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var Validator = module.exports.Validator = __webpack_require__(184);
+	var Validator = module.exports.Validator = __webpack_require__(185);
 
-	module.exports.ValidatorResult = __webpack_require__(186).ValidatorResult;
-	module.exports.ValidationError = __webpack_require__(186).ValidationError;
-	module.exports.SchemaError = __webpack_require__(186).SchemaError;
+	module.exports.ValidatorResult = __webpack_require__(187).ValidatorResult;
+	module.exports.ValidationError = __webpack_require__(187).ValidationError;
+	module.exports.SchemaError = __webpack_require__(187).SchemaError;
 
 	module.exports.validate = function (instance, schema, options) {
 	  var v = new Validator();
@@ -62124,15 +62144,15 @@
 
 
 /***/ },
-/* 184 */
+/* 185 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var urilib = __webpack_require__(37);
 
-	var attribute = __webpack_require__(185);
-	var helpers = __webpack_require__(186);
+	var attribute = __webpack_require__(186);
+	var helpers = __webpack_require__(187);
 	var ValidatorResult = helpers.ValidatorResult;
 	var SchemaError = helpers.SchemaError;
 	var SchemaContext = helpers.SchemaContext;
@@ -62450,12 +62470,12 @@
 
 
 /***/ },
-/* 185 */
+/* 186 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var helpers = __webpack_require__(186);
+	var helpers = __webpack_require__(187);
 
 	/** @type ValidatorResult */
 	var ValidatorResult = helpers.ValidatorResult;
@@ -63241,7 +63261,7 @@
 
 
 /***/ },
-/* 186 */
+/* 187 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -63526,25 +63546,6 @@
 
 
 /***/ },
-/* 187 */
-/***/ function(module, exports) {
-
-	"use strict";
-	// Exports
-	function returnServerError(deferred) {
-	    return function (serverError) {
-	        var error = {
-	            httpStatus: 500,
-	            description: 'Internal error',
-	            error: serverError
-	        };
-	        deferred.reject(error);
-	    };
-	}
-	exports.returnServerError = returnServerError;
-
-
-/***/ },
 /* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -63778,6 +63779,7 @@
 	"use strict";
 	var MongoModel_ts_1 = __webpack_require__(95);
 	var Q = __webpack_require__(180);
+	var returnServerError_ts_1 = __webpack_require__(182);
 	/**
 	 * Create Session
 	 */
@@ -63790,7 +63792,7 @@
 	    };
 	    model.insert(sessionData).then(function (respData) {
 	        deferred.resolve(sessionData);
-	    }).catch(deferred.reject);
+	    }).catch(returnServerError_ts_1.returnServerError(deferred));
 	    return deferred.promise;
 	}
 	exports.createSession = createSession;
