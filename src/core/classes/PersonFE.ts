@@ -1,17 +1,17 @@
 
 // Imports
-	import {Person} from './Person.ts';
+	import {PersonDecorator} from './PersonDecorator.ts';
 	import {IPerson} from '../interfaces/IPerson.ts';
 
 // Exports
-	export class PersonFE extends Person {
+	export class PersonFE extends PersonDecorator {
 
 		// Attributes
 			
 
 		// Constructor
-			constructor (personData: IPerson) {
-				super(personData);
+			constructor (person: IPerson) {
+				super(person);
 			}
 
 	};

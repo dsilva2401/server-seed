@@ -63664,24 +63664,24 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	// Imports
-	var Person_ts_1 = __webpack_require__(191);
+	var PersonDecorator_ts_1 = __webpack_require__(191);
 	var Credential_ts_1 = __webpack_require__(189);
 	var Session_ts_1 = __webpack_require__(192);
-	var Person_ts_2 = __webpack_require__(94);
+	var Person_ts_1 = __webpack_require__(94);
 	var Q = __webpack_require__(180);
 	// Exports
 	var PersonBE = (function (_super) {
 	    __extends(PersonBE, _super);
 	    // Constructor
-	    function PersonBE(data) {
-	        _super.call(this, data);
+	    function PersonBE(person) {
+	        _super.call(this, person);
 	        this.credential = new Credential_ts_1.Credential(this.email);
-	        Person_ts_2.createPersonIndexes();
+	        Person_ts_1.createPersonIndexes();
 	    }
 	    PersonBE.prototype.save = function () {
 	        var _this = this;
 	        var deferred = Q.defer();
-	        Person_ts_2.updateOrCreatePerson({
+	        Person_ts_1.updateOrCreatePerson({
 	            name: this.name,
 	            lastname: this.lastname,
 	            sex: this.sex,
@@ -63705,7 +63705,7 @@
 	        return deferred.promise;
 	    };
 	    return PersonBE;
-	}(Person_ts_1.Person));
+	}(PersonDecorator_ts_1.PersonDecorator));
 	exports.PersonBE = PersonBE;
 	;
 
@@ -63715,19 +63715,18 @@
 /***/ function(module, exports) {
 
 	"use strict";
-	// Exports
-	var Person = (function () {
-	    // Constructor
-	    function Person(personData) {
-	        if (personData) {
-	            this.name = personData.name;
-	            this.lastname = personData.lastname;
-	            this.email = personData.email;
-	            this.birthday = personData.birthday;
-	            this.sex = personData.sex;
-	        }
+	var PersonDecorator = (function () {
+	    // Methods
+	    function PersonDecorator(person) {
+	        this.person = person;
+	        this.id = person.id;
+	        this.name = person.name;
+	        this.lastname = person.lastname;
+	        this.email = person.email;
+	        this.birthday = person.birthday;
+	        this.sex = person.sex;
 	    }
-	    Person.prototype.basicData = function () {
+	    PersonDecorator.prototype.basicData = function () {
 	        return {
 	            id: this.id,
 	            name: this.name,
@@ -63737,10 +63736,9 @@
 	            email: this.email
 	        };
 	    };
-	    return Person;
+	    return PersonDecorator;
 	}());
-	exports.Person = Person;
-	;
+	exports.PersonDecorator = PersonDecorator;
 
 
 /***/ },

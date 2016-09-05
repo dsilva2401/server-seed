@@ -1,6 +1,6 @@
 
 // Imports
-	import {Person} from './Person.ts';
+	import {PersonDecorator} from './PersonDecorator.ts';
 	import {IPerson} from '../interfaces/IPerson.ts';
 	import {Credential} from './Credential.ts';
 	import {Session} from './Session.ts';
@@ -14,15 +14,15 @@
 	import * as Q from 'q';
 
 // Exports
-	export class PersonBE extends Person {
+	export class PersonBE extends PersonDecorator {
 
 		// Attributes
 			public credential: Credential;
 			public sessions: Session[];
 
 		// Constructor
-			constructor (data: IPerson) {
-				super(data);
+			constructor (person: IPerson) {
+				super(person);
 				this.credential = new Credential(this.email);
 				createPersonIndexes();
 			}
