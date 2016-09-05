@@ -1,33 +1,43 @@
 
 import {MongoModel} from '../classes/MongoModel.ts';
+import {Person as PersonModel} from '../db-models/Person.ts';
 import {IPerson} from '../interfaces/IPerson.ts';
 import {Credential as CredentialModel} from '../db-models/Credential.ts';
-import {getPersonData} from './Person.ts';
+import {getPersonDataFromEmail} from './Person.ts';
+import * as Q from 'q';
 
 
-let model = new MongoModel('credental');
-
-export function updateOrCreateCredential (email: string, password: string): Promise<any> {
-    let deferred = Q.defer();
-    let credentialData: CredentialModel = {
-        email: email,
-        password: password
+/**
+ ***** Update or Create Credential *****
+ */
+    export function updateOrCreateCredential (email: string, password: string): Promise<any> {
+        var model = new MongoModel('credential');
+        var deferred = Q.defer();
+        var credentialData: CredentialModel = {
+            email: email,
+            password: password
+        };
+        model.updateOrCreate({email: email}, credentialData).then(function () {
+            deferred.resolve();
+        }).catch(deferred.reject);
+        return deferred.promise; 
     }
-    model.updateOrCreate({email: email}, credentialData).then(function () {
-        deferred.resolve();
-    }).catch(deferred.reject);
-    return deferred.promise; 
-}
 
-export function getOwnerData (email: string, password: string): Promise<IPerson> {
-    let deferred = Q.defer();
-    let credentialData: CredentialModel = {
-        email: email,
-        password: password
+/**
+ ***** Get Owner Data from credentials *****
+ */
+    export function getOwnerDataFromCredentials (email: string, password?: string): Promise<IPerson> {
+        var model = new MongoModel('credential');
+        var deferred = Q.defer();
+        var credentialData: CredentialModel = {
+            email: email,
+            password: password
+        }
+        model.findOne(credentialData).then(function (respCredentialData?: CredentialModel) {
+            if (!respCredentialData) deferred.resolve();
+            else getPersonDataFromEmail(respCredentialData.email).then(function (personData: PersonModel) {
+                deferred.resolve(personData);
+            }).catch(deferred.reject);
+        }).catch(deferred.reject);
+        return deferred.promise;
     }
-    this.model.findOne(credentialData).then(function (respCredentialData?: CredentialModel) {
-        if (!respCredentialData) deferred.resolve();
-        else return getPersonData(respCredentialData._id);
-    }).catch(deferred.reject);
-    return deferred.promise;
-}

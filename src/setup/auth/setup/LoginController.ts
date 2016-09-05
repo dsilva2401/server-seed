@@ -5,6 +5,7 @@
 	import {Credential} from '../../../core/classes/Credential.ts';
 	import {ExpressController} from '../../../core/classes/ExpressController.ts';
 	import * as Q from 'q';
+	import {getOwnerDataFromCredentials} from '../../../core/db-transactions/Credential.ts';
 
 // Exports
 	export class LoginController extends ExpressController {
@@ -28,8 +29,8 @@
 
 				// Verify if valid credentials
 				this.searchPerson(req.body.email, req.body.password).then(function (person?: PersonBE) {
-
 					// Invalid credentials
+
 					if (!person) {
 						self.sendResponse(401, {
 							details: 'Invalid credentials'

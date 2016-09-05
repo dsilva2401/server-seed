@@ -47,7 +47,7 @@
 
 	"use strict";
 	// Imports
-	var server_ts_1 = __webpack_require__(381);
+	var server_ts_1 = __webpack_require__(389);
 	// Start server
 	server_ts_1.startServer();
 
@@ -24636,7 +24636,7 @@
 
 /***/ },
 
-/***/ 381:
+/***/ 389:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
