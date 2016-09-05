@@ -24559,8 +24559,8 @@
 	var express = __webpack_require__(2);
 	var index_ts_1 = __webpack_require__(89);
 	var config_ts_1 = __webpack_require__(85);
-	var bodyParser = __webpack_require__(194);
-	var cookieParser = __webpack_require__(226);
+	var bodyParser = __webpack_require__(195);
+	var cookieParser = __webpack_require__(227);
 	// Server setup
 	var serverConfig = config_ts_1.config.servers.auth;
 	exports.server = express();
@@ -24585,7 +24585,7 @@
 	"use strict";
 	var ServiceRouter_ts_1 = __webpack_require__(90);
 	var RegisterController_ts_1 = __webpack_require__(92);
-	var LoginController_ts_1 = __webpack_require__(188);
+	var LoginController_ts_1 = __webpack_require__(189);
 	// Export router setup function
 	function setupAuth(server) {
 	    // Init router
@@ -24779,13 +24779,7 @@
 	    var model = new MongoModel_ts_1.MongoModel('person');
 	    var deferred = Q.defer();
 	    // Validate
-	    var validationResults = validate_ts_1.validate(personData, {
-	        type: 'object',
-	        required: ['name', 'lastname', 'email', 'birthday', 'sex'],
-	        properties: {
-	            email: { "type": "string", "format": "email" }
-	        }
-	    });
+	    var validationResults = validate_ts_1.validate(personData, __webpack_require__(188));
 	    if (validationResults.errors.length) {
 	        var error = {
 	            httpStatus: 400,
@@ -63547,6 +63541,28 @@
 
 /***/ },
 /* 188 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"type": "object",
+		"required": [
+			"name",
+			"lastname",
+			"email",
+			"birthday",
+			"sex",
+			"password"
+		],
+		"properties": {
+			"email": {
+				"type": "string",
+				"format": "email"
+			}
+		}
+	};
+
+/***/ },
+/* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -63555,7 +63571,7 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var Credential_ts_1 = __webpack_require__(189);
+	var Credential_ts_1 = __webpack_require__(190);
 	var ExpressController_ts_1 = __webpack_require__(93);
 	var Q = __webpack_require__(180);
 	// Exports
@@ -63616,11 +63632,11 @@
 
 
 /***/ },
-/* 189 */
+/* 190 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var PersonBE_ts_1 = __webpack_require__(190);
+	var PersonBE_ts_1 = __webpack_require__(191);
 	var Q = __webpack_require__(180);
 	var Credential_ts_1 = __webpack_require__(181);
 	// Exports
@@ -63655,7 +63671,7 @@
 
 
 /***/ },
-/* 190 */
+/* 191 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -63665,9 +63681,9 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	// Imports
-	var PersonDecorator_ts_1 = __webpack_require__(191);
-	var Credential_ts_1 = __webpack_require__(189);
-	var Session_ts_1 = __webpack_require__(192);
+	var PersonDecorator_ts_1 = __webpack_require__(192);
+	var Credential_ts_1 = __webpack_require__(190);
+	var Session_ts_1 = __webpack_require__(193);
 	var Person_ts_1 = __webpack_require__(94);
 	var Q = __webpack_require__(180);
 	// Exports
@@ -63712,7 +63728,7 @@
 
 
 /***/ },
-/* 191 */
+/* 192 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -63743,11 +63759,11 @@
 
 
 /***/ },
-/* 192 */
+/* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var Session_ts_1 = __webpack_require__(193);
+	var Session_ts_1 = __webpack_require__(194);
 	// Exports
 	var Session = (function () {
 	    function Session(personId, keyOrSize) {
@@ -63773,7 +63789,7 @@
 
 
 /***/ },
-/* 193 */
+/* 194 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -63799,7 +63815,7 @@
 
 
 /***/ },
-/* 194 */
+/* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -63943,16 +63959,16 @@
 	  // this uses a switch for static require analysis
 	  switch (parserName) {
 	    case 'json':
-	      parser = __webpack_require__(195)
+	      parser = __webpack_require__(196)
 	      break
 	    case 'raw':
-	      parser = __webpack_require__(223)
-	      break
-	    case 'text':
 	      parser = __webpack_require__(224)
 	      break
-	    case 'urlencoded':
+	    case 'text':
 	      parser = __webpack_require__(225)
+	      break
+	    case 'urlencoded':
+	      parser = __webpack_require__(226)
 	      break
 	  }
 
@@ -63962,7 +63978,7 @@
 
 
 /***/ },
-/* 195 */
+/* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -63979,11 +63995,11 @@
 	 * @private
 	 */
 
-	var bytes = __webpack_require__(196)
+	var bytes = __webpack_require__(197)
 	var contentType = __webpack_require__(47)
 	var createError = __webpack_require__(49)
 	var debug = __webpack_require__(8)('body-parser:json')
-	var read = __webpack_require__(197)
+	var read = __webpack_require__(198)
 	var typeis = __webpack_require__(77)
 
 	/**
@@ -64143,7 +64159,7 @@
 
 
 /***/ },
-/* 196 */
+/* 197 */
 /***/ function(module, exports) {
 
 	/*!
@@ -64306,7 +64322,7 @@
 
 
 /***/ },
-/* 197 */
+/* 198 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -64323,10 +64339,10 @@
 	 */
 
 	var createError = __webpack_require__(49)
-	var getBody = __webpack_require__(198)
-	var iconv = __webpack_require__(200)
+	var getBody = __webpack_require__(199)
+	var iconv = __webpack_require__(201)
 	var onFinished = __webpack_require__(16)
-	var zlib = __webpack_require__(222)
+	var zlib = __webpack_require__(223)
 
 	/**
 	 * Module exports.
@@ -64500,7 +64516,7 @@
 
 
 /***/ },
-/* 198 */
+/* 199 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -64517,8 +64533,8 @@
 	 * @private
 	 */
 
-	var bytes = __webpack_require__(199)
-	var iconv = __webpack_require__(200)
+	var bytes = __webpack_require__(200)
+	var iconv = __webpack_require__(201)
 	var unpipe = __webpack_require__(20)
 
 	/**
@@ -64826,7 +64842,7 @@
 
 
 /***/ },
-/* 199 */
+/* 200 */
 /***/ function(module, exports) {
 
 	/*!
@@ -64989,12 +65005,12 @@
 
 
 /***/ },
-/* 200 */
+/* 201 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
 
-	var bomHandling = __webpack_require__(201),
+	var bomHandling = __webpack_require__(202),
 	    iconv = module.exports;
 
 	// All codecs and aliases are kept here, keyed by encoding name/alias.
@@ -65052,7 +65068,7 @@
 	iconv._codecDataCache = {};
 	iconv.getCodec = function getCodec(encoding) {
 	    if (!iconv.encodings)
-	        iconv.encodings = __webpack_require__(202); // Lazy load all encoding definitions.
+	        iconv.encodings = __webpack_require__(203); // Lazy load all encoding definitions.
 	    
 	    // Canonicalize encoding name: strip all non-alphanumeric chars and appended year.
 	    var enc = (''+encoding).toLowerCase().replace(/[^0-9a-z]|:\d{4}$/g, "");
@@ -65126,17 +65142,17 @@
 	    // Load streaming support in Node v0.10+
 	    var nodeVerArr = nodeVer.split(".").map(Number);
 	    if (nodeVerArr[0] > 0 || nodeVerArr[1] >= 10) {
-	        __webpack_require__(220)(iconv);
+	        __webpack_require__(221)(iconv);
 	    }
 
 	    // Load Node primitive extensions.
-	    __webpack_require__(221)(iconv);
+	    __webpack_require__(222)(iconv);
 	}
 
 
 
 /***/ },
-/* 201 */
+/* 202 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -65194,7 +65210,7 @@
 
 
 /***/ },
-/* 202 */
+/* 203 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -65202,14 +65218,14 @@
 	// Update this array if you add/rename/remove files in this directory.
 	// We support Browserify by skipping automatic module discovery and requiring modules directly.
 	var modules = [
-	    __webpack_require__(203),
-	    __webpack_require__(205),
+	    __webpack_require__(204),
 	    __webpack_require__(206),
 	    __webpack_require__(207),
 	    __webpack_require__(208),
 	    __webpack_require__(209),
 	    __webpack_require__(210),
 	    __webpack_require__(211),
+	    __webpack_require__(212),
 	];
 
 	// Put all encoding/alias/codec definitions to single object and export it. 
@@ -65222,7 +65238,7 @@
 
 
 /***/ },
-/* 203 */
+/* 204 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -65272,7 +65288,7 @@
 	//------------------------------------------------------------------------------
 
 	// We use node.js internal decoder. Its signature is the same as ours.
-	var StringDecoder = __webpack_require__(204).StringDecoder;
+	var StringDecoder = __webpack_require__(205).StringDecoder;
 
 	if (!StringDecoder.prototype.end) // Node v0.8 doesn't have this method.
 	    StringDecoder.prototype.end = function() {};
@@ -65415,13 +65431,13 @@
 
 
 /***/ },
-/* 204 */
+/* 205 */
 /***/ function(module, exports) {
 
 	module.exports = require("string_decoder");
 
 /***/ },
-/* 205 */
+/* 206 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -65601,7 +65617,7 @@
 
 
 /***/ },
-/* 206 */
+/* 207 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -65896,7 +65912,7 @@
 
 
 /***/ },
-/* 207 */
+/* 208 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -65974,7 +65990,7 @@
 
 
 /***/ },
-/* 208 */
+/* 209 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -66149,7 +66165,7 @@
 
 
 /***/ },
-/* 209 */
+/* 210 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -66605,7 +66621,7 @@
 	}
 
 /***/ },
-/* 210 */
+/* 211 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -67165,7 +67181,7 @@
 
 
 /***/ },
-/* 211 */
+/* 212 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -67211,7 +67227,7 @@
 
 	    'shiftjis': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(212) },
+	        table: function() { return __webpack_require__(213) },
 	        encodeAdd: {'\u00a5': 0x5C, '\u203E': 0x7E},
 	        encodeSkipVals: [{from: 0xED40, to: 0xF940}],
 	    },
@@ -67226,7 +67242,7 @@
 
 	    'eucjp': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(213) },
+	        table: function() { return __webpack_require__(214) },
 	        encodeAdd: {'\u00a5': 0x5C, '\u203E': 0x7E},
 	    },
 
@@ -67252,21 +67268,21 @@
 	    '936': 'cp936',
 	    'cp936': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(214) },
+	        table: function() { return __webpack_require__(215) },
 	    },
 
 	    // GBK (~22000 chars) is an extension of CP936 that added user-mapped chars and some other.
 	    'gbk': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(214).concat(__webpack_require__(215)) },
+	        table: function() { return __webpack_require__(215).concat(__webpack_require__(216)) },
 	    },
 	    'xgbk': 'gbk',
 
 	    // GB18030 is an algorithmic extension of GBK.
 	    'gb18030': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(214).concat(__webpack_require__(215)) },
-	        gb18030: function() { return __webpack_require__(216) },
+	        table: function() { return __webpack_require__(215).concat(__webpack_require__(216)) },
+	        gb18030: function() { return __webpack_require__(217) },
 	    },
 
 	    'chinese': 'gb18030',
@@ -67282,7 +67298,7 @@
 	    '949': 'cp949',
 	    'cp949': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(217) },
+	        table: function() { return __webpack_require__(218) },
 	    },
 
 	    'cseuckr': 'cp949',
@@ -67322,14 +67338,14 @@
 	    '950': 'cp950',
 	    'cp950': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(218) },
+	        table: function() { return __webpack_require__(219) },
 	    },
 
 	    // Big5 has many variations and is an extension of cp950. We use Encoding Standard's as a consensus.
 	    'big5': 'big5hkscs',
 	    'big5hkscs': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(218).concat(__webpack_require__(219)) },
+	        table: function() { return __webpack_require__(219).concat(__webpack_require__(220)) },
 	        encodeSkipVals: [0xa2cc],
 	    },
 
@@ -67341,7 +67357,7 @@
 
 
 /***/ },
-/* 212 */
+/* 213 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -67892,7 +67908,7 @@
 	];
 
 /***/ },
-/* 213 */
+/* 214 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -68717,7 +68733,7 @@
 	];
 
 /***/ },
-/* 214 */
+/* 215 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -71341,7 +71357,7 @@
 	];
 
 /***/ },
-/* 215 */
+/* 216 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -71604,7 +71620,7 @@
 	];
 
 /***/ },
-/* 216 */
+/* 217 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -72029,7 +72045,7 @@
 	};
 
 /***/ },
-/* 217 */
+/* 218 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -74412,7 +74428,7 @@
 	];
 
 /***/ },
-/* 218 */
+/* 219 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -75144,7 +75160,7 @@
 	];
 
 /***/ },
-/* 219 */
+/* 220 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -75653,7 +75669,7 @@
 	];
 
 /***/ },
-/* 220 */
+/* 221 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -75779,7 +75795,7 @@
 
 
 /***/ },
-/* 221 */
+/* 222 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -75999,13 +76015,13 @@
 
 
 /***/ },
-/* 222 */
+/* 223 */
 /***/ function(module, exports) {
 
 	module.exports = require("zlib");
 
 /***/ },
-/* 223 */
+/* 224 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -76020,9 +76036,9 @@
 	 * Module dependencies.
 	 */
 
-	var bytes = __webpack_require__(196)
+	var bytes = __webpack_require__(197)
 	var debug = __webpack_require__(8)('body-parser:raw')
-	var read = __webpack_require__(197)
+	var read = __webpack_require__(198)
 	var typeis = __webpack_require__(77)
 
 	/**
@@ -76112,7 +76128,7 @@
 
 
 /***/ },
-/* 224 */
+/* 225 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -76127,10 +76143,10 @@
 	 * Module dependencies.
 	 */
 
-	var bytes = __webpack_require__(196)
+	var bytes = __webpack_require__(197)
 	var contentType = __webpack_require__(47)
 	var debug = __webpack_require__(8)('body-parser:text')
-	var read = __webpack_require__(197)
+	var read = __webpack_require__(198)
 	var typeis = __webpack_require__(77)
 
 	/**
@@ -76239,7 +76255,7 @@
 
 
 /***/ },
-/* 225 */
+/* 226 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -76256,12 +76272,12 @@
 	 * @private
 	 */
 
-	var bytes = __webpack_require__(196)
+	var bytes = __webpack_require__(197)
 	var contentType = __webpack_require__(47)
 	var createError = __webpack_require__(49)
 	var debug = __webpack_require__(8)('body-parser:urlencoded')
 	var deprecate = __webpack_require__(29)('body-parser')
-	var read = __webpack_require__(197)
+	var read = __webpack_require__(198)
 	var typeis = __webpack_require__(77)
 
 	/**
@@ -76524,7 +76540,7 @@
 
 
 /***/ },
-/* 226 */
+/* 227 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!

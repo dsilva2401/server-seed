@@ -26,13 +26,7 @@ import {returnServerError} from '../services/returnServerError.ts';
         var model = new MongoModel('person');
         var deferred = Q.defer();
         // Validate
-        var validationResults = validate(personData, {
-            type: 'object',
-            required: ['name', 'lastname', 'email', 'birthday', 'sex'],
-            properties: {
-                email: { "type": "string", "format": "email" }
-            }
-        });
+        var validationResults = validate(personData, require('../schemas/PersonWithCredentials.json'));
         if (validationResults.errors.length) {
             var error: Error = {
                 httpStatus: 400,
