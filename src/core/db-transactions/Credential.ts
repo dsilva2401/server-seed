@@ -6,9 +6,16 @@ import {Credential as CredentialModel} from '../db-models/Credential.ts';
 import {getPersonDataFromEmail} from './Person.ts';
 import * as Q from 'q';
 
+/**
+ * Create Indexes for Credential model
+ */
+    export function createCredentialsIndexes () {
+        var model = new MongoModel('credential');
+        model.createIndex({email: 1}, {unique: true});
+    }
 
 /**
- ***** Update or Create Credential *****
+ * Update or Create Credential
  */
     export function updateOrCreateCredential (email: string, password: string): Promise<any> {
         var model = new MongoModel('credential');
@@ -24,7 +31,7 @@ import * as Q from 'q';
     }
 
 /**
- ***** Get Owner Data from credentials *****
+ * Get Owner Data from credentials
  */
     export function getOwnerDataFromCredentials (email: string, password?: string): Promise<IPerson> {
         var model = new MongoModel('credential');

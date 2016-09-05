@@ -62024,7 +62024,15 @@
 	var Person_ts_1 = __webpack_require__(94);
 	var Q = __webpack_require__(180);
 	/**
-	 ***** Update or Create Credential *****
+	 * Create Indexes for Credential model
+	 */
+	function createCredentialsIndexes() {
+	    var model = new MongoModel_ts_1.MongoModel('credential');
+	    model.createIndex({ email: 1 }, { unique: true });
+	}
+	exports.createCredentialsIndexes = createCredentialsIndexes;
+	/**
+	 * Update or Create Credential
 	 */
 	function updateOrCreateCredential(email, password) {
 	    var model = new MongoModel_ts_1.MongoModel('credential');
@@ -62040,7 +62048,7 @@
 	}
 	exports.updateOrCreateCredential = updateOrCreateCredential;
 	/**
-	 ***** Get Owner Data from credentials *****
+	 * Get Owner Data from credentials
 	 */
 	function getOwnerDataFromCredentials(email, password) {
 	    var model = new MongoModel_ts_1.MongoModel('credential');
@@ -63591,74 +63599,32 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	// Imports
-	var MongoModel_ts_1 = __webpack_require__(95);
 	var PersonBE_ts_1 = __webpack_require__(190);
 	var Q = __webpack_require__(180);
+	var Credential_ts_1 = __webpack_require__(181);
 	// Exports
 	var Credential = (function () {
 	    // Constructor
 	    function Credential(email, password) {
-	        var self = this;
 	        this.email = email;
-	        if (password)
-	            this.password = password;
-	        this.personModel = new MongoModel_ts_1.MongoModel('person');
-	        this.model = new MongoModel_ts_1.MongoModel('credential');
-	        this.model.createIndex({ email: 1 }, { unique: true });
+	        this.password = password;
+	        Credential_ts_1.createCredentialsIndexes();
 	    }
-	    Credential.prototype.load = function () {
-	        var deferred = Q.defer();
-	        var self = this;
-	        this.model.findOne({ email: this.email })
-	            .then(function (credentialData) {
-	            if (credentialData) {
-	                self.password = credentialData.password;
-	                deferred.resolve();
-	            }
-	            deferred.reject({
-	                data: { email: self.email, password: self.password },
-	                details: 'Credential not registered'
-	            });
-	        }).catch(function (err) {
-	            deferred.reject(err);
-	        });
-	        return deferred.promise;
-	    };
 	    Credential.prototype.updatePassword = function (password) {
 	        this.password = password;
 	        return this.save();
 	    };
 	    Credential.prototype.save = function () {
-	        var deferred = Q.defer();
-	        var self = this;
-	        this.model.updateOrCreate({ email: this.email }, {
-	            email: this.email,
-	            password: this.password
-	        })
-	            .then(function (personData) {
-	            deferred.resolve();
-	        }).catch(function (err) {
-	            deferred.reject(err);
-	        });
-	        return deferred.promise;
+	        return Credential_ts_1.updateOrCreateCredential(this.email, this.password);
 	    };
 	    Credential.prototype.getOwner = function () {
 	        var deferred = Q.defer();
-	        var q = {};
-	        q.email = this.email;
-	        if (this.password)
-	            q.password = this.password;
-	        this.model.findOne(q)
-	            .then(function (credentialData) {
-	            var owner = null;
-	            if (credentialData)
-	                owner = new PersonBE_ts_1.PersonBE(credentialData._id);
-	            deferred.resolve(owner);
-	        })
-	            .catch(function (err) {
-	            deferred.reject(err);
-	        });
+	        Credential_ts_1.getOwnerDataFromCredentials(this.email, this.password).then(function (personData) {
+	            if (!personData)
+	                deferred.resolve();
+	            else
+	                deferred.resolve(new PersonBE_ts_1.PersonBE(personData));
+	        }).catch(deferred.reject);
 	        return deferred.promise;
 	    };
 	    return Credential;
