@@ -47,3 +47,5 @@ test/project-src
 
 **/node_modules
 **/typings
+
+.DS_Store
