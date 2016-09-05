@@ -24559,8 +24559,8 @@
 	var express = __webpack_require__(2);
 	var index_ts_1 = __webpack_require__(89);
 	var config_ts_1 = __webpack_require__(85);
-	var bodyParser = __webpack_require__(193);
-	var cookieParser = __webpack_require__(225);
+	var bodyParser = __webpack_require__(194);
+	var cookieParser = __webpack_require__(226);
 	// Server setup
 	var serverConfig = config_ts_1.config.servers.auth;
 	exports.server = express();
@@ -24765,7 +24765,15 @@
 	var validate_ts_1 = __webpack_require__(182);
 	var returnServerError_ts_1 = __webpack_require__(187);
 	/**
-	 ***** Register Person *****
+	 * Create Indexes for Person model
+	 */
+	function createPersonIndexes() {
+	    var model = new MongoModel_ts_1.MongoModel('person');
+	    model.createIndex({ email: 1 }, { unique: true });
+	}
+	exports.createPersonIndexes = createPersonIndexes;
+	/**
+	 * Register a new Person
 	 */
 	function registerPerson(personData) {
 	    var model = new MongoModel_ts_1.MongoModel('person');
@@ -24814,7 +24822,19 @@
 	}
 	exports.registerPerson = registerPerson;
 	/**
-	 ***** Get Person Data *****
+	 * Update or Create a Person
+	 */
+	function updateOrCreatePerson(personData) {
+	    var model = new MongoModel_ts_1.MongoModel('person');
+	    var deferred = Q.defer();
+	    model.updateOrCreate({ email: personData.email }, personData).then(function () {
+	        deferred.resolve();
+	    }).catch(deferred.reject);
+	    return deferred.promise;
+	}
+	exports.updateOrCreatePerson = updateOrCreatePerson;
+	/**
+	 * Get Person Data
 	 */
 	function getPersonDataFromId(id) {
 	    var model = new MongoModel_ts_1.MongoModel('person');
@@ -63582,7 +63602,7 @@
 	        var self = this;
 	        person.addSession(30).then(function (session) {
 	            self.addCookies({
-	                uid: session.ownerId,
+	                uid: session.personId,
 	                skey: session.key
 	            });
 	            deferred.resolve();
@@ -63647,71 +63667,32 @@
 	var Person_ts_1 = __webpack_require__(191);
 	var Credential_ts_1 = __webpack_require__(189);
 	var Session_ts_1 = __webpack_require__(192);
-	var MongoModel_ts_1 = __webpack_require__(95);
+	var Person_ts_2 = __webpack_require__(94);
 	var Q = __webpack_require__(180);
 	// Exports
 	var PersonBE = (function (_super) {
 	    __extends(PersonBE, _super);
-	    function PersonBE(dataOrId) {
-	        // Id
-	        if (typeof dataOrId == 'string') {
-	            _super.call(this);
-	            this.id = dataOrId;
-	        }
-	        else {
-	            _super.call(this, dataOrId);
-	            this.credential = new Credential_ts_1.Credential(this.email);
-	        }
-	        this.model = new MongoModel_ts_1.MongoModel('person');
-	        this.model.createIndex({ email: 1 }, { unique: true });
+	    // Constructor
+	    function PersonBE(data) {
+	        _super.call(this, data);
+	        this.credential = new Credential_ts_1.Credential(this.email);
+	        Person_ts_2.createPersonIndexes();
 	    }
-	    PersonBE.prototype.load = function () {
-	        var deferred = Q.defer();
-	        var self = this;
-	        this.model.findOne({
-	            _id: this.id
-	        }).then(function (data) {
-	            if (data) {
-	                self.name = data.name;
-	                self.lastname = data.lastname;
-	                self.email = data.email;
-	                self.sex = data.sex;
-	                self.birthday = data.birthday;
-	                self.credential = new Credential_ts_1.Credential(self.email);
-	                deferred.resolve(self.basicData());
-	            }
-	            deferred.reject({
-	                details: 'Id ' + self.id + ' not registered'
-	            });
-	        }).catch(function (err) {
-	            deferred.reject(err);
-	        });
-	        return deferred.promise;
-	    };
 	    PersonBE.prototype.save = function () {
+	        var _this = this;
 	        var deferred = Q.defer();
-	        var self = this;
-	        var data = {
+	        Person_ts_2.updateOrCreatePerson({
 	            name: this.name,
 	            lastname: this.lastname,
 	            sex: this.sex,
 	            email: this.email,
 	            birthday: this.birthday
-	        };
-	        this.model.updateOrCreate({ email: this.email }, data)
-	            .then(function (personData) {
+	        }).then(function (personData) {
 	            if (personData && personData._id)
-	                self.id = personData._id;
-	            deferred.resolve(self.basicData());
-	        }).catch(function (err) {
-	            deferred.reject(err);
-	        });
+	                _this.id = personData._id;
+	            deferred.resolve(_this.basicData());
+	        }).catch(deferred.reject);
 	        return deferred.promise;
-	    };
-	    PersonBE.prototype.destroy = function () {
-	        return this.model.remove({
-	            email: this.email
-	        });
 	    };
 	    PersonBE.prototype.addSession = function (keySize) {
 	        var deferred = Q.defer();
@@ -63756,25 +63737,6 @@
 	            email: this.email
 	        };
 	    };
-	    Person.prototype.validate = function () {
-	        var required = ['name', 'lastname', 'email', 'birthday', 'sex'];
-	        var missing = [];
-	        var malformed = [];
-	        // Validate required
-	        for (var i = 0; i < required.length; i++) {
-	            if (!this[required[i]])
-	                missing.push(required[i]);
-	        }
-	        // Validate format
-	        var emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-	        if (!!!emailRegex.test(this.email))
-	            malformed.push('email');
-	        // Results
-	        if (!missing.length && !malformed.length)
-	            return false;
-	        else
-	            return { missing: missing, malformed: malformed };
-	    };
 	    return Person;
 	}());
 	exports.Person = Person;
@@ -63786,12 +63748,11 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var MongoModel_ts_1 = __webpack_require__(95);
-	var Q = __webpack_require__(180);
+	var Session_ts_1 = __webpack_require__(193);
 	// Exports
 	var Session = (function () {
-	    function Session(ownerId, keyOrSize) {
-	        this.ownerId = ownerId;
+	    function Session(personId, keyOrSize) {
+	        this.personId = personId;
 	        if (typeof keyOrSize == 'string') {
 	            this.key = keyOrSize;
 	        }
@@ -63802,23 +63763,9 @@
 	                this.key += abc[Math.floor(Math.random() * abc.length)];
 	            }
 	        }
-	        this.model = new MongoModel_ts_1.MongoModel('session');
 	    }
 	    Session.prototype.save = function () {
-	        var deferred = Q.defer();
-	        var self = this;
-	        this.model.updateOrCreate({
-	            ownserId: this.ownerId,
-	            key: this.key
-	        }, {
-	            ownserId: this.ownerId,
-	            key: this.key
-	        }).then(function () {
-	            deferred.resolve();
-	        }).catch(function (err) {
-	            deferred.reject(err);
-	        });
-	        return deferred.promise;
+	        return Session_ts_1.createSession(this.personId, this.key);
 	    };
 	    return Session;
 	}());
@@ -63828,6 +63775,31 @@
 
 /***/ },
 /* 193 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var MongoModel_ts_1 = __webpack_require__(95);
+	var Q = __webpack_require__(180);
+	/**
+	 * Create Session
+	 */
+	function createSession(personId, key) {
+	    var model = new MongoModel_ts_1.MongoModel('session');
+	    var deferred = Q.defer();
+	    var sessionData = {
+	        personId: personId,
+	        key: key
+	    };
+	    model.insert(sessionData).then(function (respData) {
+	        deferred.resolve(sessionData);
+	    }).catch(deferred.reject);
+	    return deferred.promise;
+	}
+	exports.createSession = createSession;
+
+
+/***/ },
+/* 194 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -63971,16 +63943,16 @@
 	  // this uses a switch for static require analysis
 	  switch (parserName) {
 	    case 'json':
-	      parser = __webpack_require__(194)
+	      parser = __webpack_require__(195)
 	      break
 	    case 'raw':
-	      parser = __webpack_require__(222)
-	      break
-	    case 'text':
 	      parser = __webpack_require__(223)
 	      break
-	    case 'urlencoded':
+	    case 'text':
 	      parser = __webpack_require__(224)
+	      break
+	    case 'urlencoded':
+	      parser = __webpack_require__(225)
 	      break
 	  }
 
@@ -63990,7 +63962,7 @@
 
 
 /***/ },
-/* 194 */
+/* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -64007,11 +63979,11 @@
 	 * @private
 	 */
 
-	var bytes = __webpack_require__(195)
+	var bytes = __webpack_require__(196)
 	var contentType = __webpack_require__(47)
 	var createError = __webpack_require__(49)
 	var debug = __webpack_require__(8)('body-parser:json')
-	var read = __webpack_require__(196)
+	var read = __webpack_require__(197)
 	var typeis = __webpack_require__(77)
 
 	/**
@@ -64171,7 +64143,7 @@
 
 
 /***/ },
-/* 195 */
+/* 196 */
 /***/ function(module, exports) {
 
 	/*!
@@ -64334,7 +64306,7 @@
 
 
 /***/ },
-/* 196 */
+/* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -64351,10 +64323,10 @@
 	 */
 
 	var createError = __webpack_require__(49)
-	var getBody = __webpack_require__(197)
-	var iconv = __webpack_require__(199)
+	var getBody = __webpack_require__(198)
+	var iconv = __webpack_require__(200)
 	var onFinished = __webpack_require__(16)
-	var zlib = __webpack_require__(221)
+	var zlib = __webpack_require__(222)
 
 	/**
 	 * Module exports.
@@ -64528,7 +64500,7 @@
 
 
 /***/ },
-/* 197 */
+/* 198 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -64545,8 +64517,8 @@
 	 * @private
 	 */
 
-	var bytes = __webpack_require__(198)
-	var iconv = __webpack_require__(199)
+	var bytes = __webpack_require__(199)
+	var iconv = __webpack_require__(200)
 	var unpipe = __webpack_require__(20)
 
 	/**
@@ -64854,7 +64826,7 @@
 
 
 /***/ },
-/* 198 */
+/* 199 */
 /***/ function(module, exports) {
 
 	/*!
@@ -65017,12 +64989,12 @@
 
 
 /***/ },
-/* 199 */
+/* 200 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
 
-	var bomHandling = __webpack_require__(200),
+	var bomHandling = __webpack_require__(201),
 	    iconv = module.exports;
 
 	// All codecs and aliases are kept here, keyed by encoding name/alias.
@@ -65080,7 +65052,7 @@
 	iconv._codecDataCache = {};
 	iconv.getCodec = function getCodec(encoding) {
 	    if (!iconv.encodings)
-	        iconv.encodings = __webpack_require__(201); // Lazy load all encoding definitions.
+	        iconv.encodings = __webpack_require__(202); // Lazy load all encoding definitions.
 	    
 	    // Canonicalize encoding name: strip all non-alphanumeric chars and appended year.
 	    var enc = (''+encoding).toLowerCase().replace(/[^0-9a-z]|:\d{4}$/g, "");
@@ -65154,17 +65126,17 @@
 	    // Load streaming support in Node v0.10+
 	    var nodeVerArr = nodeVer.split(".").map(Number);
 	    if (nodeVerArr[0] > 0 || nodeVerArr[1] >= 10) {
-	        __webpack_require__(219)(iconv);
+	        __webpack_require__(220)(iconv);
 	    }
 
 	    // Load Node primitive extensions.
-	    __webpack_require__(220)(iconv);
+	    __webpack_require__(221)(iconv);
 	}
 
 
 
 /***/ },
-/* 200 */
+/* 201 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -65222,7 +65194,7 @@
 
 
 /***/ },
-/* 201 */
+/* 202 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -65230,14 +65202,14 @@
 	// Update this array if you add/rename/remove files in this directory.
 	// We support Browserify by skipping automatic module discovery and requiring modules directly.
 	var modules = [
-	    __webpack_require__(202),
-	    __webpack_require__(204),
+	    __webpack_require__(203),
 	    __webpack_require__(205),
 	    __webpack_require__(206),
 	    __webpack_require__(207),
 	    __webpack_require__(208),
 	    __webpack_require__(209),
 	    __webpack_require__(210),
+	    __webpack_require__(211),
 	];
 
 	// Put all encoding/alias/codec definitions to single object and export it. 
@@ -65250,7 +65222,7 @@
 
 
 /***/ },
-/* 202 */
+/* 203 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -65300,7 +65272,7 @@
 	//------------------------------------------------------------------------------
 
 	// We use node.js internal decoder. Its signature is the same as ours.
-	var StringDecoder = __webpack_require__(203).StringDecoder;
+	var StringDecoder = __webpack_require__(204).StringDecoder;
 
 	if (!StringDecoder.prototype.end) // Node v0.8 doesn't have this method.
 	    StringDecoder.prototype.end = function() {};
@@ -65443,13 +65415,13 @@
 
 
 /***/ },
-/* 203 */
+/* 204 */
 /***/ function(module, exports) {
 
 	module.exports = require("string_decoder");
 
 /***/ },
-/* 204 */
+/* 205 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -65629,7 +65601,7 @@
 
 
 /***/ },
-/* 205 */
+/* 206 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -65924,7 +65896,7 @@
 
 
 /***/ },
-/* 206 */
+/* 207 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -66002,7 +65974,7 @@
 
 
 /***/ },
-/* 207 */
+/* 208 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -66177,7 +66149,7 @@
 
 
 /***/ },
-/* 208 */
+/* 209 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -66633,7 +66605,7 @@
 	}
 
 /***/ },
-/* 209 */
+/* 210 */
 /***/ function(module, exports) {
 
 	"use strict"
@@ -67193,7 +67165,7 @@
 
 
 /***/ },
-/* 210 */
+/* 211 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -67239,7 +67211,7 @@
 
 	    'shiftjis': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(211) },
+	        table: function() { return __webpack_require__(212) },
 	        encodeAdd: {'\u00a5': 0x5C, '\u203E': 0x7E},
 	        encodeSkipVals: [{from: 0xED40, to: 0xF940}],
 	    },
@@ -67254,7 +67226,7 @@
 
 	    'eucjp': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(212) },
+	        table: function() { return __webpack_require__(213) },
 	        encodeAdd: {'\u00a5': 0x5C, '\u203E': 0x7E},
 	    },
 
@@ -67280,21 +67252,21 @@
 	    '936': 'cp936',
 	    'cp936': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(213) },
+	        table: function() { return __webpack_require__(214) },
 	    },
 
 	    // GBK (~22000 chars) is an extension of CP936 that added user-mapped chars and some other.
 	    'gbk': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(213).concat(__webpack_require__(214)) },
+	        table: function() { return __webpack_require__(214).concat(__webpack_require__(215)) },
 	    },
 	    'xgbk': 'gbk',
 
 	    // GB18030 is an algorithmic extension of GBK.
 	    'gb18030': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(213).concat(__webpack_require__(214)) },
-	        gb18030: function() { return __webpack_require__(215) },
+	        table: function() { return __webpack_require__(214).concat(__webpack_require__(215)) },
+	        gb18030: function() { return __webpack_require__(216) },
 	    },
 
 	    'chinese': 'gb18030',
@@ -67310,7 +67282,7 @@
 	    '949': 'cp949',
 	    'cp949': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(216) },
+	        table: function() { return __webpack_require__(217) },
 	    },
 
 	    'cseuckr': 'cp949',
@@ -67350,14 +67322,14 @@
 	    '950': 'cp950',
 	    'cp950': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(217) },
+	        table: function() { return __webpack_require__(218) },
 	    },
 
 	    // Big5 has many variations and is an extension of cp950. We use Encoding Standard's as a consensus.
 	    'big5': 'big5hkscs',
 	    'big5hkscs': {
 	        type: '_dbcs',
-	        table: function() { return __webpack_require__(217).concat(__webpack_require__(218)) },
+	        table: function() { return __webpack_require__(218).concat(__webpack_require__(219)) },
 	        encodeSkipVals: [0xa2cc],
 	    },
 
@@ -67369,7 +67341,7 @@
 
 
 /***/ },
-/* 211 */
+/* 212 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -67920,7 +67892,7 @@
 	];
 
 /***/ },
-/* 212 */
+/* 213 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -68745,7 +68717,7 @@
 	];
 
 /***/ },
-/* 213 */
+/* 214 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -71369,7 +71341,7 @@
 	];
 
 /***/ },
-/* 214 */
+/* 215 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -71632,7 +71604,7 @@
 	];
 
 /***/ },
-/* 215 */
+/* 216 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -72057,7 +72029,7 @@
 	};
 
 /***/ },
-/* 216 */
+/* 217 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -74440,7 +74412,7 @@
 	];
 
 /***/ },
-/* 217 */
+/* 218 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -75172,7 +75144,7 @@
 	];
 
 /***/ },
-/* 218 */
+/* 219 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -75681,7 +75653,7 @@
 	];
 
 /***/ },
-/* 219 */
+/* 220 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -75807,7 +75779,7 @@
 
 
 /***/ },
-/* 220 */
+/* 221 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict"
@@ -76027,13 +75999,13 @@
 
 
 /***/ },
-/* 221 */
+/* 222 */
 /***/ function(module, exports) {
 
 	module.exports = require("zlib");
 
 /***/ },
-/* 222 */
+/* 223 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -76048,9 +76020,9 @@
 	 * Module dependencies.
 	 */
 
-	var bytes = __webpack_require__(195)
+	var bytes = __webpack_require__(196)
 	var debug = __webpack_require__(8)('body-parser:raw')
-	var read = __webpack_require__(196)
+	var read = __webpack_require__(197)
 	var typeis = __webpack_require__(77)
 
 	/**
@@ -76140,7 +76112,7 @@
 
 
 /***/ },
-/* 223 */
+/* 224 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -76155,10 +76127,10 @@
 	 * Module dependencies.
 	 */
 
-	var bytes = __webpack_require__(195)
+	var bytes = __webpack_require__(196)
 	var contentType = __webpack_require__(47)
 	var debug = __webpack_require__(8)('body-parser:text')
-	var read = __webpack_require__(196)
+	var read = __webpack_require__(197)
 	var typeis = __webpack_require__(77)
 
 	/**
@@ -76267,7 +76239,7 @@
 
 
 /***/ },
-/* 224 */
+/* 225 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -76284,12 +76256,12 @@
 	 * @private
 	 */
 
-	var bytes = __webpack_require__(195)
+	var bytes = __webpack_require__(196)
 	var contentType = __webpack_require__(47)
 	var createError = __webpack_require__(49)
 	var debug = __webpack_require__(8)('body-parser:urlencoded')
 	var deprecate = __webpack_require__(29)('body-parser')
-	var read = __webpack_require__(196)
+	var read = __webpack_require__(197)
 	var typeis = __webpack_require__(77)
 
 	/**
@@ -76552,7 +76524,7 @@
 
 
 /***/ },
-/* 225 */
+/* 226 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!

@@ -10,8 +10,17 @@ import * as Q from 'q';
 import {validate} from '../services/validate.ts';
 import {returnServerError} from '../services/returnServerError.ts';
 
+
 /**
- ***** Register Person *****
+ * Create Indexes for Person model
+ */
+    export function createPersonIndexes () {
+        var model = new MongoModel('person');
+        model.createIndex({email: 1}, {unique: true});
+    }
+
+/**
+ * Register a new Person
  */
     export function registerPerson (personData: IPersonWithCredentials): Promise<IPerson> {
         var model = new MongoModel('person');
@@ -60,9 +69,20 @@ import {returnServerError} from '../services/returnServerError.ts';
         return deferred.promise;
     }
 
+/**
+ * Update or Create a Person
+ */
+    export function updateOrCreatePerson (personData: PersonModel): Promise<any> {
+        var model = new MongoModel('person');
+        var deferred = Q.defer();
+        model.updateOrCreate({email: personData.email}, personData).then(function () {
+            deferred.resolve();
+        }).catch(deferred.reject);
+        return deferred.promise; 
+    }
 
 /**
- ***** Get Person Data *****
+ * Get Person Data
  */
     export function getPersonDataFromId (id: string): Promise<IPerson> {
         var model = new MongoModel('person');

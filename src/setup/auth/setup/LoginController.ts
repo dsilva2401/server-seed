@@ -60,7 +60,7 @@
 				let self = this;
 				person.addSession(30).then(function (session: Session) {
 					self.addCookies({
-						uid: session.ownerId,
+						uid: session.personId,
 						skey: session.key
 					})
 					deferred.resolve();
