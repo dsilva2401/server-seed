@@ -60548,14 +60548,7 @@
 	        2. Request api
 	        3. Response request
 	    */
-	    /*var apps = config.webapps.apps;
-	    Object.keys(apps).forEach(function (appName) {
-	        var appData = apps[appName];
-	        console.log(appName, appData);
-	    });
-	    res.end('Calling Views');*/
 	    next();
-	    // res.end('Calling Views');
 	});
 	// Setting views
 	var views = config_ts_1.config.httpRoutes.views.services;
@@ -60569,14 +60562,6 @@
 	        res.send(indexFile);
 	        res.end();
 	    });
-	    /*var routeData = views[viewName];
-	    var webappData = config.webapps.apps[viewName];
-	    if (!routeData || !webappData) return;
-	    
-	    // Handler
-	    router.get(routeData.path, function (req, res, next) {
-	        res.end();
-	    });*/
 	});
 
 
