@@ -12,6 +12,7 @@
 	var webpack = require('gulp-webpack');
 	var httpRoutes = require('./src/settings/http-routes.json');
 	var webapps = require('./src/settings/webapps.json');
+	var replace = require("replace");
 
 // Tasks
 
@@ -157,9 +158,16 @@
 	// New webapp
 		gulp.task('webapps:new', function (name) {
 			if (!name) return;
-			fs.copy(
+			fs.copySync(
 				path.join(__dirname, 'src/setup/webapps/src/.seed-webapp'),
 				path.join(__dirname, 'src/setup/webapps/src/'+name)	
 			);
+			replace({
+				regex: 'REPLACE',
+				replacement: name,
+				paths: [path.join(__dirname, 'src/setup/webapps/src/'+name, 'src/index.html')],
+				recursive: false,
+				silent: false,
+			});
 			console.log('Webapp created..');
 		});

@@ -24650,20 +24650,7 @@
 /***/ function(module, exports) {
 
 	module.exports = {
-		"dir": "src/setup/webapps/src",
-		"apps": {
-			"register": {
-				"indexPath": "src/index.html",
-				"scripts": [
-					"dist/polyfills.bundle.js",
-					"dist/vendor.bundle.js",
-					"dist/main.bundle.js"
-				]
-			},
-			"login": {
-				"indexPath": "src/index.html"
-			}
-		}
+		"dir": "src/setup/webapps/src"
 	};
 
 /***/ },

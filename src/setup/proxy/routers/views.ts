@@ -15,25 +15,19 @@
 			2. Request api
 			3. Response request
 		*/
-		/*var apps = config.webapps.apps;
-		Object.keys(apps).forEach(function (appName) {
-			var appData = apps[appName];
-			console.log(appName, appData);
-		});
-		res.end('Calling Views');*/
-		//next();
-		res.end('Calling Views');
+		next();
 	});
 
 	// Setting views
-	/*var views = config.httpRoutes.views.services;  
+	var views = config.httpRoutes.views.services;
 	Object.keys(views).forEach(function (viewName) {
-		var routeData = views[viewName];
-		var webappData = config.webapps.apps[viewName];
-		if (!routeData || !webappData) return;
-		
-		// Handler
-		router.get(routeData.path, function (req, res, next) {
+		var webappPath = path.join(config.webapps.dir, viewName);
+		var webappManifestPath = path.join(webappPath, 'manifest.json');
+		var webappManifest = JSON.parse(fs.readFileSync(webappManifestPath, 'utf-8'));
+		var indexFilePath = path.join(webappPath, webappManifest.indexPath);
+		var indexFile = fs.readFileSync(indexFilePath, 'utf-8');
+		router.get(views[viewName].path, function (req, res, next) {
+			res.send(indexFile);
 			res.end();
 		});
-	});*/
+	});

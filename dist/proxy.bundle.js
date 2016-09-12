@@ -24566,20 +24566,7 @@
 /***/ function(module, exports) {
 
 	module.exports = {
-		"dir": "src/setup/webapps/src",
-		"apps": {
-			"register": {
-				"indexPath": "src/index.html",
-				"scripts": [
-					"dist/polyfills.bundle.js",
-					"dist/vendor.bundle.js",
-					"dist/main.bundle.js"
-				]
-			},
-			"login": {
-				"indexPath": "src/index.html"
-			}
-		}
+		"dir": "src/setup/webapps/src"
 	};
 
 /***/ },
@@ -60549,6 +60536,9 @@
 	"use strict";
 	// Imports
 	var express = __webpack_require__(2);
+	var fs = __webpack_require__(13);
+	var path = __webpack_require__(35);
+	var config_ts_1 = __webpack_require__(85);
 	// Define router
 	exports.router = express.Router();
 	// Setup routes
@@ -60564,21 +60554,30 @@
 	        console.log(appName, appData);
 	    });
 	    res.end('Calling Views');*/
-	    //next();
-	    res.end('Calling Views');
+	    next();
+	    // res.end('Calling Views');
 	});
 	// Setting views
-	/*var views = config.httpRoutes.views.services;
+	var views = config_ts_1.config.httpRoutes.views.services;
 	Object.keys(views).forEach(function (viewName) {
-	    var routeData = views[viewName];
+	    var webappPath = path.join(config_ts_1.config.webapps.dir, viewName);
+	    var webappManifestPath = path.join(webappPath, 'manifest.json');
+	    var webappManifest = JSON.parse(fs.readFileSync(webappManifestPath, 'utf-8'));
+	    var indexFilePath = path.join(webappPath, webappManifest.indexPath);
+	    var indexFile = fs.readFileSync(indexFilePath, 'utf-8');
+	    exports.router.get(views[viewName].path, function (req, res, next) {
+	        res.send(indexFile);
+	        res.end();
+	    });
+	    /*var routeData = views[viewName];
 	    var webappData = config.webapps.apps[viewName];
 	    if (!routeData || !webappData) return;
 	    
 	    // Handler
 	    router.get(routeData.path, function (req, res, next) {
 	        res.end();
-	    });
-	});*/ 
+	    });*/
+	});
 
 
 /***/ },
