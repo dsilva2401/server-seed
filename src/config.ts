@@ -26,11 +26,13 @@
 
 	// Database server
 	config.servers.database = {};
-	config.servers.database.domain = 'localhost';
-	config.servers.database.port = 27017;
+	config.servers.database.domain = 'ds029476.mlab.com';
+	config.servers.database.port = 29476;
 	config.servers.database.dataPath = path.join(process.cwd(), 'mongodata');
-	config.servers.database.dbname = 'serverseed';
-	config.servers.database.url = 'mongodb://'+config.servers.database.domain+':'+config.servers.database.port+'/'+config.servers.database.dbname;
+	config.servers.database.dbname = 'server-seed';
+	config.servers.database.username = 'test';
+	config.servers.database.password = 'test123';
+	config.servers.database.url = 'mongodb://'+config.servers.database.username+':'+config.servers.database.password+'@'+config.servers.database.domain+':'+config.servers.database.port+'/'+config.servers.database.dbname;
 
 	// Proxy Server
 	config.servers.proxy = {};
@@ -81,4 +83,4 @@
 */
 	// Import configutation
 	config.webapps = require('./settings/webapps.json');
-	config.webapps.dir = path.join(config.rootPath, config.webapps.dir); 
+	config.webapps.dir = path.join(config.rootPath, config.webapps.dir);

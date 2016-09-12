@@ -24459,11 +24459,13 @@
 	exports.config.servers = {};
 	// Database server
 	exports.config.servers.database = {};
-	exports.config.servers.database.domain = 'localhost';
-	exports.config.servers.database.port = 27017;
+	exports.config.servers.database.domain = 'ds029476.mlab.com';
+	exports.config.servers.database.port = 29476;
 	exports.config.servers.database.dataPath = path.join(process.cwd(), 'mongodata');
-	exports.config.servers.database.dbname = 'serverseed';
-	exports.config.servers.database.url = 'mongodb://' + exports.config.servers.database.domain + ':' + exports.config.servers.database.port + '/' + exports.config.servers.database.dbname;
+	exports.config.servers.database.dbname = 'server-seed';
+	exports.config.servers.database.username = 'test';
+	exports.config.servers.database.password = 'test123';
+	exports.config.servers.database.url = 'mongodb://' + exports.config.servers.database.username + ':' + exports.config.servers.database.password + '@' + exports.config.servers.database.domain + ':' + exports.config.servers.database.port + '/' + exports.config.servers.database.dbname;
 	// Proxy Server
 	exports.config.servers.proxy = {};
 	exports.config.servers.proxy.domain = 'localhost';
