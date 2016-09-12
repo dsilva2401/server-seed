@@ -107,7 +107,12 @@
 	"use strict";
 	// Imports
 	var path = __webpack_require__(35);
-	exports.config = { servers: null, httpRoutes: null, webapps: null };
+	exports.config = {
+	    servers: null,
+	    httpRoutes: null,
+	    webapps: null,
+	    rootPath: path.join(__dirname, '..')
+	};
 	/**
 	    === Servers configuration ===
 	*/
@@ -162,6 +167,7 @@
 	*/
 	// Import configutation
 	exports.config.webapps = __webpack_require__(87);
+	exports.config.webapps.dir = path.join(exports.config.rootPath, exports.config.webapps.dir);
 
 
 /***/ },
@@ -201,7 +207,16 @@
 		},
 		"views": {
 			"path": "/",
-			"services": {}
+			"services": {
+				"login": {
+					"method": "GET",
+					"path": "/login"
+				},
+				"register": {
+					"method": "GET",
+					"path": "/register"
+				}
+			}
 		}
 	};
 
@@ -210,7 +225,22 @@
 /***/ 87:
 /***/ function(module, exports) {
 
-	module.exports = {};
+	module.exports = {
+		"dir": "src/setup/webapps/src",
+		"apps": {
+			"register": {
+				"indexPath": "src/index.html",
+				"scripts": [
+					"dist/polyfills.bundle.js",
+					"dist/vendor.bundle.js",
+					"dist/main.bundle.js"
+				]
+			},
+			"login": {
+				"indexPath": "src/index.html"
+			}
+		}
+	};
 
 /***/ },
 

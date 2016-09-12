@@ -17,5 +17,8 @@
     "request": "registry:dt/request#0.0.0+20160726020908",
     "serve-static": "registry:dt/serve-static#0.0.0+20160606155157",
     "shelljs": "registry:dt/shelljs#0.0.0+20160526131156"
+  },
+  "dependencies": {
+    "xml2json": "registry:npm/xml2json#0.9.1+20160811060400"
   }
 }

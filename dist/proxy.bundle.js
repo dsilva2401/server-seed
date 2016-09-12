@@ -24447,7 +24447,12 @@
 	"use strict";
 	// Imports
 	var path = __webpack_require__(35);
-	exports.config = { servers: null, httpRoutes: null, webapps: null };
+	exports.config = {
+	    servers: null,
+	    httpRoutes: null,
+	    webapps: null,
+	    rootPath: path.join(__dirname, '..')
+	};
 	/**
 	    === Servers configuration ===
 	*/
@@ -24502,6 +24507,7 @@
 	*/
 	// Import configutation
 	exports.config.webapps = __webpack_require__(87);
+	exports.config.webapps.dir = path.join(exports.config.rootPath, exports.config.webapps.dir);
 
 
 /***/ },
@@ -24540,7 +24546,16 @@
 		},
 		"views": {
 			"path": "/",
-			"services": {}
+			"services": {
+				"login": {
+					"method": "GET",
+					"path": "/login"
+				},
+				"register": {
+					"method": "GET",
+					"path": "/register"
+				}
+			}
 		}
 	};
 
@@ -24548,7 +24563,22 @@
 /* 87 */
 /***/ function(module, exports) {
 
-	module.exports = {};
+	module.exports = {
+		"dir": "src/setup/webapps/src",
+		"apps": {
+			"register": {
+				"indexPath": "src/index.html",
+				"scripts": [
+					"dist/polyfills.bundle.js",
+					"dist/vendor.bundle.js",
+					"dist/main.bundle.js"
+				]
+			},
+			"login": {
+				"indexPath": "src/index.html"
+			}
+		}
+	};
 
 /***/ },
 /* 88 */,
@@ -40036,6 +40066,15 @@
 	exports.server.use(bodyParser.json());
 	exports.server.use(cookieParser());
 	exports.server.use(morgan('dev'));
+	exports.server.use(function (req, res, next) {
+	    res.header('Access-Control-Allow-Origin', '*');
+	    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+	    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+	    if ('OPTIONS' == req.method)
+	        res.status(200).send('OK');
+	    else
+	        next();
+	});
 	index_ts_1.setupRouters(exports.server);
 	// Start function
 	function startServer() {
@@ -60517,8 +60556,27 @@
 	        2. Request api
 	        3. Response request
 	    */
+	    /*var apps = config.webapps.apps;
+	    Object.keys(apps).forEach(function (appName) {
+	        var appData = apps[appName];
+	        console.log(appName, appData);
+	    });
+	    res.end('Calling Views');*/
+	    //next();
 	    res.end('Calling Views');
 	});
+	// Setting views
+	/*var views = config.httpRoutes.views.services;
+	Object.keys(views).forEach(function (viewName) {
+	    var routeData = views[viewName];
+	    var webappData = config.webapps.apps[viewName];
+	    if (!routeData || !webappData) return;
+	    
+	    // Handler
+	    router.get(routeData.path, function (req, res, next) {
+	        res.end();
+	    });
+	});*/ 
 
 
 /***/ },

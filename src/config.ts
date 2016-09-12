@@ -7,11 +7,17 @@
 		servers: any;
 		httpRoutes: any;
 		webapps: any;
+		rootPath: string;
 	}
 
 // Exports
 	export let config: Configuration;
-	config = { servers: null, httpRoutes: null, webapps: null };
+	config = {
+		servers: null,
+		httpRoutes: null,
+		webapps: null,
+		rootPath: path.join(__dirname, '..')
+	};
 
 /**
 	=== Servers configuration ===
@@ -75,3 +81,4 @@
 */
 	// Import configutation
 	config.webapps = require('./settings/webapps.json');
+	config.webapps.dir = path.join(config.rootPath, config.webapps.dir); 

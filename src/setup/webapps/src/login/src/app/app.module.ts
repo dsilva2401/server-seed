@@ -10,10 +10,7 @@ import {AppComponent} from "./app";
 @NgModule({
   declarations: [AppComponent],
   imports     : [BrowserModule, FormsModule, HttpModule, RouterModule.forRoot(rootRouterConfig)],
-  providers   : [
-    {provide: LocationStrategy, useClass: HashLocationStrategy},
-    {provide: Window, useValue: window}
-  ],
+  providers   : [{provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap   : [AppComponent]
 })
 export class AppModule {

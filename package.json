@@ -53,7 +53,8 @@
     "promised-mongo": "^1.2.0",
     "q": "^1.4.1",
     "request": "^2.65.0",
-    "shelljs": "^0.7.3"
+    "shelljs": "^0.7.3",
+    "xml2json": "^0.10.0"
   },
   "bugs": {
     "url": "https://github.com/dsilva2401/server-seed/issues"

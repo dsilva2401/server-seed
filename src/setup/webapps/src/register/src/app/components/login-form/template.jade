@@ -1,0 +1,59 @@
+form((ngSubmit)="submit()")
+
+    div
+        span Name
+        input(
+            placeholder="name",
+            [(ngModel)]="person.name",
+            name="name",
+            required
+        )
+    
+    div
+        span Lastname
+        input(
+            placeholder="lastname",
+            [(ngModel)]="person.lastname",
+            name="lastname",
+            required
+        )
+    
+    div
+        span Email
+        input(
+            placeholder="email",
+            [(ngModel)]="person.email",
+            type="email",
+            name="email",
+            required
+        )
+    
+    div
+        span Password
+        input(
+            placeholder="password",
+            [(ngModel)]="person.password",
+            type="password",
+            name="password",
+            required
+        )
+    
+    div
+        span Birthday
+        input(
+            placeholder="birthday",
+            [(ngModel)]="person.birthday",
+            type="date",
+            name="date",
+            required
+        )
+    
+    div
+        span Sex
+        select([(ngModel)]="person.sex", name="sex", required)
+            option(value="") -
+            option(value="m") Male
+            option(value="f") Female
+    
+    div
+        input(type="submit", value="Register")

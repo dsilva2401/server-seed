@@ -29,7 +29,10 @@
 
 	"views": {
 		"path": "/",
-		"services": {}
+		"services": {
+			"login": { "method": "GET", "path": "/login" },
+			"register": { "method": "GET", "path": "/register" }
+		}
 	}
 
 }
