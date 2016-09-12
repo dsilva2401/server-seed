@@ -47,7 +47,7 @@
 
 	"use strict";
 	// Imports
-	var shell = __webpack_require__(228);
+	var shell = __webpack_require__(246);
 	var config_ts_1 = __webpack_require__(85);
 	// Setup
 	var databaseConfig = config_ts_1.config.servers.database;
@@ -114,10 +114,10 @@
 	exports.config.servers = {};
 	// Database server
 	exports.config.servers.database = {};
-	exports.config.servers.database.domain = 'localhost';
-	exports.config.servers.database.port = 27017;
+	exports.config.servers.database.domain = 'ds029476.mlab.com';
+	exports.config.servers.database.port = 29476;
 	exports.config.servers.database.dataPath = path.join(process.cwd(), 'mongodata');
-	exports.config.servers.database.dbname = 'serverseed';
+	exports.config.servers.database.dbname = 'server-seed';
 	exports.config.servers.database.url = 'mongodb://' + exports.config.servers.database.domain + ':' + exports.config.servers.database.port + '/' + exports.config.servers.database.dbname;
 	// Proxy Server
 	exports.config.servers.proxy = {};
@@ -214,7 +214,21 @@
 
 /***/ },
 
-/***/ 228:
+/***/ 130:
+/***/ function(module, exports) {
+
+	module.exports = require("os");
+
+/***/ },
+
+/***/ 145:
+/***/ function(module, exports) {
+
+	module.exports = require("assert");
+
+/***/ },
+
+/***/ 246:
 /***/ function(module, exports, __webpack_require__) {
 
 	//
@@ -225,7 +239,7 @@
 	// http://github.com/arturadib/shelljs
 	//
 
-	var common = __webpack_require__(229);
+	var common = __webpack_require__(247);
 
 	//@
 	//@ All commands run synchronously, unless otherwise stated.
@@ -252,70 +266,70 @@
 	// with wildcards, such as with the regexes for sed & grep
 
 	//@include ./src/cd
-	__webpack_require__(245);
-
-	//@include ./src/pwd
-	__webpack_require__(246);
-
-	//@include ./src/ls
-	__webpack_require__(247);
-
-	//@include ./src/find
-	__webpack_require__(248);
-
-	//@include ./src/cp
-	__webpack_require__(249);
-
-	//@include ./src/rm
-	__webpack_require__(250);
-
-	//@include ./src/mv
-	__webpack_require__(251);
-
-	//@include ./src/mkdir
-	__webpack_require__(252);
-
-	//@include ./src/test
-	__webpack_require__(253);
-
-	//@include ./src/cat
-	__webpack_require__(254);
-
-	//@include ./src/head
-	__webpack_require__(255);
-
-	//@include ./src/tail
-	__webpack_require__(256);
-
-	//@include ./src/to
-	__webpack_require__(257);
-
-	//@include ./src/toEnd
-	__webpack_require__(258);
-
-	//@include ./src/sed
-	__webpack_require__(259);
-
-	//@include ./src/sort
-	__webpack_require__(260);
-
-	//@include ./src/uniq
 	__webpack_require__(261);
 
-	//@include ./src/grep
+	//@include ./src/pwd
 	__webpack_require__(262);
 
-	//@include ./src/which
+	//@include ./src/ls
 	__webpack_require__(263);
 
-	//@include ./src/echo
+	//@include ./src/find
 	__webpack_require__(264);
 
-	//@include ./src/dirs
+	//@include ./src/cp
 	__webpack_require__(265);
 
-	//@include ./src/ln
+	//@include ./src/rm
 	__webpack_require__(266);
+
+	//@include ./src/mv
+	__webpack_require__(267);
+
+	//@include ./src/mkdir
+	__webpack_require__(268);
+
+	//@include ./src/test
+	__webpack_require__(269);
+
+	//@include ./src/cat
+	__webpack_require__(270);
+
+	//@include ./src/head
+	__webpack_require__(271);
+
+	//@include ./src/tail
+	__webpack_require__(272);
+
+	//@include ./src/to
+	__webpack_require__(273);
+
+	//@include ./src/toEnd
+	__webpack_require__(274);
+
+	//@include ./src/sed
+	__webpack_require__(275);
+
+	//@include ./src/sort
+	__webpack_require__(276);
+
+	//@include ./src/uniq
+	__webpack_require__(277);
+
+	//@include ./src/grep
+	__webpack_require__(278);
+
+	//@include ./src/which
+	__webpack_require__(279);
+
+	//@include ./src/echo
+	__webpack_require__(280);
+
+	//@include ./src/dirs
+	__webpack_require__(281);
+
+	//@include ./src/ln
+	__webpack_require__(282);
 
 	//@
 	//@ ### exit(code)
@@ -328,16 +342,16 @@
 	exports.env = process.env;
 
 	//@include ./src/exec
-	__webpack_require__(267);
+	__webpack_require__(283);
 
 	//@include ./src/chmod
-	__webpack_require__(270);
+	__webpack_require__(286);
 
 	//@include ./src/touch
-	__webpack_require__(271);
+	__webpack_require__(287);
 
 	//@include ./src/set
-	__webpack_require__(272);
+	__webpack_require__(288);
 
 
 	//@
@@ -345,11 +359,11 @@
 	//@
 
 	//@include ./src/tempdir
-	__webpack_require__(268);
+	__webpack_require__(284);
 
 	//@include ./src/error
 
-	exports.error = __webpack_require__(273);
+	exports.error = __webpack_require__(289);
 
 	//@include ./src/common
 	exports.ShellString = common.ShellString;
@@ -439,17 +453,17 @@
 
 /***/ },
 
-/***/ 229:
+/***/ 247:
 /***/ function(module, exports, __webpack_require__) {
 
-	// jshint -W053
 	// Ignore warning about 'new String()'
+	/* eslint no-new-wrappers: 0 */
 	'use strict';
 
-	var os = __webpack_require__(230);
+	var os = __webpack_require__(130);
 	var fs = __webpack_require__(13);
-	var glob = __webpack_require__(231);
-	var shell = __webpack_require__(228);
+	var glob = __webpack_require__(248);
+	var shell = __webpack_require__(246);
 
 	var DEFAULT_ERROR_CODE = 1;
 	var shellMethods = Object.create(shell);
@@ -482,8 +496,9 @@
 	var pipeMethods = [];
 
 	function log() {
-	  if (!config.silent)
+	  if (!config.silent) {
 	    console.error.apply(console, arguments);
+	  }
 	}
 	exports.log = log;
 
@@ -493,27 +508,29 @@
 	    _continue = _code;
 	    _code = DEFAULT_ERROR_CODE;
 	  }
-	  if (typeof _code !== 'number')
+	  if (typeof _code !== 'number') {
 	    _code = DEFAULT_ERROR_CODE;
+	  }
 
-	  if (state.errorCode === 0)
+	  if (state.errorCode === 0) {
 	    state.errorCode = _code;
+	  }
 
-	  if (state.error === null)
+	  if (state.error === null) {
 	    state.error = '';
-	  var log_entry = state.currentCmd + ': ' + msg;
-	  if (state.error === '')
-	    state.error = log_entry;
-	  else
-	    state.error += '\n' + log_entry;
+	  }
+	  var logEntry = state.currentCmd + ': ' + msg;
+	  if (state.error === '') {
+	    state.error = logEntry;
+	  } else {
+	    state.error += '\n' + logEntry;
+	  }
 
-	  if(config.fatal)
-	    throw new Error(log_entry);
+	  if (config.fatal) throw new Error(logEntry);
 
-	  if (msg.length > 0)
-	    log(log_entry);
+	  if (msg.length > 0) log(logEntry);
 
-	  if(!_continue) {
+	  if (!_continue) {
 	    throw {
 	      msg: 'earlyExit',
 	      retValue: (new ShellString('', state.error, state.errorCode))
@@ -521,6 +538,16 @@
 	  }
 	}
 	exports.error = error;
+
+	function existsSync(file) {
+	  try {
+	    fs.statSync(file);
+	    return true;
+	  } catch (e) {
+	    return false;
+	  }
+	}
+	exports.existsSync = existsSync;
 
 	//@
 	//@ ### ShellString(str)
@@ -559,10 +586,11 @@
 	// older versions of node
 	function getUserHome() {
 	  var result;
-	  if (os.homedir)
+	  if (os.homedir) {
 	    result = os.homedir(); // node 3+
-	  else
+	  } else {
 	    result = process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME'];
+	  }
 	  return result;
 	}
 	exports.getUserHome = getUserHome;
@@ -572,49 +600,50 @@
 	// Returns {'reference': 'string-value', 'bob': false} when passed two dictionaries of the form:
 	//   parseOptions({'-r': 'string-value'}, {'r':'reference', 'b':'bob'});
 	function parseOptions(opt, map) {
-	  if (!map)
-	    error('parseOptions() internal error: no map given');
+	  if (!map) error('parseOptions() internal error: no map given');
 
 	  // All options are false by default
 	  var options = {};
-	  for (var letter in map) {
-	    if (map[letter][0] !== '!')
+	  Object.keys(map).forEach(function (letter) {
+	    if (map[letter][0] !== '!') {
 	      options[map[letter]] = false;
-	  }
+	    }
+	  });
 
-	  if (!opt)
-	    return options; // defaults
+	  if (!opt) return options; // defaults
 
 	  var optionName;
 	  if (typeof opt === 'string') {
-	    if (opt[0] !== '-')
+	    if (opt[0] !== '-') {
 	      return options;
+	    }
 
 	    // e.g. chars = ['R', 'f']
 	    var chars = opt.slice(1).split('');
 
-	    chars.forEach(function(c) {
+	    chars.forEach(function (c) {
 	      if (c in map) {
 	        optionName = map[c];
-	        if (optionName[0] === '!')
+	        if (optionName[0] === '!') {
 	          options[optionName.slice(1)] = false;
-	        else
+	        } else {
 	          options[optionName] = true;
+	        }
 	      } else {
-	        error('option not recognized: '+c);
+	        error('option not recognized: ' + c);
 	      }
 	    });
 	  } else if (typeof opt === 'object') {
-	    for (var key in opt) {
+	    Object.keys(opt).forEach(function (key) {
 	      // key is a string of the form '-r', '-d', etc.
 	      var c = key[1];
 	      if (c in map) {
 	        optionName = map[c];
 	        options[optionName] = opt[key]; // assign the given value
 	      } else {
-	        error('option not recognized: '+c);
+	        error('option not recognized: ' + c);
 	      }
-	    }
+	    });
 	  } else {
 	    error('options must be strings or key-value pairs');
 	  }
@@ -631,7 +660,7 @@
 	    throw new TypeError('must be an array');
 	  }
 	  var expanded = [];
-	  list.forEach(function(listEl) {
+	  list.forEach(function (listEl) {
 	    // Don't expand non-strings
 	    if (typeof listEl !== 'string') {
 	      expanded.push(listEl);
@@ -650,7 +679,7 @@
 	function unlinkSync(file) {
 	  try {
 	    fs.unlinkSync(file);
-	  } catch(e) {
+	  } catch (e) {
 	    // Try to override file permission
 	    if (e.code === 'EPERM') {
 	      fs.chmodSync(file, '0666');
@@ -665,17 +694,17 @@
 	// e.g. 'shelljs_a5f185d0443ca...'
 	function randomFileName() {
 	  function randomHash(count) {
-	    if (count === 1)
-	      return parseInt(16*Math.random(), 10).toString(16);
-	    else {
-	      var hash = '';
-	      for (var i=0; i<count; i++)
-	        hash += randomHash(1);
-	      return hash;
+	    if (count === 1) {
+	      return parseInt(16 * Math.random(), 10).toString(16);
 	    }
+	    var hash = '';
+	    for (var i = 0; i < count; i++) {
+	      hash += randomHash(1);
+	    }
+	    return hash;
 	  }
 
-	  return 'shelljs_'+randomHash(20);
+	  return 'shelljs_' + randomHash(20);
 	}
 	exports.randomFileName = randomFileName;
 
@@ -684,9 +713,10 @@
 	//    objectAssign({A:1}, {b:2}, {c:3}) returns {A:1, b:2, c:3}
 	function objectAssign(target) {
 	  var sources = [].slice.call(arguments, 1);
-	  sources.forEach(function(source) {
-	    for (var key in source)
+	  sources.forEach(function (source) {
+	    Object.keys(source).forEach(function (key) {
 	      target[key] = source[key];
+	    });
 	  });
 
 	  return target;
@@ -700,7 +730,7 @@
 	  if (options.canReceivePipe) {
 	    pipeMethods.push(cmd);
 	  }
-	  return function() {
+	  return function () {
 	    var retValue = null;
 
 	    state.currentCmd = cmd;
@@ -715,6 +745,10 @@
 	        console.error.apply(console, [cmd].concat(args));
 	      }
 
+	      // If this is coming from a pipe, let's set the pipedValue (otherwise, set
+	      // it to the empty string)
+	      state.pipedValue = (this && typeof this.stdout === 'string') ? this.stdout : '';
+
 	      if (options.unix === false) { // this branch is for exec()
 	        retValue = fn.apply(this, args);
 	      } else { // and this branch is for everything else
@@ -728,30 +762,29 @@
 	        //    `cp([file1, file2, file3], dest);`
 	        // equivalent to:
 	        //    `cp(file1, file2, file3, dest);`
-	        args = args.reduce(function(accum, cur) {
+	        args = args.reduce(function (accum, cur) {
 	          if (Array.isArray(cur)) {
 	            return accum.concat(cur);
-	          } else {
-	            accum.push(cur);
-	            return accum;
 	          }
+	          accum.push(cur);
+	          return accum;
 	        }, []);
 
 	        // Convert ShellStrings (basically just String objects) to regular strings
-	        args = args.map(function(arg) {
+	        args = args.map(function (arg) {
 	          if (arg instanceof Object && arg.constructor.name === 'String') {
 	            return arg.toString();
-	          } else
-	            return arg;
+	          }
+	          return arg;
 	        });
 
 	        // Expand the '~' if appropriate
 	        var homeDir = getUserHome();
-	        args = args.map(function(arg) {
-	          if (typeof arg === 'string' && arg.slice(0, 2) === '~/' || arg === '~')
+	        args = args.map(function (arg) {
+	          if (typeof arg === 'string' && arg.slice(0, 2) === '~/' || arg === '~') {
 	            return arg.replace(/^~/, homeDir);
-	          else
-	            return arg;
+	          }
+	          return arg;
 	        });
 
 	        // Perform glob-expansion on all arguments after globStart, but preserve
@@ -768,9 +801,11 @@
 
 	          retValue = fn.apply(this, args);
 	        } catch (e) {
-	          if (e.msg === 'earlyExit')
+	          if (e.msg === 'earlyExit') {
 	            retValue = e.retValue;
-	          else throw e; // this is probably a bug that should be thrown up the call stack
+	          } else {
+	            throw e; // this is probably a bug that should be thrown up the call stack
+	          }
 	        }
 	      }
 	    } catch (e) {
@@ -780,8 +815,7 @@
 	        console.error(e.stack || e);
 	        process.exit(1);
 	      }
-	      if (config.fatal)
-	        throw e;
+	      if (config.fatal) throw e;
 	    }
 
 	    if (options.wrapOutput &&
@@ -797,8 +831,8 @@
 
 	// This returns all the input that is piped into the current command (or the
 	// empty string, if this isn't on the right-hand side of a pipe
-	function _readFromPipe(that) {
-	  return typeof that.stdout === 'string' ? that.stdout : '';
+	function _readFromPipe() {
+	  return state.pipedValue;
 	}
 	exports.readFromPipe = _readFromPipe;
 
@@ -810,6 +844,7 @@
 	  pipeOnly: false,
 	  unix: true,
 	  wrapOutput: true,
+	  overWrite: false,
 	};
 
 	// Register a new ShellJS command
@@ -817,6 +852,11 @@
 	  wrapOptions = wrapOptions || {};
 	  // If an option isn't specified, use the default
 	  wrapOptions = objectAssign({}, DEFAULT_WRAP_OPTIONS, wrapOptions);
+
+	  if (shell[name] && !wrapOptions.overWrite) {
+	    throw new Error('unable to overwrite `' + name + '` command');
+	  }
+
 	  if (wrapOptions.pipeOnly) {
 	    wrapOptions.canReceivePipe = true;
 	    shellMethods[name] = wrap(name, implementation, wrapOptions);
@@ -829,14 +869,7 @@
 
 /***/ },
 
-/***/ 230:
-/***/ function(module, exports) {
-
-	module.exports = require("os");
-
-/***/ },
-
-/***/ 231:
+/***/ 248:
 /***/ function(module, exports, __webpack_require__) {
 
 	// Approach:
@@ -882,26 +915,26 @@
 	module.exports = glob
 
 	var fs = __webpack_require__(13)
-	var rp = __webpack_require__(232)
-	var minimatch = __webpack_require__(234)
+	var rp = __webpack_require__(249)
+	var minimatch = __webpack_require__(251)
 	var Minimatch = minimatch.Minimatch
 	var inherits = __webpack_require__(51)
 	var EE = __webpack_require__(4).EventEmitter
 	var path = __webpack_require__(35)
-	var assert = __webpack_require__(238)
-	var isAbsolute = __webpack_require__(239)
-	var globSync = __webpack_require__(240)
-	var common = __webpack_require__(241)
+	var assert = __webpack_require__(145)
+	var isAbsolute = __webpack_require__(255)
+	var globSync = __webpack_require__(256)
+	var common = __webpack_require__(257)
 	var alphasort = common.alphasort
 	var alphasorti = common.alphasorti
 	var setopts = common.setopts
 	var ownProp = common.ownProp
-	var inflight = __webpack_require__(242)
+	var inflight = __webpack_require__(258)
 	var util = __webpack_require__(10)
 	var childrenIgnored = common.childrenIgnored
 	var isIgnored = common.isIgnored
 
-	var once = __webpack_require__(244)
+	var once = __webpack_require__(260)
 
 	function glob (pattern, options, cb) {
 	  if (typeof options === 'function') cb = options, options = {}
@@ -941,6 +974,10 @@
 
 	  var g = new Glob(pattern, options)
 	  var set = g.minimatch.set
+
+	  if (!pattern)
+	    return false
+
 	  if (set.length > 1)
 	    return true
 
@@ -1626,7 +1663,7 @@
 
 /***/ },
 
-/***/ 232:
+/***/ 249:
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = realpath
@@ -1642,7 +1679,7 @@
 
 	var version = process.version
 	var ok = /^v[0-5]\./.test(version)
-	var old = __webpack_require__(233)
+	var old = __webpack_require__(250)
 
 	function newError (er) {
 	  return er && er.syscall === 'realpath' && (
@@ -1699,7 +1736,7 @@
 
 /***/ },
 
-/***/ 233:
+/***/ 250:
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -2009,7 +2046,7 @@
 
 /***/ },
 
-/***/ 234:
+/***/ 251:
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = minimatch
@@ -2021,7 +2058,15 @@
 	} catch (er) {}
 
 	var GLOBSTAR = minimatch.GLOBSTAR = Minimatch.GLOBSTAR = {}
-	var expand = __webpack_require__(235)
+	var expand = __webpack_require__(252)
+
+	var plTypes = {
+	  '!': { open: '(?:(?!(?:', close: '))[^/]*?)'},
+	  '?': { open: '(?:', close: ')?' },
+	  '+': { open: '(?:', close: ')+' },
+	  '*': { open: '(?:', close: ')*' },
+	  '@': { open: '(?:', close: ')' }
+	}
 
 	// any single thing other than /
 	// don't need to escape / when using new RegExp()
@@ -2291,7 +2336,6 @@
 	  // ? => one single character
 	  var patternListStack = []
 	  var negativeLists = []
-	  var plType
 	  var stateChar
 	  var inClass = false
 	  var reClassStart = -1
@@ -2390,11 +2434,12 @@
 	          continue
 	        }
 
-	        plType = stateChar
 	        patternListStack.push({
-	          type: plType,
+	          type: stateChar,
 	          start: i - 1,
-	          reStart: re.length
+	          reStart: re.length,
+	          open: plTypes[stateChar].open,
+	          close: plTypes[stateChar].close
 	        })
 	        // negation is (?:(?!js)[^/]*)
 	        re += stateChar === '!' ? '(?:(?!(?:' : '(?:'
@@ -2410,24 +2455,14 @@
 
 	        clearStateChar()
 	        hasMagic = true
-	        re += ')'
 	        var pl = patternListStack.pop()
-	        plType = pl.type
 	        // negation is (?:(?!js)[^/]*)
 	        // The others are (?:<pattern>)<type>
-	        switch (plType) {
-	          case '!':
-	            negativeLists.push(pl)
-	            re += ')[^/]*?)'
-	            pl.reEnd = re.length
-	            break
-	          case '?':
-	          case '+':
-	          case '*':
-	            re += plType
-	            break
-	          case '@': break // the default anyway
+	        re += pl.close
+	        if (pl.type === '!') {
+	          negativeLists.push(pl)
 	        }
+	        pl.reEnd = re.length
 	      continue
 
 	      case '|':
@@ -2534,7 +2569,8 @@
 	  // Go through and escape them, taking care not to double-escape any
 	  // | chars that were already escaped.
 	  for (pl = patternListStack.pop(); pl; pl = patternListStack.pop()) {
-	    var tail = re.slice(pl.reStart + 3)
+	    var tail = re.slice(pl.reStart + pl.open.length)
+	    this.debug('setting tail', re, pl)
 	    // maybe some even number of \, then maybe 1 \, followed by a |
 	    tail = tail.replace(/((?:\\{2}){0,64})(\\?)\|/g, function (_, $1, $2) {
 	      if (!$2) {
@@ -2551,7 +2587,7 @@
 	      return $1 + $1 + $2 + '|'
 	    })
 
-	    this.debug('tail=%j\n   %s', tail, tail)
+	    this.debug('tail=%j\n   %s', tail, tail, pl, re)
 	    var t = pl.type === '*' ? star
 	      : pl.type === '?' ? qmark
 	      : '\\' + pl.type
@@ -2940,11 +2976,11 @@
 
 /***/ },
 
-/***/ 235:
+/***/ 252:
 /***/ function(module, exports, __webpack_require__) {
 
-	var concatMap = __webpack_require__(236);
-	var balanced = __webpack_require__(237);
+	var concatMap = __webpack_require__(253);
+	var balanced = __webpack_require__(254);
 
 	module.exports = expandTop;
 
@@ -3148,7 +3184,7 @@
 
 /***/ },
 
-/***/ 236:
+/***/ 253:
 /***/ function(module, exports) {
 
 	module.exports = function (xs, fn) {
@@ -3168,7 +3204,7 @@
 
 /***/ },
 
-/***/ 237:
+/***/ 254:
 /***/ function(module, exports) {
 
 	module.exports = balanced;
@@ -3233,14 +3269,7 @@
 
 /***/ },
 
-/***/ 238:
-/***/ function(module, exports) {
-
-	module.exports = require("assert");
-
-/***/ },
-
-/***/ 239:
+/***/ 255:
 /***/ function(module, exports) {
 
 	'use strict';
@@ -3267,22 +3296,22 @@
 
 /***/ },
 
-/***/ 240:
+/***/ 256:
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = globSync
 	globSync.GlobSync = GlobSync
 
 	var fs = __webpack_require__(13)
-	var rp = __webpack_require__(232)
-	var minimatch = __webpack_require__(234)
+	var rp = __webpack_require__(249)
+	var minimatch = __webpack_require__(251)
 	var Minimatch = minimatch.Minimatch
-	var Glob = __webpack_require__(231).Glob
+	var Glob = __webpack_require__(248).Glob
 	var util = __webpack_require__(10)
 	var path = __webpack_require__(35)
-	var assert = __webpack_require__(238)
-	var isAbsolute = __webpack_require__(239)
-	var common = __webpack_require__(241)
+	var assert = __webpack_require__(145)
+	var isAbsolute = __webpack_require__(255)
+	var common = __webpack_require__(257)
 	var alphasort = common.alphasort
 	var alphasorti = common.alphasorti
 	var setopts = common.setopts
@@ -3742,7 +3771,7 @@
 
 /***/ },
 
-/***/ 241:
+/***/ 257:
 /***/ function(module, exports, __webpack_require__) {
 
 	exports.alphasort = alphasort
@@ -3760,8 +3789,8 @@
 	}
 
 	var path = __webpack_require__(35)
-	var minimatch = __webpack_require__(234)
-	var isAbsolute = __webpack_require__(239)
+	var minimatch = __webpack_require__(251)
+	var isAbsolute = __webpack_require__(255)
 	var Minimatch = minimatch.Minimatch
 
 	function alphasorti (a, b) {
@@ -3984,12 +4013,12 @@
 
 /***/ },
 
-/***/ 242:
+/***/ 258:
 /***/ function(module, exports, __webpack_require__) {
 
-	var wrappy = __webpack_require__(243)
+	var wrappy = __webpack_require__(259)
 	var reqs = Object.create(null)
-	var once = __webpack_require__(244)
+	var once = __webpack_require__(260)
 
 	module.exports = wrappy(inflight)
 
@@ -4035,7 +4064,7 @@
 
 /***/ },
 
-/***/ 243:
+/***/ 259:
 /***/ function(module, exports) {
 
 	// Returns a wrapper function that returns a wrapped callback
@@ -4075,16 +4104,24 @@
 
 /***/ },
 
-/***/ 244:
+/***/ 260:
 /***/ function(module, exports, __webpack_require__) {
 
-	var wrappy = __webpack_require__(243)
+	var wrappy = __webpack_require__(259)
 	module.exports = wrappy(once)
+	module.exports.strict = wrappy(onceStrict)
 
 	once.proto = once(function () {
 	  Object.defineProperty(Function.prototype, 'once', {
 	    value: function () {
 	      return once(this)
+	    },
+	    configurable: true
+	  })
+
+	  Object.defineProperty(Function.prototype, 'onceStrict', {
+	    value: function () {
+	      return onceStrict(this)
 	    },
 	    configurable: true
 	  })
@@ -4100,14 +4137,27 @@
 	  return f
 	}
 
+	function onceStrict (fn) {
+	  var f = function () {
+	    if (f.called)
+	      throw new Error(f.onceError)
+	    f.called = true
+	    return f.value = fn.apply(this, arguments)
+	  }
+	  var name = fn.name || 'Function wrapped with `once`'
+	  f.onceError = name + " shouldn't be called more than once"
+	  f.called = false
+	  return f
+	}
+
 
 /***/ },
 
-/***/ 245:
+/***/ 261:
 /***/ function(module, exports, __webpack_require__) {
 
 	var fs = __webpack_require__(13);
-	var common = __webpack_require__(229);
+	var common = __webpack_require__(247);
 
 	common.register('cd', _cd, {});
 
@@ -4116,14 +4166,14 @@
 	//@ Changes to directory `dir` for the duration of the script. Changes to home
 	//@ directory if no argument is supplied.
 	function _cd(options, dir) {
-	  if (!dir)
-	    dir = common.getUserHome();
+	  if (!dir) dir = common.getUserHome();
 
 	  if (dir === '-') {
-	    if (!process.env.OLDPWD)
+	    if (!process.env.OLDPWD) {
 	      common.error('could not find previous directory');
-	    else
+	    } else {
 	      dir = process.env.OLDPWD;
+	    }
 	  }
 
 	  try {
@@ -4136,7 +4186,7 @@
 	    try {
 	      fs.statSync(dir); // if this succeeds, it must be some sort of file
 	      err = 'not a directory: ' + dir;
-	    } catch (e) {
+	    } catch (e2) {
 	      err = 'no such file or directory: ' + dir;
 	    }
 	    if (err) common.error(err);
@@ -4148,11 +4198,11 @@
 
 /***/ },
 
-/***/ 246:
+/***/ 262:
 /***/ function(module, exports, __webpack_require__) {
 
 	var path = __webpack_require__(35);
-	var common = __webpack_require__(229);
+	var common = __webpack_require__(247);
 
 	common.register('pwd', _pwd, {
 	  allowGlobbing: false,
@@ -4170,13 +4220,13 @@
 
 /***/ },
 
-/***/ 247:
+/***/ 263:
 /***/ function(module, exports, __webpack_require__) {
 
 	var path = __webpack_require__(35);
 	var fs = __webpack_require__(13);
-	var common = __webpack_require__(229);
-	var glob = __webpack_require__(231);
+	var common = __webpack_require__(247);
+	var glob = __webpack_require__(248);
 
 	var globPatternRecursive = path.sep + '**' + path.sep + '*';
 
@@ -4222,16 +4272,18 @@
 	    options.all = true;
 	  }
 
-	  if (!paths)
+	  if (!paths) {
 	    paths = ['.'];
-	  else
+	  } else {
 	    paths = [].slice.call(arguments, 1);
+	  }
 
 	  var list = [];
 
 	  function pushFile(abs, relName, stat) {
-	    if (process.platform === 'win32')
+	    if (process.platform === 'win32') {
 	      relName = relName.replace(/\\/g, '/');
+	    }
 	    if (options.long) {
 	      stat = stat || fs.lstatSync(abs);
 	      list.push(addLsAttributes(relName, stat));
@@ -4241,7 +4293,7 @@
 	    }
 	  }
 
-	  paths.forEach(function(p) {
+	  paths.forEach(function (p) {
 	    var stat;
 
 	    try {
@@ -4257,8 +4309,8 @@
 	        // use glob, because it's simple
 	        glob.sync(p + globPatternRecursive, { dot: options.all })
 	          .forEach(function (item) {
-	          pushFile(item, path.relative(p, item));
-	        });
+	            pushFile(item, path.relative(p, item));
+	          });
 	      } else if (options.all) {
 	        // use fs.readdirSync, because it's fast
 	        fs.readdirSync(p).forEach(function (item) {
@@ -4267,8 +4319,9 @@
 	      } else {
 	        // use fs.readdirSync and then filter out secret files
 	        fs.readdirSync(p).forEach(function (item) {
-	          if (item[0] !== '.')
+	          if (item[0] !== '.') {
 	            pushFile(path.join(p, item), item);
+	          }
 	        });
 	      }
 	    } else {
@@ -4280,10 +4333,10 @@
 	  return list;
 	}
 
-	function addLsAttributes(path, stats) {
+	function addLsAttributes(pathName, stats) {
 	  // Note: this object will contain more information than .toString() returns
-	  stats.name = path;
-	  stats.toString = function() {
+	  stats.name = pathName;
+	  stats.toString = function () {
 	    // Return a string resembling unix's `ls -l` format
 	    return [this.mode, this.nlink, this.uid, this.gid, this.size, this.mtime, this.name].join(' ');
 	  };
@@ -4295,13 +4348,13 @@
 
 /***/ },
 
-/***/ 248:
+/***/ 264:
 /***/ function(module, exports, __webpack_require__) {
 
 	var fs = __webpack_require__(13);
 	var path = __webpack_require__(35);
-	var common = __webpack_require__(229);
-	var _ls = __webpack_require__(247);
+	var common = __webpack_require__(247);
+	var _ls = __webpack_require__(263);
 
 	common.register('find', _find, {});
 
@@ -4321,10 +4374,11 @@
 	//@ The main difference from `ls('-R', path)` is that the resulting file names
 	//@ include the base directories, e.g. `lib/resources/file1` instead of just `file1`.
 	function _find(options, paths) {
-	  if (!paths)
+	  if (!paths) {
 	    common.error('no path specified');
-	  else if (typeof paths === 'string')
+	  } else if (typeof paths === 'string') {
 	    paths = [].slice.call(arguments, 1);
+	  }
 
 	  var list = [];
 
@@ -4338,11 +4392,11 @@
 	  // why not simply do ls('-R', paths)? because the output wouldn't give the base dirs
 	  // to get the base dir in the output, we need instead ls('-R', 'dir/*') for every directory
 
-	  paths.forEach(function(file) {
+	  paths.forEach(function (file) {
 	    pushFile(file);
 
 	    if (fs.statSync(file).isDirectory()) {
-	      _ls({recursive: true, all: true}, file).forEach(function(subfile) {
+	      _ls({ recursive: true, all: true }, file).forEach(function (subfile) {
 	        pushFile(path.join(file, subfile));
 	      });
 	    }
@@ -4355,13 +4409,13 @@
 
 /***/ },
 
-/***/ 249:
+/***/ 265:
 /***/ function(module, exports, __webpack_require__) {
 
 	var fs = __webpack_require__(13);
 	var path = __webpack_require__(35);
-	var common = __webpack_require__(229);
-	var os = __webpack_require__(230);
+	var common = __webpack_require__(247);
+	var os = __webpack_require__(130);
 
 	common.register('cp', _cp, {
 	  cmdOptions: {
@@ -4379,8 +4433,9 @@
 	// (Using readFileSync() + writeFileSync() could easily cause a memory overflow
 	//  with large files)
 	function copyFileSync(srcFile, destFile, options) {
-	  if (!fs.existsSync(srcFile))
+	  if (!common.existsSync(srcFile)) {
 	    common.error('copyFileSync: no such file or directory: ' + srcFile);
+	  }
 
 	  if (fs.lstatSync(srcFile).isSymbolicLink() && !options.followsymlink) {
 	    try {
@@ -4391,25 +4446,25 @@
 	    }
 
 	    var symlinkFull = fs.readlinkSync(srcFile);
-	    fs.symlinkSync(symlinkFull, destFile, os.platform() === "win32" ? "junction" : null);
+	    fs.symlinkSync(symlinkFull, destFile, os.platform() === 'win32' ? 'junction' : null);
 	  } else {
-	    var BUF_LENGTH = 64*1024,
-	        buf = new Buffer(BUF_LENGTH),
-	        bytesRead = BUF_LENGTH,
-	        pos = 0,
-	        fdr = null,
-	        fdw = null;
+	    var BUF_LENGTH = 64 * 1024;
+	    var buf = new Buffer(BUF_LENGTH);
+	    var bytesRead = BUF_LENGTH;
+	    var pos = 0;
+	    var fdr = null;
+	    var fdw = null;
 
 	    try {
 	      fdr = fs.openSync(srcFile, 'r');
-	    } catch(e) {
-	      common.error('copyFileSync: could not read src file ('+srcFile+')');
+	    } catch (e) {
+	      common.error('copyFileSync: could not read src file (' + srcFile + ')');
 	    }
 
 	    try {
 	      fdw = fs.openSync(destFile, 'w');
-	    } catch(e) {
-	      common.error('copyFileSync: could not write to dest file (code='+e.code+'):'+destFile);
+	    } catch (e) {
+	      common.error('copyFileSync: could not write to dest file (code=' + e.code + '):' + destFile);
 	    }
 
 	    while (bytesRead === BUF_LENGTH) {
@@ -4443,24 +4498,24 @@
 	  if (opts.depth >= common.config.maxdepth) {
 	    // Max depth has been reached, end copy.
 	    return;
-	  } else {
-	    opts.depth++;
 	  }
+	  opts.depth++;
 
-	  /* Create the directory where all our junk is moving to; read the mode of the source directory and mirror it */
+	  // Create the directory where all our junk is moving to; read the mode of the
+	  // source directory and mirror it
 	  try {
 	    var checkDir = fs.statSync(sourceDir);
 	    fs.mkdirSync(destDir, checkDir.mode);
 	  } catch (e) {
-	    //if the directory already exists, that's okay
+	    // if the directory already exists, that's okay
 	    if (e.code !== 'EEXIST') throw e;
 	  }
 
 	  var files = fs.readdirSync(sourceDir);
 
 	  for (var i = 0; i < files.length; i++) {
-	    var srcFile = sourceDir + "/" + files[i];
-	    var destFile = destDir + "/" + files[i];
+	    var srcFile = sourceDir + '/' + files[i];
+	    var destFile = destDir + '/' + files[i];
 	    var srcFileStat = fs.lstatSync(srcFile);
 
 	    var symlinkFull;
@@ -4469,7 +4524,7 @@
 	        // Cycle link found.
 	        console.error('Cycle link found.');
 	        symlinkFull = fs.readlinkSync(srcFile);
-	        fs.symlinkSync(symlinkFull, destFile, os.platform() === "win32" ? "junction" : null);
+	        fs.symlinkSync(symlinkFull, destFile, os.platform() === 'win32' ? 'junction' : null);
 	        continue;
 	      }
 	    }
@@ -4484,7 +4539,7 @@
 	      } catch (e) {
 	        // it doesn't exist, so no work needs to be done
 	      }
-	      fs.symlinkSync(symlinkFull, destFile, os.platform() === "win32" ? "junction" : null);
+	      fs.symlinkSync(symlinkFull, destFile, os.platform() === 'win32' ? 'junction' : null);
 	    } else if (srcFileStat.isSymbolicLink() && opts.followsymlink) {
 	      srcFileStat = fs.statSync(srcFile);
 	      if (srcFileStat.isDirectory()) {
@@ -4494,20 +4549,24 @@
 	      }
 	    } else {
 	      /* At this point, we've hit a file actually worth copying... so copy it on over. */
-	      if (fs.existsSync(destFile) && opts.no_force) {
+	      if (common.existsSync(destFile) && opts.no_force) {
 	        common.log('skipping existing file: ' + files[i]);
 	      } else {
 	        copyFileSync(srcFile, destFile, opts);
 	      }
 	    }
-
 	  } // for files
 	} // cpdirSyncRecursive
 
 	function cpcheckcycle(sourceDir, srcFile) {
 	  var srcFileStat = fs.lstatSync(srcFile);
 	  if (srcFileStat.isSymbolicLink()) {
-	    // Do cycle check. For example mkdir -p 1/2/3/4 ; cd  1/2/3/4; ln -s ../../3 link ; cd ../../../.. ; cp -RL 1 copy
+	    // Do cycle check. For example:
+	    //   $ mkdir -p 1/2/3/4
+	    //   $ cd  1/2/3/4
+	    //   $ ln -s ../../3 link
+	    //   $ cd ../../../..
+	    //   $ cp -RL 1 copy
 	    var cyclecheck = fs.statSync(srcFile);
 	    if (cyclecheck.isDirectory()) {
 	      var sourcerealpath = fs.realpathSync(sourceDir);
@@ -4544,10 +4603,12 @@
 	//@ Copies files.
 	function _cp(options, sources, dest) {
 	  // If we're missing -R, it actually implies -L (unless -P is explicit)
-	  if (options.followsymlink)
+	  if (options.followsymlink) {
 	    options.noFollowsymlink = false;
-	  if (!options.recursive && !options.noFollowsymlink)
+	  }
+	  if (!options.recursive && !options.noFollowsymlink) {
 	    options.followsymlink = true;
+	  }
 
 	  // Get sources, dest
 	  if (arguments.length < 3) {
@@ -4557,20 +4618,22 @@
 	    dest = arguments[arguments.length - 1];
 	  }
 
-	  var destExists = fs.existsSync(dest),
-	      destStat = destExists && fs.statSync(dest);
+	  var destExists = common.existsSync(dest);
+	  var destStat = destExists && fs.statSync(dest);
 
 	  // Dest is not existing dir, but multiple sources given
-	  if ((!destExists || !destStat.isDirectory()) && sources.length > 1)
+	  if ((!destExists || !destStat.isDirectory()) && sources.length > 1) {
 	    common.error('dest is not a directory (too many sources)');
+	  }
 
 	  // Dest is an existing file, but -n is given
-	  if (destExists && destStat.isFile() && options.no_force)
+	  if (destExists && destStat.isFile() && options.no_force) {
 	    return new common.ShellString('', '', 0);
+	  }
 
-	  sources.forEach(function(src) {
-	    if (!fs.existsSync(src)) {
-	      common.error('no such file or directory: '+src, true);
+	  sources.forEach(function (src) {
+	    if (!common.existsSync(src)) {
+	      common.error('no such file or directory: ' + src, true);
 	      return; // skip file
 	    }
 	    var srcStat = fs.statSync(src);
@@ -4587,22 +4650,22 @@
 
 	        try {
 	          fs.statSync(path.dirname(dest));
-	          cpdirSyncRecursive(src, newDest, {no_force: options.no_force, followsymlink: options.followsymlink});
-	        } catch(e) {
+	          cpdirSyncRecursive(src, newDest, { no_force: options.no_force, followsymlink: options.followsymlink });
+	        } catch (e) {
 	          common.error("cannot create directory '" + dest + "': No such file or directory");
 	        }
 	      }
-	      return; // done with dir
 	    } else {
 	      // If here, src is a file
 
 	      // When copying to '/path/dir':
 	      //    thisDest = '/path/dir/file1'
 	      var thisDest = dest;
-	      if (destStat && destStat.isDirectory())
+	      if (destStat && destStat.isDirectory()) {
 	        thisDest = path.normalize(dest + '/' + path.basename(src));
+	      }
 
-	      if (fs.existsSync(thisDest) && options.no_force) {
+	      if (common.existsSync(thisDest) && options.no_force) {
 	        return; // skip file
 	      }
 
@@ -4616,10 +4679,10 @@
 
 /***/ },
 
-/***/ 250:
+/***/ 266:
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(229);
+	var common = __webpack_require__(247);
 	var fs = __webpack_require__(13);
 
 	common.register('rm', _rm, {
@@ -4644,18 +4707,18 @@
 	  files = fs.readdirSync(dir);
 
 	  // Loop through and delete everything in the sub-tree after checking it
-	  for(var i = 0; i < files.length; i++) {
-	    var file = dir + "/" + files[i],
-	        currFile = fs.lstatSync(file);
+	  for (var i = 0; i < files.length; i++) {
+	    var file = dir + '/' + files[i];
+	    var currFile = fs.lstatSync(file);
 
-	    if(currFile.isDirectory()) { // Recursive function back to the beginning
+	    if (currFile.isDirectory()) { // Recursive function back to the beginning
 	      rmdirSyncRecursive(file, force);
 	    } else { // Assume it's a file - perhaps a try/catch belongs here?
 	      if (force || isWriteable(file)) {
 	        try {
 	          common.unlinkSync(file);
 	        } catch (e) {
-	          common.error('could not remove file (code '+e.code+'): ' + file, true);
+	          common.error('could not remove file (code ' + e.code + '): ' + file, true);
 	        }
 	      }
 	    }
@@ -4671,13 +4734,13 @@
 	    while (true) {
 	      try {
 	        result = fs.rmdirSync(dir);
-	        if (fs.existsSync(dir)) throw { code: "EAGAIN" };
+	        if (common.existsSync(dir)) throw { code: 'EAGAIN' };
 	        break;
-	      } catch(er) {
+	      } catch (er) {
 	        // In addition to error codes, also check if the directory still exists and loop again if true
-	        if (process.platform === "win32" && (er.code === "ENOTEMPTY" || er.code === "EBUSY" || er.code === "EPERM" || er.code === "EAGAIN")) {
+	        if (process.platform === 'win32' && (er.code === 'ENOTEMPTY' || er.code === 'EBUSY' || er.code === 'EPERM' || er.code === 'EAGAIN')) {
 	          if (Date.now() - start > 1000) throw er;
-	        } else if (er.code === "ENOENT") {
+	        } else if (er.code === 'ENOENT') {
 	          // Directory did not exist, deletion was successful
 	          break;
 	        } else {
@@ -4685,8 +4748,8 @@
 	        }
 	      }
 	    }
-	  } catch(e) {
-	    common.error('could not remove directory (code '+e.code+'): ' + dir, true);
+	  } catch (e) {
+	    common.error('could not remove directory (code ' + e.code + '): ' + dir, true);
 	  }
 
 	  return result;
@@ -4699,7 +4762,7 @@
 	  try {
 	    var __fd = fs.openSync(file, 'a');
 	    fs.closeSync(__fd);
-	  } catch(e) {
+	  } catch (e) {
 	    writePermission = false;
 	  }
 
@@ -4724,36 +4787,36 @@
 	//@
 	//@ Removes files.
 	function _rm(options, files) {
-	  if (!files)
-	    common.error('no paths given');
+	  if (!files) common.error('no paths given');
 
 	  // Convert to array
 	  files = [].slice.call(arguments, 1);
 
-	  files.forEach(function(file) {
+	  files.forEach(function (file) {
 	    var stats;
 	    try {
 	      stats = fs.lstatSync(file); // test for existence
 	    } catch (e) {
 	      // Path does not exist, no force flag given
-	      if (!options.force)
-	        common.error('no such file or directory: '+file, true);
+	      if (!options.force) {
+	        common.error('no such file or directory: ' + file, true);
+	      }
 	      return; // skip file
 	    }
 
 	    // If here, path exists
 	    if (stats.isFile() || stats.isSymbolicLink()) {
-
 	      // Do not check for file writing permissions
 	      if (options.force) {
 	        common.unlinkSync(file);
 	        return;
 	      }
 
-	      if (isWriteable(file))
+	      if (isWriteable(file)) {
 	        common.unlinkSync(file);
-	      else
-	        common.error('permission denied: '+file, true);
+	      } else {
+	        common.error('permission denied: ' + file, true);
+	      }
 
 	      return;
 	    } // simple file
@@ -4776,14 +4839,14 @@
 
 /***/ },
 
-/***/ 251:
+/***/ 267:
 /***/ function(module, exports, __webpack_require__) {
 
 	var fs = __webpack_require__(13);
 	var path = __webpack_require__(35);
-	var common = __webpack_require__(229);
-	var cp = __webpack_require__(249);
-	var rm = __webpack_require__(250);
+	var common = __webpack_require__(247);
+	var cp = __webpack_require__(265);
+	var rm = __webpack_require__(266);
 
 	common.register('mv', _mv, {
 	  cmdOptions: {
@@ -4822,20 +4885,22 @@
 	    common.error('invalid arguments');
 	  }
 
-	  var exists = fs.existsSync(dest),
-	      stats = exists && fs.statSync(dest);
+	  var exists = common.existsSync(dest);
+	  var stats = exists && fs.statSync(dest);
 
 	  // Dest is not existing dir, but multiple sources given
-	  if ((!exists || !stats.isDirectory()) && sources.length > 1)
+	  if ((!exists || !stats.isDirectory()) && sources.length > 1) {
 	    common.error('dest is not a directory (too many sources)');
+	  }
 
 	  // Dest is an existing file, but no -f given
-	  if (exists && stats.isFile() && options.no_force)
+	  if (exists && stats.isFile() && options.no_force) {
 	    common.error('dest file already exists: ' + dest);
+	  }
 
-	  sources.forEach(function(src) {
-	    if (!fs.existsSync(src)) {
-	      common.error('no such file or directory: '+src, true);
+	  sources.forEach(function (src) {
+	    if (!common.existsSync(src)) {
+	      common.error('no such file or directory: ' + src, true);
 	      return; // skip file
 	    }
 
@@ -4844,16 +4909,17 @@
 	    // When copying to '/path/dir':
 	    //    thisDest = '/path/dir/file1'
 	    var thisDest = dest;
-	    if (fs.existsSync(dest) && fs.statSync(dest).isDirectory())
+	    if (common.existsSync(dest) && fs.statSync(dest).isDirectory()) {
 	      thisDest = path.normalize(dest + '/' + path.basename(src));
+	    }
 
-	    if (fs.existsSync(thisDest) && options.no_force) {
+	    if (common.existsSync(thisDest) && options.no_force) {
 	      common.error('dest file already exists: ' + thisDest, true);
 	      return; // skip file
 	    }
 
 	    if (path.resolve(src) === path.dirname(path.resolve(thisDest))) {
-	      common.error('cannot move to self: '+src, true);
+	      common.error('cannot move to self: ' + src, true);
 	      return; // skip file
 	    }
 
@@ -4875,10 +4941,10 @@
 
 /***/ },
 
-/***/ 252:
+/***/ 268:
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(229);
+	var common = __webpack_require__(247);
 	var fs = __webpack_require__(13);
 	var path = __webpack_require__(35);
 
@@ -4895,12 +4961,12 @@
 	  // Prevents some potential problems arising from malformed UNCs or
 	  // insufficient permissions.
 	  /* istanbul ignore next */
-	  if(baseDir === dir) {
-	    common.error("dirname() failed: [" + dir + "]");
+	  if (baseDir === dir) {
+	    common.error('dirname() failed: [' + dir + ']');
 	  }
 
 	  // Base dir exists, no recursion necessary
-	  if (fs.existsSync(baseDir)) {
+	  if (common.existsSync(baseDir)) {
 	    fs.mkdirSync(dir, parseInt('0777', 8));
 	    return;
 	  }
@@ -4928,18 +4994,19 @@
 	//@
 	//@ Creates directories.
 	function _mkdir(options, dirs) {
-	  if (!dirs)
-	    common.error('no paths given');
+	  if (!dirs) common.error('no paths given');
 
-	  if (typeof dirs === 'string')
+	  if (typeof dirs === 'string') {
 	    dirs = [].slice.call(arguments, 1);
+	  }
 	  // if it's array leave it as it is
 
-	  dirs.forEach(function(dir) {
+	  dirs.forEach(function (dir) {
 	    try {
 	      fs.lstatSync(dir);
-	      if (!options.fullpath)
+	      if (!options.fullpath) {
 	        common.error('path already exists: ' + dir, true);
+	      }
 	      return; // skip dir
 	    } catch (e) {
 	      // do nothing
@@ -4947,21 +5014,23 @@
 
 	    // Base dir does not exist, and no -p option given
 	    var baseDir = path.dirname(dir);
-	    if (!fs.existsSync(baseDir) && !options.fullpath) {
+	    if (!common.existsSync(baseDir) && !options.fullpath) {
 	      common.error('no such file or directory: ' + baseDir, true);
 	      return; // skip dir
 	    }
 
 	    try {
-	      if (options.fullpath)
+	      if (options.fullpath) {
 	        mkdirSyncRecursive(dir);
-	      else
+	      } else {
 	        fs.mkdirSync(dir, parseInt('0777', 8));
+	      }
 	    } catch (e) {
-	      if (e.code === 'EACCES')
+	      if (e.code === 'EACCES') {
 	        common.error('cannot create directory ' + dir + ': Permission denied');
-	      else
+	      } else {
 	        throw e;
+	      }
 	    }
 	  });
 	  return '';
@@ -4971,10 +5040,10 @@
 
 /***/ },
 
-/***/ 253:
+/***/ 269:
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(229);
+	var common = __webpack_require__(247);
 	var fs = __webpack_require__(13);
 
 	common.register('test', _test, {
@@ -4990,7 +5059,6 @@
 	  },
 	  wrapOutput: false,
 	});
-
 
 
 	//@
@@ -5015,62 +5083,54 @@
 	//@
 	//@ Evaluates expression using the available primaries and returns corresponding value.
 	function _test(options, path) {
-	  if (!path)
-	    common.error('no path given');
+	  if (!path) common.error('no path given');
 
 	  var canInterpret = false;
-	  for (var key in options)
+	  Object.keys(options).forEach(function (key) {
 	    if (options[key] === true) {
 	      canInterpret = true;
-	      break;
 	    }
+	  });
 
-	  if (!canInterpret)
-	    common.error('could not interpret expression');
+	  if (!canInterpret) common.error('could not interpret expression');
 
 	  if (options.link) {
 	    try {
 	      return fs.lstatSync(path).isSymbolicLink();
-	    } catch(e) {
+	    } catch (e) {
 	      return false;
 	    }
 	  }
 
-	  if (!fs.existsSync(path))
-	    return false;
+	  if (!common.existsSync(path)) return false;
 
-	  if (options.exists)
-	    return true;
+	  if (options.exists) return true;
 
 	  var stats = fs.statSync(path);
 
-	  if (options.block)
-	    return stats.isBlockDevice();
+	  if (options.block) return stats.isBlockDevice();
 
-	  if (options.character)
-	    return stats.isCharacterDevice();
+	  if (options.character) return stats.isCharacterDevice();
 
-	  if (options.directory)
-	    return stats.isDirectory();
+	  if (options.directory) return stats.isDirectory();
 
-	  if (options.file)
-	    return stats.isFile();
+	  if (options.file) return stats.isFile();
 
-	  if (options.pipe)
-	    return stats.isFIFO();
+	  if (options.pipe) return stats.isFIFO();
 
-	  if (options.socket)
-	    return stats.isSocket();
+	  if (options.socket) return stats.isSocket();
+
+	  return false; // fallback
 	} // test
 	module.exports = _test;
 
 
 /***/ },
 
-/***/ 254:
+/***/ 270:
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(229);
+	var common = __webpack_require__(247);
 	var fs = __webpack_require__(13);
 
 	common.register('cat', _cat, {
@@ -5093,16 +5153,16 @@
 	//@ containing the files if more than one file is given (a new line character is
 	//@ introduced between each file).
 	function _cat(options, files) {
-	  var cat = common.readFromPipe(this);
+	  var cat = common.readFromPipe();
 
-	  if (!files && !cat)
-	    common.error('no paths given');
+	  if (!files && !cat) common.error('no paths given');
 
 	  files = [].slice.call(arguments, 1);
 
-	  files.forEach(function(file) {
-	    if (!fs.existsSync(file))
+	  files.forEach(function (file) {
+	    if (!common.existsSync(file)) {
 	      common.error('no such file or directory: ' + file);
+	    }
 
 	    cat += fs.readFileSync(file, 'utf8');
 	  });
@@ -5114,10 +5174,10 @@
 
 /***/ },
 
-/***/ 255:
+/***/ 271:
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(229);
+	var common = __webpack_require__(247);
 	var fs = __webpack_require__(13);
 
 	common.register('head', _head, {
@@ -5129,15 +5189,15 @@
 
 	// This reads n or more lines, or the entire file, whichever is less.
 	function readSomeLines(file, numLines) {
-	  var BUF_LENGTH = 64*1024,
-	      buf = new Buffer(BUF_LENGTH),
-	      bytesRead = BUF_LENGTH,
-	      pos = 0,
-	      fdr = null;
+	  var BUF_LENGTH = 64 * 1024;
+	  var buf = new Buffer(BUF_LENGTH);
+	  var bytesRead = BUF_LENGTH;
+	  var pos = 0;
+	  var fdr = null;
 
 	  try {
 	    fdr = fs.openSync(file, 'r');
-	  } catch(e) {
+	  } catch (e) {
 	    common.error('cannot read file: ' + file);
 	  }
 
@@ -5155,8 +5215,8 @@
 	  return ret;
 	}
 	//@
-	//@ ### head([{'-n', \<num\>},] file [, file ...])
-	//@ ### head([{'-n', \<num\>},] file_array)
+	//@ ### head([{'-n': \<num\>},] file [, file ...])
+	//@ ### head([{'-n': \<num\>},] file_array)
 	//@ Available options:
 	//@
 	//@ + `-n <num>`: Show the first `<num>` lines of the files
@@ -5164,7 +5224,7 @@
 	//@ Examples:
 	//@
 	//@ ```javascript
-	//@ var str = head({'-n', 1}, 'file*.txt');
+	//@ var str = head({'-n': 1}, 'file*.txt');
 	//@ var str = head('file1', 'file2');
 	//@ var str = head(['file1', 'file2']); // same as above
 	//@ ```
@@ -5172,10 +5232,9 @@
 	//@ Read the start of a file.
 	function _head(options, files) {
 	  var head = [];
-	  var pipe = common.readFromPipe(this);
+	  var pipe = common.readFromPipe();
 
-	  if (!files && !pipe)
-	    common.error('no paths given');
+	  if (!files && !pipe) common.error('no paths given');
 
 	  var idx = 1;
 	  if (options.numLines === true) {
@@ -5186,36 +5245,39 @@
 	  }
 	  files = [].slice.call(arguments, idx);
 
-	  if (pipe)
+	  if (pipe) {
 	    files.unshift('-');
+	  }
 
 	  var shouldAppendNewline = false;
-	  files.forEach(function(file) {
-	    if (!fs.existsSync(file) && file !== '-') {
+	  files.forEach(function (file) {
+	    if (!common.existsSync(file) && file !== '-') {
 	      common.error('no such file or directory: ' + file, true);
 	      return;
 	    }
 
 	    var contents;
-	    if (file === '-')
+	    if (file === '-') {
 	      contents = pipe;
-	    else if (options.numLines < 0) {
+	    } else if (options.numLines < 0) {
 	      contents = fs.readFileSync(file, 'utf8');
 	    } else {
 	      contents = readSomeLines(file, options.numLines);
 	    }
 
 	    var lines = contents.split('\n');
-	    var hasTrailingNewline = (lines[lines.length-1] === '');
-	    if (hasTrailingNewline)
+	    var hasTrailingNewline = (lines[lines.length - 1] === '');
+	    if (hasTrailingNewline) {
 	      lines.pop();
+	    }
 	    shouldAppendNewline = (hasTrailingNewline || options.numLines < lines.length);
 
 	    head = head.concat(lines.slice(0, options.numLines));
 	  });
 
-	  if (shouldAppendNewline)
+	  if (shouldAppendNewline) {
 	    head.push(''); // to add a trailing newline once we join
+	  }
 	  return head.join('\n');
 	}
 	module.exports = _head;
@@ -5223,10 +5285,10 @@
 
 /***/ },
 
-/***/ 256:
+/***/ 272:
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(229);
+	var common = __webpack_require__(247);
 	var fs = __webpack_require__(13);
 
 	common.register('tail', _tail, {
@@ -5237,8 +5299,8 @@
 	});
 
 	//@
-	//@ ### tail([{'-n', \<num\>},] file [, file ...])
-	//@ ### tail([{'-n', \<num\>},] file_array)
+	//@ ### tail([{'-n': \<num\>},] file [, file ...])
+	//@ ### tail([{'-n': \<num\>},] file_array)
 	//@ Available options:
 	//@
 	//@ + `-n <num>`: Show the last `<num>` lines of the files
@@ -5246,7 +5308,7 @@
 	//@ Examples:
 	//@
 	//@ ```javascript
-	//@ var str = tail({'-n', 1}, 'file*.txt');
+	//@ var str = tail({'-n': 1}, 'file*.txt');
 	//@ var str = tail('file1', 'file2');
 	//@ var str = tail(['file1', 'file2']); // same as above
 	//@ ```
@@ -5254,10 +5316,9 @@
 	//@ Read the end of a file.
 	function _tail(options, files) {
 	  var tail = [];
-	  var pipe = common.readFromPipe(this);
+	  var pipe = common.readFromPipe();
 
-	  if (!files && !pipe)
-	    common.error('no paths given');
+	  if (!files && !pipe) common.error('no paths given');
 
 	  var idx = 1;
 	  if (options.numLines === true) {
@@ -5269,12 +5330,13 @@
 	  options.numLines = -1 * Math.abs(options.numLines);
 	  files = [].slice.call(arguments, idx);
 
-	  if (pipe)
+	  if (pipe) {
 	    files.unshift('-');
+	  }
 
 	  var shouldAppendNewline = false;
-	  files.forEach(function(file) {
-	    if (!fs.existsSync(file) && file !== '-') {
+	  files.forEach(function (file) {
+	    if (!common.existsSync(file) && file !== '-') {
 	      common.error('no such file or directory: ' + file, true);
 	      return;
 	    }
@@ -5282,7 +5344,7 @@
 	    var contents = file === '-' ? pipe : fs.readFileSync(file, 'utf8');
 
 	    var lines = contents.split('\n');
-	    if (lines[lines.length-1] === '') {
+	    if (lines[lines.length - 1] === '') {
 	      lines.pop();
 	      shouldAppendNewline = true;
 	    } else {
@@ -5292,8 +5354,9 @@
 	    tail = tail.concat(lines.slice(options.numLines));
 	  });
 
-	  if (shouldAppendNewline)
+	  if (shouldAppendNewline) {
 	    tail.push(''); // to add a trailing newline once we join
+	  }
 	  return tail.join('\n');
 	}
 	module.exports = _tail;
@@ -5301,10 +5364,10 @@
 
 /***/ },
 
-/***/ 257:
+/***/ 273:
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(229);
+	var common = __webpack_require__(247);
 	var fs = __webpack_require__(13);
 	var path = __webpack_require__(35);
 
@@ -5326,17 +5389,17 @@
 	//@ ShellStrings (such as those returned by `cat`, `grep`, etc). _Like Unix
 	//@ redirections, `to()` will overwrite any existing file!_
 	function _to(options, file) {
-	  if (!file)
-	    common.error('wrong arguments');
+	  if (!file) common.error('wrong arguments');
 
-	  if (!fs.existsSync( path.dirname(file) ))
-	      common.error('no such file or directory: ' + path.dirname(file));
+	  if (!common.existsSync(path.dirname(file))) {
+	    common.error('no such file or directory: ' + path.dirname(file));
+	  }
 
 	  try {
 	    fs.writeFileSync(file, this.stdout || this.toString(), 'utf8');
 	    return this;
-	  } catch(e) {
-	    common.error('could not write to file (code '+e.code+'): '+file, true);
+	  } catch (e) {
+	    common.error('could not write to file (code ' + e.code + '): ' + file, true);
 	  }
 	}
 	module.exports = _to;
@@ -5344,10 +5407,10 @@
 
 /***/ },
 
-/***/ 258:
+/***/ 274:
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(229);
+	var common = __webpack_require__(247);
 	var fs = __webpack_require__(13);
 	var path = __webpack_require__(35);
 
@@ -5368,17 +5431,17 @@
 	//@ Analogous to the redirect-and-append operator `>>` in Unix, but works with
 	//@ ShellStrings (such as those returned by `cat`, `grep`, etc).
 	function _toEnd(options, file) {
-	  if (!file)
-	    common.error('wrong arguments');
+	  if (!file) common.error('wrong arguments');
 
-	  if (!fs.existsSync( path.dirname(file) ))
-	      common.error('no such file or directory: ' + path.dirname(file));
+	  if (!common.existsSync(path.dirname(file))) {
+	    common.error('no such file or directory: ' + path.dirname(file));
+	  }
 
 	  try {
 	    fs.appendFileSync(file, this.stdout || this.toString(), 'utf8');
 	    return this;
-	  } catch(e) {
-	    common.error('could not append to file (code '+e.code+'): '+file, true);
+	  } catch (e) {
+	    common.error('could not append to file (code ' + e.code + '): ' + file, true);
 	  }
 	}
 	module.exports = _toEnd;
@@ -5386,10 +5449,10 @@
 
 /***/ },
 
-/***/ 259:
+/***/ 275:
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(229);
+	var common = __webpack_require__(247);
 	var fs = __webpack_require__(13);
 
 	common.register('sed', _sed, {
@@ -5418,30 +5481,34 @@
 	//@ using the given search regex and replacement string or function. Returns the new string after replacement.
 	function _sed(options, regex, replacement, files) {
 	  // Check if this is coming from a pipe
-	  var pipe = common.readFromPipe(this);
+	  var pipe = common.readFromPipe();
 
-	  if (typeof replacement === 'string' || typeof replacement === 'function')
-	    replacement = replacement; // no-op
-	  else if (typeof replacement === 'number')
-	    replacement = replacement.toString(); // fallback
-	  else
-	    common.error('invalid replacement string');
+	  if (typeof replacement !== 'string' && typeof replacement !== 'function') {
+	    if (typeof replacement === 'number') {
+	      replacement = replacement.toString(); // fallback
+	    } else {
+	      common.error('invalid replacement string');
+	    }
+	  }
 
 	  // Convert all search strings to RegExp
-	  if (typeof regex === 'string')
+	  if (typeof regex === 'string') {
 	    regex = RegExp(regex);
+	  }
 
-	  if (!files && !pipe)
+	  if (!files && !pipe) {
 	    common.error('no files given');
+	  }
 
 	  files = [].slice.call(arguments, 3);
 
-	  if (pipe)
+	  if (pipe) {
 	    files.unshift('-');
+	  }
 
 	  var sed = [];
-	  files.forEach(function(file) {
-	    if (!fs.existsSync(file) && file !== '-') {
+	  files.forEach(function (file) {
+	    if (!common.existsSync(file) && file !== '-') {
 	      common.error('no such file or directory: ' + file, 2, true);
 	      return;
 	    }
@@ -5454,8 +5521,9 @@
 
 	    sed.push(result);
 
-	    if (options.inplace)
+	    if (options.inplace) {
 	      fs.writeFileSync(file, result, 'utf8');
+	    }
 	  });
 
 	  return sed.join('\n');
@@ -5465,10 +5533,10 @@
 
 /***/ },
 
-/***/ 260:
+/***/ 276:
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(229);
+	var common = __webpack_require__(247);
 	var fs = __webpack_require__(13);
 
 	common.register('sort', _sort, {
@@ -5480,9 +5548,9 @@
 	});
 
 	// parse out the number prefix of a line
-	function parseNumber (str) {
+	function parseNumber(str) {
 	  var match = str.match(/^\s*(\d*)\s*(.*)$/);
-	  return {num: Number(match[1]), value: match[2]};
+	  return { num: Number(match[1]), value: match[2] };
 	}
 
 	// compare two strings case-insensitively, but examine case for strings that are
@@ -5527,19 +5595,19 @@
 	//@ files mixes their content, just like unix sort does.
 	function _sort(options, files) {
 	  // Check if this is coming from a pipe
-	  var pipe = common.readFromPipe(this);
+	  var pipe = common.readFromPipe();
 
-	  if (!files && !pipe)
-	    common.error('no files given');
+	  if (!files && !pipe) common.error('no files given');
 
 	  files = [].slice.call(arguments, 1);
 
-	  if (pipe)
+	  if (pipe) {
 	    files.unshift('-');
+	  }
 
 	  var lines = [];
-	  files.forEach(function(file) {
-	    if (!fs.existsSync(file) && file !== '-') {
+	  files.forEach(function (file) {
+	    if (!common.existsSync(file) && file !== '-') {
 	      // exit upon any sort of error
 	      common.error('no such file or directory: ' + file);
 	    }
@@ -5551,10 +5619,11 @@
 	  var sorted;
 	  sorted = lines.sort(options.numerical ? numericalCmp : unixCmp);
 
-	  if (options.reverse)
+	  if (options.reverse) {
 	    sorted = sorted.reverse();
+	  }
 
-	  return sorted.join('\n')+'\n';
+	  return sorted.join('\n') + '\n';
 	}
 
 	module.exports = _sort;
@@ -5562,17 +5631,17 @@
 
 /***/ },
 
-/***/ 261:
+/***/ 277:
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(229);
+	var common = __webpack_require__(247);
 	var fs = __webpack_require__(13);
 
-	//add c spaces to the left of str
-	function lpad(c, str){
+	// add c spaces to the left of str
+	function lpad(c, str) {
 	  var res = '' + str;
-	  if(res.length < c){
-	    res = Array((c-res.length)+1).join(' ') + res;
+	  if (res.length < c) {
+	    res = Array((c - res.length) + 1).join(' ') + res;
 	  }
 	  return res;
 	}
@@ -5605,39 +5674,41 @@
 	//@ Filter adjacent matching lines from input
 	function _uniq(options, input, output) {
 	  // Check if this is coming from a pipe
-	  var pipe = common.readFromPipe(this);
+	  var pipe = common.readFromPipe();
 
-	  if (!input && !pipe)
-	    common.error('no input given');
+	  if (!input && !pipe) common.error('no input given');
 
 	  var lines = (input ? fs.readFileSync(input, 'utf8') : pipe).
 	              trimRight().
 	              split(/\r*\n/);
 
-	  var compare = function(a, b){
-	    return options.ignoreCase ? 
-	             a.toLocaleLowerCase().localeCompare(b.toLocaleLowerCase()) :
-	             a.localeCompare(b);
+	  var compare = function (a, b) {
+	    return options.ignoreCase ?
+	           a.toLocaleLowerCase().localeCompare(b.toLocaleLowerCase()) :
+	           a.localeCompare(b);
 	  };
-	  var uniqed = lines.reduceRight(function(res, e){
-	                 //Perform uniq -c on the input
-	                 return res.length === 0 ? [{count: 1, ln: e}] :
-	                        (compare(res[0].ln,e) === 0 ? 
-	                          [{count: res[0].count + 1, ln: e}].concat(res.slice(1)) :
-	                          [{count: 1, ln: e}].concat(res));
-	               }, []).filter(function(obj){
-	                 //Do we want only duplicated objects?
-	                 return options.duplicates ? obj.count > 1 : true;
-	               }).map(function(obj){
-	                 //Are we tracking the counts of each line?
-	                 return (options.count ? (lpad(7,obj.count) + ' ') : '') + obj.ln;
-	               }).join('\n') + '\n';
+	  var uniqed = lines.reduceRight(function (res, e) {
+	    // Perform uniq -c on the input
+	    if (res.length === 0) {
+	      return [{ count: 1, ln: e }];
+	    } else if (compare(res[0].ln, e) === 0) {
+	      return [{ count: res[0].count + 1, ln: e }].concat(res.slice(1));
+	    } else {
+	      return [{ count: 1, ln: e }].concat(res);
+	    }
+	  }, []).filter(function (obj) {
+	                 // Do we want only duplicated objects?
+	    return options.duplicates ? obj.count > 1 : true;
+	  }).map(function (obj) {
+	                 // Are we tracking the counts of each line?
+	    return (options.count ? (lpad(7, obj.count) + ' ') : '') + obj.ln;
+	  }).join('\n') + '\n';
 
-	  if(output){
+	  if (output) {
 	    (new common.ShellString(uniqed)).to(output);
-	    //if uniq writes to output, nothing is passed to the next command in the pipeline (if any)
+	    // if uniq writes to output, nothing is passed to the next command in the pipeline (if any)
 	    return '';
-	  }else{
+	  } else {
 	    return uniqed;
 	  }
 	}
@@ -5647,10 +5718,10 @@
 
 /***/ },
 
-/***/ 262:
+/***/ 278:
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(229);
+	var common = __webpack_require__(247);
 	var fs = __webpack_require__(13);
 
 	common.register('grep', _grep, {
@@ -5681,19 +5752,19 @@
 	//@ file that match the given `regex_filter`.
 	function _grep(options, regex, files) {
 	  // Check if this is coming from a pipe
-	  var pipe = common.readFromPipe(this);
+	  var pipe = common.readFromPipe();
 
-	  if (!files && !pipe)
-	    common.error('no paths given', 2);
+	  if (!files && !pipe) common.error('no paths given', 2);
 
 	  files = [].slice.call(arguments, 2);
 
-	  if (pipe)
+	  if (pipe) {
 	    files.unshift('-');
+	  }
 
 	  var grep = [];
-	  files.forEach(function(file) {
-	    if (!fs.existsSync(file) && file !== '-') {
+	  files.forEach(function (file) {
+	    if (!common.existsSync(file) && file !== '-') {
 	      common.error('no such file or directory: ' + file, 2, true);
 	      return;
 	    }
@@ -5701,28 +5772,30 @@
 	    var contents = file === '-' ? pipe : fs.readFileSync(file, 'utf8');
 	    var lines = contents.split(/\r*\n/);
 	    if (options.nameOnly) {
-	      if (contents.match(regex))
+	      if (contents.match(regex)) {
 	        grep.push(file);
+	      }
 	    } else {
-	      lines.forEach(function(line) {
+	      lines.forEach(function (line) {
 	        var matched = line.match(regex);
-	        if ((options.inverse && !matched) || (!options.inverse && matched))
+	        if ((options.inverse && !matched) || (!options.inverse && matched)) {
 	          grep.push(line);
+	        }
 	      });
 	    }
 	  });
 
-	  return grep.join('\n')+'\n';
+	  return grep.join('\n') + '\n';
 	}
 	module.exports = _grep;
 
 
 /***/ },
 
-/***/ 263:
+/***/ 279:
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(229);
+	var common = __webpack_require__(247);
 	var fs = __webpack_require__(13);
 	var path = __webpack_require__(35);
 
@@ -5736,17 +5809,17 @@
 
 	// Cross-platform method for splitting environment PATH variables
 	function splitPath(p) {
-	  if (!p)
-	    return [];
+	  if (!p) return [];
 
-	  if (common.platform === 'win')
+	  if (common.platform === 'win') {
 	    return p.split(';');
-	  else
+	  } else {
 	    return p.split(':');
+	  }
 	}
 
-	function checkPath(path) {
-	  return fs.existsSync(path) && !fs.statSync(path).isDirectory();
+	function checkPath(pathName) {
+	  return common.existsSync(pathName) && !fs.statSync(pathName).isDirectory();
 	}
 
 	//@
@@ -5762,19 +5835,17 @@
 	//@ `PATHEXT` variable to append the extension if it's not already executable.
 	//@ Returns string containing the absolute path to the command.
 	function _which(options, cmd) {
-	  if (!cmd)
-	    common.error('must specify command');
+	  if (!cmd) common.error('must specify command');
 
-	  var pathEnv = process.env.path || process.env.Path || process.env.PATH,
-	      pathArray = splitPath(pathEnv),
-	      where = null;
+	  var pathEnv = process.env.path || process.env.Path || process.env.PATH;
+	  var pathArray = splitPath(pathEnv);
+	  var where = null;
 
 	  // No relative/absolute paths provided?
 	  if (cmd.search(/\//) === -1) {
 	    // Search for command in PATH
-	    pathArray.forEach(function(dir) {
-	      if (where)
-	        return; // already found it
+	    pathArray.forEach(function (dir) {
+	      if (where) return; // already found it
 
 	      var attempt = path.resolve(dir, cmd);
 
@@ -5816,8 +5887,7 @@
 	  }
 
 	  // Command not found anywhere?
-	  if (!checkPath(cmd) && !where)
-	    return null;
+	  if (!checkPath(cmd) && !where) return null;
 
 	  where = where || path.resolve(cmd);
 
@@ -5828,17 +5898,20 @@
 
 /***/ },
 
-/***/ 264:
+/***/ 280:
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(229);
+	var common = __webpack_require__(247);
 
 	common.register('echo', _echo, {
 	  allowGlobbing: false,
 	});
 
 	//@
-	//@ ### echo(string [, string ...])
+	//@ ### echo([options,] string [, string ...])
+	//@ Available options:
+	//@
+	//@ + `-e`: interpret backslash escapes (default)
 	//@
 	//@ Examples:
 	//@
@@ -5852,6 +5925,12 @@
 	function _echo(opts, messages) {
 	  // allow strings starting with '-', see issue #20
 	  messages = [].slice.call(arguments, opts ? 0 : 1);
+
+	  if (messages[0] === '-e') {
+	    // ignore -e
+	    messages.shift();
+	  }
+
 	  console.log.apply(console, messages);
 	  return messages.join(' ');
 	}
@@ -5860,11 +5939,11 @@
 
 /***/ },
 
-/***/ 265:
+/***/ 281:
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(229);
-	var _cd = __webpack_require__(245);
+	var common = __webpack_require__(247);
+	var _cd = __webpack_require__(261);
 	var path = __webpack_require__(35);
 
 	common.register('dirs', _dirs, {
@@ -5888,9 +5967,8 @@
 	  if (_isStackIndex(index)) {
 	    if (Math.abs(index) < _dirStack.length + 1) { // +1 for pwd
 	      return (/^-/).test(index) ? Number(index) - 1 : Number(index);
-	    } else {
-	      common.error(index + ': directory stack index out of range');
 	    }
+	    common.error(index + ': directory stack index out of range');
 	  } else {
 	    common.error(index + ': invalid number');
 	  }
@@ -5929,7 +6007,7 @@
 	  }
 
 	  options = common.parseOptions(options, {
-	    'n' : 'no-cd'
+	    'n': 'no-cd'
 	  });
 
 	  var dirs = _actualDirStack();
@@ -5995,7 +6073,7 @@
 	  }
 
 	  options = common.parseOptions(options, {
-	    'n' : 'no-cd'
+	    'n': 'no-cd'
 	  });
 
 	  if (!_dirStack.length) {
@@ -6038,10 +6116,10 @@
 	  }
 
 	  options = common.parseOptions(options, {
-	    'c' : 'clear'
+	    'c': 'clear'
 	  });
 
-	  if (options['clear']) {
+	  if (options.clear) {
 	    _dirStack = [];
 	    return _dirStack;
 	  }
@@ -6068,12 +6146,12 @@
 
 /***/ },
 
-/***/ 266:
+/***/ 282:
 /***/ function(module, exports, __webpack_require__) {
 
 	var fs = __webpack_require__(13);
 	var path = __webpack_require__(35);
-	var common = __webpack_require__(229);
+	var common = __webpack_require__(247);
 
 	common.register('ln', _ln, {
 	  cmdOptions: {
@@ -6107,7 +6185,7 @@
 	  var isAbsolute = (path.resolve(source) === sourcePath);
 	  dest = path.resolve(process.cwd(), String(dest));
 
-	  if (fs.existsSync(dest)) {
+	  if (common.existsSync(dest)) {
 	    if (!options.force) {
 	      common.error('Destination file exists', true);
 	    }
@@ -6119,19 +6197,19 @@
 	    var isWindows = common.platform === 'win';
 	    var linkType = isWindows ? 'file' : null;
 	    var resolvedSourcePath = isAbsolute ? sourcePath : path.resolve(process.cwd(), path.dirname(dest), source);
-	    if (!fs.existsSync(resolvedSourcePath)) {
+	    if (!common.existsSync(resolvedSourcePath)) {
 	      common.error('Source file does not exist', true);
 	    } else if (isWindows && fs.statSync(resolvedSourcePath).isDirectory()) {
-	      linkType =  'junction';
+	      linkType = 'junction';
 	    }
 
 	    try {
-	      fs.symlinkSync(linkType === 'junction' ? resolvedSourcePath: source, dest, linkType);
+	      fs.symlinkSync(linkType === 'junction' ? resolvedSourcePath : source, dest, linkType);
 	    } catch (err) {
 	      common.error(err.message);
 	    }
 	  } else {
-	    if (!fs.existsSync(source)) {
+	    if (!common.existsSync(source)) {
 	      common.error('Source file does not exist', true);
 	    }
 	    try {
@@ -6147,17 +6225,17 @@
 
 /***/ },
 
-/***/ 267:
+/***/ 283:
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(229);
-	var _tempDir = __webpack_require__(268);
-	var _pwd = __webpack_require__(246);
+	var common = __webpack_require__(247);
+	var _tempDir = __webpack_require__(284);
+	var _pwd = __webpack_require__(262);
 	var path = __webpack_require__(35);
 	var fs = __webpack_require__(13);
-	var child = __webpack_require__(269);
+	var child = __webpack_require__(285);
 
-	var DEFAULT_MAXBUFFER_SIZE = 20*1024*1024;
+	var DEFAULT_MAXBUFFER_SIZE = 20 * 1024 * 1024;
 
 	common.register('exec', _exec, {
 	  unix: false,
@@ -6172,11 +6250,11 @@
 	// event loop).
 	function execSync(cmd, opts, pipe) {
 	  var tempDir = _tempDir();
-	  var stdoutFile = path.resolve(tempDir+'/'+common.randomFileName()),
-	      stderrFile = path.resolve(tempDir+'/'+common.randomFileName()),
-	      codeFile = path.resolve(tempDir+'/'+common.randomFileName()),
-	      scriptFile = path.resolve(tempDir+'/'+common.randomFileName()),
-	      sleepFile = path.resolve(tempDir+'/'+common.randomFileName());
+	  var stdoutFile = path.resolve(tempDir + '/' + common.randomFileName());
+	  var stderrFile = path.resolve(tempDir + '/' + common.randomFileName());
+	  var codeFile = path.resolve(tempDir + '/' + common.randomFileName());
+	  var scriptFile = path.resolve(tempDir + '/' + common.randomFileName());
+	  var sleepFile = path.resolve(tempDir + '/' + common.randomFileName());
 
 	  opts = common.extend({
 	    silent: common.config.silent,
@@ -6185,36 +6263,38 @@
 	    maxBuffer: DEFAULT_MAXBUFFER_SIZE
 	  }, opts);
 
-	  var previousStdoutContent = '',
-	      previousStderrContent = '';
+	  var previousStdoutContent = '';
+	  var previousStderrContent = '';
 	  // Echoes stdout and stderr changes from running process, if not silent
 	  function updateStream(streamFile) {
-	    if (opts.silent || !fs.existsSync(streamFile))
+	    if (opts.silent || !common.existsSync(streamFile)) {
 	      return;
+	    }
 
-	    var previousStreamContent,
-	        proc_stream;
+	    var previousStreamContent;
+	    var procStream;
 	    if (streamFile === stdoutFile) {
 	      previousStreamContent = previousStdoutContent;
-	      proc_stream = process.stdout;
+	      procStream = process.stdout;
 	    } else { // assume stderr
 	      previousStreamContent = previousStderrContent;
-	      proc_stream = process.stderr;
+	      procStream = process.stderr;
 	    }
 
 	    var streamContent = fs.readFileSync(streamFile, 'utf8');
 	    // No changes since last time?
-	    if (streamContent.length <= previousStreamContent.length)
+	    if (streamContent.length <= previousStreamContent.length) {
 	      return;
+	    }
 
-	    proc_stream.write(streamContent.substr(previousStreamContent.length));
+	    procStream.write(streamContent.substr(previousStreamContent.length));
 	    previousStreamContent = streamContent;
 	  }
 
-	  if (fs.existsSync(scriptFile)) common.unlinkSync(scriptFile);
-	  if (fs.existsSync(stdoutFile)) common.unlinkSync(stdoutFile);
-	  if (fs.existsSync(stderrFile)) common.unlinkSync(stderrFile);
-	  if (fs.existsSync(codeFile)) common.unlinkSync(codeFile);
+	  if (common.existsSync(scriptFile)) common.unlinkSync(scriptFile);
+	  if (common.existsSync(stdoutFile)) common.unlinkSync(stdoutFile);
+	  if (common.existsSync(stderrFile)) common.unlinkSync(stderrFile);
+	  if (common.existsSync(codeFile)) common.unlinkSync(codeFile);
 
 	  var execCommand = JSON.stringify(process.execPath) + ' ' + JSON.stringify(scriptFile);
 	  var script;
@@ -6224,23 +6304,23 @@
 
 	  if (typeof child.execSync === 'function') {
 	    script = [
-	        "var child = require('child_process')",
-	        "  , fs = require('fs');",
-	        "var childProcess = child.exec("+JSON.stringify(cmd)+", "+optString+", function(err) {",
-	        "  fs.writeFileSync("+JSON.stringify(codeFile)+", err ? err.code.toString() : '0');",
-	        "});",
-	        "var stdoutStream = fs.createWriteStream("+JSON.stringify(stdoutFile)+");",
-	        "var stderrStream = fs.createWriteStream("+JSON.stringify(stderrFile)+");",
-	        "childProcess.stdout.pipe(stdoutStream, {end: false});",
-	        "childProcess.stderr.pipe(stderrStream, {end: false});",
-	        "childProcess.stdout.pipe(process.stdout);",
-	        "childProcess.stderr.pipe(process.stderr);"
-	      ].join('\n') +
-	      (pipe ? "\nchildProcess.stdin.end("+JSON.stringify(pipe)+");\n" : '\n') +
+	      "var child = require('child_process')",
+	      "  , fs = require('fs');",
+	      'var childProcess = child.exec(' + JSON.stringify(cmd) + ', ' + optString + ', function(err) {',
+	      '  fs.writeFileSync(' + JSON.stringify(codeFile) + ", err ? err.code.toString() : '0');",
+	      '});',
+	      'var stdoutStream = fs.createWriteStream(' + JSON.stringify(stdoutFile) + ');',
+	      'var stderrStream = fs.createWriteStream(' + JSON.stringify(stderrFile) + ');',
+	      'childProcess.stdout.pipe(stdoutStream, {end: false});',
+	      'childProcess.stderr.pipe(stderrStream, {end: false});',
+	      'childProcess.stdout.pipe(process.stdout);',
+	      'childProcess.stderr.pipe(process.stderr);'
+	    ].join('\n') +
+	      (pipe ? '\nchildProcess.stdin.end(' + JSON.stringify(pipe) + ');\n' : '\n') +
 	      [
-	        "var stdoutEnded = false, stderrEnded = false;",
-	        "function tryClosingStdout(){ if(stdoutEnded){ stdoutStream.end(); } }",
-	        "function tryClosingStderr(){ if(stderrEnded){ stderrStream.end(); } }",
+	        'var stdoutEnded = false, stderrEnded = false;',
+	        'function tryClosingStdout(){ if(stdoutEnded){ stdoutStream.end(); } }',
+	        'function tryClosingStderr(){ if(stderrEnded){ stderrStream.end(); } }',
 	        "childProcess.stdout.on('end', function(){ stdoutEnded = true; tryClosingStdout(); });",
 	        "childProcess.stderr.on('end', function(){ stderrEnded = true; tryClosingStderr(); });"
 	      ].join('\n');
@@ -6258,23 +6338,23 @@
 	      child.execSync(execCommand, opts);
 	    } catch (e) {
 	      // Clean up immediately if we have an exception
-	      try { common.unlinkSync(scriptFile); } catch(e) {}
-	      try { common.unlinkSync(stdoutFile); } catch(e) {}
-	      try { common.unlinkSync(stderrFile); } catch(e) {}
-	      try { common.unlinkSync(codeFile); } catch(e) {}
+	      try { common.unlinkSync(scriptFile); } catch (e2) {}
+	      try { common.unlinkSync(stdoutFile); } catch (e2) {}
+	      try { common.unlinkSync(stderrFile); } catch (e2) {}
+	      try { common.unlinkSync(codeFile); } catch (e2) {}
 	      throw e;
 	    }
 	  } else {
-	    cmd += ' > '+stdoutFile+' 2> '+stderrFile; // works on both win/unix
+	    cmd += ' > ' + stdoutFile + ' 2> ' + stderrFile; // works on both win/unix
 
 	    script = [
-	        "var child = require('child_process')",
-	        "  , fs = require('fs');",
-	        "var childProcess = child.exec("+JSON.stringify(cmd)+", "+optString+", function(err) {",
-	        "  fs.writeFileSync("+JSON.stringify(codeFile)+", err ? err.code.toString() : '0');",
-	        "});"
-	      ].join('\n') +
-	      (pipe ? "\nchildProcess.stdin.end("+JSON.stringify(pipe)+");\n" : '\n');
+	      "var child = require('child_process')",
+	      "  , fs = require('fs');",
+	      'var childProcess = child.exec(' + JSON.stringify(cmd) + ', ' + optString + ', function(err) {',
+	      '  fs.writeFileSync(' + JSON.stringify(codeFile) + ", err ? err.code.toString() : '0');",
+	      '});'
+	    ].join('\n') +
+	      (pipe ? '\nchildProcess.stdin.end(' + JSON.stringify(pipe) + ');\n' : '\n');
 
 	    fs.writeFileSync(scriptFile, script);
 
@@ -6284,10 +6364,10 @@
 	    // sleepFile is used as a dummy I/O op to mitigate unnecessary CPU usage
 	    // (tried many I/O sync ops, writeFileSync() seems to be only one that is effective in reducing
 	    // CPU usage, though apparently not so much on Windows)
-	    while (!fs.existsSync(codeFile)) { updateStream(stdoutFile); fs.writeFileSync(sleepFile, 'a'); }
-	    while (!fs.existsSync(stdoutFile)) { updateStream(stdoutFile); fs.writeFileSync(sleepFile, 'a'); }
-	    while (!fs.existsSync(stderrFile)) { updateStream(stderrFile); fs.writeFileSync(sleepFile, 'a'); }
-	    try { common.unlinkSync(sleepFile); } catch(e) {}
+	    while (!common.existsSync(codeFile)) { updateStream(stdoutFile); fs.writeFileSync(sleepFile, 'a'); }
+	    while (!common.existsSync(stdoutFile)) { updateStream(stdoutFile); fs.writeFileSync(sleepFile, 'a'); }
+	    while (!common.existsSync(stderrFile)) { updateStream(stderrFile); fs.writeFileSync(sleepFile, 'a'); }
+	    try { common.unlinkSync(sleepFile); } catch (e) {}
 	  }
 
 	  // At this point codeFile exists, but it's not necessarily flushed yet.
@@ -6301,12 +6381,12 @@
 	  var stderr = fs.readFileSync(stderrFile, 'utf8');
 
 	  // No biggie if we can't erase the files now -- they're in a temp dir anyway
-	  try { common.unlinkSync(scriptFile); } catch(e) {}
-	  try { common.unlinkSync(stdoutFile); } catch(e) {}
-	  try { common.unlinkSync(stderrFile); } catch(e) {}
-	  try { common.unlinkSync(codeFile); } catch(e) {}
+	  try { common.unlinkSync(scriptFile); } catch (e) {}
+	  try { common.unlinkSync(stdoutFile); } catch (e) {}
+	  try { common.unlinkSync(stderrFile); } catch (e) {}
+	  try { common.unlinkSync(codeFile); } catch (e) {}
 
-	  if (code !== 0)  {
+	  if (code !== 0) {
 	    common.error('', code, true);
 	  }
 	  var obj = common.ShellString(stdout, stderr, code);
@@ -6325,24 +6405,22 @@
 	    maxBuffer: DEFAULT_MAXBUFFER_SIZE
 	  }, opts);
 
-	  var c = child.exec(cmd, opts, function(err) {
-	    if (callback)
+	  var c = child.exec(cmd, opts, function (err) {
+	    if (callback) {
 	      callback(err ? err.code : 0, stdout, stderr);
+	    }
 	  });
 
-	  if (pipe)
-	    c.stdin.end(pipe);
+	  if (pipe) c.stdin.end(pipe);
 
-	  c.stdout.on('data', function(data) {
+	  c.stdout.on('data', function (data) {
 	    stdout += data;
-	    if (!opts.silent)
-	      process.stdout.write(data);
+	    if (!opts.silent) process.stdout.write(data);
 	  });
 
-	  c.stderr.on('data', function(data) {
+	  c.stderr.on('data', function (data) {
 	    stderr += data;
-	    if (!opts.silent)
-	      process.stderr.write(data);
+	    if (!opts.silent) process.stderr.write(data);
 	  });
 
 	  return c;
@@ -6388,10 +6466,10 @@
 	//@ the current synchronous implementation uses a lot of CPU. This should be getting
 	//@ fixed soon.
 	function _exec(command, options, callback) {
-	  if (!command)
-	    common.error('must specify command');
+	  options = options || {};
+	  if (!command) common.error('must specify command');
 
-	  var pipe = common.readFromPipe(this);
+	  var pipe = common.readFromPipe();
 
 	  // Callback is defined instead of options.
 	  if (typeof options === 'function') {
@@ -6410,10 +6488,11 @@
 	  }, options);
 
 	  try {
-	    if (options.async)
+	    if (options.async) {
 	      return execAsync(command, options, pipe, callback);
-	    else
+	    } else {
 	      return execSync(command, options, pipe);
+	    }
 	  } catch (e) {
 	    common.error('internal error');
 	  }
@@ -6423,11 +6502,11 @@
 
 /***/ },
 
-/***/ 268:
+/***/ 284:
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(229);
-	var os = __webpack_require__(230);
+	var common = __webpack_require__(247);
+	var os = __webpack_require__(130);
 	var fs = __webpack_require__(13);
 
 	common.register('tempdir', _tempDir, {
@@ -6437,13 +6516,11 @@
 
 	// Returns false if 'dir' is not a writeable directory, 'dir' otherwise
 	function writeableDir(dir) {
-	  if (!dir || !fs.existsSync(dir))
-	    return false;
+	  if (!dir || !common.existsSync(dir)) return false;
 
-	  if (!fs.statSync(dir).isDirectory())
-	    return false;
+	  if (!fs.statSync(dir).isDirectory()) return false;
 
-	  var testFile = dir+'/'+common.randomFileName();
+	  var testFile = dir + '/' + common.randomFileName();
 	  try {
 	    fs.writeFileSync(testFile, ' ');
 	    common.unlinkSync(testFile);
@@ -6467,15 +6544,14 @@
 	//@ Follows Python's [tempfile algorithm](http://docs.python.org/library/tempfile.html#tempfile.tempdir).
 	function _tempDir() {
 	  var state = common.state;
-	  if (state.tempDir)
-	    return state.tempDir; // from cache
+	  if (state.tempDir) return state.tempDir; // from cache
 
 	  state.tempDir = writeableDir(os.tmpdir && os.tmpdir()) || // node 0.10+
 	                  writeableDir(os.tmpDir && os.tmpDir()) || // node 0.8+
-	                  writeableDir(process.env['TMPDIR']) ||
-	                  writeableDir(process.env['TEMP']) ||
-	                  writeableDir(process.env['TMP']) ||
-	                  writeableDir(process.env['Wimp$ScrapDir']) || // RiscOS
+	                  writeableDir(process.env.TMPDIR) ||
+	                  writeableDir(process.env.TEMP) ||
+	                  writeableDir(process.env.TMP) ||
+	                  writeableDir(process.env.Wimp$ScrapDir) || // RiscOS
 	                  writeableDir('C:\\TEMP') || // Windows
 	                  writeableDir('C:\\TMP') || // Windows
 	                  writeableDir('\\TEMP') || // Windows
@@ -6492,47 +6568,46 @@
 
 /***/ },
 
-/***/ 269:
+/***/ 285:
 /***/ function(module, exports) {
 
 	module.exports = require("child_process");
 
 /***/ },
 
-/***/ 270:
+/***/ 286:
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(229);
+	var common = __webpack_require__(247);
 	var fs = __webpack_require__(13);
 	var path = __webpack_require__(35);
 
 	var PERMS = (function (base) {
 	  return {
-	    OTHER_EXEC  : base.EXEC,
-	    OTHER_WRITE : base.WRITE,
-	    OTHER_READ  : base.READ,
+	    OTHER_EXEC: base.EXEC,
+	    OTHER_WRITE: base.WRITE,
+	    OTHER_READ: base.READ,
 
-	    GROUP_EXEC  : base.EXEC  << 3,
-	    GROUP_WRITE : base.WRITE << 3,
-	    GROUP_READ  : base.READ << 3,
+	    GROUP_EXEC: base.EXEC << 3,
+	    GROUP_WRITE: base.WRITE << 3,
+	    GROUP_READ: base.READ << 3,
 
-	    OWNER_EXEC  : base.EXEC << 6,
-	    OWNER_WRITE : base.WRITE << 6,
-	    OWNER_READ  : base.READ << 6,
+	    OWNER_EXEC: base.EXEC << 6,
+	    OWNER_WRITE: base.WRITE << 6,
+	    OWNER_READ: base.READ << 6,
 
-	    // Literal octal numbers are apparently not allowed in "strict" javascript.  Using parseInt is
-	    // the preferred way, else a jshint warning is thrown.
-	    STICKY      : parseInt('01000', 8),
-	    SETGID      : parseInt('02000', 8),
-	    SETUID      : parseInt('04000', 8),
+	    // Literal octal numbers are apparently not allowed in "strict" javascript.
+	    STICKY: parseInt('01000', 8),
+	    SETGID: parseInt('02000', 8),
+	    SETUID: parseInt('04000', 8),
 
-	    TYPE_MASK   : parseInt('0770000', 8)
+	    TYPE_MASK: parseInt('0770000', 8)
 	  };
-	})({
-	  EXEC  : 1,
-	  WRITE : 2,
-	  READ  : 4
-	});
+	}({
+	  EXEC: 1,
+	  WRITE: 2,
+	  READ: 4
+	}));
 
 	common.register('chmod', _chmod, {
 	});
@@ -6570,8 +6645,7 @@
 	      // get picked up by the option parser as command flags.
 	      // If we are down by one argument and options starts with -, shift everything over.
 	      [].unshift.call(arguments, '');
-	    }
-	    else {
+	    } else {
 	      common.error('You must specify a file.');
 	    }
 	  }
@@ -6602,14 +6676,13 @@
 	        }
 	      }
 	    });
-	  }
-	  else {
+	  } else {
 	    files = filePattern;
 	  }
 
 	  files.forEach(function innerChmod(file) {
 	    file = path.resolve(file);
-	    if (!fs.existsSync(file)) {
+	    if (!common.existsSync(file)) {
 	      common.error('File not found: ' + file);
 	    }
 
@@ -6628,7 +6701,6 @@
 	    if (isNaN(parseInt(mode, 8))) {
 	      // parse options
 	      mode.split(',').forEach(function (symbolicMode) {
-	        /*jshint regexdash:true */
 	        var pattern = /([ugoa]*)([=\+-])([rwxXst]*)/i;
 	        var matches = pattern.exec(symbolicMode);
 
@@ -6637,19 +6709,20 @@
 	          var operator = matches[2];
 	          var change = matches[3];
 
-	          var changeOwner = applyTo.indexOf('u') != -1 || applyTo === 'a' || applyTo === '';
-	          var changeGroup = applyTo.indexOf('g') != -1 || applyTo === 'a' || applyTo === '';
-	          var changeOther = applyTo.indexOf('o') != -1 || applyTo === 'a' || applyTo === '';
+	          var changeOwner = applyTo.indexOf('u') !== -1 || applyTo === 'a' || applyTo === '';
+	          var changeGroup = applyTo.indexOf('g') !== -1 || applyTo === 'a' || applyTo === '';
+	          var changeOther = applyTo.indexOf('o') !== -1 || applyTo === 'a' || applyTo === '';
 
-	          var changeRead    = change.indexOf('r') != -1;
-	          var changeWrite   = change.indexOf('w') != -1;
-	          var changeExec    = change.indexOf('x') != -1;
-	          var changeExecDir = change.indexOf('X') != -1;
-	          var changeSticky  = change.indexOf('t') != -1;
-	          var changeSetuid  = change.indexOf('s') != -1;
+	          var changeRead = change.indexOf('r') !== -1;
+	          var changeWrite = change.indexOf('w') !== -1;
+	          var changeExec = change.indexOf('x') !== -1;
+	          var changeExecDir = change.indexOf('X') !== -1;
+	          var changeSticky = change.indexOf('t') !== -1;
+	          var changeSetuid = change.indexOf('s') !== -1;
 
-	          if (changeExecDir && isDir)
+	          if (changeExecDir && isDir) {
 	            changeExec = true;
+	          }
 
 	          var mask = 0;
 	          if (changeOwner) {
@@ -6679,35 +6752,37 @@
 	            case '=':
 	              newPerms = type + mask;
 
-	              // According to POSIX, when using = to explicitly set the permissions, setuid and setgid can never be cleared.
+	              // According to POSIX, when using = to explicitly set the
+	              // permissions, setuid and setgid can never be cleared.
 	              if (fs.statSync(file).isDirectory()) {
 	                newPerms |= (PERMS.SETUID + PERMS.SETGID) & perms;
 	              }
 	              break;
+	            default:
+	              common.error('Could not recognize operator: `' + operator + '`');
 	          }
 
 	          if (options.verbose) {
 	            console.log(file + ' -> ' + newPerms.toString(8));
 	          }
 
-	          if (perms != newPerms) {
+	          if (perms !== newPerms) {
 	            if (!options.verbose && options.changes) {
 	              console.log(file + ' -> ' + newPerms.toString(8));
 	            }
 	            fs.chmodSync(file, newPerms);
 	            perms = newPerms; // for the next round of changes!
 	          }
-	        }
-	        else {
+	        } else {
 	          common.error('Invalid symbolic mode change: ' + symbolicMode);
 	        }
 	      });
-	    }
-	    else {
+	    } else {
 	      // they gave us a full number
 	      newPerms = type + parseInt(mode, 8);
 
-	      // POSIX rules are that setuid and setgid can only be added using numeric form, but not cleared.
+	      // POSIX rules are that setuid and setgid can only be added using numeric
+	      // form, but not cleared.
 	      if (fs.statSync(file).isDirectory()) {
 	        newPerms |= (PERMS.SETUID + PERMS.SETGID) & perms;
 	      }
@@ -6722,10 +6797,10 @@
 
 /***/ },
 
-/***/ 271:
+/***/ 287:
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(229);
+	var common = __webpack_require__(247);
 	var fs = __webpack_require__(13);
 
 	common.register('touch', _touch, {
@@ -6761,14 +6836,15 @@
 	//@ A FILE argument that does not exist is created empty, unless -c is supplied.
 	//@ This is a partial implementation of *[touch(1)](http://linux.die.net/man/1/touch)*.
 	function _touch(opts, files) {
-	  if (!files)
+	  if (!files) {
 	    common.error('no files given');
-	  else if (typeof files === 'string')
+	  } else if (typeof files === 'string') {
 	    files = [].slice.call(arguments, 1);
-	  else
+	  } else {
 	    common.error('file arg should be a string file path or an Array of string file paths');
+	  }
 
-	  files.forEach(function(f) {
+	  files.forEach(function (f) {
 	    touchFile(opts, f);
 	  });
 	  return '';
@@ -6838,10 +6914,10 @@
 
 /***/ },
 
-/***/ 272:
+/***/ 288:
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(229);
+	var common = __webpack_require__(247);
 
 	common.register('set', _set, {
 	  allowGlobbing: false,
@@ -6867,8 +6943,7 @@
 	function _set(options) {
 	  if (!options) {
 	    var args = [].slice.call(arguments, 0);
-	    if (args.length < 2)
-	      common.error('must provide an argument');
+	    if (args.length < 2) common.error('must provide an argument');
 	    options = args[1];
 	  }
 	  var negate = (options[0] === '+');
@@ -6881,19 +6956,19 @@
 	    'f': 'noglob'
 	  });
 
-	  var key;
 	  if (negate) {
-	    for (key in options)
+	    Object.keys(options).forEach(function (key) {
 	      options[key] = !options[key];
+	    });
 	  }
 
-	  for (key in options) {
+	  Object.keys(options).forEach(function (key) {
 	    // Only change the global config if `negate` is false and the option is true
 	    // or if `negate` is true and the option is false (aka negate !== option)
 	    if (negate !== options[key]) {
 	      common.config[key] = options[key];
 	    }
-	  }
+	  });
 	  return;
 	}
 	module.exports = _set;
@@ -6901,10 +6976,10 @@
 
 /***/ },
 
-/***/ 273:
+/***/ 289:
 /***/ function(module, exports, __webpack_require__) {
 
-	var common = __webpack_require__(229);
+	var common = __webpack_require__(247);
 
 	//@
 	//@ ### error()

@@ -20,10 +20,10 @@
 
 	// Database server
 	config.servers.database = {};
-	config.servers.database.domain = 'localhost';
-	config.servers.database.port = 27017;
+	config.servers.database.domain = 'ds029476.mlab.com';
+	config.servers.database.port = 29476;
 	config.servers.database.dataPath = path.join(process.cwd(), 'mongodata');
-	config.servers.database.dbname = 'serverseed';
+	config.servers.database.dbname = 'server-seed';
 	config.servers.database.url = 'mongodb://'+config.servers.database.domain+':'+config.servers.database.port+'/'+config.servers.database.dbname;
 
 	// Proxy Server
